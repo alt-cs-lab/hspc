@@ -1,0 +1,15 @@
+.navbar{
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    border-radius: 0px;
+}
+.page-body{
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    height: 700px;
+    text-align: center;
+    align-content: center;
+    background-color: #ffffff;
+}

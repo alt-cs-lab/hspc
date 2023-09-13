@@ -1,0 +1,7 @@
+{
+    "name": "hspc-api documentation",
+    "version": "0.1.0",
+    "description": "Uses apidocjs to generate documentation through inline comments",
+    "title": "HSPC-API Documentation",
+    "url" : "https://api.github.com/v1"
+  }

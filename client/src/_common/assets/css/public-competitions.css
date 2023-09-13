@@ -1,0 +1,38 @@
+h2{
+    font-size: 36px;
+    margin-top: 10px;
+}
+h3{
+    margin-bottom: 1em;
+}
+.jumbotron{
+    margin-bottom: 4em;
+    height: 350px;
+    text-align: center;
+    background-color: #ffffff;
+}
+.person-wrapper{
+    margin-bottom: 2em;
+}
+.profile-pic{
+    width: 50%;
+}
+.navbar{
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}
+.page-body{
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    height: 700px;
+    text-align: center;
+    align-content: center;
+    background-color: #ffffff;
+}
+.pdf{
+    width: 100%;
+    height: 1000px;
+    text-align: center;
+}

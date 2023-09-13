@@ -1,0 +1,25 @@
+services:
+
+  post_db:
+    image: postgres:14.4-alpine
+    container_name: ${DB_CONTAINER}
+    restart: always
+    ports:
+      - ${DB_PORTS}
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+  api:
+    env_file:
+      - ./.env
+    build:
+      dockerfile: Dockerfile
+    depends_on:
+      - post_db
+    ports:
+      - 3001:3001
+volumes:
+  db:
+    driver: local

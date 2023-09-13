@@ -1,0 +1,15 @@
+.RegisterBox{
+    margin: 0 auto;
+    align-content: center;
+    background-color: #FFFFFF;
+}
+#submit-button{
+    color: #ffffff;
+    font: bold;
+    background-color: green;
+    width: 200px;
+}
+
+.g-recaptcha{
+    size: "compact normal";
+}

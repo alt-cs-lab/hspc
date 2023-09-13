@@ -1,0 +1,14 @@
+.answer-green {
+    background-color: #90EE90 !important;
+    width: 100px;
+}
+
+.answer-red {
+    background-color:#ff6666 !important;
+    width: 100px;
+}
+
+.answer-yellow {
+    background-color: yellow !important;
+    width: 100px;
+}

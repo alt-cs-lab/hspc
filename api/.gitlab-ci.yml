@@ -1,0 +1,73 @@
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+image: node:18-alpine
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  POSTGRES_USER: hspc_admin
+  POSTGRES_PASSWORD: testpass
+  POSTGRES_DB: testdb
+  POSTGRES_INITDB_ARGS: "--nosync"
+  JWT_SECRET: hushwe'retestinghere
+  DB_USER: $POSTGRES_USER
+  DB_HOST: postgres
+  DB_NAME: $POSTGRES_DB
+  DB_PORT: 5432
+  DB_PASSWORD: $POSTGRES_PASSWORD
+  JEST_TIMEOUT: 50000
+
+services:
+  - postgres:14.4-alpine
+
+stages:
+  - testClient
+  - testApi
+  - deploy
+
+testClient:
+  stage: testClient
+  only:
+    - staging
+  before_script:
+    - cd client
+    - npm ci
+  script:
+    - npm test
+
+testApi:
+  stage: testApi
+  only:
+    - staging
+  before_script:
+    - npm ci
+    
+  script:
+    - npm test
+  
+
+deploy:
+  stage: deploy
+  image: docker:20.10.11
+  only:
+    - na
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    GIT_SUBMODULE_STRATEGY: recursive
+
+  services:
+    - docker:20.10.11-dind
+
+  before_script:
+    - docker info
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE:latest

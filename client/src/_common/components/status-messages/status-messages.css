@@ -1,0 +1,14 @@
+/* This class is no longer being used by status-messages.jsx
+* Can probably delete at some point - need to verify no other references
+*/
+.status {
+  padding-top: 15px;
+}
+
+.error {
+  color: red;
+}
+
+.success {
+  color: green;
+}

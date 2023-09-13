@@ -1,0 +1,51 @@
+.questionBox {
+    width: 30%;
+    height: 50%;
+    /* background-color: blueviolet; */
+    float: none;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    border-width: 2mm;
+    border-color: crimson;
+    margin-top: 10mm;
+}
+
+.question {
+    /* width: 100%; */
+    /* background-color: crimson; */
+    height: 100vh; /* Magic here */
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+
+}
+
+.buttons {
+    margin-top: 10mm;
+    /* flex: 1; */
+    /* justify-content: space-between; */
+    /* background-color: hotpink; */
+}
+
+.incorrectButton {
+    background-color: crimson;
+    color: honeydew;
+    margin-right: 10mm;
+    align-self: flex-end;
+    height: 1cm;
+
+}
+
+.correctButton {
+    background-color: green;
+    margin-left: 10mm;
+    color: honeydew;
+    align-self: flex-end;
+    height: 1cm;
+}
+
+.teamName {
+    margin-bottom: 20mm;
+}

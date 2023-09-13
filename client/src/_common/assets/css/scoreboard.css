@@ -1,0 +1,44 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+.board{
+    background-color: darkgray;
+    height: 1000px;
+    min-width: 320px;
+    width: auto;
+}
+.banner{
+    height: auto;
+    width: auto;
+    min-width: 320px;
+}
+.grid{
+    display: inline-grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 5px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+#dropdown{
+    display: inline-block;
+    width: 200px;
+    padding-left: 2.5px;
+    padding-right: 2.5px;
+}
+#title{
+    margin-top: -5px;
+    padding-top: 5px;
+}
+#tiles{
+    text-align: center;
+    height: auto;
+    width: auto;
+    padding: 50px;
+    border: solid black 1px;
+    box-shadow: 2px;
+}
+#no-event{
+    text-align: center;
+}
+

@@ -1,0 +1,26 @@
+#sub-nav{
+    width: auto;
+    margin-bottom: 5px;
+}
+#sub-nav-item{
+    margin: 0px;
+    display: inline-block;
+    width: auto;
+    padding: 2.5px;
+    font-size: 14px;
+}
+#dropdown{
+    display: inline-block;
+    width: 200px;
+    margin: 5px;
+    padding-left: 2.5px;
+    padding-right: 2.5px;
+}
+.save-button{
+    margin: 15px;
+    display: inline-block;
+}
+.start-button{
+    margin: 15px;
+    display: inline-block;
+}

@@ -1,0 +1,36 @@
+.home{
+    height:1000px;
+    width:auto;
+}
+.banner{
+    height: 150px;
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+}
+#article-field{
+    margin-top: 25px;
+    width: auto;
+    width: 100%;
+    height: auto;
+}
+#news-article{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 25px;
+    text-align: center;
+    height: auto;
+    word-wrap: break-word;
+}
+#logo{
+    margin: auto;
+    height: 25%;
+    width: 25%;
+    text-align: center;
+}
+#title{
+    text-align: center;
+}
