@@ -14,7 +14,7 @@ import {
   Modal,
   FormGroup,
   FormControl,
-  ControlLabel,
+  FormLabel,
   ToggleButton,
 } from "react-bootstrap";
 
@@ -93,7 +93,7 @@ function AddQuestionModal(props) {
       <Modal.Body>
         <form>
           <FormGroup controlId="formBasicText">
-            <ControlLabel>Description:</ControlLabel>
+            <FormLabel>Description:</FormLabel>
             <FormControl
               componentClass="textArea"
               value={text}
@@ -102,7 +102,7 @@ function AddQuestionModal(props) {
             <FormControl.Feedback />
           </FormGroup>
           <FormGroup>
-            <ControlLabel>Question level:</ControlLabel>
+            <FormLabel>Question level:</FormLabel>
             <ToggleButton
               type="radio"
               name="radioGroup"
@@ -200,7 +200,7 @@ function AddTestcaseModal(props) {
       <Modal.Body>
         <form>
           <FormGroup controlId="formBasicText">
-            <ControlLabel>Description:</ControlLabel>
+            <FormLabel>Description:</FormLabel>
             <FormControl
               type="text"
               value={text}
@@ -209,7 +209,7 @@ function AddTestcaseModal(props) {
             <FormControl.Feedback />
           </FormGroup>
           <FormGroup controlId="formBasicNumber">
-            <ControlLabel>Round:</ControlLabel>
+            <FormLabel>Round:</FormLabel>
             <FormControl
               type="number"
               value={round}
@@ -448,7 +448,7 @@ function EditTestcaseModal(props) {
         <Modal.Body>
           <form>
             <FormGroup controlId="formBasicText">
-              <ControlLabel>Description:</ControlLabel>
+              <FormLabel>Description:</FormLabel>
               <FormControl
                 componentClass="textarea"
                 value={text}
@@ -457,7 +457,7 @@ function EditTestcaseModal(props) {
               <FormControl.Feedback />
             </FormGroup>
             <FormGroup controlId="formBasicNumber">
-              <ControlLabel>Round:</ControlLabel>
+              <FormLabel>Round:</FormLabel>
               <FormControl
                 type="number"
                 value={round}

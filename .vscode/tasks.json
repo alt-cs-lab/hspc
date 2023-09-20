@@ -1,0 +1,45 @@
+// .vscode/tasks.json
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Watch Host",
+            "type": "shell",
+            // switch to the server directory and launch React dev server
+            "command": "cd server && npm install && npm start",
+            "group": "build",
+            "presentation": {
+                "group": "buildGroup",
+                "reveal": "always",
+                "panel": "new",
+                "echo": false
+            }
+        },
+        {
+            "label": "Watch API",
+            "type": "shell",
+            // Switch to the api directory and launch development server
+            "command": "cd api && npm install && npm run dev",
+            "group": "build",
+            "presentation": {
+                "group": "buildGroup",
+                "reveal": "always",
+                "panel": "new",
+                "echo": false
+            }
+        },
+        {
+            "label": "Watch All",
+            "dependsOn": [
+                "Watch Host",
+                "Watch API"
+            ],
+            "group": "build",
+            "runOptions": {
+                "runOn": "folderOpen" // This starts both tasks when the container is started
+            }
+        }
+    ]
+}

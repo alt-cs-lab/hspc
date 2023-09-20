@@ -6,10 +6,8 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
-import Button from 'react-bootstrap/Button';
+import { Button, Form, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
-import Form from 'react-bootstrap/Form'
 import ReCAPTCHA from "react-recaptcha";
 import StatusMessages from "../../_common/components/status-messages/status-messages";
 import "../../_common/assets/css/register-user.css";
