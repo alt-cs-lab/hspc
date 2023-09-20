@@ -6,6 +6,7 @@
     "tasks": [
         {
             "label": "Watch React Client",
+            "dependsOn": "Watch API Server",
             "type": "shell",
             // switch to the server directory and launch React dev server
             "command": "cd client && npm install && npm start",
@@ -15,6 +16,9 @@
                 "reveal": "always",
                 "panel": "new",
                 "echo": false
+            },
+            "runOptions": {
+                "runOn": "folderOpen" // This starts both tasks when the container is started
             }
         },
         {
@@ -28,17 +32,6 @@
                 "reveal": "always",
                 "panel": "new",
                 "echo": false
-            }
-        },
-        {
-            "label": "Watch All",
-            "dependsOn": [
-                "Watch Rect Client",
-                "Watch API Server"
-            ],
-            "group": "build",
-            "runOptions": {
-                "runOn": "folderOpen" // This starts both tasks when the container is started
             }
         }
     ]
