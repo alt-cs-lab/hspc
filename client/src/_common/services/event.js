@@ -16,7 +16,7 @@ class EventService {
     * @param {string} text value of the event's description
     */
     createEvent(eventName, eventLocation, eventDate, eventTime, teamsPerSchool, teamsPerEvent, eventDes) {
-        return ServiceUtils.postRequest('/event/create', {
+        return ServiceUtils.postRequest('/api/event/create', {
             eventName: eventName,
             eventLocation: eventLocation,
             eventDate: eventDate,
@@ -31,7 +31,7 @@ class EventService {
     * Calls the API and returns a JSON list of all registered events.
     */
     getAllEvents(userID, accessLevel) {
-        return ServiceUtils.getRequest('/event/view', {
+        return ServiceUtils.getRequest('/api/event/view', {
             userID: userID,
             accessLevel: accessLevel
         });

@@ -3,7 +3,7 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "../../_utilities/routerUtils"
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
@@ -16,14 +16,12 @@ import "../../_common/assets/css/register-user.css";
 import { registerUser } from "../../_store/actions/authActions";
 import UserService from "../../_common/services/user"; //added so students can bee created at the same time they are made into users Natalie Laughlin
 import {
-  CLEAR_ERRORS,
-  UPDATE_ERROR_MSG,
-  UPDATE_SUCCESS_MSG,
   SET_SCHOOL_DROPDOWN_REQUIRED,
 } from "../../_store/actions/types";
 import BaseSelect from "react-select";
 import FixRequiredSelect from "./FixRequiredSelect";
 import SchoolService from "../../_common/services/school.js";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
 const selectStyles = {
   menu: (base) => ({
@@ -269,7 +267,7 @@ class Register extends Component {
         </p>
         <Form name="form" onSubmit={(event) => this.handleRegister(event)}>
           {/*TODO: update to BOOTSTRAP*/}
-          <TextField
+          <Form.Text
             name="first"
             variant="filled"
             label="First Name"
@@ -285,7 +283,7 @@ class Register extends Component {
             size="small"
           />
           <br />
-          <TextField
+          <Form.Text
             name="last"
             variant="filled"
             label="Last Name"
@@ -304,7 +302,7 @@ class Register extends Component {
             {
               //  created a div so that the messaged could appear depending on if the users was focused in the phone number  Nataie Laughlin
             }
-            <TextField
+            <Form.Text
               variant="filled"
               label="Phone Number (Optional)"
               style={{ margin: "5px", width: "15%" }}
@@ -321,7 +319,7 @@ class Register extends Component {
               No dashes
             </h6>
           </div>
-          <TextField
+          <Form.Text
             name="email"
             variant="filled"
             type="email"
@@ -336,7 +334,7 @@ class Register extends Component {
             value={this.state.email}
           />
           <br />
-          <TextField
+          <Form.Text
             name="password"
             variant="filled"
             type="password"
@@ -357,7 +355,7 @@ class Register extends Component {
             {
               //added so that the student can put their advisors email in Natalie Laughlin
             }
-            <TextField
+            <Form.Text
               variant="filled"
               id="emailField"
               label="Advisor's Email"
@@ -459,10 +457,10 @@ const mapDispatchToProps = (dispatch) => {
     dispatchDropdownRequiredUpdate: (required) =>
       dispatch({ type: SET_SCHOOL_DROPDOWN_REQUIRED, payload: required }),
     dispatchError: (message) =>
-      dispatch({ type: UPDATE_ERROR_MSG, payload: message }),
+      dispatch(updateErrorMsg(message)),
     dispatchSuccess: (message) =>
-      dispatch({ type: UPDATE_SUCCESS_MSG, payload: message }),
-    dispatchResetErrors: () => dispatch({ type: CLEAR_ERRORS }),
+      dispatch(updateSuccessMsg(message)),
+    dispatchResetErrors: () => dispatch(clearErrors()),
     registerUser: (newUser, history) =>
       dispatch(registerUser(newUser, history)),
   };

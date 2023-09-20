@@ -36,6 +36,10 @@ class dbHandler {
         this.testDB = await pgp({ ...this.config, database: `test_db_${process.env.JEST_WORKER_ID}` });
     }
 
+    async connect() {
+        return this.mainDB.connect();
+    }
+
     any(query, values) {
         if (this.isTest) {
             return this.testDB.any(query, values);

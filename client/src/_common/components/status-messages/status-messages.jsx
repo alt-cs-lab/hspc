@@ -20,51 +20,40 @@ import { connect } from "react-redux";
  * @updated 2021: Cody Reeves, Jonathan Welch
  */
 
-export class StatusMessages extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      errorMessage: this.props.errors.errorMsg,
-      successMessage: this.props.errors.successMsg,
-    };
-  }
-
-  render() {
-    return (
-      <div>
-        {this.state.errorMessage !== "" ? (
-          <Alert
-            severity="danger"
-            style={{
-              fontSize: "16px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            {this.state.errorMessage}
-          </Alert>
-        ) : this.state.successMessage !== "" ? (
-          <Alert
-            severity="success"
-            style={{
-              fontSize: "16px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            {this.state.successMessage}
-          </Alert>
-        ) : (
-          ""
-        )}
-      </div>
-    );
-  }
+export function StatusMessages(props){
+  return (
+    <div>
+      {props.errors.errorMsg ? (
+        <Alert
+          severity="danger"
+          style={{
+            fontSize: "16px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {props.errors.errorMsg}
+        </Alert>
+      ) : props.errors.successMsg ? (
+        <Alert
+          severity="success"
+          style={{
+            fontSize: "16px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {props.errors.successMsg}
+        </Alert>
+      ) : (
+        ""
+      )}
+    </div>
+  );
 }
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth,
     errors: state.errors,
   };
 };

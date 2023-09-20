@@ -2,8 +2,8 @@
 MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
-import React, { Component } from "react";
-import { Navbar, NavItem, Nav, NavDropdown, Jumbotron } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 import AddEventTeam from "../registration/create/add-event-team";
 import BoardSetup from "../scoring/create-scoreboard";
@@ -28,308 +28,123 @@ import RegisterSchool from "../registration/create/school";
 import ViewSchools from "../registration/view/school";
 import ViewAdvisors from "../registration/view/advisors";
 import { connect } from "react-redux";
-import { CLEAR_ERRORS } from "../_store/actions/types.js";
+import { clearErrors } from "../_store/slices/errorSlice.js";
 
-var currentView = "";
+function AdminDash(props)
+{
+  const [currentView, setCurrentView] = useState(<></>);
+  const [currentUserName, setCurrentUserName] = useState({FirstName: "", LastName:"",});
 
-/*
- * @author: Daniel Bell, Tyler Trammell
- */
-class AdminDash extends Component {
-  constructor(props) {
-    super(props);
-    this.currentView = null;
-    this.props.dispatchResetErrors();
-    this.state = {
-      userTable: [],
-      eventTable: [],
-    };
-  }
-
-  /*
-   * Finds and displays the name of the current user on render.
-   */
-  componentDidMount = () => {
-    UserService.getAllUsers()
+  useEffect(() =>{
+    props.dispatchResetErrors();
+      UserService.getAllUsers()
       .then((response) => {
-        let body = JSON.parse(response.body);
-        if (response.statusCode === 200) {
+        let body = response.data
+        if (response.status === 200) {
           let user = [];
           for (let i = 0; i < body.length; i++) {
-            if (body[i].email === this.props.currentUser.email) {
+            if (body[i].email === props.currentUser.email) {
               user = {
                 FirstName: body[i].firstname,
                 LastName: body[i].lastname,
               };
             }
           }
-          this.currentUserName = user;
-          this.handleShowDefault();
+          setCurrentUserName(user);
+          setCurrentView(<h2 id="welcome">Welcome {user.FirstName} {user.LastName}!</h2>)
         }
       })
       .catch((resErr) => {
-        console.log("Something went wrong. Please try again");
-      });
-  };
+        console.log("Error: ",resErr);
+      })
+    }, [props]);
+  
+  return (
+    <div>
+      <Navbar inverse collapseOnSelect>
+          <Navbar.Brand onClick={() => setCurrentView(<h2 id="welcome">Welcome {currentUserName.FirstName} {currentUserName.LastName}!</h2>)}>
+            Admin Portal
+          </Navbar.Brand>
+          <Navbar.Toggle />
+        <Navbar.Collapse>
+          <Nav>
+            <NavDropdown title="Users" id="basic-nav-dropdown">
+              <NavItem eventKey={1} onClick={() => setCurrentView(<UpgradeRequests />)}>
+                Upgrade Requests
+              </NavItem>
+              <NavItem eventKey={2} onClick={() => setCurrentView(<Register />)}>
+                Create User
+              </NavItem>
+              <NavItem eventKey={3} onClick={() => setCurrentView(<ViewUsers />)}>
+                View Users
+              </NavItem>
+              <NavItem eventKey={19} onClick={() => setCurrentView(<ViewAdvisors />)}>
+                View Advisors
+              </NavItem>
+            </NavDropdown>
 
-  /*
-   * Renders the Register.jsx component. Prompts the user to create a new user.
-   */
-  handleCreateUser = () => {
-    currentView = <Register />;
-    this.forceUpdate();
-  };
+            <NavDropdown title="Schools" id="basic-nav-dropdown">
+              <NavItem eventKey={17} onClick={() => setCurrentView(<RegisterSchool />)}>
+                Create School
+              </NavItem>
+              <NavItem eventKey={18} onClick={() => setCurrentView(<ViewSchools />)}>
+                View Schools
+              </NavItem>
+            </NavDropdown>
 
-  /*
-   * Renders the RegisterTeam.jsx component. Prompts the user to create a new team.
-   */
-  handleCreateTeam = () => {
-    currentView = <RegisterTeam />;
-    this.forceUpdate();
-  };
+            <NavDropdown title="Teams" id="basic-nav-dropdown">
+              <NavItem eventKey={4} onClick={() => setCurrentView(<RegisterTeam />)}>
+                Create Team
+              </NavItem>
+              <NavItem eventKey={5} onClick={() => setCurrentView(<AddUser />)}>
+                Add User
+              </NavItem>
+              <NavItem eventKey={6} onClick={() => setCurrentView(<ViewTeams />)}>
+                View Teams
+              </NavItem>
+            </NavDropdown>
 
-  /*
-   * Renders the AddUser.jsx component. Prompts the user to a new team member or update their information.
-   */
-  handleAddToTeam = () => {
-    currentView = <AddUser />;
-    this.forceUpdate();
-  };
+            <NavDropdown title="Events" id="basic-nav-dropdown">
+              <NavItem eventKey={7} onClick={() => setCurrentView(<EventSignIn />)}>
+                Begin Event
+              </NavItem>
+              <NavItem eventKey={9} onClick={() => setCurrentView(<CreateEvent />)}>
+                Create Event
+              </NavItem>
+              <NavItem eventKey={10} onClick={() => setCurrentView(<ViewEvents />)}>
+                View Events
+              </NavItem>
+            </NavDropdown>
 
-  /*
-   * Returns a JSON message of all registered teams. Helper function needed to generate this data as a table.
-   */
-  handleShowTeams = () => {
-    currentView = <ViewTeams />;
-    this.forceUpdate();
-  };
+            <NavDropdown title="Scoreboard" id="basic-nav-dropdown">
+              <NavItem eventKey={11} onClick={() => setCurrentView(<Scoreboard />)}>
+                View Board
+              </NavItem>
+            </NavDropdown>
 
-  /*
-   * Renders the CreateEvent.jsx component. Prompts the user to create a new event.
-   */
-  handleCreateEvent = () => {
-    currentView = <CreateEvent />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Renders the Scoreboard.jsx component. Only available to users with an access level of >3 by default.
-   */
-  handleShowScore = () => {
-    currentView = <Scoreboard />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Renders the Email.jsx component. Only available to users with an access level of >3 by default.
-   */
-  handleCreateEmail = () => {
-    currentView = <Email />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Renders the BoardSetup.jsx component. Only available to users with an access level of >=3 by default.
-   */
-  handleEditBoard = () => {
-    currentView = <BoardSetup />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Publishes a new newsletter component to the home page.
-   */
-  handleCreateNews = () => {
-    currentView = <CreateNews />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Renders the PublishPractice.jsx component. Only available to users with an access level of >=4 by default.
-   */
-  handlePublishPractice = () => {
-    currentView = <PublishPractice />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Renders the PublishScores.jsx component. Only available to users with an access level of >=4 by default.
-   */
-  handlePublishScores = () => {
-    currentView = <PublishScores />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Shows a table of all teams and allows the user to mark whether the team is present.
-   */
-  handleEventSignIn = () => {
-    currentView = <EventSignIn />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Shows outstanding requests for a higher level accounts.
-   */
-  handlePendingRequests = () => {
-    currentView = <UpgradeRequests />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Returns a JSON message of all registered users. Helper function needed to generate this data as a table.
-   */
-  handleShowUsers = () => {
-    currentView = <ViewUsers />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Returns a JSON message of all scheduled events. Helper function needed to generate this data as a table.
-   */
-  handleShowEventHistory = () => {
-    currentView = <ViewEvents />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Allows the user to register specific teams to scheduled events.
-   */
-  handleAddTeamToEvent = () => {
-    currentView = <AddEventTeam />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Resets the currentView property to the default.
-   */
-  handleShowDefault = () => {
-    currentView = (
-      <h2 id="welcome">
-        Welcome {this.currentUserName.FirstName} {this.currentUserName.LastName}
-        !
-      </h2>
-    );
-    this.forceUpdate();
-  };
-
-  /*
-   * Renders the RegisterSchool.jsx component. Prompts the user to create a new school.
-   */
-  handleCreateSchool = () => {
-    currentView = <RegisterSchool />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Returns a JSON message of all registered schools. Helper function needed to generate this data as a table.
-   */
-  handleShowSchools = () => {
-    currentView = <ViewSchools />;
-    this.forceUpdate();
-  };
-
-  /*
-   * Returns a JSON message of all registered advisors. Helper function needed to generate this data as a table.
-   */
-  handleShowAdvisors = () => {
-    currentView = <ViewAdvisors />;
-    this.forceUpdate();
-  };
-
-  /*
-   *  Renders the component UI.
-   */
-  render() {
-    return (
-      <div>
-        <Navbar inverse collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand onClick={this.handleShowDefault}>
-              Admin Portal
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav>
-              <NavDropdown title="Users" id="basic-nav-dropdown">
-                <NavItem eventKey={1} onClick={this.handlePendingRequests}>
-                  Upgrade Requests
-                </NavItem>
-                <NavItem eventKey={2} onClick={this.handleCreateUser}>
-                  Create User
-                </NavItem>
-                <NavItem eventKey={3} onClick={this.handleShowUsers}>
-                  View Users
-                </NavItem>
-                <NavItem eventKey={19} onClick={this.handleShowAdvisors}>
-                  View Advisors
-                </NavItem>
-              </NavDropdown>
-
-              <NavDropdown title="Schools" id="basic-nav-dropdown">
-                <NavItem eventKey={17} onClick={this.handleCreateSchool}>
-                  Create School
-                </NavItem>
-                <NavItem eventKey={18} onClick={this.handleShowSchools}>
-                  View Schools
-                </NavItem>
-              </NavDropdown>
-
-              <NavDropdown title="Teams" id="basic-nav-dropdown">
-                <NavItem eventKey={4} onClick={this.handleCreateTeam}>
-                  Create Team
-                </NavItem>
-                <NavItem eventKey={5} onClick={this.handleAddToTeam}>
-                  Add User
-                </NavItem>
-                <NavItem eventKey={6} onClick={this.handleShowTeams}>
-                  View Teams
-                </NavItem>
-              </NavDropdown>
-
-              <NavDropdown title="Events" id="basic-nav-dropdown">
-                <NavItem eventKey={7} onClick={this.handleEventSignIn}>
-                  Begin Event
-                </NavItem>
-                <NavItem eventKey={9} onClick={this.handleCreateEvent}>
-                  Create Event
-                </NavItem>
-                <NavItem eventKey={10} onClick={this.handleShowEventHistory}>
-                  View Events
-                </NavItem>
-              </NavDropdown>
-
-              <NavDropdown title="Scoreboard" id="basic-nav-dropdown">
-                <NavItem eventKey={11} onClick={this.handleShowScore}>
-                  View Board
-                </NavItem>
-              </NavDropdown>
-
-              <NavDropdown title="Resources" id="basic-nav-dropdown">
-                <NavItem eventKey={13} onClick={this.handlePublishPractice}>
-                  Publish Practice Questions
-                </NavItem>
-                <NavItem eventKey={14} onClick={this.handlePublishScores}>
-                  Publish Scorecards
-                </NavItem>
-                <NavItem eventKey={15} onClick={this.handleCreateEmail}>
-                  Create Email Alert
-                </NavItem>
-                <NavItem eventKey={16} onClick={this.handleCreateNews}>
-                  Update Newsfeed
-                </NavItem>
-              </NavDropdown>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-        <Jumbotron className="page-body">
-          <StatusMessages />
-          {currentView}
-        </Jumbotron>
+            <NavDropdown title="Resources" id="basic-nav-dropdown">
+              <NavItem eventKey={13} onClick={() => setCurrentView(<PublishPractice />)}>
+                Publish Practice Questions
+              </NavItem>
+              <NavItem eventKey={14} onClick={() => setCurrentView(<PublishScores />)}>
+                Publish Scorecards
+              </NavItem>
+              <NavItem eventKey={15} onClick={() => setCurrentView(<Email />)}>
+                Create Email Alert
+              </NavItem>
+              <NavItem eventKey={16} onClick={() => setCurrentView(<CreateNews />)}>
+                Update Newsfeed
+              </NavItem>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+      <div className="page-body">
+        <StatusMessages />
+        {currentView}
       </div>
-    );
-  }
+    </div>
+  );
 }
 //Maps the states to props to be used in connect wrapper in export
 const mapStateToProps = (state) => {
@@ -337,7 +152,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchResetErrors: () => dispatch({ type: CLEAR_ERRORS }),
+    dispatchResetErrors: () => dispatch(clearErrors()),
   };
 };
 

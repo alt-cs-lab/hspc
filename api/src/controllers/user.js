@@ -6,9 +6,10 @@ const router = require('express').Router();
 const {check} = require('express-validator');
 const validator = require("validator");
 const isEmpty = require("is-empty");
+const passport = require("passport");
 
 const statusResponses = require("../utils/status-response.js");
-const {badRequestCheck, useService} = require("../utils/extensions.js");
+const {badRequestCheck, useService, minimumAccessLevelCheck} = require("../utils/extensions.js");
 const constants = require("../utils/constants.js");
 const userService = require('../services/user');
 const schoolService = require("../services/school.js");
@@ -149,6 +150,43 @@ router.get('/studentsAdvisor', (req, res) => {
 });
 
 
+/**
+ * @api {post} /api/user/advisorschool Get school associated with an advisor
+ * @apiName AdvisorSchool
+ * @apiGroup User
+ * 
+ * @apiBody {Number} userId User ID of the user.
+ * @apiSuccess (Success 201) {JSON} school name and id of the school associated with the advisor.
+ * @apiError (Bad Request 400) {String} error Error message for invalid request body data.
+ * @apiError (Internal Server Error 500) {String} error Error message for internal server errors.
+ * 
+ * @apiErrorExample {json} Error-Response:
+ *    HTTP/1.1 400 Bad Request
+ *   {
+ *       Advisor email is required for students.
+ *   }
+ */
+router.get('/advisorschool', 
+     passport.authenticate("jwt", { session: false }),
+    minimumAccessLevelCheck(constants.ADVISOR),
+    [
+        check('userId').exists().withMessage('User ID is required.'),
+        // check is number
+        check('userId').isNumeric().withMessage('User ID must be a number.')
+    ],
+    badRequestCheck,
+    (req, res) => {
+        const userId = Number(req.query.userId);
+        userService.getAdvisorSchool(userId)
+            .then(school => {
+                statusResponses.ok(res, school);
+            })
+            .catch(err => {
+                statusResponses.serverError(res);
+            });
+    }
+);
+
 /*
 * API Endpoint that sets a volunteer as checked in
 */
@@ -224,15 +262,15 @@ router.post('/register', [
         .isEmpty().withMessage("Email is required.")
         .isEmail({ host_blacklist: ['ksu.edu']}).withMessage("Invalid email format.")
         .normalizeEmail()
-        .custom(value => {
-            // return false if email is already in use
-            return userService.getLogin(value)
-                .then(data => {
-                    return data != null;
-                })
-                .catch(err => {
-                    return false;
-                });
+        .custom(async value => {
+            try{
+                return await userService.getLogin()
+                    ? Promise.reject()
+                    : Promise.resolve()
+            }
+            catch {
+                return Promise.reject()
+            }
         }).withMessage("That email is already in use."),
     check('phone')
         .isLength({max: 11})
@@ -262,18 +300,18 @@ router.post('/register', [
             }
             return true;
         }).withMessage('Advisor email is required for students.')
-        .custom((advisorEmail, {req}) => {
+        .custom(async (advisorEmail, {req}) => {
             if (req.body['requestLevel'] == constants.STUDENT) {
                 // return false if we could not find an advisor with that email
-                return userService.getLogin(advisorEmail)
-                    .then(data => {
-                        return data != null;
-                    })
-                    .catch(err => {
-                        return false;
-                    });
+                try{
+                    const data = await userService.getLogin(advisorEmail);
+                    return data.accessLevel == constants.ADVISOR ? Promise.resolve() : Promise.reject();
+                }
+                catch{
+                    return Promise.reject();
+                }
             }
-            return true;
+            return Promise.resolve();
         }).withMessage('An advisor with that email does not exist.'),
     check('schoolId')
         .custom((schoolId, {req}) => {

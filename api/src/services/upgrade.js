@@ -7,11 +7,12 @@ const { renameKeys } = require("../utils/extensions");
 
 module.exports = {
     getAllUpgrades: getAllUpgrades,
+    getAdminUpgrades: getAdminUpgrades,
     rejectUpgradeRequest: rejectUpgradeRequest,
     acceptUpgradeRequest: acceptUpgradeRequest
 };
 
-//function to get all the users who are requesting and upgrade
+//function to get all the users who are requesting an upgrade, except for admins
 function getAllUpgrades() {
     return db.any(`SELECT U.FirstName,
         U.LastName,
@@ -20,12 +21,31 @@ function getAllUpgrades() {
         U.AccessLevel,
         U.RequestLevel
         FROM Users AS U
-        WHERE U.RequestLevel != U.AccessLevel`)
+        WHERE U.RequestLevel != U.AccessLevel AND
+        U.RequestLevel != 80 `)
         .then((upgrades) => renameKeys(upgrades,[
             'firstName',
             'lastName',
             'email',
             'phone',
+            'accessLevel',
+            'requestLevel'
+        ]));
+}
+
+//function to get all the users who are requesting to upgrade to an admin account
+function getAdminUpgrades() {
+    return db.any(`SELECT U.FirstName,
+        U.LastName,
+        U.Email,
+        U.AccessLevel,
+        U.RequestLevel
+        FROM Users AS U
+        WHERE U.AccessLevel = 20`)
+        .then((aupgrades) => renameKeys(aupgrades,[
+            'firstName',
+            'lastName',
+            'email',
             'accessLevel',
             'requestLevel'
         ]));
@@ -47,10 +67,7 @@ function rejectUpgradeRequest({email}) {
 function acceptUpgradeRequest({email}) {
     // finds a user by email and sets their access level to their request level
     return db.none(`UPDATE Users
-        set AccessLevel = (
-            SELECT RequestLevel
-            FROM Users
-            WHERE Email = $(email)
-        )
+        set AccessLevel = 80,
+        RequestLevel = 80
         where Email = $(email);`, { email });
 }

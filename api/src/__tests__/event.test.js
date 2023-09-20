@@ -112,9 +112,14 @@ describe("Event Testing Suite", () => {
                 name: "Created Test Event",
                 description: "This is a newly test event",
                 date: "2022-12-25",
-                time: "12:00:00",
+                time: "12:00",
                 location: "Test Location",
-                teamsPerSchool: 2
+                beginnerTeamsPerSchool: 2,
+                advancedTeamsPerSchool: 1,
+                teamsPerSchool: 2,
+                beginnerTeamsPerEvent: 10,
+                advancedTeamsPerEvent: 6,
+                teamsPerEvent: 13
             };
             const createResponse = await request.post("/api/event/create").set("Authorization", getAdminToken()).send(eventDetails);
             expect(createResponse.statusCode).toBe(201);

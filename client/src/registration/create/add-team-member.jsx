@@ -9,13 +9,8 @@ import AuthService from "../../_common/services/auth";
 import EventService from "../../_common/services/event";
 import TeamService from "../../_common/services/team";
 import UserService from "../../_common/services/user";
+import { withRouter } from "../../_utilities/routerUtils"
 import Select from "react-select";
-import {
-  CLEAR_ERRORS,
-  UPDATE_SUCCESS_MSG,
-  UPDATE_ERROR_MSG,
-} from "../../_store/actions/types";
-import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -23,7 +18,8 @@ import "../../_common/assets/css/register-user.css";
 import "../../_common/assets/css/team-member-dropdown.css";
 import { Table } from "react-bootstrap";
 import ReactTable from "react-table";
-import "react-table/react-table.css";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
+// // import "react-table/react-table.css";
 
 const selectStyles = {
   menu: (base) => ({
@@ -440,11 +436,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchResetErrors: () => dispatch({ type: CLEAR_ERRORS }),
-    dispatchError: (message) =>
-      dispatch({ type: UPDATE_ERROR_MSG, payload: message }),
-    dispatchSuccess: (message) =>
-      dispatch({ type: UPDATE_SUCCESS_MSG, payload: message }),
+    dispatchResetErrors: () => dispatch(clearErrors()),
+		dispatchError: (message) =>
+			dispatch(updateErrorMsg(message)),
+		dispatchSuccess: (message) =>
+			dispatch(updateSuccessMsg(message))
   };
 };
 

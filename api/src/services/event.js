@@ -21,11 +21,55 @@ module.exports = {
  * description: the description of the event
  * @returns nothing
  */
-function createEvent({name, location, date, time, teamsPerSchool, teamsPerEvent, description}) {
+function createEvent({
+    name,
+    location,
+    date,
+    time,
+    beginnerTeamsPerSchool,
+    advancedTeamsPerSchool,
+    teamsPerSchool,
+    beginnerTeamsPerEvent,
+    advancedTeamsPerEvent,
+    teamsPerEvent,
+    description}) {
     return db.none(
-        `INSERT INTO Competition(EventName, EventLocation, EventDate, EventTime, TeamsPerSchool, TeamsPerEvent, EventDescription) 
-    VALUES($(name), $(location), $(date), $(time), $(teamsPerSchool), $(teamsPerEvent), $(description))`,
-    {name, location, date, time, teamsPerSchool, teamsPerEvent, description}
+        `INSERT INTO Competition(
+            EventName,
+            EventLocation,
+            EventDate,
+            EventTime,
+            BeginnerTeamsPerSchool,
+            AdvancedTeamsPerSchool,
+            TeamsPerSchool,
+            BeginnerTeamsPerEvent,
+            AdvancedTeamsPerEvent,
+            TeamsPerEvent,
+            EventDescription) 
+        VALUES(
+            $(name),
+            $(location),
+            $(date),
+            $(time),
+            $(beginnerTeamsPerSchool),
+            $(advancedTeamsPerSchool),
+            $(teamsPerSchool),
+            $(beginnerTeamsPerEvent),
+            $(advancedTeamsPerEvent),
+            $(teamsPerEvent),
+            $(description))`,
+    {
+        name,
+        location,
+        date,
+        time,
+        beginnerTeamsPerSchool,
+        advancedTeamsPerSchool,
+        teamsPerSchool,
+        beginnerTeamsPerEvent,
+        advancedTeamsPerEvent,
+        teamsPerEvent,
+        description}
     );
 }
 
@@ -35,9 +79,34 @@ function createEvent({name, location, date, time, teamsPerSchool, teamsPerEvent,
  */
 function getAllEvents() {
     return db.any(
-        "SELECT C.eventName, C.CompetitionID, C.EventLocation, C.EventDate, C.EventTime, C.TeamsPerSchool, C.TeamsPerEvent, C.EventDescription " +
-            "FROM Competition AS C"
-    ).then((events) => renameKeys(events,["name", "id", "location", "date", "time", "teamsPerSchool", "teamsPerEvent", "description"]));
+        `SELECT
+            C.eventName,
+            C.CompetitionID,
+            C.EventLocation,
+            C.EventDate,
+            C.EventTime,
+            C.BeginnerTeamsPerSchool,
+            C.AdvancedTeamsPerSchool,
+            C.TeamsPerSchool,
+            C.BeginnerTeamsPerEvent,
+            C.AdvancedTeamsPerEvent,
+            C.TeamsPerEvent,
+            C.EventDescription
+        FROM Competition AS C`
+    ).then((events) => renameKeys(events,[
+        "name",
+        "id",
+        "location",
+        "date",
+        "time",
+        "advancedTeamsPerSchool",
+        "beginnerTeamsPerSchool",
+        "teamsPerSchool",
+        "beginnerTeamsPerEvent",
+        "advancedTeamsPerEvent",
+        "teamsPerEvent",
+        "description"
+    ]));
 }
 
 /*
@@ -59,10 +128,22 @@ function getEventHistory(userID) {
 // returns the TeamsPerSchool and TeamsPerEvent for a given competition
 function getCompetitionTeamsInfo(competitionID) {
     return db.oneOrNone(
-        `SELECT TeamsPerSchool, TeamsPerEvent FROM Competition WHERE CompetitionID = $(competitionID);`,
+        `SELECT 
+            BeginnerTeamsPerSchool,
+            AdvancedTeamsPerSchool,
+            TeamsPerSchool,
+            BeginnerTeamsPerEvent,
+            AdvancedTeamsPerEvent,
+            TeamsPerEvent
+        FROM Competition
+        WHERE CompetitionID = $(competitionID);`,
         { competitionID }
-    ).then((teamsInfo) => Object.assign({}, teamsInfo, {
+    ).then((teamsInfo) => ({
+        beginnerTeamsPerSchool: teamsInfo.beginnerteamsperschool,
+        advancedTeamsPerSchool: teamsInfo.advancedteamsperschool,
         teamsPerSchool: teamsInfo.teamsperschool,
+        beginnerTeamsPerEvent: teamsInfo.beginnerteamsperevent,
+        advancedTeamsPerEvent: teamsInfo.advancedteamsperevent,
         teamsPerEvent: teamsInfo.teamsperevent,
     }));
 }

@@ -8,7 +8,7 @@ import Collapsible from "react-collapsible";
 import axios from "axios";
 import { connect } from "react-redux";
 
-import { Badge, Table, Button, ButtonToolbar, Panel } from "react-bootstrap";
+import { Badge, Table, Button, ButtonToolbar, Card } from "react-bootstrap";
 
 /*
  * @author: Steven Blair
@@ -194,11 +194,11 @@ function JudgeTeam(props) {
     return <></>;
   }
   return (
-    <Panel style={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}>
-      <Panel.Heading>
+    <Card style={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}>
+      <Card.Heading>
         <h4>{"Team: " + props.teamdata.teamname}</h4>
-      </Panel.Heading>
-      <Panel.Body>
+      </Card.Heading>
+      <Card.Body>
         <Collapsible
           transitionTime={100}
           trigger={
@@ -207,8 +207,8 @@ function JudgeTeam(props) {
         >
           <Questions questions={data} teamdata={props.teamdata} />
         </Collapsible>
-      </Panel.Body>
-    </Panel>
+      </Card.Body>
+    </Card>
   );
 }
 

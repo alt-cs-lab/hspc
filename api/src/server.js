@@ -8,7 +8,17 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const passport = require("passport");
 const controllerDirectory = pathJoin(__dirname, 'controllers');
+const { db } = require("./utils/hspc_db")
 
+// check db connection
+db.connect()
+    .then(obj => {
+        obj.done()
+    })
+    .catch(error => {
+        console.log('ERROR:', error.message || error)
+        process.exit()
+    })
 
 //region Set Up Middleware
 api.use(helmet());

@@ -8,14 +8,10 @@ import UpgradeService from "../../_common/services/upgrade";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import ReactTable from "react-table";
-import "react-table/react-table.css";
-import {
-    UPDATE_SUCCESS_MSG,
-    UPDATE_ERROR_MSG,
-    CLEAR_ERRORS,
-} from "../../_store/actions/types";
+// import "react-table/react-table.css";
 import {connect} from "react-redux";
 import "../../_common/assets/css/ReactTableCSS.css";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
 
 class UpgradeRequests extends Component {
@@ -194,11 +190,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        dispatchResetErrors: () => dispatch({type: CLEAR_ERRORS}),
+        dispatchResetErrors: () => dispatch(clearErrors()),
         dispatchError: (message) =>
-            dispatch({type: UPDATE_ERROR_MSG, payload: message}),
+            dispatch(updateErrorMsg(message)),
         dispatchSuccess: (message) =>
-            dispatch({type: UPDATE_SUCCESS_MSG, payload: message}),
+            dispatch(updateSuccessMsg(message)),
     };
 };
 

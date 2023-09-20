@@ -1,9 +1,13 @@
 const axios = require('axios').default;
 
+const fetchToken = () => localStorage.jwtToken || ""
+
 class RequestUtils {
     static getRequest(url, urlParams){
-        return axios.get(url,
-            {params: urlParams})
+        return axios.get(url, {
+                headers: { Authorization: fetchToken() },
+                params: urlParams
+            })
             .then(response => {
                 return response;
             })
@@ -15,7 +19,9 @@ class RequestUtils {
 
     static postRequest(url, data){
 
-        return axios.post(url,data)
+        return axios.post(url,data, {
+            headers: { Authorization: fetchToken() }
+        })
             .then(response => {
                 return response;
             })
@@ -26,7 +32,9 @@ class RequestUtils {
     };
 
     static patchRequest(url, data){
-        return axios.patch(url, data)
+        return axios.patch(url, data, {
+            headers: fetchToken()
+        })
             .then(response => {
                 return response;
             })
@@ -37,7 +45,9 @@ class RequestUtils {
     };
 
     static deleteRequest(url, data){
-        return axios.delete(url, data)
+        return axios.delete(url, data, {
+            Authorization: fetchToken()
+        })
             .then(response => {
                 return response;
             })

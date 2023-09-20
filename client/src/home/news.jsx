@@ -4,11 +4,7 @@ import StatusMessages from "../_common/components/status-messages/status-message
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import "../_common/assets/css/create-news.css";
-import {
-    UPDATE_SUCCESS_MSG,
-    UPDATE_ERROR_MSG,
-    CLEAR_ERRORS,
-} from "../_store/actions/types";
+import {updateErrorMsg, updateSuccessMsg, clearErrors} from "../_store/slices/errorSlice"
 import {connect} from "react-redux";
 
 /*
@@ -174,11 +170,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        dispatchResetErrors: () => dispatch({type: CLEAR_ERRORS}),
+        dispatchResetErrors: () => dispatch(clearErrors()),
         dispatchError: (message) =>
-            dispatch({type: UPDATE_ERROR_MSG, payload: message}),
+            dispatch(updateErrorMsg(message)),
         dispatchSuccess: (message) =>
-            dispatch({type: UPDATE_SUCCESS_MSG, payload: message}),
+            dispatch(updateSuccessMsg(message))
     };
 };
 
