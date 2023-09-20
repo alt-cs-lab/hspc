@@ -5,10 +5,10 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Watch Host",
+            "label": "Watch React Client",
             "type": "shell",
             // switch to the server directory and launch React dev server
-            "command": "cd server && npm install && npm start",
+            "command": "cd client && npm install && npm start",
             "group": "build",
             "presentation": {
                 "group": "buildGroup",
@@ -18,7 +18,7 @@
             }
         },
         {
-            "label": "Watch API",
+            "label": "Watch API Server",
             "type": "shell",
             // Switch to the api directory and launch development server
             "command": "cd api && npm install && npm run dev",
@@ -33,8 +33,8 @@
         {
             "label": "Watch All",
             "dependsOn": [
-                "Watch Host",
-                "Watch API"
+                "Watch Rect Client",
+                "Watch API Server"
             ],
             "group": "build",
             "runOptions": {
