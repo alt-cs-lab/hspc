@@ -34,3 +34,9 @@
 #title{
     text-align: center;
 }
+
+.card{
+    background-color: #D1D1D1;
+    margin: auto;
+    width: '18rem'
+}

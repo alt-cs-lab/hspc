@@ -9,12 +9,8 @@ import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/register-user.css";
 import UserService from "../../_common/services/user";
 import Select from "react-select";
-import {
-  UPDATE_SUCCESS_MSG,
-  UPDATE_ERROR_MSG,
-  CLEAR_ERRORS,
-} from "../../_store/actions/types";
 import { connect } from "react-redux";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
 const selectStyles = {
   menu: (base) => ({
@@ -152,11 +148,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchResetErrors: () => dispatch({ type: CLEAR_ERRORS }),
-    dispatchError: (message) =>
-      dispatch({ type: UPDATE_ERROR_MSG, payload: message }),
-    dispatchSuccess: (message) =>
-      dispatch({ type: UPDATE_SUCCESS_MSG, payload: message }),
+    dispatchResetErrors: () => dispatch(clearErrors()),
+		dispatchError: (message) =>
+			dispatch(updateErrorMsg(message)),
+		dispatchSuccess: (message) =>
+			dispatch(updateSuccessMsg(message))
   };
 };
 

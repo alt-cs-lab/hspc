@@ -17,36 +17,36 @@ class UserService {
     * Calls the API and returns a JSON list of all registered users.
     */
     getAllUsers() {
-        return ServiceUtils.getRequest('/user/view', {});
+        return ServiceUtils.getRequest('/api/user/view', {});
     }
 
     getAllVolunteers() {
-        return ServiceUtils.getRequest('/user/volunteers', {});
+        return ServiceUtils.getRequest('/api/user/volunteers', {});
     };
 
     getActiveVolunteers() {
-        return ServiceUtils.getRequest('/user/activevolunteers', {});
+        return ServiceUtils.getRequest('/api/user/activevolunteers', {});
     }
 
     /*
      * API Endpoint that returns all volunteers currently assigned to teams
      */
     getAllVolunteerAssignments() {
-        return ServiceUtils.getRequest('/user/getallvolunteerassignments', {});
+        return ServiceUtils.getRequest('api/user/getallvolunteerassignments', {});
     }
 
     /*
      * API Endpoint that returns all teams that have been assigned a volunteer
      */
     getAllTeamAssignments() {
-        return ServiceUtils.getRequest('/user/getallteamassignments', {});
+        return ServiceUtils.getRequest('api/user/getallteamassignments', {});
     }
 
     /*
     * API Endpoint that returns all users with Advisor access.
     */
     getAllAdvisors() {
-        return ServiceUtils.getRequest('/user/advisors', {});
+        return ServiceUtils.getRequest('api/user/advisors', {});
     };
 
     /*
@@ -54,7 +54,7 @@ class UserService {
        *
        */
     getAllStudents() {
-        return ServiceUtils.getRequest('/user/students', {});
+        return ServiceUtils.getRequest('api/user/students', {});
     };
 
 
@@ -67,14 +67,14 @@ class UserService {
        * modified to get the users assiated with an advisor Natalie Laughlin
        */
     getStudentsFromAdvisors(email) {
-        return ServiceUtils.getRequest('/user/studentsAvisor', {email: email});
+        return ServiceUtils.getRequest('api/user/studentsAvisor', {email: email});
     };
 
     /*
      * API Endpoint that returns all users with Student based on team name
      */
     getstudentsteam(teamName) {
-        return ServiceUtils.getRequest('/user/viewteam', {teamName: teamName});
+        return ServiceUtils.getRequest('api/user/viewteam', {teamName: teamName});
     };
 
 
@@ -83,7 +83,7 @@ class UserService {
     *
     */
     addstudent(firstName, lastName, email, phone, accesslevel, requestlevel, hashedPassword, advisoremail) {
-        return ServiceUtils.postRequest('/user/addstudent', {
+        return ServiceUtils.postRequest('api/user/addstudent', {
             firstName: firstName,
             lastName: lastName,
             email: email,
@@ -102,7 +102,7 @@ class UserService {
     */
     addadvisor(firstName, lastName, email, phone, accesslevel, requestlevel, hashedPassword, schoolname) {
 
-        return ServiceUtils.postRequest('/user/addadvisor', {
+        return ServiceUtils.postRequest('api/user/addadvisor', {
             firstName: firstName,
             lastName: lastName,
             email: email,
@@ -120,7 +120,7 @@ class UserService {
 
     */
     updateAdvisorSchool(userId, schoolId) {
-        return ServiceUtils.postRequest('/user/addschool', {
+        return ServiceUtils.postRequest('api/user/addschool', {
             userId: userId,
             schoolId: schoolId
         });
@@ -130,7 +130,7 @@ class UserService {
     *API Endpoint that sets a volunteer as active in the database
     */
     checkInVolunteer(userId) {
-        return ServiceUtils.postRequest('/user/checkinvolunteer', {
+        return ServiceUtils.postRequest('api/user/checkinvolunteer', {
             userId: userId
         });
     }
@@ -139,7 +139,7 @@ class UserService {
     *API Endpoint that checks out a volunteer
     */
     checkOutVolunteer(userId) {
-        return ServiceUtils.postRequest('/user/checkoutvolunteer', {
+        return ServiceUtils.postRequest('api/user/checkoutvolunteer', {
             userId: userId
         });
     }
@@ -153,7 +153,7 @@ class UserService {
     * @param {string} text value of the team ID
     */
     logVolunteerAssignment(compID, volID, teamID) {
-        return ServiceUtils.postRequest('/user/assignment', {
+        return ServiceUtils.postRequest('api/user/assignment', {
             compID: compID,
             volID: volID,
             teamID: teamID
@@ -170,7 +170,7 @@ class UserService {
     * @param {string} encrypted text value of the new user's password
     */
     addUser(teamName, firstName, lastName, email, phone, accesslevel, hashedPassword) {
-        return ServiceUtils.postRequest('/user/create', {
+        return ServiceUtils.postRequest('api/user/create', {
             teamName: teamName,
             firstName: firstName,
             lastName: lastName,
@@ -188,7 +188,7 @@ class UserService {
         * @author: Trent Kempker
         */
     getVolunteerAssignment(volunteerid) {
-        return ServiceUtils.postRequest('/user/getvolunteerassignment', {
+        return ServiceUtils.postRequest('api/user/getvolunteerassignment', {
             volunteerid: volunteerid
         });
     };
@@ -199,7 +199,7 @@ class UserService {
     * @author: May Phyo 
     */
     getTeamAssignment(teamid) {
-        return ServiceUtils.getRequest('/user/getteamassignment', {
+        return ServiceUtils.getRequest('api/user/getteamassignment', {
             teamid: teamid
         });
     };
@@ -208,7 +208,7 @@ class UserService {
     * API Endpoint that deletes the assignment based on volunteeid
     */
     removeAssignment(volunteerid) {
-        return ServiceUtils.deleteRequest('/user/removeassignment', {
+        return ServiceUtils.deleteRequest('api/user/removeassignment', {
             volunteerid: volunteerid
         });
     }

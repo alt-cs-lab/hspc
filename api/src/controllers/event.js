@@ -65,7 +65,11 @@ router.get("/view", (req, res) => {
  * @apiBody {String} [location] The location of the event.
  * @apiBody {String} [date] The date of the event.
  * @apiBody {String} [time] The time of the event.
+ * @apiBody {Number} [beginnerTeamsPerSchool] The number of teams per school.
+ * @apiBody {Number} [advancedTeamsPerSchool] The number of teams per school.
  * @apiBody {Number} [teamsPerSchool] The number of teams per school.
+ * @apiBody {Number} [beginnerTeamsPerEvent] The number of beginner teams per event.
+ * @apiBody {Number} [advancedTeamsPerEvent] The number of advanced teams per event.
  * @apiBody {Number} [teamsPerEvent] The number of teams per event.
  * @apiBody {String} [description] The description of the event.
  *
@@ -85,7 +89,29 @@ router.get("/view", (req, res) => {
  *       "message": "Internal Server Error"
  *     }
  */
-router.post("/create",
+router.post("/create", [
+        check("name")
+            .not().isEmpty().withMessage("Name is required"),
+        check("location")
+            .not().isEmpty().withMessage("Location is required"),
+        check("date")
+            .isDate().withMessage("Date is required"),
+        check("time")
+            .isTime().withMessage("Time is required"),
+        check("beginnerTeamsPerSchool")
+            .isInt({ min: 0 }).withMessage("Beginner Teams per school"),
+        check("advancedTeamsPerSchool")
+            .isInt({ min: 0 }).withMessage("Advanced Teams per school required"),
+        check("teamsPerSchool")
+            .isInt({ min: 1 }).withMessage("Teams per school required"),
+        check("beginnerTeamsPerEvent")
+            .isInt({ min: 0 }).withMessage("Beginner Teams per school required"),
+        check("advancedTeamsPerEvent")
+            .isInt({ min: 0 }).withMessage("Advanced Teams per school required"),
+        check("teamsPerEvent")
+            .isInt({ min: 2 }).withMessage("Teams per event required"),
+
+    ],
     passport.authenticate("jwt", { session: false }), //authenticate with JWT
     minimumAccessLevelCheck(constants.ADMIN), //check if user is admin
     [check("name").not().isEmpty().withMessage("name is required")], //check if name is provided

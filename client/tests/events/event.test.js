@@ -7,8 +7,8 @@ import React from 'react';
 import {render, screen} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import store from '../../src/_store/store';
-import App from '../../src/events/event';
+import store from '../../_store/store';
+import App from '../../events/event';
 
 const Wrapper = ({ children }) => (
     <Provider store={store}>{children}</Provider>
