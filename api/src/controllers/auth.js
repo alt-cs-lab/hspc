@@ -55,13 +55,19 @@ router.post("/verify", [
     check("ticket")
         .not()
         .isEmpty().withMessage("CAS ticket required."),
-], async (req, res) => {
+    check(["firstName", "lastName"])
+        .custom( (value, { req }) => retVal = !value || (!!req.body.firstName && !!req.body.lastName))
+], badRequestCheck, async (req, res) => {
 
     const ticket = req.body['ticket']
+    const firstName = req.body['firstName']
+    const lastName = req.body['lastName']
     const serviceHost = encodeURI(process.env.SERVICE_HOST)
-    const url = process.env.CAS_HOST + "serviceValidate?ticket=" + ticket + "&service=" + serviceHost + "ticket"
+    const url = process.env.CAS_HOST
+        + "serviceValidate?ticket=" + ticket
+        + "&service=" + serviceHost + "ticket" + ((firstName && lastName) ? "/register" : "")
 
-    authService.loginOrRegister(url)
+    authService.loginOrRegister(url, firstName, lastName)
         .then(data => statusResponse.ok(res, data))
         .catch( _ => statusResponse.badRequest(res))
 

@@ -9,12 +9,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import schoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/register-user.css";
-import {
-    UPDATE_SUCCESS_MSG,
-    UPDATE_ERROR_MSG,
-    CLEAR_ERRORS,
-} from "../../_store/actions/types";
 import {connect} from "react-redux";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
 /*
  * @author: Tyler Trammell
@@ -237,11 +233,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        dispatchResetErrors: () => dispatch({type: CLEAR_ERRORS}),
+        dispatchResetErrors: () => dispatch(clearErrors()),
         dispatchError: (message) =>
-            dispatch({type: UPDATE_ERROR_MSG, payload: message}),
+            dispatch(updateErrorMsg(message)),
         dispatchSuccess: (message) =>
-            dispatch({type: UPDATE_SUCCESS_MSG, payload: message}),
+            dispatch(updateSuccessMsg(message)),
     };
 };
 

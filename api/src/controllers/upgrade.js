@@ -49,6 +49,44 @@ router.get(
 );
 
 /**
+ * @api {get} /api/upgrade/admin/view View Admin Upgrade Requests
+ * @apiName ViewAdminUpgradeRequests
+ * @apiGroup Upgrade
+ * @apiHeader {String} Authorization JWT Token
+ * @apiDescription Returns a list of JSON objects of every User who has an outstanding admin upgrade request.
+ *
+ * @apiSuccess {Array} data List of User Objects
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     [
+ *         {
+ *             "firstname": "Carl",
+ *             "lastname": "Schwarts",
+ *             "email": "cschwarts@gmail.com",
+ *             "accesslevel": 1,
+ *             "requestlevel": 80
+ *         },
+ *         ...
+ *     ]
+ *
+ * @apiError {Number} 401 Unauthorized
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 401 Unauthorized
+ *     {
+ *       Unauthorized
+ *     }
+ */
+router.get(
+    "/admin/view",
+    passport.authenticate("jwt", { session: false }),
+    minimumAccessLevelCheck(constants.ADMIN),
+    (req, res) => {
+        useService(upgradeService.getAdminUpgrades, req, res);
+    }
+);
+
+/**
  * @api {post} /api/upgrade/accept Accept Upgrade Request
  * @apiName AcceptUpgradeRequest
  * @apiGroup Upgrade

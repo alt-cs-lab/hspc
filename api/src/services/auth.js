@@ -50,7 +50,7 @@ function login({ email, password }) {
     
 }
 
-const loginOrRegister = async (url) => {
+const loginOrRegister = async (url, firstName, lastName) => {
     const casResponse = await axios.get(url)
     const parser = new XMLParser()
     const casData = parser.parse(casResponse.data)
@@ -66,19 +66,29 @@ const loginOrRegister = async (url) => {
     let lockedDown = false
 
     if (!user) {
-        const peopleResponse = await axios.get('https://k-state.edu/People/filter/eid=' + "laskdjkfl")
+        const peopleResponse = await axios.get('https://k-state.edu/People/filter/eid=' + eid)
         const xmlParser = new XMLParser()
         const peopleData = xmlParser.parse(peopleResponse.data)
         lockedDown = !(peopleData.results && peopleData.results.result)
-        if (!lockedDown)  {
-            const result = peopleData.results.result
-            await userService.casRegister(result.fn, result.ln, email)
+        if (!lockedDown) {
+            let result = peopleData.results.result
+            // if result is an array grab the one with a matching eid
+            if (Array.isArray(result)) {
+                for (let i = 0; i < result.length; i++) {
+                    if (result[i].eid === eid) {
+                        result = result[i]
+                        break
+                    }
+                }
+            }
+            firstName = result.fn
+            lastName = result.ln
+        }
+
+        if (firstName && lastName)  {
+            await userService.casRegister(firstName, lastName, email)
             user = await userService.getLogin(email)
         }
-    }
-
-    if (lockedDown) {
-        return { lockedDown }
     }
 
     if (user) {
@@ -93,7 +103,11 @@ const loginOrRegister = async (url) => {
             success: true,
             token: "Bearer " + jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 86400 }), // 1 day in seconds
         };
-    } else {
+    }
+    else if (lockedDown) {
+        return { lockedDown }
+    }
+    else {
         throw Error()
     }
 }

@@ -54,6 +54,9 @@ describe('Auth Testing Suite', () => {
 
 
 	describe('/verify', () => {
+		beforeEach(() => {
+			axios.get.mockReset()
+		})
 		it('should sign in a registered user', async () => {
 			const data = `
 				<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
@@ -64,21 +67,103 @@ describe('Auth Testing Suite', () => {
 					</cas:authenticationSuccess>
 				</cas:serviceResponse>`
 
-			// const axios = jest.mock('axios')
 			axios.get.mockResolvedValueOnce({
 				statusCode: 200,
 				data: data
-			});
+			})
 
 			const response = await request
 				.post("/api/auth/verify")
-				.send({ ticket: "dummyticket" });
+				.send({ ticket: "dummyticket" })
 
-			expect(response.statusCode).toBe(200);
-
+			expect(response.statusCode).toBe(200)
+			expect(!!response.body.token).toBe(true)
 		})
 
-		it('should fail to regsiter a locked down person', async () => {
+		it('should respond with locked down for missing person in ksu people db', async () => {
+			const casData = `
+				<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+					<cas:authenticationSuccess>
+						<cas:user>newcas</cas:user>
+						<cas:dirkey>dummy</cas:dirkey>
+						<cas:ksuPersonWildcatID>999999</cas:ksuPersonWildcatID>
+					</cas:authenticationSuccess>
+				</cas:serviceResponse>`
+
+			const peopleData = `
+				<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+				<results count="0" returned="0" code="200" msg="successful"/>`
+
+			axios.get
+				.mockResolvedValueOnce({
+					statusCode: 200,
+					data: casData
+				})
+				.mockResolvedValueOnce({
+					statusCode: 200,
+					data: peopleData
+				})
+
+			const response = await request
+				.post("/api/auth/verify")
+				.send({ ticket: "dummyticket" })
+
+			expect(response.body.lockedDown).toBe(true)
+
+			const newUser = await userService.getLogin('newcas@ksu.edu')
+			expect(!!newUser).toBe(false)
+		})
+
+		it('should register a valid unregistered user as volunteer', async () => {
+			const casData = `
+				<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+					<cas:authenticationSuccess>
+						<cas:user>newcas</cas:user>
+						<cas:dirkey>dummy</cas:dirkey>
+						<cas:ksuPersonWildcatID>999999</cas:ksuPersonWildcatID>
+					</cas:authenticationSuccess>
+				</cas:serviceResponse>`
+			const peopleData = `
+				<?xml version= \"1.0\" encoding= \"ISO-8859-1\" standalone= \"yes\"?>
+				<results count= \"1\" returned= \"1\" code= \"200\" msg= \"successful\">
+					<result order= \"0\">
+						<dirkey>DK637dlh2881</dirkey>
+						<eid>novelly</eid>
+						<email>c03e09602aea3cbc2e0121fa55ab55694721b65f721b</email>
+						<fn>Cas</fn>
+						<mn>Na</mn>
+						<ln>User</ln>
+						<stu>
+							<lvl>Senior</lvl>
+							<plans>
+								<plan>Computer Science</plan>
+							</plans>
+						</stu>
+						<score>101</score>
+					</result>
+				</results>`
+
+			axios.get
+				.mockResolvedValueOnce({
+					statusCode: 200,
+					data: casData
+				})
+				.mockResolvedValueOnce({
+					statusCode: 200,
+					data: peopleData
+				})
+
+			const response = await request
+				.post("/api/auth/verify")
+				.send({ ticket: "dummyticket" })
+
+			expect(response.statusCode).toBe(200)
+			expect(!!response.body.token).toBe(true)
+			const newUser = await userService.getLogin('newcas@ksu.edu')
+			expect(newUser.accessLevel).toBe(constants.VOLUNTEER)
+		})
+
+		it('should register a locked down user with name details', async () => {
 			const casData = `
 				<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
 					<cas:authenticationSuccess>
@@ -104,12 +189,22 @@ describe('Auth Testing Suite', () => {
 
 			const response = await request
 				.post("/api/auth/verify")
-				.send({ ticket: "dummyticket" });
+				.send({
+					ticket: "dummyticket",
+					firstName: "Locked",
+					lastName: "Down",
+				});
 
-			expect(response.body.lockedDown).toBe(true);
+			expect(response.statusCode).toBe(200)
+			expect(!!response.body.token).toBe(true)
+
+			const newUser = await userService.getLogin('newcas@ksu.edu')
+			expect(newUser.accessLevel).toBe(constants.VOLUNTEER)
+			expect(newUser.firstName).toBe('Locked')
+			expect(newUser.lastName).toBe('Down')
 		})
 
-		it('should register a valid unregistered user as volunteer', async () => {
+		it('should fail to register a locked down user with missing first name', async () => {
 			const casData = `
 				<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
 					<cas:authenticationSuccess>
@@ -118,25 +213,10 @@ describe('Auth Testing Suite', () => {
 						<cas:ksuPersonWildcatID>999999</cas:ksuPersonWildcatID>
 					</cas:authenticationSuccess>
 				</cas:serviceResponse>`
+
 			const peopleData = `
-				<?xml version= \"1.0\" encoding= \"ISO-8859-1\" standalone= \"yes\"?>
-				<results count= \"1\" returned= \"1\" code= \"200\" msg= \"successful\">
-					<result order= \"0\">
-						<dirkey>DK637dlh2881</dirkey>
-						<eid>novelly</eid>
-						<email>c03e09602aea3cbc2e0121fa55ab55694721b65f721b</email>
-						<fn>Austin</fn>
-						<mn>Paul</mn>
-						<ln>Novelly</ln>
-						<stu>
-							<lvl>Senior</lvl>
-							<plans>
-								<plan>Computer Science</plan>
-							</plans>
-						</stu>
-						<score>101</score>
-					</result>
-				</results>`
+				<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+				<results count="0" returned="0" code="200" msg="successful"/>`
 
 			axios.get
 				.mockResolvedValueOnce({
@@ -150,11 +230,46 @@ describe('Auth Testing Suite', () => {
 
 			const response = await request
 				.post("/api/auth/verify")
-				.send({ ticket: "dummyticket" });
+				.send({
+					ticket: "dummyticket",
+					lastName: "Down",
+				});
 
-			expect(response.statusCode).toBe(200);
-			const newUser = await userService.getLogin('newcas@ksu.edu')
-			expect(newUser.accessLevel).toBe(constants.VOLUNTEER)
+			expect(response.statusCode).toBe(400)
+		})
+
+		it('should fail to register a locked down user with missing last name', async () => {
+			const casData = `
+				<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+					<cas:authenticationSuccess>
+						<cas:user>newcas</cas:user>
+						<cas:dirkey>dummy</cas:dirkey>
+						<cas:ksuPersonWildcatID>999999</cas:ksuPersonWildcatID>
+					</cas:authenticationSuccess>
+				</cas:serviceResponse>`
+
+			const peopleData = `
+				<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+				<results count="0" returned="0" code="200" msg="successful"/>`
+
+			axios.get
+				.mockResolvedValueOnce({
+					statusCode: 200,
+					data: casData
+				})
+				.mockResolvedValueOnce({
+					statusCode: 200,
+					data: peopleData
+				});
+
+			const response = await request
+				.post("/api/auth/verify")
+				.send({
+					ticket: "dummyticket",
+					firstName: "Down",
+				});
+
+			expect(response.statusCode).toBe(400)
 		})
 
 		it('should fail to register an invalid ticket', async () => {
@@ -171,9 +286,9 @@ describe('Auth Testing Suite', () => {
 
 			const response = await request
 				.post("/api/auth/verify")
-				.send({ ticket: "dummyticket" });
+				.send({ ticket: "dummyticket" })
 
-			expect(response.statusCode).toBe(400);
+			expect(response.statusCode).toBe(400)
 		})
 	})
 });

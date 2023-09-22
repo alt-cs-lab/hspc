@@ -1,36 +1,96 @@
-h2{
-    font-size: 36px;
-    margin-top: 10px;
+:root {
+    --primary: #512888;
+    --text-color-default: #ffffff;
+    --text-color-default-hover: #D1D1D1;
+    /*to change navbar-toggler-icon colorneeds to be updated manually to change their color*/
 }
-h3{
-    margin-bottom: 1em;
+nav.navbar, .navbar-light, .navbar-brand{
+    color: var(--text-color-default);
+    background-color: var(--primary);
+    border-top-color: var(--primary);
 }
+
+
+.navbar-light .navbar-brand,
+.navbar-light .navbar-nav nav-link{
+    text-decoration: none;
+    color: var(--text-color-default);
+    padding-right: .5rem;
+    padding-left: .5rem;
+}
+
+.navbar-light .navbar-toggler{
+    color: var(--text-color-default);
+    border: solid;
+    /*Don't want the size of the bar adjusting so blend it into background instead of removing*/
+    border-color: var(--primary); 
+}
+
+.navbar-light .navbar-toggler:focus{
+    box-shadow: 0 0 0 0;
+}
+
+.navbar-light .navbar-toggler:hover{
+    border-color: var(--text-color-default-hover);
+}
+
+.navbar-light .navbar-toggler-icon:hover{
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23D1D1D1' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-light .navbar-toggler-icon{
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23FFFFFF' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-brand .nav-link:hover,
+.navbar-light .navbar-nav .nav-link.active, 
+.navbar-light .navbar-nav .show>.nav-link{
+    text-decoration: underline;
+    color: var(--text-color-default-hover);
+}
+
+.navbar-light .navbar-brand .nav-link{
+    color: white;
+}
+
+.navbar-light .navbar-collapse{
+    justify-content: end;
+}
+button.Scorecards.btn.btn-primary,
+button.Problems.btn.btn-primary{
+  background-color: var(--primary);
+  border: solid 1px black;
+  font-size: 14px;
+  padding: 14px;
+  margin: .5rem;
+  display: inline;
+}
+button.Scorecards.btn.btn-primary:hover,
+button.Problems.btn.btn-primary:hover{
+    padding: 10px;
+    border: solid 4px black;
+  }
+.InlineButtons{
+    display: inline;
+}
+
+.event-body{
+    margin-top: .5rem;
+    height: 700px;
+    text-align: center;
+    align-content: center;
+    background-color: white;
+}
+
 .jumbotron{
     margin-bottom: 4em;
     height: 350px;
     text-align: center;
     background-color: #ffffff;
 }
-.person-wrapper{
-    margin-bottom: 2em;
-}
-.profile-pic{
-    width: 50%;
-}
-.navbar{
-    margin: 0px;
-    padding: 0px;
-    border: none;
-}
-.page-body{
-    margin: 0px;
-    padding: 0px;
-    border: none;
-    height: 700px;
-    text-align: center;
-    align-content: center;
-    background-color: #ffffff;
-}
+
 .pdf{
     width: 100%;
     height: 1000px;

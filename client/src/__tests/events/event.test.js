@@ -7,19 +7,18 @@ import React from 'react';
 import {render, screen} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import store from '../../src/_store/store';
-
-import App from '../../src/home/news';
+import store from '../../_store/store';
+import App from '../../events/event';
 
 const Wrapper = ({ children }) => (
     <Provider store={store}>{children}</Provider>
 );
 
-describe("News", () => {
+describe("Competitions", () => {
     it("Should render page", () => {
         render(<App />, {wrapper: Wrapper});
 
-        const title = screen.getByText("Create News");
+        const title = screen.getByText("Competitions");
 
         expect(title).toBeTruthy();
     })

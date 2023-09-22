@@ -14,6 +14,7 @@ const queries = fs.readFileSync(`${dbdir}/hspc_queries-psql.sql`, 'utf8');
 const schools = `${dbdir}/SchoolDirectoryCSV.csv`;
 const populate = fs.readFileSync(`${dbdir}/hspc_testpopulate.sql`, 'utf8');
 let adminToken = null;
+let advisorToken = null;
 
 async function populate_schools() {
     try {
@@ -63,7 +64,10 @@ async function resetDatabase() {
         const loginResponse = await login('dm@gmail.com', 'password1234');
         adminToken = loginResponse.body.token;
     }
-    
+    if (advisorToken == null) {
+        const loginResponse = await login('jsmith@gmail.com', 'password1234');
+        advisorToken = loginResponse.body.token;
+    }
 }
 
 async function closeConnection() {
@@ -102,6 +106,7 @@ module.exports = {
     closeConnection,
     login,
     getMasterToken,
+    getAdvisorToken: () => advisorToken,
     timeoutSetup,
     getAdminToken: () => adminToken
 }

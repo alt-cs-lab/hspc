@@ -23,6 +23,7 @@ module.exports = {
     addstudent,
     getStudentsFromAdvisors,
     getstudentsteam,
+    getAdvisorSchool,
     addadvisor,
     checkinvolunteer,
     checkoutvolunteer,
@@ -146,6 +147,16 @@ function getAdvisors(){
     return db.any(`SELECT Users.UserID, Users.FirstName, Users.LastName, Users.Email, School.SchoolName, Users.Phone FROM Users
     INNER JOIN AdvisorsAffiliation ON AdvisorsAffiliation.UserID = Users.UserID
     INNER JOIN School ON School.SchoolID = AdvisorsAffiliation.SchoolID;`)
+}
+
+// function to get the school associated with an advisor
+function getAdvisorSchool(){
+    return db.any(`SELECT School.SchoolName, School.SchoolID FROM School
+    INNER JOIN AdvisorsAffiliation ON AdvisorsAffiliation.SchoolID = School.SchoolID
+    INNER JOIN Users ON Users.UserID = AdvisorsAffiliation.UserID;`).then((data) =>  {
+        data = renameKeys(data, ['name', 'id']);
+        return data.length > 0 ? data[0] : null; 
+    });
 }
 
 //function to get all the students and their respective information who are not on a team

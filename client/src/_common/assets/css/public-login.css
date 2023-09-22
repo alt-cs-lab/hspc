@@ -1,4 +1,12 @@
-.LoginBox {
+:root {
+  --alert-color: #512888;
+  --button-color: #512888;
+  --text-color-default: #ffffff;
+  --text-color-default-hover: #D1D1D1;
+  /*to change navbar-toggler-icon colorneeds to be updated manually to change their color*/
+}
+
+#bootstrap-override .LoginBox {
   text-align: center;
   display: flex;
   align-items: center;
@@ -7,14 +15,60 @@
   flex-direction: column;
   margin: 20px;
 }
-.RegisterBox {
+
+#bootstrap-override .RegisterBox {
   text-align: center;
   margin: 2px;
   background-color: #ffffff;
 }
-.register-button {
-  margin: 15px;
+
+#bootstrap-override .register-button {
+  background-color: #00a655;
 }
-.login-button {
-  margin: 15px;
+
+#bootstrap-override .login-button {
+  background-color: #1C4F53;
+}
+
+#bootstrap-override .login-form-button{
+  border: solid 1px black;
+  font-size: 14px;
+  padding: 14px;
+}
+
+#bootstrap-override .login-form-button:hover{
+  padding: 11px;
+  border: solid 4px black;
+}
+
+#bootstrap-override .form-control-small{
+  border: 2px solid black;
+}
+
+#bootstrap-override .alert-primary {
+  color: #000000;
+  border-color: var(--alert-color);
+  font-weight: bold;
+}
+
+input.form-control.form-control-small{
+  border: 2px solid black;
+}
+
+.alert-primary {
+  color: #000000;
+  border-color: var(--alert-color);
+  font-weight: bold;
+}
+button.login-button.btn.btn-primary,
+button.register-button.btn.btn-primary{
+  background-color: var(--button-color);
+  border: solid 1px black;
+  font-size: 14px;
+  padding: 14px;
+}
+button.login-button.btn.btn-primary:hover,
+button.register-button.btn.btn-primary:hover{
+  padding: 10px;
+  border: solid 4px black;
 }

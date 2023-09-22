@@ -1,46 +1,56 @@
-nav.navbar, .navbar-default{
-    background-color: #350B4F !important;
+:root {
+    --primary: #512888;
+    --text-color-default: #ffffff;
+    --text-color-default-hover: #D1D1D1;
+    /*to change navbar-toggler-icon colorneeds to be updated manually to change their color*/
+}
+nav.navbar, .navbar-light, .navbar-brand{
+    color: var(--text-color-default);
+    background-color: var(--primary);
+    border-top-color: var(--primary);
 }
 
-.navbar-default{
-    background-image: none;
-    border: none;
-    border-radius: 0;
-    min-width: 320px;
-    width: auto; 
+
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link.active, 
+.navbar-light .navbar-nav .show>.nav-link{
+    text-decoration: underline;
+    color: var(--text-color-default-hover);
 }
 
-.navbar-default .navbar-nav>li>a{
-    color: #ffffff;
-    margin: 0%;
-}
-.navbar-default .navbar-brand{
-    color: #ffffff;
+
+.navbar-light .navbar-brand,
+.navbar-light .navbar-brand:hover,
+.navbar-light .navbar-nav .nav-link{
+    color: var(--text-color-default);
+    text-decoration: none;
 }
 
-.navbar-default .navbar-toggle{
-    border-color: #ffffff;
+.navbar-light .navbar-toggler{
+    color: var(--text-color-default);
+    border: solid;
+    /*Don't want the size of the bar adjusting so blend it into background instead of removing*/
+    border-color: var(--primary); 
 }
 
-.navbar-default .navbar-toggle .icon-bar{
-    background-color: #ffffff;
+.navbar-light .navbar-toggler:focus{
+    box-shadow: 0 0 0 0;
 }
 
-.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover{
-    background-color: transparent;
+.navbar-light .navbar-toggler:hover{
+    border-color: var(--text-color-default-hover);
 }
 
-.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover{
-    color: #ffffff;
-    background-color: transparent;
+.navbar-light .navbar-toggler-icon:hover{
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23D1D1D1' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover{
-    color: #ffffff;
-    background-color: black;
+.navbar-light .navbar-toggler-icon{
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23FFFFFF' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-.navbar-default .navbar-collapse, .navbar-default .navbar-form {
-    border-top-color: #350B4F;
-    border-top-style: none;
+
+.navbar-light .navbar-collapse{
+    justify-content: end;
 }

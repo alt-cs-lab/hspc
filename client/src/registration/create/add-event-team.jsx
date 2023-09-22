@@ -10,12 +10,8 @@ import StatusMessages from "../../_common/components/status-messages/status-mess
 import TeamService from "../../_common/services/team";
 import EventService from "../../_common/services/event";
 import participantService from "../../_common/services/participant";
-import {
-  UPDATE_SUCCESS_MSG,
-  UPDATE_ERROR_MSG,
-  CLEAR_ERRORS,
-} from "../../_store/actions/types";
 import { connect } from "react-redux";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
 const selectStyles = {
   menu: (base) => ({
@@ -245,11 +241,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchResetErrors: () => dispatch({ type: CLEAR_ERRORS }),
-    dispatchError: (message) =>
-      dispatch({ type: UPDATE_ERROR_MSG, payload: message }),
-    dispatchSuccess: (message) =>
-      dispatch({ type: UPDATE_SUCCESS_MSG, payload: message }),
+    dispatchResetErrors: () => dispatch(clearErrors()),
+		dispatchError: (message) =>
+			dispatch(updateErrorMsg(message)),
+		dispatchSuccess: (message) =>
+			dispatch(updateSuccessMsg(message))
   };
 };
 

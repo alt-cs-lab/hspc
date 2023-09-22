@@ -1,16 +1,9 @@
+import jwtDecode from "jwt-decode";
 import ServiceUtils from "../../_utilities/serviceUtils";
 
 class AuthService {
     constructor() {
         this.authenticatedUser = null;
-    }
-
-    /*
-    * Calls the API and verifies the users login credentials.
-    */
-    isAuthenticated() {
-        if (this.authenticatedUser) return true;
-        return ServiceUtils.postRequest('/auth/validate', {});
     }
 
     /*
@@ -43,10 +36,24 @@ class AuthService {
     * @param {string} plain text password from the user login page.
     */
     login(email, password) {
-        return ServiceUtils.postRequest('/auth/login', {
+        return ServiceUtils.postRequest('api/auth/login', {
             email: email,
             password: password
+        }).then((response) => {
+            if (response.status === 200 && response.data.success) {
+                localStorage.setItem("jwtToken", response.data.token)
+                return jwtDecode(response.data.token)
+            }
+            else {
+                throw new Error(response.data?.msg || "Login failed.");
+            }
         });
+    }
+
+
+    // TODO: revoke token from api.
+    logout() {
+        localStorage.removeItem("jwtToken")
     }
 }
 

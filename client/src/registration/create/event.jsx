@@ -9,14 +9,10 @@ import StatusMessages from "../../_common/components/status-messages/status-mess
 import ReCAPTCHA from "react-recaptcha";
 import eventService from "../../_common/services/event";
 import "../../_common/assets/css/create-event.css";
-import {
-    CLEAR_ERRORS,
-    UPDATE_SUCCESS_MSG,
-    UPDATE_ERROR_MSG,
-} from "../../_store/actions/types";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "../../_utilities/routerUtils"
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
 /*
  * @author: Daniel Bell, Trent Kempker
@@ -227,11 +223,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        dispatchError: (message) =>
-            dispatch({type: UPDATE_ERROR_MSG, payload: message}),
-        dispatchSuccess: (message) =>
-            dispatch({type: UPDATE_SUCCESS_MSG, payload: message}),
-        dispatchResetErrors: () => dispatch({type: CLEAR_ERRORS}),
+        dispatchResetErrors: () => dispatch(clearErrors()),
+		dispatchError: (message) =>
+			dispatch(updateErrorMsg(message)),
+		dispatchSuccess: (message) =>
+			dispatch(updateSuccessMsg(message))
     };
 };
 
@@ -239,3 +235,4 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(withRouter(CreateEvent)); //TODO: Replace, this is deprecated
+

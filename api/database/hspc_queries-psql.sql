@@ -46,7 +46,11 @@ CREATE TABLE Competition (
         EventTime VARCHAR(64),
         EventName VARCHAR(64),
         EventDescription VARCHAR(512),
+        BeginnerTeamsPerSchool INT,
+        AdvancedTeamsPerSchool INT,
         TeamsPerSchool INT,
+        BeginnerTeamsPerEvent INT,
+        AdvancedTeamsPerEvent INT,
         TeamsPerEvent INT,
         PRIMARY KEY (CompetitionID)
 );
@@ -132,6 +136,7 @@ CREATE TABLE Teams (
         TeamName VARCHAR(64),
         QuestionLevelID INT,
         AdvisorID INT,
+        Waitlisted BOOLEAN DEFAULT FALSE, 
         TimeCreated TIMESTAMP WITH TIME ZONE DEFAULT now() ,
         PRIMARY KEY (TeamID),
         FOREIGN KEY (SchoolID) REFERENCES School(SchoolID),
@@ -180,16 +185,6 @@ CREATE TABLE TeamsUsers (
         PRIMARY KEY (UserID, TeamID),
         FOREIGN KEY (UserID) REFERENCES Users(UserID),
         FOREIGN KEY (TeamID) REFERENCES Teams(TeamID)
-);
-
--- The waitlist, used when the team limits for a competition are filled. 
-CREATE TABLE Waitlist (
-        TeamID INT,
-        CompetitionID INT,
-        Date TIMESTAMP WITH TIME ZONE,
-        PRIMARY KEY (TeamID),
-        FOREIGN KEY (TeamID) REFERENCES Teams(TeamID),
-        FOREIGN KEY (CompetitionID) REFERENCES Competition(CompetitionID)
 );
 
 --Scores is a table used to _store the scores for each team.

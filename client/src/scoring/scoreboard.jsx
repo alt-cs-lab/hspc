@@ -14,12 +14,8 @@ import EventService from "../_common/services/event";
 import ScoreCardService from "../_common/services/scorecard";
 import ViewScore from "../_common/services/scoreboard";
 import io from "socket.io-client";
-import {
-  UPDATE_SUCCESS_MSG,
-  UPDATE_ERROR_MSG,
-  CLEAR_ERRORS,
-} from "../_store/actions/types";
 import { connect } from "react-redux";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../_store/slices/errorSlice.js";
 
 const URL = "ws://localhost:3001"; //for mine Natalie Laughlin
 var currentView = null;
@@ -314,11 +310,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchResetErrors: () => dispatch({ type: CLEAR_ERRORS }),
-    dispatchError: (message) =>
-      dispatch({ type: UPDATE_ERROR_MSG, payload: message }),
-    dispatchSuccess: (message) =>
-      dispatch({ type: UPDATE_SUCCESS_MSG, payload: message }),
+    dispatchResetErrors: () => dispatch(clearErrors()),
+		dispatchError: (message) =>
+			dispatch(updateErrorMsg(message)),
+		dispatchSuccess: (message) =>
+			dispatch(updateSuccessMsg(message))
   };
 };
 
