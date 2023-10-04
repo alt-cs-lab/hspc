@@ -5,7 +5,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "1. Setup Environment",
+            "label": "Setup Environment",
             "type": "shell",
             "command": "cp api/.env.example api/.env && echo 'Please populate the .env file with necessary fields.'",
             "group": "build",
@@ -15,7 +15,7 @@
             }
         },
         { 
-            "label": "2. Compose Database",
+            "label": "Compose Database",
             "type": "shell",
             "command": "cd api && docker compose up -d post_db",
             "dependsOn": [
@@ -28,7 +28,7 @@
             }
         },
         {
-            "label": "3. Populate Database",
+            "label": "Populate Database",
             "type": "shell",
             "command": "chmod u+x api/populate.sh && api/./populate.sh",
             "dependsOn": [
@@ -41,10 +41,50 @@
             }
         },
         {
-            "label": "Watch React Client",
+            "label": "NPM Install - Client",
             "type": "shell",
-            // switch to the server directory and launch React dev server
-            "command": "cd client && npm install && npm start",
+            "command": "cd client && npm install",
+            "dependsOn": [
+                "Populate Database"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "echo": true
+            }
+        },
+        {
+            "label": "NPM Install - API",
+            "type": "shell",
+            "command": "cd api && npm install",
+            "dependsOn": [
+                "Populate Database"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "echo": true
+            }
+        },
+        {
+            "label": "First Time Setup",
+            "dependsOn": [
+                "Setup Environment",
+                "Compose Database",
+                "Populate Database",
+                "NPM Install - Client",
+                "NPM Install - API"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "echo": true
+            }
+        },
+        {
+            "label": "Watch React - Client",
+            "type": "shell",
+            "command": "cd client && npm start",
             "group": "build",
             "presentation": {
                 "group": "buildGroup",
@@ -54,10 +94,9 @@
             }
         },
         {
-            "label": "Watch API Server",
+            "label": "Watch API - Server",
             "type": "shell",
-            // Switch to the api directory and launch development server
-            "command": "cd api && npm install && npm run dev",
+            "command": "cd api && npm run dev",
             "group": "build",
             "presentation": {
                 "group": "buildGroup",
@@ -69,13 +108,14 @@
         {
             "label": "Watch All",
             "dependsOn": [
-                "Watch API Server",
-                "Watch React Client"
+                "Watch API - Server",
+                "Watch React - Client"
             ],
             "group": "build",
-            //"runOptions": {
-            //    "runOn": "folderOpen" // This starts both tasks when the container is started
-            //},
+            "presentation": {
+                "reveal": "always",
+                "echo": true
+            }
         }
     ]
 }
