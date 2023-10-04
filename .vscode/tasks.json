@@ -30,12 +30,12 @@
         {
             "label": "Populate Database",
             "type": "shell",
-            "command": "chmod u+x api/populate.sh && api/./populate.sh",
+            "command": "sleep 10 && chmod u+x api/populate.sh && api/./populate.sh",
             "dependsOn": [
                 "Compose Database"
             ],
             "group": "build",
-            "presentation": {
+            "presentation": { 
                 "reveal": "always",
                 "echo": true
             }
