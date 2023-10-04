@@ -59,7 +59,7 @@
             "command": "cd api && npm install",
             "dependsOn": [
                 "Populate Database"
-            ],
+            ], 
             "group": "build",
             "presentation": {
                 "reveal": "always",
@@ -68,13 +68,7 @@
         },
         {
             "label": "First Time Setup",
-            "dependsOn": [
-                "Setup Environment",
-                "Compose Database",
-                "Populate Database",
-                "NPM Install - Client",
-                "NPM Install - API"
-            ],
+            "dependsOn": ["NPM Install - Client", "NPM Install - API"],
             "group": "build",
             "presentation": {
                 "reveal": "always",
