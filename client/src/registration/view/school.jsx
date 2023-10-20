@@ -6,7 +6,8 @@ import React, { Component } from "react";
 //import { Table } from "react-bootstrap";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import SchoolService from "../../_common/services/school";
-import ReactTable from "react-table";
+import {Table} from "react-bootstrap"
+// import ReactTable from "react-table";
 // import "react-table/react-table.css";
 import { connect } from "react-redux";
 import "../../_common/assets/css/ReactTableCSS.css";
@@ -156,14 +157,7 @@ class ViewSchools extends Component {
       <div>
         <StatusMessages />
         <h2>Schools</h2>
-        <ReactTable
-          filterable
-          className="-striped -highlight"
-          columns={this.state.columns}
-          data={this.state.schoolTable}
-          minRows={10}
-          style={{ margin: "20px 60px" }}
-        />
+        <Table data={this.state.eventTable} columns={this.state.columns}></Table>
       </div>
     );
   }
