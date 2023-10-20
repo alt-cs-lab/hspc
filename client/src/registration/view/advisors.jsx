@@ -5,7 +5,8 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { Component } from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import UserService from "../../_common/services/user";
-import ReactTable from "react-table";
+import { Table } from "react-bootstrap";
+// import ReactTable from "react-table";
 // import "react-table/react-table.css";
 import { connect } from "react-redux";
 import "../../_common/assets/css/ReactTableCSS.css";
@@ -98,14 +99,8 @@ class ViewSchools extends Component {
           school.
         </p>
         <h2>Advisors</h2>
-        <ReactTable
-          filterable
-          className="-striped -highlight"
-          data={this.state.advisorTable}
-          columns={this.state.columns}
-          minRows={10}
-          style={{ margin: "0px 60px" }}
-        />
+        <Table data={this.state.evenTable} columns={this.state.columns}>
+        </Table>
       </div>
     );
   }
