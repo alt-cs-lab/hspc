@@ -8,11 +8,11 @@ import StatusMessages from "../../_common/components/status-messages/status-mess
 import TeamService from "../../_common/services/team";
 import EventService from "../../_common/services/event";
 import UserService from "../../_common/services/user"; //added to get all the students on a team Natalie Laughlin
-import ReactTable from "react-table";
+// import ReactTable from "react-table";
 import Select from "react-select";
 // import "react-table/react-table.css";
 import { connect } from "react-redux";
-import "../../_common/assets/css/ReactTableCSS.css";
+// import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
 /*
@@ -266,52 +266,9 @@ class ViewTeams extends Component {
             />
           </div>
         </div>
-        <ReactTable
-          filterable
-          className="-striped -highlight"
-          data={this.state.teamTable}
-          columns={this.state.columnsForAllTeams}
-          minRows={10}
-          style={{ margin: "20px 60px" }}
-          expanded={this.state.expanded}
-          onExpandedChange={(newExpanded, index, event, row) => {
-            this.seeusers(row.original.teamname);
-            this.handleRowExpanded(newExpanded, index, event);
-          }}
-          SubComponent={({ row, nestingPath }) => {
-            return (
-              <div
-                style={{
-                  padding: "5px 40px",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  flexWrap: "wrap",
-                  borderTop: "1px solid lightgray",
-                  borderBottom: "1px solid lightgray",
-                }}
-              >
-                <h5>Team Members:</h5>
-                {this.state.userTable.length === 0 ? (
-                  <p style={{ fontSize: "14px" }}>
-                    There is no one assigned to this team.
-                  </p>
-                ) : (
-                  <ul>
-                    {this.state.userTable.map((user) => (
-                      <li key={user.email}>
-                        <h4 style={{ fontSize: "12px" }}>
-                          {user.firstname} {user.lastname}
-                        </h4>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            );
-          }}
-          expandedRows
-        />
+        
+        <Table data={this.state.eventTable} columns={this.state.columns}/>
+      
       </div>
     );
   }

@@ -7,11 +7,12 @@ import StatusMessages from "../../_common/components/status-messages/status-mess
 import UpgradeService from "../../_common/services/team-request";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import ReactTable from "react-table";
+// import ReactTable from "react-table";
 // import "react-table/react-table.css";
 import {connect} from "react-redux";
-import "../../_common/assets/css/ReactTableCSS.css";
+// import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
+import { Table } from "react-bootstrap"
 
 var currentView = null;
 
@@ -155,14 +156,9 @@ class TeamRequests extends Component {
             <div>
                 <StatusMessages/>
                 <h2>Team Requests</h2>
-                <ReactTable
-                    filterable
-                    className="-striped -highlight"
-                    columns={this.state.columns}
-                    data={this.state.requestTable}
-                    minRows={10}
-                    style={{margin: "20px 60px"}}
-                />
+
+                <Table data={this.state.eventTable} columns={this.state.columns}/>
+                
             </div>
         );
     }

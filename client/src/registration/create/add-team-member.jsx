@@ -17,7 +17,7 @@ import { connect } from "react-redux";
 import "../../_common/assets/css/register-user.css";
 import "../../_common/assets/css/team-member-dropdown.css";
 import { Table } from "react-bootstrap";
-import ReactTable from "react-table";
+// import ReactTable from "react-table";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 // // import "react-table/react-table.css";
 
@@ -397,13 +397,7 @@ class AddUser extends Component {
               students below
             </b>
           </p>
-          <ReactTable
-            filterable
-            data={this.state.studentList}
-            columns={this.state.columns}
-            minRows={1}
-            style={{ margin: "0px 60px" }}
-          />
+          <Table data={this.state.eventTable} columns={this.state.columns}/>
           <br />
           <Button
             variant="primary"

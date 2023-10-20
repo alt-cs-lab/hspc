@@ -5,7 +5,8 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { Component } from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import EventService from "../../_common/services/event";
-import ReactTable from "react-table";
+import {Table} from "react-bootstrap";
+// import ReactTable from "react-table";
 // import "react-table/react-table.css";
 import { connect } from "react-redux";
 import "../../_common/assets/css/ReactTableCSS.css";
@@ -90,14 +91,7 @@ class ViewEvents extends Component {
       <div>
         <StatusMessages />
         <h2>Events</h2>
-        <ReactTable
-          filterable
-          className="-striped -highlight"
-          data={this.state.eventTable}
-          columns={this.state.columns}
-          minRows={10}
-          style={{ margin: "20px 60px" }}
-        />
+        <Table data={this.state.eventTable} columns={this.state.columns}></Table>
       </div>
     );
   }
