@@ -5,12 +5,13 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { Component } from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import UserService from "../../_common/services/user";
-import ReactTable from "react-table";
+// import ReactTable from "react-table";
 // import "react-table/react-table.css";
+// import "../../../node_modules/react-table/dist/react-table.css"
 import { connect } from "react-redux";
-import "../../_common/assets/css/ReactTableCSS.css";
+// import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
-
+import { Table } from "react-bootstrap"
 
 class ViewUsers extends Component {
   constructor(props) {
@@ -47,28 +48,23 @@ class ViewUsers extends Component {
     return [
       {
         Header: "First Name",
-        accessor: "firstname",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        accessor: "firstname"
       },
       {
         Header: "Last Name",
-        accessor: "lastname",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        accessor: "lastname"
       },
       {
         Header: "Email",
-        accessor: "email",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        accessor: "email"
       },
       {
         Header: "Phone",
-        accessor: "phone",
-        Cell: (row) => <div style={{ textAlign: "right" }}>{row.value}</div>,
+        accessor: "phone"
       },
       {
         Header: "Role",
-        accessor: "role",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        accessor: "role"
       },
     ];
   }
@@ -80,15 +76,9 @@ class ViewUsers extends Component {
       <div>
         <StatusMessages />
         <h2>Users</h2>
-        <ReactTable
-          filterable
-          className="-striped -highlight"
-          defaultFilterMethod={this.filterMethod}
-          data={this.state.userTable}
-          columns={this.state.columns}
-          minRows={10}
-          style={{ margin: "20px 60px" }}
-        />
+        
+        <Table data={this.state.eventTable} columns={this.state.columns}/>
+
       </div>
     );
   }
