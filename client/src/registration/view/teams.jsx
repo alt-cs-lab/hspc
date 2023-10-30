@@ -3,12 +3,13 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import { Table } from "react-bootstrap";
+// import { Table } from "react-bootstrap";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import TeamService from "../../_common/services/team";
 import EventService from "../../_common/services/event";
 import UserService from "../../_common/services/user"; //added to get all the students on a team Natalie Laughlin
 // import ReactTable from "react-table";
+import DataTable from "react-data-table-component";
 import Select from "react-select";
 // import "react-table/react-table.css";
 import { connect } from "react-redux";
@@ -44,9 +45,10 @@ class ViewTeams extends Component {
     TeamService.getAllTeams()
       .then((response) => {
         var data = JSON.parse(response.body);
-        if (response.statusCode === 200 && this.advisor === undefined) {
+        console.log(response.data);
+        if (response.ok && this.advisor === undefined) {
           this.setState({ teamTable: data });
-        } else if (response.statusCode === 200) {
+        } else if (response.ok) {
           var registeredTeams = [];
           data.forEach((team, index) => {
             if (team.email === this.advisor) {
@@ -75,8 +77,9 @@ class ViewTeams extends Component {
     )
       .then((response) => {
         let body = response.body;
+        console.log(response.data);
         let events = [];
-        if (response.statusCode === 200) {
+        if (response.ok) {
           for (let i = 0; i < body.length; i++) {
             events.push({
               label: body[i].eventname,
@@ -97,7 +100,8 @@ class ViewTeams extends Component {
   seeusers(teamName) {
     UserService.getstudentsteam(teamName)
       .then((response) => {
-        if (response.statusCode === 200) {
+        console.log(response.data);
+        if (response.ok) {
           this.setState({ userTable: response.body });
         } else console.log("An error has occurred, Please try again.");
       })
@@ -115,8 +119,9 @@ class ViewTeams extends Component {
       let teams = [];
       if (response.body.length > 0) {
         let body = response.body;
+        console.log(response.data);
         if (
-          response.statusCode === 200 &&
+          response.ok &&
           this.state.advisorEmail === undefined
         ) {
           for (let i = 0; i < body.length; i++) {
@@ -133,7 +138,7 @@ class ViewTeams extends Component {
               email: body[i].email,
             });
           }
-        } else if (response.statusCode === 200) {
+        } else if (response.ok) {
           for (let i = 0; i < body.length; i++) {
             if (body[i].email === this.state.advisorEmail) {
               //was not accesting the right data fixed Natalie Laughlin
@@ -165,48 +170,39 @@ class ViewTeams extends Component {
     return [
       {
         Header: "Team Name",
-        accessor: "teamname",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        selector: row => row.teamname,
       },
       {
         Header: "School Name",
-        accessor: "schoolname",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        selector: row => row.schoolname,
       },
       {
         Header: "Address Line 1",
-        accessor: "addressline1",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        selector: row => row.addressline1,
       },
       {
         Header: "Address Line 2",
-        accessor: "addressline2",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        selector: row => row.addressline2,
       },
       {
         Header: "City",
-        accessor: "city",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        selector: row => row.city,
       },
       {
         Header: "State",
-        accessor: "state",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        selector: row => row.state,
       },
       {
         Header: "USD",
-        accessor: "usdcode",
-        Cell: (row) => <div style={{ textAlign: "right" }}>{row.value}</div>,
+        selector: row => row.usdcode,
       },
       {
         Header: "Question Level",
-        accessor: "questionlevel",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        selector: row => row.questionlevel,
       },
       {
         Header: "Email",
-        accessor: "email",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        selector: row => row.email,
       },
     ];
   }
@@ -267,7 +263,7 @@ class ViewTeams extends Component {
           </div>
         </div>
         
-        <Table data={this.state.eventTable} columns={this.state.columns}/>
+        <DataTable data={this.state.teamTable} columns={this.state.columns}/>
       
       </div>
     );

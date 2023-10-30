@@ -23,6 +23,7 @@
     "react": "~18.2.0",
     "react-bootstrap": "~2.5.0",
     "react-collapsible": "~2.10.0",
+    "react-data-table-component": "^7.5.4",
     "react-dom": "~18.2.0",
     "react-filepond": "~7.1.2",
     "react-recaptcha": "~2.3.10",
@@ -34,7 +35,8 @@
     "react-websocket": "~2.1.0",
     "redux": "~4.2.0",
     "redux-thunk": "~2.4.1",
-    "socket.io-client": "~4.5.1"
+    "socket.io-client": "~4.5.1",
+    "styled-components": "^6.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -66,8 +68,13 @@
   },
   "proxy": "http://localhost:3001",
   "jest": {
-    "moduleFileExtensions": ["js", "jsx"],
-    "moduleDirectories": ["node_modules"],
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
     "testEnvironment": "jsdom",
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/_common/assets/__mocks__/fileMock.js",
