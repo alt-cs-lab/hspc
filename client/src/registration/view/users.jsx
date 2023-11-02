@@ -6,9 +6,7 @@ import React, { Component } from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import UserService from "../../_common/services/user";
 import DataTable from "react-data-table-component";
-// import "../../../node_modules/react-table/dist/react-table.css"
 import { connect } from "react-redux";
-// import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
 class ViewUsers extends Component {
@@ -28,7 +26,6 @@ class ViewUsers extends Component {
     UserService.getAllUsers()
       .then((response) => {
         if (response.ok) {
-          console.log(response.data);
           this.setState({ userTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
@@ -48,6 +45,11 @@ class ViewUsers extends Component {
       {
         name: "First Name",
         selector: row => row.firstname,
+        cell: row => { 
+          return (
+            <div style={{textAlign: "left"}}>{row.key}</div>
+          );
+        },
       },
       {
         name: "Last Name",

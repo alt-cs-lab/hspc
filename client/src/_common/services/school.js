@@ -35,8 +35,7 @@ class SchoolService {
     * Calls the API and returns a JSON list of all registered schools.
     */
     getAllSchools() {
-        //TODO: Put in URL
-        return ServiceUtils.getRequest('zzz', {});
+        return ServiceUtils.getRequest('/api/school/view', {});
     }
 
 }
