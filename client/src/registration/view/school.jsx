@@ -7,7 +7,6 @@ import StatusMessages from "../../_common/components/status-messages/status-mess
 import SchoolService from "../../_common/services/school";
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
-import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 /*
  * @author: Tyler Trammell
@@ -72,9 +71,7 @@ class ViewSchools extends Component {
     ];
   }
   /*
-   *
    * Renders all the registered schools in table form
-   *
    */
   render() {
     return (
