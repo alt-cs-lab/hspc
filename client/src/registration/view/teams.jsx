@@ -44,29 +44,28 @@ class ViewTeams extends Component {
   componentDidMount = () => {
     TeamService.getAllTeams()
       .then((response) => {
-        var data = JSON.parse(response.body);
-        console.log(response.data);
         if (response.ok && this.advisor === undefined) {
-          this.setState({ teamTable: data });
+          this.setState({ teamTable: response.data });
         } else if (response.ok) {
-          var registeredTeams = [];
-          data.forEach((team, index) => {
-            if (team.email === this.advisor) {
-              registeredTeams.push({
-                id: index,
-                teamname: team.teamname,
-                schoolname: team.schoolname,
-                addressline1: team.addressline1,
-                addressline2: team.addressline2,
-                city: team.city,
-                state: team.state,
-                usdcode: team.usdcode,
-                questionlevel: team.questionlevel,
-                email: team.email,
-              });
-            }
-          });
-          this.setState({ teamTable: registeredTeams });
+
+          // var registeredTeams = [];
+          // data.forEach((team, index) => {
+          //   if (team.email === this.advisor) {
+          //     registeredTeams.push({
+          //       id: index,
+          //       teamname: team.teamname,
+          //       schoolname: team.schoolname,
+          //       addressline1: team.addressline1,
+          //       addressline2: team.addressline2,
+          //       city: team.city,
+          //       state: team.state,
+          //       usdcode: team.usdcode,
+          //       questionlevel: team.questionlevel,
+          //       email: team.email,
+          //     });
+          //   }
+          // });
+          this.setState({ teamTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -77,7 +76,6 @@ class ViewTeams extends Component {
     )
       .then((response) => {
         let body = response.data;
-        console.log(response.data);
         let events = [];
         if (response.ok) {
           for (let i = 0; i < body.length; i++) {
@@ -115,92 +113,91 @@ class ViewTeams extends Component {
    */
   UpdateTeams(nameofevent) {
     TeamService.getAllTeamsInCompName(nameofevent).then((response) => {
-      let teams = [];
-      if (response.body.length > 0) {
-        let body = response.body;
-        console.log(response.data);
-        if (
-          response.ok &&
-          this.state.advisorEmail === undefined
-        ) {
-          for (let i = 0; i < body.length; i++) {
-            teams.push({
-              id: i,
-              teamname: body[i].teamname,
-              schoolname: body[i].schoolname,
-              addressline1: body[i].addressline1,
-              addressline2: body[i].addressline2,
-              city: body[i].city,
-              state: body[i].state,
-              usdcode: body[i].usdcode,
-              questionlevel: body[i].questionlevel,
-              email: body[i].email,
-            });
-          }
-        } else if (response.ok) {
-          for (let i = 0; i < body.length; i++) {
-            if (body[i].email === this.state.advisorEmail) {
-              //was not accesting the right data fixed Natalie Laughlin
-              teams.push({
-                id: i,
-                teamname: body[i].teamname,
-                schoolname: body[i].schoolname,
-                addressline1: body[i].addressline1,
-                addressline2: body[i].addressline2,
-                city: body[i].city,
-                state: body[i].state,
-                usdcode: body[i].usdcode,
-                questionlevel: body[i].questionlevel,
-                email: body[i].email,
-              });
-            }
-          }
-        } else {
-          this.props.dispatchError(
-            `There was an error filtering students by "${nameofevent}" event`
-          );
-        }
+      // let teams = [];
+      console.log(response.data);
+      if (response.data.length > 0) {
+        // let body = response.data;
+        this.setState({ teamTable: response.data, columns: this.getAllTeamColumns() });
+        // if (response.ok && this.state.advisorEmail === undefined) {
+        //   for (let i = 0; i < body.length; i++) {
+        //     teams.push({
+        //       id: i,
+        //       teamname: body[i].teamname,
+        //       schoolname: body[i].schoolname,
+        //       addressline1: body[i].addressline1,
+        //       addressline2: body[i].addressline2,
+        //       city: body[i].city,
+        //       state: body[i].state,
+        //       usdcode: body[i].usdcode,
+        //       questionlevel: body[i].questionlevel,
+        //       email: body[i].email,
+        //     });
+        //   }
+        // } else if (response.ok) {
+        //   for (let i = 0; i < body.length; i++) {
+        //     if (body[i].email === this.state.advisorEmail) {
+        //       //was not accesting the right data fixed Natalie Laughlin
+        //       teams.push({
+        //         id: i,
+        //         teamname: body[i].teamname,
+        //         schoolname: body[i].schoolname,
+        //         addressline1: body[i].addressline1,
+        //         addressline2: body[i].addressline2,
+        //         city: body[i].city,
+        //         state: body[i].state,
+        //         usdcode: body[i].usdcode,
+        //         questionlevel: body[i].questionlevel,
+        //         email: body[i].email,
+        //       });
+        //     }
+        //   }
+        // } else {
+        //   this.props.dispatchError(
+        //     `There was an error filtering students by "${nameofevent}" event`
+        //   );
+        // }
       }
-      this.setState({ teamTable: teams });
+      // this.setState({ teamTable: teams });
     });
+    return;
   }
 
   getAllTeamColumns() {
     return [
       {
-        Header: "Team Name",
+        name: "Team Name",
         selector: row => row.teamname,
       },
       {
-        Header: "School Name",
+        name: "School Name",
         selector: row => row.schoolname,
       },
       {
-        Header: "Address Line 1",
+        name: "Address Line 1",
         selector: row => row.addressline1,
       },
       {
-        Header: "Address Line 2",
+        name: "Address Line 2",
         selector: row => row.addressline2,
       },
       {
-        Header: "City",
+        name: "City",
         selector: row => row.city,
       },
       {
-        Header: "State",
-        selector: row => row.state,
+        name: "State",
+        selector: row => row.State,
       },
       {
-        Header: "USD",
+        name: "USD",
         selector: row => row.usdcode,
       },
       {
-        Header: "Question Level",
+        name: "Question Level",
         selector: row => row.questionlevel,
       },
       {
-        Header: "Email",
+        name: "Email",
         selector: row => row.email,
       },
     ];
@@ -208,20 +205,20 @@ class ViewTeams extends Component {
   getSpecficTeamUsersColumns() {
     return [
       {
-        Header: "First Name",
-        accessor: "first",
+        name: "First Name",
+        selector: row => row.first,
       },
       {
-        Header: "Last Name",
-        accessor: "lastname",
+        name: "Last Name",
+        selector: row => row.lastname,
       },
       {
-        Header: "Email",
-        accessor: "email",
+        name: "Email",
+        selector: row => row.email,
       },
       {
-        Header: "Phone",
-        accessor: "phone",
+        name: "Phone",
+        selector: row => row.phone,
       },
     ];
   }
@@ -238,7 +235,6 @@ class ViewTeams extends Component {
    * Renders the current view - the table with all the teams - and the status messages for successess/errors
    */
   render() {
-    console.log(this.state.eventList);
     return (
       <div>
         <StatusMessages />

@@ -13,7 +13,7 @@ class TeamService {
     * @param {string} user id of the advisor who the team belongs to
     */
     registerTeam(teamName, schoolId, competitionId, questionLevelId, advisorId) {
-        return ServiceUtils.postRequest('/team/create', {
+        return ServiceUtils.postRequest('/api/team/create', {
             teamName: teamName,
             schoolId: schoolId,
             competitionId: competitionId,
@@ -26,14 +26,14 @@ class TeamService {
     * Calls the API and returns a JSON list of all registered teams.
     */
     getAllTeams() {
-        return ServiceUtils.getRequest('/team/view', {});
+        return ServiceUtils.getRequest('/api/team/view', {});
     }
 
     /*
   * Calls the API and returns a JSON list of all registered teams.
   */
     getTeamsNeedingAssignment() {
-        return ServiceUtils.getRequest('/team/teamsNeedingAssignment', {});
+        return ServiceUtils.getRequest('/api/team/teamsNeedingAssignment', {});
     }
 
 
@@ -53,7 +53,7 @@ class TeamService {
     * Posts the corresponding student and team in the TeamUsers table, adding a student to a team
     */
     addStudentToTeam(email, teamName) {
-        return ServiceUtils.postRequest('/team/add', {
+        return ServiceUtils.postRequest('/api/team/add', {
             email: email,
             teamName: teamName
         });
@@ -63,21 +63,21 @@ class TeamService {
     * Calls the API and returns a JSON list of all teams for the passed in competition by event date.
     */
     getAllTeamsInComp(eventDate) {
-        return ServiceUtils.getRequest('/team/compTeams', {eventDate: eventDate});
+        return ServiceUtils.getRequest('/api/team/compTeams', {eventDate: eventDate});
     }
 
     /*
     * Calls the API and returns a JSON list of all teams for the passed in competition by event name.
     */
     getAllTeamsInCompName(eventName) {
-        return ServiceUtils.getRequest('/team/teamsEventName', {eventName: eventName});
+        return ServiceUtils.getRequest('/api/team/teamsEventName', {eventName: eventName});
     }
 
     /*
     * Gets teams from a school during an event
     */
     getTeamSchoolEvent(schoolid, competitionid) {
-        return ServiceUtils.getRequest('/team/schoolevent', {
+        return ServiceUtils.getRequest('/api/team/schoolevent', {
             schoolId: schoolid,
             competitionId: competitionid
         });
@@ -88,14 +88,14 @@ class TeamService {
      * Gets Teams from an event
      */
     getTeamsEventID(competitionid) {
-        return ServiceUtils.getRequest('/team/teamseventid', {competitionId: competitionid});
+        return ServiceUtils.getRequest('/api/team/teamseventid', {competitionId: competitionid});
     }
 
     /*
     * Calls the API and returns a JSON of the team associated with the passed in id.
     */
     getVolunteerTeam(teamid) {
-        return ServiceUtils.getRequest('/team/getvolunteerteam', {teamid: teamid});
+        return ServiceUtils.getRequest('/api/team/getvolunteerteam', {teamid: teamid});
     };
 
 
