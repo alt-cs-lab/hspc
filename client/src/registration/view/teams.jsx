@@ -25,7 +25,7 @@ class ViewTeams extends Component {
     super(props);
     this.props.dispatchResetErrors();
     this.advisor =
-      this.props.advisor !== undefined ? this.props.advisor.email : undefined;
+      props.advisor !== undefined ? this.props.advisor.email : undefined;
     this.state = {
       expanded: {},
       teamName: "",
@@ -76,14 +76,14 @@ class ViewTeams extends Component {
       this.props.auth.user.accessLevel
     )
       .then((response) => {
-        let body = response.body;
+        let body = response.data;
         console.log(response.data);
         let events = [];
         if (response.ok) {
           for (let i = 0; i < body.length; i++) {
             events.push({
-              label: body[i].eventname,
-              value: body[i].eventname,
+              label: body[i].name,
+              value: body[i].name,
             });
           }
         } else {
@@ -100,9 +100,8 @@ class ViewTeams extends Component {
   seeusers(teamName) {
     UserService.getstudentsteam(teamName)
       .then((response) => {
-        console.log(response.data);
         if (response.ok) {
-          this.setState({ userTable: response.body });
+          this.setState({ userTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -239,6 +238,7 @@ class ViewTeams extends Component {
    * Renders the current view - the table with all the teams - and the status messages for successess/errors
    */
   render() {
+    console.log(this.state.eventList);
     return (
       <div>
         <StatusMessages />

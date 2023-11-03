@@ -20,7 +20,7 @@ class SchoolService {
     * @param {string} USD code of the school
     */
     registerSchool(schoolName, addressLine1, addressLine2, city, state, postalCode, usdCode) {
-        return ServiceUtils.postRequest('/school/create', {
+        return ServiceUtils.postRequest('/api/school/create', {
             schoolName: schoolName,
             addressLine1: addressLine1,
             addressline2: addressLine2,
@@ -36,7 +36,7 @@ class SchoolService {
     */
     getAllSchools() {
         //TODO: Put in URL
-        return ServiceUtils.getRequest('zzz', {});
+        return ServiceUtils.getRequest('/api/school/view', {});
     }
 
 }

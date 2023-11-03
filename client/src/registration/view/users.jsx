@@ -28,7 +28,6 @@ class ViewUsers extends Component {
     UserService.getAllUsers()
       .then((response) => {
         if (response.ok) {
-          console.log(response.data);
           this.setState({ userTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
