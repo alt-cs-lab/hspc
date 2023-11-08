@@ -5,9 +5,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { Component } from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import EventService from "../../_common/services/event";
-import {Table} from "react-bootstrap";
-// import ReactTable from "react-table";
-// import "react-table/react-table.css";
+import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
@@ -37,8 +35,9 @@ class ViewEvents extends Component {
       this.props.auth.user.accessLevel
     )
       .then((response) => {
-        if (response.statusCode === 200) {
-          this.setState({ eventTable: response.body });
+        console.log(response.data)
+        if (response.ok) {
+          this.setState({ eventTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -47,39 +46,32 @@ class ViewEvents extends Component {
   getColumns() {
     return [
       {
-        Header: "Name",
-        accessor: "eventname",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "Name",
+        selector: row => row.name
       },
       {
-        Header: "Location",
-        accessor: "eventlocation",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "Location",
+        selector: row => row.location
       },
       {
-        Header: "Date",
-        accessor: "eventdate",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "Date",
+        selector: row => row.date
       },
       {
-        Header: "Time",
-        accessor: "eventtime",
-        Cell: (row) => <div style={{ textAlign: "right" }}>{row.value}</div>,
+        name: "Time",
+        selector: row => row.time
       },
       {
-        Header: "Description",
-        accessor: "eventdescription",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "Description",
+        selector: row => row.description
       },
       {
-        Header: "School Limit",
-        accessor: "teamsperschool",
-        Cell: (row) => <div style={{ textAlign: "right" }}>{row.value}</div>,
+        name: "School Limit",
+        selector: row => row.teamsPerSchool
       },
       {
-        Header: "Event Limit",
-        accessor: "teamsperevent",
-        Cell: (row) => <div style={{ textAlign: "right" }}>{row.value}</div>,
+        name: "Event Limit",
+        selector: row => row.teamsPerEvent
       },
     ];
   }
@@ -91,7 +83,7 @@ class ViewEvents extends Component {
       <div>
         <StatusMessages />
         <h2>Events</h2>
-        <Table data={this.state.eventTable} columns={this.state.columns}></Table>
+        <DataTable data={this.state.eventTable} columns={this.state.columns}/>
       </div>
     );
   }

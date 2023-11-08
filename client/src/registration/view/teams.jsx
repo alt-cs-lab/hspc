@@ -3,12 +3,13 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import { Table } from "react-bootstrap";
+// import { Table } from "react-bootstrap";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import TeamService from "../../_common/services/team";
 import EventService from "../../_common/services/event";
 import UserService from "../../_common/services/user"; //added to get all the students on a team Natalie Laughlin
 // import ReactTable from "react-table";
+import DataTable from "react-data-table-component";
 import Select from "react-select";
 // import "react-table/react-table.css";
 import { connect } from "react-redux";
@@ -24,7 +25,7 @@ class ViewTeams extends Component {
     super(props);
     this.props.dispatchResetErrors();
     this.advisor =
-      this.props.advisor !== undefined ? this.props.advisor.email : undefined;
+      props.advisor !== undefined ? this.props.advisor.email : undefined;
     this.state = {
       expanded: {},
       teamName: "",
@@ -43,28 +44,28 @@ class ViewTeams extends Component {
   componentDidMount = () => {
     TeamService.getAllTeams()
       .then((response) => {
-        var data = JSON.parse(response.body);
-        if (response.statusCode === 200 && this.advisor === undefined) {
-          this.setState({ teamTable: data });
-        } else if (response.statusCode === 200) {
-          var registeredTeams = [];
-          data.forEach((team, index) => {
-            if (team.email === this.advisor) {
-              registeredTeams.push({
-                id: index,
-                teamname: team.teamname,
-                schoolname: team.schoolname,
-                addressline1: team.addressline1,
-                addressline2: team.addressline2,
-                city: team.city,
-                state: team.state,
-                usdcode: team.usdcode,
-                questionlevel: team.questionlevel,
-                email: team.email,
-              });
-            }
-          });
-          this.setState({ teamTable: registeredTeams });
+        if (response.ok && this.advisor === undefined) {
+          this.setState({ teamTable: response.data });
+        } else if (response.ok) {
+
+          // var registeredTeams = [];
+          // data.forEach((team, index) => {
+          //   if (team.email === this.advisor) {
+          //     registeredTeams.push({
+          //       id: index,
+          //       teamname: team.teamname,
+          //       schoolname: team.schoolname,
+          //       addressline1: team.addressline1,
+          //       addressline2: team.addressline2,
+          //       city: team.city,
+          //       state: team.state,
+          //       usdcode: team.usdcode,
+          //       questionlevel: team.questionlevel,
+          //       email: team.email,
+          //     });
+          //   }
+          // });
+          this.setState({ teamTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -74,13 +75,13 @@ class ViewTeams extends Component {
       this.props.auth.user.accessLevel
     )
       .then((response) => {
-        let body = response.body;
+        let body = response.data;
         let events = [];
-        if (response.statusCode === 200) {
+        if (response.ok) {
           for (let i = 0; i < body.length; i++) {
             events.push({
-              label: body[i].eventname,
-              value: body[i].eventname,
+              label: body[i].name,
+              value: body[i].name,
             });
           }
         } else {
@@ -97,8 +98,8 @@ class ViewTeams extends Component {
   seeusers(teamName) {
     UserService.getstudentsteam(teamName)
       .then((response) => {
-        if (response.statusCode === 200) {
-          this.setState({ userTable: response.body });
+        if (response.ok) {
+          this.setState({ userTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -112,121 +113,112 @@ class ViewTeams extends Component {
    */
   UpdateTeams(nameofevent) {
     TeamService.getAllTeamsInCompName(nameofevent).then((response) => {
-      let teams = [];
-      if (response.body.length > 0) {
-        let body = response.body;
-        if (
-          response.statusCode === 200 &&
-          this.state.advisorEmail === undefined
-        ) {
-          for (let i = 0; i < body.length; i++) {
-            teams.push({
-              id: i,
-              teamname: body[i].teamname,
-              schoolname: body[i].schoolname,
-              addressline1: body[i].addressline1,
-              addressline2: body[i].addressline2,
-              city: body[i].city,
-              state: body[i].state,
-              usdcode: body[i].usdcode,
-              questionlevel: body[i].questionlevel,
-              email: body[i].email,
-            });
-          }
-        } else if (response.statusCode === 200) {
-          for (let i = 0; i < body.length; i++) {
-            if (body[i].email === this.state.advisorEmail) {
-              //was not accesting the right data fixed Natalie Laughlin
-              teams.push({
-                id: i,
-                teamname: body[i].teamname,
-                schoolname: body[i].schoolname,
-                addressline1: body[i].addressline1,
-                addressline2: body[i].addressline2,
-                city: body[i].city,
-                state: body[i].state,
-                usdcode: body[i].usdcode,
-                questionlevel: body[i].questionlevel,
-                email: body[i].email,
-              });
-            }
-          }
-        } else {
-          this.props.dispatchError(
-            `There was an error filtering students by "${nameofevent}" event`
-          );
-        }
+      // let teams = [];
+      console.log(response.data);
+      if (response.data.length > 0) {
+        // let body = response.data;
+        this.setState({ teamTable: response.data, columns: this.getAllTeamColumns() });
+        // if (response.ok && this.state.advisorEmail === undefined) {
+        //   for (let i = 0; i < body.length; i++) {
+        //     teams.push({
+        //       id: i,
+        //       teamname: body[i].teamname,
+        //       schoolname: body[i].schoolname,
+        //       addressline1: body[i].addressline1,
+        //       addressline2: body[i].addressline2,
+        //       city: body[i].city,
+        //       state: body[i].state,
+        //       usdcode: body[i].usdcode,
+        //       questionlevel: body[i].questionlevel,
+        //       email: body[i].email,
+        //     });
+        //   }
+        // } else if (response.ok) {
+        //   for (let i = 0; i < body.length; i++) {
+        //     if (body[i].email === this.state.advisorEmail) {
+        //       //was not accesting the right data fixed Natalie Laughlin
+        //       teams.push({
+        //         id: i,
+        //         teamname: body[i].teamname,
+        //         schoolname: body[i].schoolname,
+        //         addressline1: body[i].addressline1,
+        //         addressline2: body[i].addressline2,
+        //         city: body[i].city,
+        //         state: body[i].state,
+        //         usdcode: body[i].usdcode,
+        //         questionlevel: body[i].questionlevel,
+        //         email: body[i].email,
+        //       });
+        //     }
+        //   }
+        // } else {
+        //   this.props.dispatchError(
+        //     `There was an error filtering students by "${nameofevent}" event`
+        //   );
+        // }
       }
-      this.setState({ teamTable: teams });
+      // this.setState({ teamTable: teams });
     });
+    return;
   }
 
   getAllTeamColumns() {
     return [
       {
-        Header: "Team Name",
-        accessor: "teamname",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "Team Name",
+        selector: row => row.teamname,
       },
       {
-        Header: "School Name",
-        accessor: "schoolname",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "School Name",
+        selector: row => row.schoolname,
       },
       {
-        Header: "Address Line 1",
-        accessor: "addressline1",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "Address Line 1",
+        selector: row => row.addressline1,
       },
       {
-        Header: "Address Line 2",
-        accessor: "addressline2",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "Address Line 2",
+        selector: row => row.addressline2,
       },
       {
-        Header: "City",
-        accessor: "city",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "City",
+        selector: row => row.city,
       },
       {
-        Header: "State",
-        accessor: "state",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "State",
+        selector: row => row.State,
       },
       {
-        Header: "USD",
-        accessor: "usdcode",
-        Cell: (row) => <div style={{ textAlign: "right" }}>{row.value}</div>,
+        name: "USD",
+        selector: row => row.usdcode,
       },
       {
-        Header: "Question Level",
-        accessor: "questionlevel",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "Question Level",
+        selector: row => row.questionlevel,
       },
       {
-        Header: "Email",
-        accessor: "email",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "Email",
+        selector: row => row.email,
       },
     ];
   }
   getSpecficTeamUsersColumns() {
     return [
       {
-        Header: "First Name",
-        accessor: "first",
+        name: "First Name",
+        selector: row => row.first,
       },
       {
-        Header: "Last Name",
-        accessor: "lastname",
+        name: "Last Name",
+        selector: row => row.lastname,
       },
       {
-        Header: "Email",
-        accessor: "email",
+        name: "Email",
+        selector: row => row.email,
       },
       {
-        Header: "Phone",
-        accessor: "phone",
+        name: "Phone",
+        selector: row => row.phone,
       },
     ];
   }
@@ -267,7 +259,7 @@ class ViewTeams extends Component {
           </div>
         </div>
         
-        <Table data={this.state.eventTable} columns={this.state.columns}/>
+        <DataTable data={this.state.teamTable} columns={this.state.columns}/>
       
       </div>
     );

@@ -5,14 +5,9 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { Component } from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import UserService from "../../_common/services/user";
-import { Table } from "react-bootstrap";
-// import ReactTable from "react-table";
-// import "react-table/react-table.css";
+import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
-import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
-
-var currentView = null;
 
 /*
  * @author: Tyler Trammell
@@ -35,21 +30,8 @@ class ViewSchools extends Component {
   componentDidMount = () => {
     UserService.getAllAdvisors()
       .then((response) => {
-        var data = JSON.parse(response.body);
-        if (response.statusCode === 200) {
-          this.setState({ advisorTable: data }, () => {});
-        } else if (response.statusCode === 200) {
-          var registeredAdvisors = [];
-          data.forEach((advisor, index) => {
-            registeredAdvisors.push({
-              ID: index,
-              FirstName: advisor.FirstName,
-              LastName: advisor.LastName,
-              Email: advisor.Email,
-              School: advisor.SchoolName,
-            });
-          });
-          this.setState({ advisorTable: registeredAdvisors }, () => {});
+        if (response.ok) {
+          this.setState({ advisorTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -59,28 +41,23 @@ class ViewSchools extends Component {
     return [
       {
         Header: "First Name",
-        accessor: "firstname",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        selector: row => row.firstname,
       },
       {
-        Header: "Last Name",
-        accessor: "lastname",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "Last Name",
+        selector: row => row.lastname,
       },
       {
-        Header: "Email",
-        accessor: "email",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "Email",
+        selector: row => row.email,
       },
       {
-        Header: "School",
-        accessor: "schoolname",
-        Cell: (row) => <div style={{ textAlign: "left" }}>{row.value}</div>,
+        name: "School",
+        selector: row => row.schoolname
       },
       {
-        Header: "Phone",
-        accessor: "phone",
-        Cell: (row) => <div style={{ textAlign: "right" }}>{row.value}</div>,
+        name: "Phone",
+        selector: row => row.phone,
       },
     ];
   }
@@ -99,8 +76,7 @@ class ViewSchools extends Component {
           school.
         </p>
         <h2>Advisors</h2>
-        <Table data={this.state.evenTable} columns={this.state.columns}>
-        </Table>
+        <DataTable data={this.state.advisorTable} columns={this.state.columns}/>
       </div>
     );
   }

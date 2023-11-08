@@ -7,10 +7,8 @@ import StatusMessages from "../../_common/components/status-messages/status-mess
 import UpgradeService from "../../_common/services/upgrade";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-// import ReactTable from "react-table";
-// import "react-table/react-table.css";
 import {connect} from "react-redux";
-// import "../../_common/assets/css/ReactTableCSS.css";
+import DataTable from "react-data-table-component";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import { Table } from "react-bootstrap"
 
@@ -85,7 +83,7 @@ class UpgradeRequests extends Component {
             {
                 Header: "First Name",
                 accessor: "firstname",
-                Cell: (row) => <div style={{textAlign: "left"}}>{row.value}</div>,
+                cell: (row) => <div style={{textAlign: "left"}}>{row.value}</div>,
             },
             {
                 Header: "Last Name",
@@ -168,9 +166,7 @@ class UpgradeRequests extends Component {
             <div>
                 <StatusMessages/>
                 <h2>User Upgrade Requests</h2>
-
-                <Table data={this.state.eventTable} columns={this.state.columns}/>
-
+                <DataTable data={this.state.requestTable} columns={this.state.columns}/>
             </div>
         );
     }

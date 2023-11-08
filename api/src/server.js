@@ -19,6 +19,8 @@ db.connect()
         console.log('ERROR:', error.message || error)
         process.exit()
     })
+// disables caching
+api.disable('etag');
 
 //region Set Up Middleware
 api.use(helmet());
@@ -39,7 +41,7 @@ require("./utils/passport")(passport);
 
 // Set Up Controllers
 require('fs').readdirSync(controllerDirectory).forEach((controller) => {
-    //console.debug("loading controller: " + controller);
+    // console.debug("loading controller: " + controller, `/${controller.substring(0, controller.lastIndexOf('.'))}`);
     api.use(`/${controller.substring(0, controller.lastIndexOf('.'))}`, require(pathJoin(controllerDirectory, controller)));
 });
 

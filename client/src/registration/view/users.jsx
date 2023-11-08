@@ -5,13 +5,9 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { Component } from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import UserService from "../../_common/services/user";
-// import ReactTable from "react-table";
-// import "react-table/react-table.css";
-// import "../../../node_modules/react-table/dist/react-table.css"
+import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
-// import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
-import { Table } from "react-bootstrap"
 
 class ViewUsers extends Component {
   constructor(props) {
@@ -29,8 +25,8 @@ class ViewUsers extends Component {
   componentDidMount = () => {
     UserService.getAllUsers()
       .then((response) => {
-        if (response.statusCode === 200) {
-          this.setState({ userTable: JSON.parse(response.body) }, () => {});
+        if (response.ok) {
+          this.setState({ userTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -47,24 +43,29 @@ class ViewUsers extends Component {
   getColumns() {
     return [
       {
-        Header: "First Name",
-        accessor: "firstname"
+        name: "First Name",
+        selector: row => row.firstname,
+        cell: row => { 
+          return (
+            <div style={{textAlign: "left"}}>{row.key}</div>
+          );
+        },
       },
       {
-        Header: "Last Name",
-        accessor: "lastname"
+        name: "Last Name",
+        selector: row => row.lastname,
       },
       {
-        Header: "Email",
-        accessor: "email"
+        name: "Email",
+        selector: row => row.email,
       },
       {
-        Header: "Phone",
-        accessor: "phone"
+        name: "Phone",
+        selector: row => row.phone,
       },
       {
-        Header: "Role",
-        accessor: "role"
+        name: "Role",
+        selector: row => row.role,
       },
     ];
   }
@@ -74,11 +75,9 @@ class ViewUsers extends Component {
   render() {
     return (
       <div>
-        <StatusMessages />
+        <StatusMessages/>
         <h2>Users</h2>
-        
-        <Table data={this.state.eventTable} columns={this.state.columns}/>
-
+        <DataTable data={this.state.userTable} columns={this.state.columns}/>
       </div>
     );
   }
