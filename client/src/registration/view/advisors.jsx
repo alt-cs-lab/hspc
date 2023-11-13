@@ -40,24 +40,29 @@ class ViewSchools extends Component {
   getColumns() {
     return [
       {
-        Header: "First Name",
+        name: "First Name",
         selector: row => row.firstname,
+        sortable: true,
       },
       {
         name: "Last Name",
         selector: row => row.lastname,
+        sortable: true,
       },
       {
         name: "Email",
         selector: row => row.email,
+        sortable: true,
       },
       {
         name: "School",
-        selector: row => row.schoolname
+        selector: row => row.schoolname,
+        sortable: true,
       },
       {
         name: "Phone",
         selector: row => row.phone,
+        sortable: true,
       },
     ];
   }
@@ -70,13 +75,19 @@ class ViewSchools extends Component {
   render() {
     return (
       <div>
-        <StatusMessages />
+        <StatusMessages/>
         <p style={{ color: "red", fontSize: "18px", marginTop: "10px" }}>
           *NOTE* Table only displays advisors who have selected their main
           school.
         </p>
         <h2>Advisors</h2>
-        <DataTable data={this.state.advisorTable} columns={this.state.columns}/>
+        <DataTable
+          data={this.state.advisorTable} 
+          columns={this.state.columns} 
+          pagination 
+          paginationPerPage={20} 
+          paginationRowsPerPageOptions={[20, 30, 40, 50]}
+        />
       </div>
     );
   }

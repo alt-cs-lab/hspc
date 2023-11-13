@@ -10,8 +10,6 @@ import { connect } from "react-redux";
 import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
-var currentView = null;
-
 /*
  * @author: Daniel Bell
  * @Updated: Natalie Laughlin - Viewing the Event Name
@@ -47,19 +45,23 @@ class ViewEvents extends Component {
     return [
       {
         name: "Name",
-        selector: row => row.name
+        selector: row => row.name,
+        sortable: true,
       },
       {
         name: "Location",
-        selector: row => row.location
+        selector: row => row.location,
+        sortable: true,
       },
       {
         name: "Date",
-        selector: row => row.date
+        selector: row => row.date,
+        sortable: true,
       },
       {
         name: "Time",
-        selector: row => row.time
+        selector: row => row.time,
+        sortable: true,
       },
       {
         name: "Description",
@@ -81,9 +83,15 @@ class ViewEvents extends Component {
   render() {
     return (
       <div>
-        <StatusMessages />
+        <StatusMessages/>
         <h2>Events</h2>
-        <DataTable data={this.state.eventTable} columns={this.state.columns}/>
+        <DataTable
+          data={this.state.eventTable} 
+          columns={this.state.columns} 
+          pagination 
+          paginationPerPage={20} 
+          paginationRowsPerPageOptions={[20, 30, 40, 50]}
+        />
       </div>
     );
   }

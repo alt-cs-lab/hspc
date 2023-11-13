@@ -167,38 +167,47 @@ class ViewTeams extends Component {
       {
         name: "Team Name",
         selector: row => row.teamname,
+        sortable: true,
       },
       {
         name: "School Name",
         selector: row => row.schoolname,
+        sortable: true,
       },
       {
         name: "Address Line 1",
         selector: row => row.addressline1,
+        sortable: true,
       },
       {
         name: "Address Line 2",
         selector: row => row.addressline2,
+        sortable: true,
       },
       {
         name: "City",
         selector: row => row.city,
+        sortable: true,
       },
       {
         name: "State",
         selector: row => row.State,
+        sortable: true,
       },
       {
         name: "USD",
         selector: row => row.usdcode,
+        sortable: true,
       },
       {
         name: "Question Level",
         selector: row => row.questionlevel,
+        sortable: true,
       },
       {
         name: "Email",
         selector: row => row.email,
+        sortable: true,
       },
     ];
   }
@@ -207,18 +216,22 @@ class ViewTeams extends Component {
       {
         name: "First Name",
         selector: row => row.first,
+        sortable: true,
       },
       {
         name: "Last Name",
         selector: row => row.lastname,
+        sortable: true,
       },
       {
         name: "Email",
         selector: row => row.email,
+        sortable: true,
       },
       {
         name: "Phone",
         selector: row => row.phone,
+        sortable: true,
       },
     ];
   }
@@ -258,9 +271,13 @@ class ViewTeams extends Component {
             />
           </div>
         </div>
-        
-        <DataTable data={this.state.teamTable} columns={this.state.columns}/>
-      
+        <DataTable
+          data={this.state.teamTable} 
+          columns={this.state.columns} 
+          pagination 
+          paginationPerPage={20} 
+          paginationRowsPerPageOptions={[20, 30, 40, 50]}
+        />
       </div>
     );
   }
