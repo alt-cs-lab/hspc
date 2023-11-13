@@ -1,13 +1,13 @@
 import React from "react";
 import {HashRouter, Route, Routes} from "react-router-dom";
 
-import Home from "./home/homepage";
-import Login from "./login/login";
+import Home from "./pages/home/homepage";
+import Login from "./pages/login/login";
 import RequireAuth from "./_common/guards/privateRoute";
 
-import Register from "./registration/create/user";
+import Register from "./pages/users/createUser/user";
 import Navbar from "./_common/components/top-navbar";
-import Event from "./events/event";
+import Event from "./pages/details/event";
 import AuthVerify from "./_common/guards/authVerify";
 import { protectedRouteElements } from "./_store/slices/routeSlice";
 

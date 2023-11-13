@@ -5,13 +5,13 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { useState } from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
-import ViewEvents from "../registration/view/events";
-import ViewUsers from "../registration/view/users";
-import ViewTeams from "../registration/view/teams";
+import ViewEvents from "../pages/events/ViewEvents/events.jsx";
+import ViewUsers from "../pages/users/viewUsers/users";
+import ViewTeams from "../pages/teams/viewTeams/teams";
 //import Questions from "../judging/volunteerAssignmentQuestion";
 //import StartJudging from "../judging/startJudging";
 
-import Scoreboard from "../scoring/scoreboard.jsx";
+import Scoreboard from "../pages/scoreboard/viewBoard/scoreboard.jsx";
 import UserService from "../_common/services/user";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-volunteer.css";
