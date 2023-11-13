@@ -3,17 +3,15 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
-import ViewEvents from "../registration/view/events";
-import ViewQuestions from "../registration/view/questions";
+import ViewEvents from "../pages/events/ViewEvents/events.jsx";
+import ViewQuestions from "../pages/viewQuestions/questions";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 import "../_common/assets/css/dashboard-student.css";
 import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice";
 // import ViewEvents from '../registration/view/events.jsx';
-
-var currentView = null;
 
 /*
  * @author: Daniel Bell
