@@ -2,18 +2,15 @@
 MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
-import React, { Component } from "react";
-// import { Table } from "react-bootstrap";
+import React, { Component, useState, useEffect } from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
+import Button from 'react-bootstrap/Button';
 import TeamService from "../../_common/services/team";
 import EventService from "../../_common/services/event";
-import UserService from "../../_common/services/user"; //added to get all the students on a team Natalie Laughlin
-// import ReactTable from "react-table";
+import UserService from "../../_common/services/user";
 import DataTable from "react-data-table-component";
 import Select from "react-select";
-// import "react-table/react-table.css";
 import { connect } from "react-redux";
-// import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
 /*
@@ -29,11 +26,9 @@ class ViewTeams extends Component {
     this.state = {
       expanded: {},
       teamName: "",
-      userTable: [],
       teamTable: [],
       eventList: [],
       columnsForAllTeams: this.getAllTeamColumns(),
-      columnsForSpecficTeams: this.getSpecficTeamUsersColumns(),
     };
   }
 
@@ -44,27 +39,7 @@ class ViewTeams extends Component {
   componentDidMount = () => {
     TeamService.getAllTeams()
       .then((response) => {
-        if (response.ok && this.advisor === undefined) {
-          this.setState({ teamTable: response.data });
-        } else if (response.ok) {
-
-          // var registeredTeams = [];
-          // data.forEach((team, index) => {
-          //   if (team.email === this.advisor) {
-          //     registeredTeams.push({
-          //       id: index,
-          //       teamname: team.teamname,
-          //       schoolname: team.schoolname,
-          //       addressline1: team.addressline1,
-          //       addressline2: team.addressline2,
-          //       city: team.city,
-          //       state: team.state,
-          //       usdcode: team.usdcode,
-          //       questionlevel: team.questionlevel,
-          //       email: team.email,
-          //     });
-          //   }
-          // });
+        if (response.ok) {
           this.setState({ teamTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
@@ -92,72 +67,12 @@ class ViewTeams extends Component {
       .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
   /*
-   *Returns a list of all registered users when the component is rendered.  coppied from view users.jsx
-   *  @author: Daniel Bell  Modified by Natalie Laughlin
-   */
-  seeusers(teamName) {
-    UserService.getstudentsteam(teamName)
-      .then((response) => {
-        if (response.ok) {
-          this.setState({ userTable: response.data });
-        } else console.log("An error has occurred, Please try again.");
-      })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
-    //document.getElementById("button").style.color="green";
-    //button.
-    //button.style.textAlign="right";
-  }
-
-  /*
    * Updates the list of teams based on selected event
    */
   UpdateTeams(nameofevent) {
     TeamService.getAllTeamsInCompName(nameofevent).then((response) => {
-      // let teams = [];
       console.log(response.data);
-      if (response.data.length > 0) {
-        // let body = response.data;
-        this.setState({ teamTable: response.data, columns: this.getAllTeamColumns() });
-        // if (response.ok && this.state.advisorEmail === undefined) {
-        //   for (let i = 0; i < body.length; i++) {
-        //     teams.push({
-        //       id: i,
-        //       teamname: body[i].teamname,
-        //       schoolname: body[i].schoolname,
-        //       addressline1: body[i].addressline1,
-        //       addressline2: body[i].addressline2,
-        //       city: body[i].city,
-        //       state: body[i].state,
-        //       usdcode: body[i].usdcode,
-        //       questionlevel: body[i].questionlevel,
-        //       email: body[i].email,
-        //     });
-        //   }
-        // } else if (response.ok) {
-        //   for (let i = 0; i < body.length; i++) {
-        //     if (body[i].email === this.state.advisorEmail) {
-        //       //was not accesting the right data fixed Natalie Laughlin
-        //       teams.push({
-        //         id: i,
-        //         teamname: body[i].teamname,
-        //         schoolname: body[i].schoolname,
-        //         addressline1: body[i].addressline1,
-        //         addressline2: body[i].addressline2,
-        //         city: body[i].city,
-        //         state: body[i].state,
-        //         usdcode: body[i].usdcode,
-        //         questionlevel: body[i].questionlevel,
-        //         email: body[i].email,
-        //       });
-        //     }
-        //   }
-        // } else {
-        //   this.props.dispatchError(
-        //     `There was an error filtering students by "${nameofevent}" event`
-        //   );
-        // }
-      }
-      // this.setState({ teamTable: teams });
+      this.setState({ teamTable: response.data, columns: this.getAllTeamColumns() });
     });
     return;
   }
@@ -167,103 +82,170 @@ class ViewTeams extends Component {
       {
         name: "Team Name",
         selector: row => row.teamname,
+        sortable: true,
       },
       {
         name: "School Name",
         selector: row => row.schoolname,
+        sortable: true,
       },
       {
         name: "Address Line 1",
         selector: row => row.addressline1,
+        sortable: true,
       },
       {
         name: "Address Line 2",
         selector: row => row.addressline2,
+        sortable: true,
       },
       {
         name: "City",
         selector: row => row.city,
+        sortable: true,
       },
       {
         name: "State",
         selector: row => row.State,
+        sortable: true,
       },
       {
         name: "USD",
         selector: row => row.usdcode,
+        sortable: true,
       },
       {
         name: "Question Level",
         selector: row => row.questionlevel,
+        sortable: true,
       },
       {
         name: "Email",
         selector: row => row.email,
+        sortable: true,
       },
     ];
   }
-  getSpecficTeamUsersColumns() {
-    return [
-      {
-        name: "First Name",
-        selector: row => row.first,
-      },
-      {
-        name: "Last Name",
-        selector: row => row.lastname,
-      },
-      {
-        name: "Email",
-        selector: row => row.email,
-      },
-      {
-        name: "Phone",
-        selector: row => row.phone,
-      },
-    ];
-  }
-
-  handleRowExpanded(newExpanded, index, event) {
-    this.setState({
-      // we override newExpanded, keeping only current selected row expanded
-      expanded: {
-        [index[0]]: !this.state.expanded[index[0]],
-      },
-    });
-  }
+  reloadAllTeams() {
+    TeamService.getAllTeams()
+      .then((response) => {
+        if (response.ok) {
+          this.setState({ teamTable: response.data });
+        } else console.log("An error has occurred, Please try again.");
+      })
+      .catch((resErr) => console.log("Something went wrong. Please try again"));
+    }
   /*
    * Renders the current view - the table with all the teams - and the status messages for successess/errors
    */
   render() {
+    const table = this.state.teamTable.length === 0 ? 
+      <h3>No teams to display.</h3>: 
+      <DataTable
+        data={this.state.teamTable} 
+        columns={this.state.columnsForAllTeams} 
+        pagination 
+        paginationPerPage={20} 
+        paginationRowsPerPageOptions={[20, 30, 40, 50]}
+        expandableRows
+        expandableRowsComponent={ExpandedComponent}
+      />
     return (
       <div>
         <StatusMessages />
         <h2>Teams</h2>
-        <div
+        <section
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent: "space-evenly",
           }}
         >
-          <span style={{ marginRight: "10px", fontSize: "16px" }}>
-            Select Event:
-          </span>
-          <div id="sub-nav" className="teamDropDown">
-            <Select
-              id="event-dropdown"
-              placeholder="Select Event"
-              options={this.state.eventList}
-              onChange={(opt) => this.UpdateTeams(opt.label)}
-            />
+          <div style={{display:"flex", alignItems:"center"}}>
+            <span style={{ marginRight: "5px", fontSize: "16px" }}>
+              Select Event:
+            </span>
+            <div id="sub-nav" className="teamDropDown">
+              <Select
+                id="event-dropdown"
+                placeholder="Select Event"
+                options={this.state.eventList}
+                onChange={(opt) => this.UpdateTeams(opt.label)}
+              />
+            </div>
           </div>
-        </div>
-        
-        <DataTable data={this.state.teamTable} columns={this.state.columns}/>
-      
+          <div style={{display:"flex", alignItems:"center"}}>
+            <span style={{marginRight:"5px", fontSize:"16px"}}>
+              View All Teams:
+            </span>
+            <Button
+              variant="primary"
+              className="RegisterButton"
+              style={{
+                margin: 15,
+                backgroundColor: "#00a655",
+                color: "white",
+                fontSize: 14,
+              }}
+              onClick={() => {
+                this.reloadAllTeams()
+              }}
+            >
+              Click Here
+            </Button>
+          </div>
+        </section>
+        {table}
       </div>
     );
   }
+}
+
+const ExpandedComponent = ({ data }) => {
+  var columnsForSpecficTeams = getSpecficTeamUsersColumns();
+  const [teamUsersTable, setTeamUsersTable] = useState([]);
+  useEffect(() => {
+    UserService.getstudentsteam(data.teamname)  
+    .then((response) => {
+      if (response.ok) {
+        console.log(response.data)
+        setTeamUsersTable(response.data);
+      } else console.log("An error has occurred, Please try again.");
+    })
+    .catch((resErr) => console.log("Something went wrong. Please try again"));
+  })
+  
+  return (
+    <DataTable
+      data={teamUsersTable} 
+      columns={columnsForSpecficTeams}
+    />
+  );
+};
+
+function getSpecficTeamUsersColumns() {
+  return [
+    {
+      name: "First Name",
+      selector: row => row.firstname,
+      sortable: true,
+    },
+    {
+      name: "Last Name",
+      selector: row => row.lastname,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: row => row.email,
+      sortable: true,
+    },
+    {
+      name: "Phone",
+      selector: row => row.phone,
+      sortable: true,
+    },
+  ];
 }
 
 const mapStateToProps = (state) => {

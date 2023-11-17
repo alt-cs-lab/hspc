@@ -45,27 +45,27 @@ class ViewUsers extends Component {
       {
         name: "First Name",
         selector: row => row.firstname,
-        cell: row => { 
-          return (
-            <div style={{textAlign: "left"}}>{row.key}</div>
-          );
-        },
+        sortable: true,
       },
       {
         name: "Last Name",
         selector: row => row.lastname,
+        sortable: true,
       },
       {
         name: "Email",
         selector: row => row.email,
+        sortable: true,
       },
       {
         name: "Phone",
         selector: row => row.phone,
+        sortable: true,
       },
       {
         name: "Role",
         selector: row => row.role,
+        sortable: true,
       },
     ];
   }
@@ -77,7 +77,13 @@ class ViewUsers extends Component {
       <div>
         <StatusMessages/>
         <h2>Users</h2>
-        <DataTable data={this.state.userTable} columns={this.state.columns}/>
+        <DataTable
+          data={this.state.userTable} 
+          columns={this.state.columns} 
+          pagination 
+          paginationPerPage={20} 
+          paginationRowsPerPageOptions={[20, 30, 40, 50]}
+        />
       </div>
     );
   }

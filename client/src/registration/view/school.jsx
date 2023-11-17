@@ -43,30 +43,37 @@ class ViewSchools extends Component {
       {
         name: "State",
         selector: row => row.state,
+        sortable: true,
       },
       {
         name: "School Name",
         selector: row => row.name,
+        sortable: true,
       },
       {
         name: "Address Line 1",
         selector: row => row.addressLine1,
+        sortable: true,
       },
       {
         name: "Address Line 2",
         selector: row => row.addressLine2,
+        sortable: true,
       },
       {
         name: "City",
         selector: row => row.city,
+        sortable: true,
       },
       {
         name: "USD Code",
         selector: row => row.usdCode,
+        sortable: true,
       },
       {
         name: "Postal Code",
         selector: row => row.postalCode,
+        sortable: true,
       },
     ];
   }
@@ -76,9 +83,15 @@ class ViewSchools extends Component {
   render() {
     return (
       <div>
-        <StatusMessages />
+        <StatusMessages/>
         <h2>Schools</h2>
-        <DataTable data={this.state.schoolTable} columns={this.state.columns}/>
+        <DataTable
+          data={this.state.schoolTable} 
+          columns={this.state.columns} 
+          pagination 
+          paginationPerPage={20} 
+          paginationRowsPerPageOptions={[20, 30, 40, 50]}
+        />
       </div>
     );
   }

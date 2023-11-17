@@ -8,7 +8,7 @@ class UpgradeService {
     * Calls the API and returns a JSON list of all requests for a higher tier account.
     */
     getAllUpgrades() {
-        return ServiceUtils.getRequest('/upgrade/view', {});
+        return ServiceUtils.getRequest('/api/upgrade/view', {});
     }
 
     /*
@@ -17,7 +17,7 @@ class UpgradeService {
     * @param {string} text value of the requested permission level
     */
     acceptUpgradeRequest(level, email) {
-        return ServiceUtils.postRequest('/upgrade/edit', {
+        return ServiceUtils.postRequest('/api/upgrade/edit', {
             email: email,
             requestLevel: level
         });
@@ -30,7 +30,7 @@ class UpgradeService {
     * @param {string} email address of the requesting account
     */
     makeAdvisor(email) {
-        return ServiceUtils.postRequest('/upgrade/advisor', {email: email});
+        return ServiceUtils.postRequest('/api/upgrade/advisor', {email: email});
     }
 
     /*
@@ -38,7 +38,7 @@ class UpgradeService {
     * @param {string} text value of the requesting account's email address
     */
     removeUpgradeRequest(email) {
-        return ServiceUtils.postRequest('/upgrade/edit', {email: email});
+        return ServiceUtils.postRequest('/api/upgrade/edit', {email: email});
     }
 }
 
