@@ -33,7 +33,6 @@ class ViewEvents extends Component {
       this.props.auth.user.accessLevel
     )
       .then((response) => {
-        console.log(response.data)
         if (response.ok) {
           this.setState({ eventTable: response.data });
         } else console.log("An error has occurred, Please try again.");
@@ -54,9 +53,10 @@ class ViewEvents extends Component {
         sortable: true,
       },
       {
-        name: "Date",
+        name: "Date (YYYY-MM-DD)",
         selector: row => row.date,
         sortable: true,
+        sortFunction: dateSort,
       },
       {
         name: "Time",
@@ -96,6 +96,21 @@ class ViewEvents extends Component {
     );
   }
 }
+
+const dateSort = (rowA, rowB) => {
+  const a = Date.parse(rowA.date);
+  const b = Date.parse(rowB.date);
+  console.log(a);
+  console.log(b);
+  
+  if (a > b){
+    return 1;
+  }
+  if (b > a){
+    return -1;
+  }
+  return 0;
+};
 
 const mapStateToProps = (state) => {
   return {
