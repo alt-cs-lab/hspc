@@ -6,11 +6,11 @@ import React, {Component} from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import UpgradeService from "../../_common/services/upgrade";
 
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+//import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {connect} from "react-redux";
 import DataTable from "react-data-table-component";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
-import { Table } from "react-bootstrap"
+import { Button } from "react-bootstrap"
 
 class UpgradeRequests extends Component {
     constructor(props) {
@@ -28,8 +28,8 @@ class UpgradeRequests extends Component {
     componentDidMount = () => {
         UpgradeService.getAllUpgrades()
             .then((response) => {
-                if (response.statusCode === 200) {
-                    this.setState({requestTable: JSON.parse(response.body)}, () => {
+                if (response.ok) {
+                    this.setState({requestTable: response.data}, () => {
                     });
                 } else console.log("An error has occurred, Please try again.");
             })
@@ -43,7 +43,7 @@ class UpgradeRequests extends Component {
         console.log("Handler requestLevel: ", level);
         UpgradeService.acceptUpgradeRequest(level, email)
             .then((response) => {
-                if (response.statusCode === 200) {
+                if (response.ok) {
                     this.componentDidMount();
                 } else console.log("An error has occurred, Please try again.");
             })
@@ -52,7 +52,7 @@ class UpgradeRequests extends Component {
             //if the accepted request level was 60 - advisor - we want to call the makeAdvisor method
             UpgradeService.makeAdvisor(email)
                 .then((response) => {
-                    if (response.statusCode === 200) {
+                    if (response.ok) {
                         this.componentDidMount();
                     } else console.log("An error has occured, Please try again.");
                 })
@@ -68,7 +68,7 @@ class UpgradeRequests extends Component {
     handleDenyRequest = (email) => {
         UpgradeService.removeUpgradeRequest(email)
             .then((response) => {
-                if (response.statusCode === 200) {
+                if (response.ok) {
                     this.componentDidMount();
                 } else console.log("An error has occurred, Please try again.");
             })
@@ -81,53 +81,76 @@ class UpgradeRequests extends Component {
     getColumns() {
         return [
             {
-                Header: "First Name",
-                accessor: "firstname",
-                cell: (row) => <div style={{textAlign: "left"}}>{row.value}</div>,
+                name: "First Name",
+                selector: (row) => row.firstName
             },
             {
-                Header: "Last Name",
-                accessor: "lastname",
-                Cell: (row) => <div style={{textAlign: "left"}}>{row.value}</div>,
+                name: "Last Name",
+                selector: (row) => row.lastName
             },
             {
-                Header: "Email",
-                accessor: "email",
-                Cell: (row) => <div style={{textAlign: "left"}}>{row.value}</div>,
+                name: "Email",
+                selector: (row) => row.email
             },
             {
-                Header: "Phone",
-                accessor: "phone",
-                Cell: (row) => <div style={{textAlign: "right"}}>{row.value}</div>,
+                name: "Phone",
+                selector: (row) => row.phone
             },
             {
-                Header: "Requested Level",
-                Cell: (cell) => (
-                    <div style={{textAlign: "left"}}>
-                        {cell.original.requestlevel === 1 ? (
-                            <span>Student</span>
-                        ) : cell.original.requestlevel === 20 ? (
-                            <span>Volunteer</span>
-                        ) : cell.original.requestlevel === 40 ? (
-                            <span>Judge</span>
-                        ) : cell.original.requestlevel === 60 ? (
-                            <span>Advisor</span>
-                        ) : cell.original.requestlevel === 80 ? (
-                            <span>Admin</span>
-                        ) : cell.original.requestlevel === 100 ? (
-                            <span>Master</span>
-                        ) : (
-                            <span></span>
-                        )}
-                    </div>
-                ),
+                name: "Requested Level",
+                cell: row => {
+                    return(
+                        <div>
+                            {row.requestLevel === 1 ? (
+                                <span>Student</span>
+                            ) : row.requestLevel === 20 ? (
+                                <span>Volunteer</span>
+                            ) : row.requestLevel === 40 ? (
+                                <span>Judge</span>
+                            ) : row.requestLevel === 60 ? (
+                                <span>Advisor</span>
+                            ) : row.requestLevel === 80 ? (
+                                <span>Admin</span>
+                            ) : row.requestLevel === 100 ? (
+                                <span>Master</span>
+                            ) : (
+                                <span></span>
+                            )}
+                        </div>
+                    );
+                }
             },
             {
-                Header: "Activate",
-                Cell: (cell) => (
+                name: "Approve Request",
+                cell: row => {
+                    return(
+                        <Button onClick={() => {
+                            console.log("requestLevel:", row.requestLevel);
+                            this.handleAcceptRequest(
+                                row.email,
+                                row.requestLevel
+                            );
+                            }}
+                        >
+                            Approve
+                        </Button>
+                        );
+                    }
+                },
+                {
+                    name: "Deny Request",
+                    cell: row => {
+                        return(
+                            <Button onClick={() => this.handleDenyRequest(row.email)} >
+                                Deny
+                            </Button>
+                        );
+                    }
+                }
+                /*Cell: (cell) => (
                     <div>
 
-                        {/*TODO: Replace STYLE*/}
+                        {/*TODO: Replace STYLE*}
                         <FontAwesomeIcon icon="badge-check"
                                          onClick={() => {
                                              console.log("requestLevel:", cell.original.requestlevel);
@@ -153,8 +176,7 @@ class UpgradeRequests extends Component {
                                          }}
                         />
                     </div>
-                ),
-            },
+                ),*/
         ];
     }
 
