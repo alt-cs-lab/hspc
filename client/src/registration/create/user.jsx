@@ -28,6 +28,11 @@ const selectStyles = {
   }),
 };
 
+const Roles = {
+	Volunteer: 20,
+	Advisor: 60
+}
+
 /*
  * @author: Daniel Bell
  * @Updated: Natalie Laughlin - create student and Advisors adding instructions on the phone number
@@ -45,8 +50,7 @@ class Register extends Component {
       password: "",
       phone: "",
       schoolid: 0,
-      accessLevel: 1,
-      requestLevel: 1,
+      requestLevel: Roles.Volunteer,
       advisoremail: "",
       teamName: "",
       schoolList: [],
@@ -58,16 +62,16 @@ class Register extends Component {
     Added a componentDidMount to retrieve all the schools from the database
   */
   componentDidMount = () => {
-    this.changeFields(1);
+    this.changeFields(Roles.Volunteer);
     SchoolService.getAllSchools()
       .then((response) => {
-        if (response.statusCode === 200) {
-          let schoolbody = JSON.parse(response.body);
+        if (response.ok) {
+          let schoolbody = response.data;
           let schools = [];
           for (let i = 0; i < schoolbody.length; i++) {
             schools.push({
-              label: schoolbody[i].schoolname,
-              value: schoolbody[i].schoolid,
+              label: schoolbody[i].name,
+              value: schoolbody[i].id,
             });
           }
           this.setState({ schoolList: schools });
@@ -83,10 +87,9 @@ class Register extends Component {
     event.preventDefault();
     const newUser = this.state;
     if (this.state.isVerified) {
-      if (this.state.requestLevel === 20 || this.state.requestLevel === 40) {
-        //if not a student register normaly
+      if (this.state.requestLevel === Roles.Volunteer) {
         this.props.registerUser(newUser, this.props.history);
-      } else if (this.state.requestLevel === 60) {
+      } else {
         console.log(newUser);
         //need to make an advisor
         UserService.addadvisor(
@@ -94,7 +97,6 @@ class Register extends Component {
           newUser.lastName,
           newUser.email.toLowerCase(),
           newUser.phone,
-          newUser.accessLevel,
           newUser.requestLevel,
           newUser.password,
           newUser.schoolList[newUser.schoolid]
@@ -108,26 +110,6 @@ class Register extends Component {
           });
 
         // this.props.history.push("/login");
-      } else {
-        //needs to make them a student
-        UserService.addstudent(
-          newUser.firstName,
-          newUser.lastName,
-          newUser.email.toLowerCase(),
-          newUser.phone,
-          newUser.accessLevel,
-          newUser.requestLevel,
-          newUser.password,
-          newUser.advisoremail.toLowerCase()
-        )
-          .then((response) => {
-            this.props.dispatchSuccess("Registration Successful!");
-            this.resetFields();
-          })
-          .catch((error) => {
-            console.log(error);
-            this.props.dispatchError("There was an error creating a Student.");
-          });
       }
     } else {
       this.props.dispatchError("Please verify you are a human.");
@@ -146,25 +128,6 @@ class Register extends Component {
     this.setState({ advisoremail: "" });
     this.setState({ phone: "" });
     this.setState({ schoolid: 0 });
-  };
-
-  /*
-   * Handle the changing of access level.
-   */
-  accessLevelChange = (value) => {
-    this.setState({ accessLevel: value }, () => {
-      console.log("Access level changed.");
-      if (this.state.accessLevel !== 1) {
-        this.setState({ requestLevel: value, accessLevel: "1" }, () => {
-          this.props.dispatchError(
-            "Selections other than 'Student' will be subject to further review"
-          );
-        });
-      } else {
-        this.setState({ requestLevel: value, accessLevel: "1" });
-        this.props.dispatchResetErrors();
-      }
-    });
   };
 
   /*
@@ -187,54 +150,19 @@ class Register extends Component {
       [event.target.name]: event.target.value,
     });
   }
-  /*
-   * made the phone message appear  Natalie Laughlin
-   */
-  phonemessageunhide() {
-    document.getElementById("phone").hidden = false;
-    document.getElementById("phone").style.color = "red";
-  }
-  /*
-   *hides the phone message  Natalie Laughlin
-   */
-  phonemessagehide() {
-    document.getElementById("phone").hidden = true;
-  }
 
   /**
    * @ Natalie Laughlin
-   * @param {string} value takes the access level that the user is requesting
+   * @param {string} value takes the request level that the user is requesting
    */
   changeFields(value) {
     this.props.dispatchResetErrors();
-    this.phonemessagehide();
-    if (value === 1) {
-      this.accessLevelChange(1);
-      document.getElementById("email").hidden = false;
-      document.getElementById("emailField").required = true;
+    if (value === Roles.Volunteer) {
+      this.setState({ requestLevel: Roles.Volunteer });
       document.getElementById("schoolList").hidden = true;
       this.props.dispatchDropdownRequiredUpdate(false);
-    }
-    if (value === 20) {
-      this.accessLevelChange(20);
-
-      document.getElementById("email").hidden = true;
-      document.getElementById("emailField").required = false;
-      document.getElementById("schoolList").hidden = true;
-      this.props.dispatchDropdownRequiredUpdate(false);
-    }
-    if (value === 40) {
-      this.accessLevelChange(40);
-
-      document.getElementById("email").hidden = true;
-      document.getElementById("emailField").required = false;
-      document.getElementById("schoolList").hidden = true;
-      this.props.dispatchDropdownRequiredUpdate(false);
-    }
-    if (value === 60) {
-      this.accessLevelChange(60);
-      document.getElementById("email").hidden = true;
-      document.getElementById("emailField").required = false;
+    } else {
+      this.setState({ requestLevel: Roles.Advisor });
       document.getElementById("schoolList").hidden = false;
       this.props.dispatchDropdownRequiredUpdate(true);
     }
@@ -264,91 +192,107 @@ class Register extends Component {
           <b>Please fill out the information below.</b>
         </p>
         <Form name="form" onSubmit={(event) => this.handleRegister(event)}>
-          {/*TODO: update to BOOTSTRAP*/}
-          <Form.Text
-            name="first"
-            variant="filled"
-            label="First Name"
-            required
-            style={{ margin: "5px", width: "15%" }}
-            inputProps={{ style: { fontSize: 14 } }}
-            InputLabelProps={{ style: { fontSize: 14 } }}
-            onChange={(target) =>
-              this.setState({ firstName: target.target.value })
-            }
-            value={this.state.firstName}
-            onFocus={(target, value) => this.phonemessagehide()}
-            size="small"
-          />
-          <br />
-          <Form.Text
-            name="last"
-            variant="filled"
-            label="Last Name"
-            required
-            style={{ margin: "5px", width: "15%" }}
-            inputProps={{ style: { fontSize: 14 } }}
-            InputLabelProps={{ style: { fontSize: 14 } }}
-            onChange={(target) =>
-              this.setState({ lastName: target.target.value })
-            }
-            onFocus={(target, value) => this.phonemessagehide()}
-            size="small"
-            value={this.state.lastName}
-          />{" "}
-          <div name="phone-div">
-            {
-              //  created a div so that the messaged could appear depending on if the users was focused in the phone number  Nataie Laughlin
-            }
-            <Form.Text
-              variant="filled"
-              label="Phone Number (Optional)"
-              style={{ margin: "5px", width: "15%" }}
+          <p>Please select an account type.</p>
+          <ToggleButtonGroup
+            className="RoleSelect"
+            type="radio"
+            name="options"
+            defaultValue={Roles.Volunteer}
+            >
+            <ToggleButton 
+              id="tbg-radio-2"
+              value={Roles.Volunteer} 
+              onClick={(event) => this.changeFields(Roles.Volunteer)}
+              >
+              Volunteer
+            </ToggleButton>
+            <ToggleButton 
+              id="tbg-radio-1"
+              value={Roles.Advisor} 
+              onClick={(event) => this.changeFields(Roles.Advisor)}
+              >
+              Advisor
+            </ToggleButton>
+          </ToggleButtonGroup>
+          <Form.Group>
+            <Form.Label> First Name </Form.Label>
+            <Form.Control
+              name="first"
+              required
+              placeholder = "Input First Name"
+              style={{ margin:"auto", width:"25%" }}
               inputProps={{ style: { fontSize: 14 } }}
               InputLabelProps={{ style: { fontSize: 14 } }}
               onChange={(target) =>
-                this.setState({ phone: target.target.value })
+                this.setState({ firstName: target.target.value })
               }
-              onFocus={(target, value) => this.phonemessageunhide()}
+              value={this.state.firstName}
+              size="small"
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label> Last Name </Form.Label>
+            <Form.Control
+              name="last"
+              required
+              style={{ margin: "auto", width: "25%" }}
+              placeholder = "Input Last Name"
+              inputProps={{ style: { fontSize: 14 } }}
+              InputLabelProps={{ style: { fontSize: 14 } }}
+              onChange={(target) =>
+                this.setState({ lastName: target.target.value })
+              }
+              size="small"
+              value={this.state.lastName}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label> Phone Number (No dashes) </Form.Label>
+            <Form.Control
+              name="phone"
+              required
+              style={{ margin: "auto", width: "25%" }}
+              placeholder = "Input Phone Number"
+              inputProps={{ style: { fontSize: 14 } }}
+              InputLabelProps={{ style: { fontSize: 14 } }}
+              onChange={(target) => this.setState({ phone: target.target.value })}
               size="small"
               value={this.state.phone}
             />
-            <h6 id="phone" hidden={true}>
-              No dashes
-            </h6>
-          </div>
-          <Form.Text
-            name="email"
-            variant="filled"
-            type="email"
-            label="Email"
-            required
-            style={{ margin: "5px", width: "15%" }}
-            inputProps={{ style: { fontSize: 14 } }}
-            InputLabelProps={{ style: { fontSize: 14 } }}
-            onChange={(target) => this.setState({ email: target.target.value })}
-            onFocus={(target, value) => this.phonemessagehide()}
-            size="small"
-            value={this.state.email}
-          />
-          <br />
-          <Form.Text
-            name="password"
-            variant="filled"
-            type="password"
-            label="Password"
-            required
-            style={{ margin: "5px", width: "15%" }}
-            inputProps={{ style: { fontSize: 14 } }}
-            InputLabelProps={{ style: { fontSize: 14 } }}
-            onChange={(target) =>
-              this.setState({ password: target.target.value })
-            }
-            onFocus={(target, value) => this.phonemessagehide()}
-            size="small"
-            value={this.state.password}
-          />
-          <br />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label> Email Address </Form.Label>
+            <Form.Control
+              name="email"
+              type="email"
+              required
+              style={{ margin: "auto", width: "25%" }}
+              placeholder = "email@example.com"
+              inputProps={{ style: { fontSize: 14 } }}
+              InputLabelProps={{ style: { fontSize: 14 } }}
+              onChange={(target) => this.setState({ email: target.target.value })}
+              size="small"
+              value={this.state.email}
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label> Password </Form.Label>
+            <Form.Control
+              name="password"
+              type="password"
+              required
+              style={{ margin: "auto", width: "25%" }}
+              placeholder = "Input Password"
+              inputProps={{ style: { fontSize: 14 } }}
+              InputLabelProps={{ style: { fontSize: 14 } }}
+              onChange={(target) =>
+                this.setState({ password: target.target.value })
+              }
+              size="small"
+              value={this.state.password}
+            />
+          </Form.Group>
+          {/* Would no longer be necessary with database changes
           <div name="email-div" id="email">
             {
               //added so that the student can put their advisors email in Natalie Laughlin
@@ -366,12 +310,11 @@ class Register extends Component {
                   advisoremail: target.target.value.toLowerCase(),
                 })
               }
-              onFocus={(target, value) => this.phonemessagehide()}
               size="small"
               value={this.state.advisoremail}
             />
-            <br />
           </div>
+          */}
           <div name="dropdown-div" id="schoolList" hidden={true}>
             <FixRequiredSelect
               id="dropdown"
@@ -384,29 +327,6 @@ class Register extends Component {
             />
             <br />
           </div>
-          <p>
-            <br />
-            Please select an account type.
-          </p>
-          <ToggleButtonGroup
-            className="RoleSelect"
-            type="radio"
-            name="options"
-            defaultValue={1}
-          >
-            <ToggleButton value={1} onClick={(event) => this.changeFields(1)}>
-              Student
-            </ToggleButton>
-            <ToggleButton value={20} onClick={(event) => this.changeFields(20)}>
-              Volunteer
-            </ToggleButton>
-            <ToggleButton value={40} onClick={(event) => this.changeFields(40)}>
-              Judge
-            </ToggleButton>
-            <ToggleButton value={60} onClick={(event) => this.changeFields(60)}>
-              Advisor
-            </ToggleButton>
-          </ToggleButtonGroup>
           <br />
           <br />
           <div name="captcha" align="center">

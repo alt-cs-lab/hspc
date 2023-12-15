@@ -23,6 +23,15 @@ const schoolService = require("../services/school.js");
 */
 router.get('/view', (req, res) => {
     userService.getAllUsers()
+        /*
+        TODO: Trent Powell
+        .then (user => {
+            if( CHECK ROLE PRIVELEGES HERE)
+                Show Filtered Users
+            else
+                Show all users
+        })
+        */
         .then((userdata) => {
             statusResponses.ok(res, userdata);
         })
