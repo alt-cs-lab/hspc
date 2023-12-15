@@ -40,6 +40,7 @@ class ViewEvents extends Component {
       .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
 
+  // Specifies what information to include in the columns
   getColumns() {
     return [
       {
@@ -77,9 +78,8 @@ class ViewEvents extends Component {
       },
     ];
   }
-  /*
-   * Renders the component UI.
-   */
+  
+  // Renders the component UI.
   render() {
     return (
       <div>
@@ -97,11 +97,10 @@ class ViewEvents extends Component {
   }
 }
 
+// Sorting method for the date column
 const dateSort = (rowA, rowB) => {
   const a = Date.parse(rowA.date);
   const b = Date.parse(rowB.date);
-  console.log(a);
-  console.log(b);
   
   if (a > b){
     return 1;

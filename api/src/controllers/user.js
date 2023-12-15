@@ -50,6 +50,7 @@ router.get('/view', (req, res) => {
 router.get('/viewteam', (req, res) => {
     let teamName = req.query['teamName'];  //need user email
     userService.getstudentsteam(teamName)
+        // TODO: Create .then for filtering what informtaion is returned based on role
         .then((userdata) => {
             statusResponses.ok(res, userdata);
         })

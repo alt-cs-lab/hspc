@@ -22,10 +22,7 @@ class ViewSchools extends Component {
     };
   }
 
-  /*
-   * Returns a list of all registered schools when the component is rendered.
-   *
-   */
+  // Returns a list of all registered schools when the component is rendered.
   componentDidMount = () => {
     SchoolService.getAllSchools()
       .then((response) => {
@@ -35,9 +32,8 @@ class ViewSchools extends Component {
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
-  /* 
-    This method maps the database call and the columns to the correct positioning
-  */
+
+  // This method maps the database call and the columns to the correct positioning
   getColumns() {
     return [
       {
@@ -77,9 +73,8 @@ class ViewSchools extends Component {
       },
     ];
   }
-  /*
-   * Renders all the registered schools in table form
-   */
+  
+  // Renders all the registered schools in table form
   render() {
     return (
       <div>
