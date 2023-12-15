@@ -23,6 +23,15 @@ const schoolService = require("../services/school.js");
 */
 router.get('/view', (req, res) => {
     userService.getAllUsers()
+        /*
+        TODO: Trent Powell
+        .then (user => {
+            if( CHECK ROLE PRIVELEGES HERE)
+                Show Filtered Users
+            else
+                Show all users
+        })
+        */
         .then((userdata) => {
             statusResponses.ok(res, userdata);
         })
@@ -41,6 +50,7 @@ router.get('/view', (req, res) => {
 router.get('/viewteam', (req, res) => {
     let teamName = req.query['teamName'];  //need user email
     userService.getstudentsteam(teamName)
+        // TODO: Create .then for filtering what informtaion is returned based on role
         .then((userdata) => {
             statusResponses.ok(res, userdata);
         })

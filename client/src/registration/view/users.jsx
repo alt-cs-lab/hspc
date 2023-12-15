@@ -9,6 +9,7 @@ import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
+// This class inherits functionality of the Component class and extends it.
 class ViewUsers extends Component {
   constructor(props) {
     super(props);
@@ -19,9 +20,7 @@ class ViewUsers extends Component {
     };
   }
 
-  /*
-   * Returns a list of all registered users when the component is rendered.
-   */
+  // Returns a list of all registered users when the component is rendered.
   componentDidMount = () => {
     UserService.getAllUsers()
       .then((response) => {
@@ -32,6 +31,7 @@ class ViewUsers extends Component {
       .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
 
+  // TODO: Update this method so that it is usable.
   filterMethod = (filter, row, column) => {
     const id = filter.pivotId || filter.id;
 
@@ -40,6 +40,7 @@ class ViewUsers extends Component {
       : true;
   };
 
+  // Specifies what information to include in the rendered columns.
   getColumns() {
     return [
       {
@@ -69,9 +70,8 @@ class ViewUsers extends Component {
       },
     ];
   }
-  /*
-   * Renders the component UI.
-   */
+  
+  // Renders the component.
   render() {
     return (
       <div>

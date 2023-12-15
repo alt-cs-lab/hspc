@@ -77,6 +77,7 @@ class ViewTeams extends Component {
     return;
   }
 
+  // Specifies what information to include in the rendered columns.
   getAllTeamColumns() {
     return [
       {
@@ -126,6 +127,8 @@ class ViewTeams extends Component {
       },
     ];
   }
+
+  // This method is used whenever a user wants to see all of the teams again
   reloadAllTeams() {
     TeamService.getAllTeams()
       .then((response) => {
@@ -135,9 +138,8 @@ class ViewTeams extends Component {
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
     }
-  /*
-   * Renders the current view - the table with all the teams - and the status messages for successess/errors
-   */
+
+  // Renders the component.
   render() {
     const table = this.state.teamTable.length === 0 ? 
       <h3>No teams to display.</h3>: 
@@ -201,6 +203,7 @@ class ViewTeams extends Component {
   }
 }
 
+// Method that returns a specific team.
 const ExpandedComponent = ({ data }) => {
   var columnsForSpecficTeams = getSpecficTeamUsersColumns();
   const [teamUsersTable, setTeamUsersTable] = useState([]);
@@ -223,6 +226,7 @@ const ExpandedComponent = ({ data }) => {
   );
 };
 
+// Once a specific team is chosen the columns are updated by this function.
 function getSpecficTeamUsersColumns() {
   return [
     {

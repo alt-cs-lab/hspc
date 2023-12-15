@@ -23,10 +23,7 @@ class ViewSchools extends Component {
     };
   }
 
-  /*
-   * Returns a list of all registered advisors when the component is rendered.
-   *
-   */
+  // Returns a list of all registered advisors when the component is rendered.
   componentDidMount = () => {
     UserService.getAllAdvisors()
       .then((response) => {
@@ -37,6 +34,7 @@ class ViewSchools extends Component {
       .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
 
+  // Specifies what information to include in the columns
   getColumns() {
     return [
       {
@@ -67,11 +65,7 @@ class ViewSchools extends Component {
     ];
   }
 
-  /*
-   *
-   * Renders all the registered advisors in table form
-   *
-   */
+  // Renders all the registered advisors in table form
   render() {
     return (
       <div>
