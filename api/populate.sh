@@ -1,4 +1,5 @@
 # from https://gist.github.com/mihow/9c7f559807069a03e302605691f85572
+set -x
 export $(grep -v '^#' .env | xargs)
 
 docker cp ./api/database/SchoolDirectoryCSV.csv ${DB_CONTAINER}:/schools.csv
