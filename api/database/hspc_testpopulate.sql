@@ -6,11 +6,156 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 -- dummy data for testing purposes
 -- Import SchoolDirectoryCSV before using this file
 
-/*If the database has been created already:
+/*If the database has been created already:x
     navigate to api database in powershell
     run \i hspc_testpopulate.sql
 */
 
+INSERT INTO Competition
+    (CompetitionID, EventLocation, EventDate, EventTime, EventName, EventDescription, TeamCapacity)
+VALUES
+    (7, 'Central High School', '2024-03-15', '09:00', 'Spring Coding Challenge', 'An engaging competition for high school students to showcase their programming skills.', 4),
+    (8, 'Eastside Community College', '2024-04-20', '10:00', 'ECC Tech Fest', 'A technology festival and competition for local high school and college students.', 3);
+
+INSERT INTO Roles
+    (Level, Role)
+VALUES
+    (20, 'Volunteer'),
+    (40, 'Judge'),
+    (60, 'Advisor'),
+    (80, 'Admin'),
+    (100, 'Master');
+
+/*
+Insert Dummy Values into Users Table
+*/
+INSERT INTO Users
+    (UserID, Phone, FirstName, LastName, EncryptedPassword, AccessLevel, RequestLevel, Email, CreatedOn, AccessedOn)
+VALUES
+    (18, '234-555-1012', 'Evelyn', 'Smith', '$2a$10$examplehashedpassword3', 20, 20, 'evelyn.smith@email.com', '2024-01-03', '2024-01-29'),
+    (19, '213-555-1013', 'Frank', 'Wright', '$2a$10$examplehashedpassword4', 20, 20, 'frank.wright@email.com', '2024-01-04', '2024-01-28'),
+    (20, '762-555-1014', 'Gina', 'Davis', '$2a$10$examplehashedpassword5', 40, 40, 'gina.davis@email.com', '2024-01-05', '2024-01-27'),
+    (21, '127-555-1015', 'Harry', 'Miller', '$2a$10$examplehashedpassword6', 40, 40, 'harry.miller@email.com', '2024-01-06', '2024-01-26'),
+    (22, '932-555-1016', 'Irene', 'Wilson', '$2a$10$examplehashedpassword7', 60, 60, 'irene.wilson@email.com', '2024-01-07', '2024-01-25'),
+    (23, '328-555-1017', 'Jack', 'Thomas', '$2a$10$examplehashedpassword8', 60, 60, 'jack.thomas@email.com', '2024-01-08', '2024-01-24'),
+    (24, '421-555-1018', 'Kathy', 'Lee', '$2a$10$examplehashedpassword9', 80, 80, 'kathy.lee@email.com', '2024-01-09', '2024-01-23'),
+    (25, '321-555-1019', 'Leo', 'Garcia', '$2a$10$examplehashedpassword10', 80, 80, 'leo.garcia@email.com', '2024-01-10', '2024-01-22'),
+    (26, '442-555-1020', 'Josh', 'Weese', '$2a$10$examplehashedpassword11', 100, 100, 'maggie.perez@email.com', '2024-01-11', '2024-01-29'),
+    (27, '745-555-1021', 'Nathan', 'Bean', '$2a$10$examplehashedpassword12', 100, 100, 'nathan.kim@email.com', '2024-01-12', '2024-01-28');
+
+/*
+Insert Dummy Values into School Advisors Table
+*/
+INSERT INTO SchoolAdvisors
+    (UserID, SchoolID)
+VALUES
+    (22, 181),
+    (23, 182);
+
+/*
+Insert Dummy Values into High School Students Table
+*/
+INSERT INTO HighSchoolStudents
+    (StudentID, FirstName, LastName, SchoolID, Email, GradDate)
+VALUES
+    (16, 'Chris', 'Martin', 181, 'chris.martin@school.com', '2025-05-30'),
+    (17, 'Diana', 'Ross', 182, 'diana.ross@school.com', '2024-06-15');
+
+/*
+Insert Dummy Values into Schools Table
+*/
+INSERT INTO Schools
+    (SchoolID, SchoolName, AddressLine1, AddressLine2, City, State, PostalCode, USDCode)
+VALUES
+    (181, 'Maple High School', '1234 Maple St', NULL, 'Mapletown', 'KS', '12345', 'USD011'),
+    (182, 'Riverdale Academy', '5678 River Ave', 'Suite 9', 'River City', 'KS', '54321', 'USD022');
+
+/*
+Insert Dummy Values into Volunteers Table
+*/
+INSERT INTO Volunteers
+    (VolunteerID, UserID, CompetitionID, Availability, ScheduledTime)
+VALUES
+    (12, 18, 7, '2024-03-15', '09:00-12:00'),
+    (13, 19, 8, '2024-04-20', '10:00-13:00');
+
+/*
+Insert Dummy Values into Teams Table
+*/
+INSERT INTO Teams
+    (TeamID, SchoolID, CompetitionID, TeamName, SkillLevelID, AdvisorID, TeamStatusID, TimeCreated)
+VALUES
+    (7, 181, 7, 'Maple Coders', 1, 22, 1, '2024-01-15T08:00:00.000'),
+    (8, 182, 8, 'Riverdale Hackers', 2, 23, 2, '2024-01-20T09:00:00.000');
+
+/*
+Insert Values into Team Status Table
+*/
+INSERT INTO TeamStatus
+    (StatusID, Status)
+VALUES
+    (0, 'Unregistered'),
+    (1, 'Waitlisted');
+    (2, 'Registered'),
+    (3, 'Denied');
+
+/*
+Insert Values into Skill Levels Table
+*/
+INSERT INTO SkillLevels
+    (SkillLevelID, SkillLevel)
+VALUES
+    (0, 'Beginner'),
+    (1, 'Advanced');
+
+/*
+Insert Values into Questions Table
+*/
+INSERT INTO Questions
+    (QuestionID, QuestionTitle, QuestionDescription, QuestionSolution, RoundID, SkillLevelID)
+VALUES
+    (11, 'Array Challenge', 'Solve the given array manipulation problem.', 'Solution text here.', 3, 1),
+    (12, 'Database Query', 'Write an SQL query to solve the given problem.', 'Solution text here.', 4, 2);
+
+/*
+Insert Dummy Values into Round Table
+*/
+INSERT INTO Round
+    (RoundID, CompetitionID, RoundNumber, MinutesAllowed, RoundStarted)
+VALUES
+    (3, 7, 1, 60, TRUE),
+    (4, 8, 2, 45, FALSE);
+
+/*
+Insert Dummy Values into Score Attempt Table
+*/
+INSERT INTO ScoreAttempt
+    (ScoreAttemptID, TeamID, QuestionID, VolunteerID, Passed, TimeJudged, Score)
+VALUES
+    (7, 7, 11, 12, TRUE, '2024-03-15T10:00:00.000', 85),
+    (8, 8, 12, 13, FALSE, '2024-04-20T11:30:00.000', 70);
+
+/*
+Insert Dummy Values into Test Case Table
+*/
+INSERT INTO TestCase
+    (TestCaseID, QuestionID, Input, Output)
+VALUES
+    (13, 11, 'Input data here', 'Expected output here'),
+    (14, 12, 'Input data here', 'Expected output here');
+
+/*
+Insert Dummy Values into Test Case Attempt Table
+*/
+INSERT INTO TestCaseAttempt
+    (ScoreAttemptID, TestCaseID, Passed)
+VALUES
+    (7, 13, TRUE),
+    (8, 14, FALSE);
+
+
+-- OLD INSERTS
+/*
 INSERT INTO Competition
     (EventLocation, EventDate, EventTime, EventName, EventDescription, BeginnerTeamsPerSchool, AdvancedTeamsPerSchool, TeamsPerSchool, BeginnerTeamsperEvent, AdvancedTeamsperEvent, TeamsperEvent)
 VALUES
@@ -112,3 +257,4 @@ VALUES
 (4, FALSE, '2000-01-01T00:00:00.000-00:00'),
 (5, TRUE, '2000-01-01T00:00:00.000-00:00'),
 (6, FALSE, '2000-01-01T00:00:00.000-00:00');
+*/
