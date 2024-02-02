@@ -36,6 +36,9 @@ function registerSchool({name, addressLine1, addressLine2, city, state, postalCo
  * @returns {Promise} Promise that resolves to a list of schools.
  */
 function getAllSchools(){
-    return db.any(`SELECT * FROM School;`)
+    return db.any(`
+        SELECT * 
+        FROM Schools;
+        `)
         .then((schools) => renameKeys(schools, ["id", "name", "addressLine1", "addressLine2", "city", "state", "postalCode", "usdCode"]));
 }

@@ -112,14 +112,10 @@ function getLogin(email) {
 //function to get all the user information for each user in the Users table
 function getAllUsers() {
     return db.any(`
-    SELECT U.UserID, 
-        U.FirstName,
-        U.LastName,
-        U.Email,
-        U.Phone,
-        R.Role
+    SELECT U.UserID, U.FirstName, U.LastName, U.Email, U.Phone, R."Role"
     FROM Users AS U
-    INNER JOIN Roles AS R on R.Level = U.AccessLevel`);
+        INNER JOIN Roles R ON R."Level" = U.AccessLevel
+    `);
 }
 
 /*

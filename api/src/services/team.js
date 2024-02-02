@@ -20,13 +20,14 @@ const pgp = require("pg-promise")();
 // Code Added for curent end points required in the client
 function getAll(){
     return db.any(`
-    SELECT T.TeamID, T.TeamName, Q.QuestionLevel, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
-    FROM 
-        Teams T
-        INNER JOIN QuestionLevel Q ON T.QuestionLevelID = Q.QuestionLevelID
-        INNER JOIN School S ON T.SchoolID = S.SchoolID  
-        INNER JOIN Users U ON T.advisorID = U.UserID;`
-)
+    SELECT TE.TeamID, TE.TeamName
+    FROM Teams TE
+        INNER JOIN Schools S ON S.SchoolID = TE.SchoolID
+        INNER JOIN Competitions CO ON CO.CompetitionID = TE.CompetitionID
+        INNER JOIN SkillLevels SL ON SL.SkillLevelID = TE.SkillLevelID
+        INNER JOIN Users U ON U.UserID = TE.AdvisorID
+        INNER JOIN TeamStatus TS ON TS.StatusID = TE.TeamStatusID
+    `)
 }
 
 function getTeamsInCompetitionName(eventName){
