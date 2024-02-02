@@ -55,16 +55,16 @@ Insert Dummy Values into Users Table
 INSERT INTO Users
     (UserID, Phone, FirstName, LastName, EncryptedPassword, AccessLevel, RequestLevel, Email, CreatedOn, AccessedOn)
 VALUES
-    (18, '234-555-1012', 'Evelyn', 'Smith', '$2a$10$examplehashedpassword3', 20, 20, 'evelyn.smith@email.com', '2024-01-03', '2024-01-29'),
-    (19, '213-555-1013', 'Frank', 'Wright', '$2a$10$examplehashedpassword4', 20, 20, 'frank.wright@email.com', '2024-01-04', '2024-01-28'),
-    (20, '762-555-1014', 'Gina', 'Davis', '$2a$10$examplehashedpassword5', 40, 40, 'gina.davis@email.com', '2024-01-05', '2024-01-27'),
-    (21, '127-555-1015', 'Harry', 'Miller', '$2a$10$examplehashedpassword6', 40, 40, 'harry.miller@email.com', '2024-01-06', '2024-01-26'),
-    (22, '932-555-1016', 'Irene', 'Wilson', '$2a$10$examplehashedpassword7', 60, 60, 'irene.wilson@email.com', '2024-01-07', '2024-01-25'),
-    (23, '328-555-1017', 'Jack', 'Thomas', '$2a$10$examplehashedpassword8', 60, 60, 'jack.thomas@email.com', '2024-01-08', '2024-01-24'),
-    (24, '421-555-1018', 'Kathy', 'Lee', '$2a$10$examplehashedpassword9', 80, 80, 'kathy.lee@email.com', '2024-01-09', '2024-01-23'),
-    (25, '321-555-1019', 'Leo', 'Garcia', '$2a$10$examplehashedpassword10', 80, 80, 'leo.garcia@email.com', '2024-01-10', '2024-01-22'),
-    (26, '442-555-1020', 'Josh', 'Weese', '$2a$10$examplehashedpassword11', 100, 100, 'maggie.perez@email.com', '2024-01-11', '2024-01-29'),
-    (27, '745-555-1021', 'Nathan', 'Bean', '$2a$10$examplehashedpassword12', 100, 100, 'nathan.kim@email.com', '2024-01-12', '2024-01-28');
+    (18, '234-555-1012', 'Evelyn', 'Smith', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 20, 20, 'evelyn.smith@email.com', '2024-01-03', '2024-01-29'),
+    (19, '213-555-1013', 'Frank', 'Wright', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 20, 20, 'frank.wright@email.com', '2024-01-04', '2024-01-28'),
+    (20, '762-555-1014', 'Gina', 'Davis', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 40, 40, 'gina.davis@email.com', '2024-01-05', '2024-01-27'),
+    (21, '127-555-1015', 'Harry', 'Miller', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 40, 40, 'harry.miller@email.com', '2024-01-06', '2024-01-26'),
+    (22, '932-555-1016', 'Irene', 'Wilson', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 60, 60, 'irene.wilson@email.com', '2024-01-07', '2024-01-25'),
+    (23, '328-555-1017', 'Jack', 'Thomas', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 60, 60, 'jack.thomas@email.com', '2024-01-08', '2024-01-24'),
+    (24, '421-555-1018', 'Kathy', 'Lee', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 80, 80, 'kathy.lee@email.com', '2024-01-09', '2024-01-23'),
+    (25, '321-555-1019', 'Leo', 'Garcia', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 80, 80, 'leo.garcia@email.com', '2024-01-10', '2024-01-22'),
+    (26, '442-555-1020', 'Josh', 'Weese', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 100, 100, 'maggie.perez@email.com', '2024-01-11', '2024-01-29'),
+    (27, '745-555-1021', 'Nathan', 'Bean', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 100, 100, 'nathan.kim@email.com', '2024-01-12', '2024-01-28');
 
 /*
 Insert Dummy Values into School Advisors Table

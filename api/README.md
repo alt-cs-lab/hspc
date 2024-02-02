@@ -44,14 +44,14 @@ Tests require the postgress container running. Testing is done with jest against
 > If developing on VS code, you can install the jest extension to debug tests.
 
 ## Docker
-docker build -t me/demo-node .
-docker run -it me/demo-node sh
+>docker build -t me/demo-node .\
+>docker run -it me/demo-node sh
 
-## For Database Querying
+## For Querying Database
 Run commands: 
-    docker exec -it [DB_CONTAINER] sh
-    psql [DB_NAME] -U [DB_USERNAME] -w [DB_PASSWORD]
-    [YOUR QUERY];
+>docker exec -it [DB_CONTAINER] sh\
+>psql [DB_NAME] -U [DB_USERNAME] -w [DB_PASSWORD]\
+>[YOUR QUERY];
 
 The client is included as a submodule for testing and deployment. Pull up the client module to keep versions in sync.
 
