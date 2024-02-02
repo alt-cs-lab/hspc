@@ -127,7 +127,7 @@ CREATE TABLE Teams (
 	PRIMARY KEY (TeamID),
 	UNIQUE (CompetitionID, TeamName),
 	FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID),
-	FOREIGN KEY (CompetitionID) REFERENCES Competition(CompetitionID),
+	FOREIGN KEY (CompetitionID) REFERENCES Competitions(CompetitionID),
 	FOREIGN KEY (SkillLevelID) REFERENCES SkillLevels(SkillLevelID),
 	FOREIGN KEY (AdvisorID) REFERENCES Users(UserID),
 	FOREIGN KEY (TeamStatusID) REFERENCES TeamStatus(StatusID)
