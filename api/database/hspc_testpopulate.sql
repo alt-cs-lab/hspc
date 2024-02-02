@@ -11,20 +11,43 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
     run \i hspc_testpopulate.sql
 */
 
-INSERT INTO Competition
+INSERT INTO Competitions
     (CompetitionID, EventLocation, EventDate, EventTime, EventName, EventDescription, TeamCapacity)
 VALUES
     (7, 'Central High School', '2024-03-15', '09:00', 'Spring Coding Challenge', 'An engaging competition for high school students to showcase their programming skills.', 4),
     (8, 'Eastside Community College', '2024-04-20', '10:00', 'ECC Tech Fest', 'A technology festival and competition for local high school and college students.', 3);
 
+/*
+Insert Values into Roles Table
+*/
 INSERT INTO Roles
-    (Level, Role)
+    ("Level", "Role")
 VALUES
     (20, 'Volunteer'),
     (40, 'Judge'),
     (60, 'Advisor'),
     (80, 'Admin'),
     (100, 'Master');
+
+/*
+Insert Values into Team Status Table
+*/
+INSERT INTO TeamStatus
+    (StatusID, Status)
+VALUES
+    (1, 'Unregistered'),
+    (2, 'Waitlisted'),
+    (3, 'Registered'),
+    (4, 'Denied');
+
+/*
+Insert Values into Skill Levels Table
+*/
+INSERT INTO SkillLevels
+    (SkillLevelID, SkillLevel)
+VALUES
+    (1, 'Beginner'),
+    (2, 'Advanced');
 
 /*
 Insert Dummy Values into Users Table
@@ -49,8 +72,8 @@ Insert Dummy Values into School Advisors Table
 INSERT INTO SchoolAdvisors
     (UserID, SchoolID)
 VALUES
-    (22, 181),
-    (23, 182);
+    (22, 194),
+    (23, 137);
 
 /*
 Insert Dummy Values into High School Students Table
@@ -60,15 +83,6 @@ INSERT INTO HighSchoolStudents
 VALUES
     (16, 'Chris', 'Martin', 181, 'chris.martin@school.com', '2025-05-30'),
     (17, 'Diana', 'Ross', 182, 'diana.ross@school.com', '2024-06-15');
-
-/*
-Insert Dummy Values into Schools Table
-*/
-INSERT INTO Schools
-    (SchoolID, SchoolName, AddressLine1, AddressLine2, City, State, PostalCode, USDCode)
-VALUES
-    (181, 'Maple High School', '1234 Maple St', NULL, 'Mapletown', 'KS', '12345', 'USD011'),
-    (182, 'Riverdale Academy', '5678 River Ave', 'Suite 9', 'River City', 'KS', '54321', 'USD022');
 
 /*
 Insert Dummy Values into Volunteers Table
@@ -89,24 +103,13 @@ VALUES
     (8, 182, 8, 'Riverdale Hackers', 2, 23, 2, '2024-01-20T09:00:00.000');
 
 /*
-Insert Values into Team Status Table
+Insert Dummy Values into Round Table
 */
-INSERT INTO TeamStatus
-    (StatusID, Status)
+INSERT INTO "Rounds"
+    (RoundID, CompetitionID, RoundNumber, MinutesAllowed, RoundStarted)
 VALUES
-    (0, 'Unregistered'),
-    (1, 'Waitlisted');
-    (2, 'Registered'),
-    (3, 'Denied');
-
-/*
-Insert Values into Skill Levels Table
-*/
-INSERT INTO SkillLevels
-    (SkillLevelID, SkillLevel)
-VALUES
-    (0, 'Beginner'),
-    (1, 'Advanced');
+    (3, 7, 1, 60, '2024-01-15T08:00:00.000'),
+    (4, 8, 2, 45, '2024-01-15T09:00:00.000');
 
 /*
 Insert Values into Questions Table
@@ -118,18 +121,9 @@ VALUES
     (12, 'Database Query', 'Write an SQL query to solve the given problem.', 'Solution text here.', 4, 2);
 
 /*
-Insert Dummy Values into Round Table
-*/
-INSERT INTO Round
-    (RoundID, CompetitionID, RoundNumber, MinutesAllowed, RoundStarted)
-VALUES
-    (3, 7, 1, 60, TRUE),
-    (4, 8, 2, 45, FALSE);
-
-/*
 Insert Dummy Values into Score Attempt Table
 */
-INSERT INTO ScoreAttempt
+INSERT INTO ScoreAttempts
     (ScoreAttemptID, TeamID, QuestionID, VolunteerID, Passed, TimeJudged, Score)
 VALUES
     (7, 7, 11, 12, TRUE, '2024-03-15T10:00:00.000', 85),
@@ -138,8 +132,8 @@ VALUES
 /*
 Insert Dummy Values into Test Case Table
 */
-INSERT INTO TestCase
-    (TestCaseID, QuestionID, Input, Output)
+INSERT INTO TestCases
+    (TestCaseID, QuestionID, "Input", "Output")
 VALUES
     (13, 11, 'Input data here', 'Expected output here'),
     (14, 12, 'Input data here', 'Expected output here');
@@ -147,11 +141,19 @@ VALUES
 /*
 Insert Dummy Values into Test Case Attempt Table
 */
-INSERT INTO TestCaseAttempt
+INSERT INTO TestCaseAttempts
     (ScoreAttemptID, TestCaseID, Passed)
 VALUES
     (7, 13, TRUE),
     (8, 14, FALSE);
+
+/*
+Insert Dummy value into Article Table
+*/
+INSERT INTO Article
+    (ArticleTitle,ArticleSubHeading,ArticleMessage,ArticleDate)
+VALUES
+('Work being done','Please do not disturb the engineers','Goodbye!','2022-2-18');
 
 
 -- OLD INSERTS
