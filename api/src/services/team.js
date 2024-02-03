@@ -20,24 +20,25 @@ const pgp = require("pg-promise")();
 // Code Added for curent end points required in the client
 function getAll(){
     return db.any(`
-    SELECT TE.TeamID, TE.TeamName
-    FROM Teams TE
-        INNER JOIN Schools S ON S.SchoolID = TE.SchoolID
-        INNER JOIN Competitions CO ON CO.CompetitionID = TE.CompetitionID
-        INNER JOIN SkillLevels SL ON SL.SkillLevelID = TE.SkillLevelID
-        INNER JOIN Users U ON U.UserID = TE.AdvisorID
-        INNER JOIN TeamStatus TS ON TS.StatusID = TE.TeamStatusID
-    `)
+    SELECT T.TeamID, T.TeamName, SK.SkillLevel, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
+    FROM 
+        Teams T
+        INNER JOIN Questions Q ON T.SkillLevelID = Q.SkillLevelID
+        INNER JOIN SkillLevels SK ON Q.SkillevelID = SK.SkillLevelID
+        INNER JOIN Schools S ON T.SchoolID = S.SchoolID  
+        INNER JOIN Users U ON T.AdvisorID = U.UserID;`
+)
 }
 
 function getTeamsInCompetitionName(eventName){
     return db.any(`
-    SELECT T.TeamID, T.TeamName, Q.QuestionLevel, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
+    SELECT T.TeamID, T.TeamName, SK.SkillLevel, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
     FROM 
         Teams T
-        INNER JOIN QuestionLevel Q ON T.QuestionLevelID = Q.QuestionLevelID
+        INNER JOIN Questions Q ON T.SkillLevelID = Q.SkillLevelID
+        INNER JOIN SkillLevels SK ON Q.SkillevelID = SK.SkillLevelID
         INNER JOIN School S ON T.SchoolID = S.SchoolID  
-        INNER JOIN Users U ON T.advisorID = U.UserID
+        INNER JOIN Users U ON T.AdvisorID = U.UserID
         INNER JOIN Competition C ON T.CompetitionID = C.CompetitionID
     WHERE C.EventName = $(eventName);`, {eventName})
 }
@@ -45,9 +46,9 @@ function getTeamsInCompetitionName(eventName){
 //Function to get all teams a school has registered for an event
 function getSchoolEvent(schoolId, eventId) {
     return db.any(`
-    SELECT T.TeamId, T.TeamName, C.teamsperschool
+    SELECT T.TeamId, T.TeamName, C.TeamCapacity
 	FROM Teams T
-    INNER JOIN Competition C on T.competitionID = C.competitionID
+    INNER JOIN Competition C on T.CompetitionID = C.competitionID
 	WHERE T.CompetitionID = $(eventId) AND T.SchoolID = $(schoolId);`, {eventId, schoolId})
 }
 
@@ -97,7 +98,7 @@ function get({ schoolId, competitionId, questionLevelId, advisorId, teamId, wait
             values.competitionId = competitionId;
         }
         if (questionLevelId) {
-            whereList.push(`T.QuestionLevelID = $(questionLevelId)`);
+            whereList.push(`T.SkillLevelID = $(questionLevelId)`);
             values.questionLevelId = questionLevelId;
         }
         if (advisorId) {
@@ -109,7 +110,7 @@ function get({ schoolId, competitionId, questionLevelId, advisorId, teamId, wait
             values.teamId = teamId;
         }
         if (waitlisted) {
-            whereList.push(`T.Waitlisted = $(waitlisted)`);
+            whereList.push(`T.TeamStatusID = $(waitlisted)`);
             values.waitlisted = waitlisted;
         }
         // create the query
@@ -200,7 +201,7 @@ function update({ teamId, studentIds, teamName, questionLevelId, waitlisted }) {
         }
         // set the waitlisted status of the team if it is given, may be true or false
         if (waitlisted !== undefined) {
-            await t.none(`UPDATE Teams SET Waitlisted = $(waitlisted) WHERE TeamID = $(teamId)`, {
+            await t.none(`UPDATE Teams SET TeamStatusID = $(waitlisted) WHERE TeamID = $(teamId)`, {
                 waitlisted,
                 teamId,
             });
@@ -208,7 +209,7 @@ function update({ teamId, studentIds, teamName, questionLevelId, waitlisted }) {
 
         // update the questionLevelI and teamName if they are given
         if (questionLevelId) {
-            await t.none(`UPDATE Teams SET QuestionLevelID = $(questionLevelId) WHERE TeamID = $(teamId)`, {
+            await t.none(`UPDATE Teams SET SkillLevelID = $(questionLevelId) WHERE TeamID = $(teamId)`, {
                 questionLevelId,
                 teamId,
             });
@@ -261,12 +262,12 @@ function teamsInCompetitionBySchool(competitionId, schoolId, waitlisted = false)
     return db.oneOrNone(`
             SELECT
                 COUNT(*) as teamCount,
-                SUM(CASE QuestionLevelID when 1 then 1 else 0 end) as beginnerTeamCount,
-                SUM(CASE QuestionLevelID when 2 then 1 else 0 end) as advancedTeamCount
+                SUM(CASE SkillLevelID when 1 then 1 else 0 end) as beginnerTeamCount,
+                SUM(CASE SkillLevelID when 2 then 1 else 0 end) as advancedTeamCount
             FROM Teams
             WHERE CompetitionID = $(competitionId)
                 AND SchoolID = $(schoolId)
-                AND Waitlisted = $(waitlisted)`,
+                AND TeamStatusID = $(waitlisted)`,
             {competitionId, schoolId, waitlisted})
         .then(countInfo => ({
             beginnerTeamCount: parseInt(countInfo.beginnerteamcount),
@@ -285,7 +286,7 @@ function getCompetitionId(teamId){
 }
 
 function getTeamInfo(teamId){
-    return db.oneOrNone(`SELECT TeamID, SchoolID, CompetitionID, TeamName, QuestionLevelID, AdvisorID, Waitlisted FROM Teams WHERE TeamID = $(teamId)`, {teamId})
+    return db.oneOrNone(`SELECT TeamID, SchoolID, CompetitionID, TeamName, SkillLevelID, AdvisorID, TeamStatusID FROM Teams WHERE TeamID = $(teamId)`, {teamId})
     .then((result) => {
         // only if the result is not null
         if(result){
