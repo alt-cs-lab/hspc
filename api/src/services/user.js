@@ -30,7 +30,13 @@ module.exports = {
     getactivevolunteers,
 };
 
-function generateHash (password) {
+/**
+ * Generates a hash for a password
+ * @param {string} password The given password
+ * @returns A new hash
+ */
+function generateHash (password) 
+{
     return new Promise((resolve, reject) => {
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, (err, hash) => {
@@ -44,49 +50,64 @@ function generateHash (password) {
     });
 }
 
-//function used to register a new user 
-function register({firstName, lastName, email, phone, requestLevel, advisorEmail, schoolId, password}) {
+/**
+ * Gets the current Date and Time
+ * @returns A string consisting of the date and time
+ */
+function getDateTime()
+{
+    var currentDate = new Date(); 
+        return currentDate.getFullYear() + "-"
+                + (currentDate.getMonth() + 1) + "-" 
+                + currentDate.getDate() + " "  
+                + currentDate.getHours() + ":"  
+                + currentDate.getMinutes() + ":" 
+                + currentDate.getSeconds();
+}
+
+/**
+ * Registers a new user
+ * @param {List?} list A list of all the items needed to make a new user
+ * @returns Nothing
+ */
+function register({ firstName, lastName, email, phone, requestLevel, schoolId, password, gradDate }) {
     // newly registered users are automatically given access level 1 unless they are an advisor
     // otherwise they must be upgraded by an admin
     accessLevel = requestLevel == constants.ADVISOR ? constants.ADVISOR : constants.STUDENT;
     return generateHash(password).then((encryptedPassword) => 
     {
+        var dateTime = getDateTime();
         return db.none(`
-        INSERT INTO Users
-            (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword)
-        VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword))`, 
-        {firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword});
+            INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword, CreatedOn, AccessedOn)
+            VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword), $(dateTime), $(dateTime))
+        `, { firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, dateTime });
     }).then(() => 
     {
         // if they are registering as a student, we also need to create a Student record
         if (requestLevel == constants.STUDENT) {
             return db.none(`
-            INSERT INTO Student
-                (UserID, AdvisorID)
-            VALUES(
-                (SELECT UserID FROM Users WHERE Email = $(email)),
-                (SELECT UserID FROM Users WHERE Email = $(advisorEmail))
-            )`, {email, advisorEmail});
-        }else if (requestLevel == constants.ADVISOR) {
+                INSERT INTO HighSchoolStudents (FirstName, LastName, SchoolID, Email, GradDate)
+                VALUES($(firstName), $(lastName), $(schoolID), $(email), $(gradDate))
+            `, { firstName, lastName, schoolID, email, gradDate });
+        }
+        else if (requestLevel == constants.ADVISOR) {
             // if they are registering as an advisor, we need to add an AdvisorsAffiliation record
             return db.none(`
-            INSERT INTO AdvisorsAffiliation
-                (UserID, SchoolID)
-            VALUES(
-                (SELECT UserID FROM Users WHERE Email = $(email)),
-                $(schoolId)
-            )`, {email, schoolId});
+                INSERT INTO SchoolAdvisors (UserID, SchoolID)
+                VALUES((SELECT UserID FROM Users WHERE Email = $(email)), $(schoolId))
+            `, { email, schoolId });
         }
     });
 }
 
-
+/*
 function casRegister(firstName, lastName, email, accessLevel) {
-    return db.none(`INSERT INTO Users
-        (FirstName, LastName, Email, AccessLevel, RequestLevel)
+    return db.none(`
+        INSERT INTO Users (FirstName, LastName, Email, AccessLevel, RequestLevel)
         VALUES($(firstName), $(lastName), $(email), $(accessLevel), $(accessLevel))`,
         {firstName, lastName, email, accessLevel: constants.VOLUNTEER})
 }
+*/
 
 /**
  * Returns the login information for the user with the given email
@@ -94,108 +115,191 @@ function casRegister(firstName, lastName, email, accessLevel) {
  * @returns 
  */
 function getLogin(email) {
-    return db.any(`SELECT U.UserID,
-                U.Email,
-                U.EncryptedPassword,
-                U.AccessLevel,
-                U.FirstName,
-                U.LastName
-            FROM Users AS U
-            WHERE Email = $(email)`, {
-                email
-            }).then((data) =>  {
-                data = renameKeys(data, ['id', 'email', 'encryptedPassword', 'accessLevel', 'firstName', 'lastName']);
-                return data.length > 0 ? data[0] : null; 
-            });
+    return db.any(`
+        SELECT U.UserID, U.Email, U.EncryptedPassword, U.AccessLevel, U.FirstName, U.LastName
+        FROM Users AS U
+        WHERE Email = $(email)
+    `, { email }).then((data) =>  {
+        data = renameKeys(data, ['id', 'email', 'encryptedPassword', 'accessLevel', 'firstName', 'lastName']);
+        return data.length > 0 ? data[0] : null; });
 }
 
-//function to get all the user information for each user in the Users table
+/**
+ * Gets all the users from the database
+ * @returns All the users from the database
+ */
 function getAllUsers() {
     return db.any(`
-    SELECT U.UserID, U.FirstName, U.LastName, U.Email, U.Phone, R."Role"
-    FROM Users AS U
-        INNER JOIN Roles R ON R."Level" = U.AccessLevel
+        SELECT U.UserID, U.FirstName, U.LastName, U.Email, U.Phone, R."Role"
+        FROM Users AS U
+            INNER JOIN Roles R ON R."Level" = U.AccessLevel
     `);
 }
 
-/*
-* get all users from database where access level is equal to volunteer
-*
-* @author: Trey Moddelmog
-*/
+/**
+ * Gets all the volunteers from the database
+ * @returns All the volunteers
+ */
 function getAllVolunteers() {
-    return db.any(
-        `SELECT U.UserID, U.FirstName, U.LastName, U.Email
+    return db.any(`
+        SELECT U.UserID, U.FirstName, U.LastName, U.Email, U.Phone
         FROM Users AS U
-        WHERE U.AccessLevel = 20`
-    );
+        WHERE U.AccessLevel = 20
+    `);
 }
 
 
-//gets all the roles that a use can be - master, admin, advisor, etc.
+/**
+ * Gets all the roles from the Roles table
+ * @returns All the roles
+ */
 function getAllRoles() {
-    return db.any(`SELECT *
-            FROM Roles`);
+    return db.any(`
+        SELECT * 
+        FROM Roles
+    `);
 }
 
-//function to get all the advisors (from AdvisorsAffiliation table) and their respective information
+
+/**
+ * Gets all the advisors
+ * @returns All the Advisors
+ */
 function getAdvisors(){
-    return db.any(`SELECT Users.UserID, Users.FirstName, Users.LastName, Users.Email, School.SchoolName, Users.Phone FROM Users
-    INNER JOIN AdvisorsAffiliation ON AdvisorsAffiliation.UserID = Users.UserID
-    INNER JOIN School ON School.SchoolID = AdvisorsAffiliation.SchoolID;`)
+    return db.any(`
+        SELECT U.UserID, U.FirstName, U.LastName, U.Email, U.Phone, S.SchoolName
+        FROM Users U
+            INNER JOIN SchoolAdvisors SA ON SA.UserID = U.UserID
+            INNER JOIN Schools S ON S.SchoolID = SA.SchoolID
+    `);
 }
 
-// function to get the school associated with an advisor
+// function to get the school associated with an advisor - FINISH??
 function getAdvisorSchool(){
-    return db.any(`SELECT School.SchoolName, School.SchoolID FROM School
-    INNER JOIN AdvisorsAffiliation ON AdvisorsAffiliation.SchoolID = School.SchoolID
-    INNER JOIN Users ON Users.UserID = AdvisorsAffiliation.UserID;`).then((data) =>  {
-        data = renameKeys(data, ['name', 'id']);
-        return data.length > 0 ? data[0] : null; 
+    return db.any(`
+        SELECT S.SchoolName, S.SchoolID 
+        FROM Schools S
+            INNER JOIN SchoolAdvisors SA ON SA.SchoolID = S.SchoolID
+            INNER JOIN Users U ON U.UserID = SA.UserID
+    `).then((data) =>  {
+            data = renameKeys(data, ['name', 'id']);
+            return data.length > 0 ? data[0] : null; 
     });
 }
 
-//function to get all the students and their respective information who are not on a team
+/**
+ * Gets students who are not on a team
+ * @returns All the students not on a team
+ */
 function getStudents(){
     return db.any(`
-    SELECT Users.Phone, Users.FirstName, Users.LastName, Users.Email, Users.AccessLevel 
-    FROM Users 
-    WHERE Users.AccessLevel = 1 
-        AND NOT EXISTS (SELECT UserId FROM TeamsUsers WHERE Users.UserId = TeamsUsers.UserID);`)
+        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email
+        FROM HighSchoolStudents HS
+        WHERE NOT EXISTS (SELECT StudentID FROM TeamMembers TM WHERE HS.StudentID = TM.StudentID)
+    `)
 }
 
-//function to insert the school associated with an advisor into the advisor table
+/**
+ * Changes the school an advisor is attached to
+ * @param {int} userId The id of the advisor
+ * @param {int} schoolId The id of the school
+ * @returns Nothing
+ */
 function advisorUpdateSchool(userId, schoolId){
-    return db.none(`UPDATE AdvisorsAffiliation SET SchoolID = $(schoolId) WHERE UserID = $(userId)`, {userId, schoolId} )
+    return db.none(`
+        UPDATE SchoolAdvisors 
+        SET SchoolID = $(schoolId) 
+        WHERE UserID = $(userId)
+    `, {userId, schoolId} )
 }
-///get students based on the Advisor Natalie Laughlin
+
+
+/**
+ * Gets all the students for an advisor
+ * @param {string} email The email of the advisor 
+ * @returns All the students for an advisor
+ */
 function getStudentsFromAdvisors(email){
     return db.any(`
-    SELECT Users.Phone, Users.Firstname, Users.LastName, Users.email, Users.AccessLevel  
-    FROM users 
-    INNER JOIN student on student.userId = Users.UserId 
-    WHERE student.AdvisorID in (SELECT Users.userid FROM users WHERE Users.email = $(email))
-        AND Users.AccessLevel = 1 
-        AND NOT EXISTS (SELECT UserId FROM TeamsUsers WHERE Users.UserId = TeamsUsers.UserID);`, 
-    {email})
+        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email
+        FROM HighSchoolStudents HS
+            INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
+            INNER JOIN SchoolAdvisors SA ON SA.SchoolID = S.SchoolID
+                WHERE SA.UserID IN (SELECT U.UserID FROM Users U WHERE U.Email = $(email))
+    `, {email})
 }
 
-///function to insert the user into the student table with their advisor after making a user Natalie Laughlin
-function addstudent(firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, advisoremail){
-   return db.none(`INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword) VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword)); 
-   insert into student values((select userid from users where email= $(email)),(select userid from users where email=$(advisoremail)));`, {firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, advisoremail});
+/**
+ * Adds a student to the Users and HighSchoolStudents table
+ * @param {string} firstName 
+ * @param {string} lastName 
+ * @param {string} email 
+ * @param {string} phone 
+ * @param {short} accessLevel 
+ * @param {short} requestLevel 
+ * @param {string} encryptedPassword 
+ * @param {int} schoolID 
+ * @returns Nothing
+ */
+function addstudent(firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, schoolId){
+    var dateTime = getDateTime();
+    return db.none(`
+        INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword, CreatedOn, AccessedOn)
+        VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword), $(dateTime), $(dateTime))
+
+        INSERT INTO HighSchoolStudents (FirstName, LastName, SchoolID, Email, GradDate)
+        VALUES($(firstName), $(lastName), $(schoolId), $(email), $(gradDate)) 
+    `, { firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, schoolId, dateTime });
+
+//    return db.none(`INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword) VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword)); 
+//    insert into student values((select userid from users where email= $(email)),(select userid from users where email=$(advisoremail)));`, {firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, advisoremail});
 }
 
-///function to insert the user into the (from AdvisorsAffiliation table) after making a user Natalie Laughlin
-function addadvisor(firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, schoolname){
-    return db.none(`INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword) VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword)); 
-    insert into advisorsaffiliation values((select userid from users where email= $(email)),(select schoolid from school where schoolname=$(schoolname)));`, {firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, schoolname});
+
+/**
+ * Adds an advisor to the Users and SchoolAdvisors table
+ * @param {string} firstName 
+ * @param {string} lastName 
+ * @param {string} email 
+ * @param {string} phone EX: XXX-XXX-XXXX 
+ * @param {short} accessLevel 
+ * @param {short} requestLevel 
+ * @param {string} encryptedPassword 
+ * @param {int} schoolId 
+ * @returns Nothing
+ */
+function addadvisor(firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, schoolId){
+    var dateTime = getDateTime();
+    return db.none(`
+        INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword, CreatedOn, AccessedOn)
+        VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword), $(dateTime), $(dateTime))
+
+        INSERT INTO SchoolAdvisors (UserID, SchoolID)
+        VALUES((SELECT UserID FROM Users WHERE Email = $(email)), $(schoolId))
+    `, { firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, schoolId, dateTime});
+
+    // return db.none(`INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword) VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword)); 
+    // insert into advisorsaffiliation values((select userid from users where email= $(email)),(select schoolid from school where schoolname=$(schoolname)));`, {firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, schoolname});
  }
 
-///Function to get sutdents based on thier teamName
+/**
+ * Gets all the students based off their team name
+ * @param {string} teamName The name of the team
+ * @returns All students of a certain team
+ */
 function getstudentsteam(teamName){
-    return db.any(`select Users.Phone, Users.Firstname, Users.LastName, Users.email, Users.AccessLevel  From users inner join teamsusers on teamsUsers.userid = users.userid inner join Teams on teams.teamid = teamsusers.teamid where teams.teamname = $(teamName);`, {teamName})
+    return db.any(`
+        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email, HS.SchoolID
+        FROM HighSchoolStudents HS
+            INNER JOIN TeamMembers TM ON TM.StudentID = HS.StudentID
+            INNER JOIN Teams T ON T.TeamID = TM.TeamID
+                WHERE T.TeamName = $(teamName)
+    `, { teamName });
+
+    // return db.any(`select Users.Phone, Users.Firstname, Users.LastName, Users.email, Users.AccessLevel  From users inner join teamsusers on teamsUsers.userid = users.userid inner join Teams on teams.teamid = teamsusers.teamid where teams.teamname = $(teamName);`, {teamName})
 }
+
+/*
 
 //Function used to check in Volunteers based on userid
 function checkinvolunteer(userid){
@@ -214,3 +318,5 @@ function getactivevolunteers(){
     FROM Users AS U
     WHERE U.AccessLevel = 20 AND U.Active = 1`)
 }
+
+*/
