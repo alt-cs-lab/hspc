@@ -49,7 +49,7 @@ Tests require the postgress container running. Testing is done with jest against
 
 ## For Querying Database
 Run commands: 
->docker exec -it [DB_CONTAINER] sh\
+>docker exec -it [DB_CONTAINER] sh\ 
 >psql [DB_NAME] -U [DB_USERNAME] -w [DB_PASSWORD]\
 >[YOUR QUERY];
 

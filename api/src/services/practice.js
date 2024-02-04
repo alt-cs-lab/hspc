@@ -8,7 +8,7 @@ module.exports = {
     addPractice: addPractice,
     getAllPractice: getAllPractice
 };
-/// 
+
 //inserts the file into the table modified by Natalie Laughlin
 function addPractice(practice){
 
@@ -16,10 +16,8 @@ function addPractice(practice){
     VALUES($(practice), $(practice.mimetype), 'Practice')`, {practice});//OLD CODE VALUES(@practice, '${practice.mimetype}', 'Practice')`);
    }
 
-   
 //gets all the practice questions Added the where statment  Natalie Laughlin
 function getAllPractice(){
-
     return db.any(`SELECT * FROM Files where filegroup='Practice'`);
 }
 

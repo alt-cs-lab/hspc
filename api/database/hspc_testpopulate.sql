@@ -12,10 +12,10 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
 INSERT INTO Competitions
-    (CompetitionID, EventLocation, EventDate, EventTime, EventName, EventDescription, TeamCapacity)
+    (CompetitionID, EventLocation, EventDate, EventTime, EventName, EventDescription, TeamsperEvent, BeginnerTeamsperEvent, AdvancedTeamsperEvent, TeamsPerSchool, BeginnerTeamsPerSchool, AdvancedTeamsPerSchool )
 VALUES
-    (7, 'Central High School', '2024-03-15', '09:00', 'Spring Coding Challenge', 'An engaging competition for high school students to showcase their programming skills.', 4),
-    (8, 'Eastside Community College', '2024-04-20', '10:00', 'ECC Tech Fest', 'A technology festival and competition for local high school and college students.', 3);
+    (7, 'Central High School', '2024-03-15', '09:00', 'Spring Coding Challenge', 'An engaging competition for high school students to showcase their programming skills.', 100, 50, 50, 5, 3, 3 ),
+    (8, 'Eastside Community College', '2024-04-20', '10:00', 'ECC Tech Fest', 'A technology festival and competition for local high school and college students.', 120, 80, 80, 3, 2, 2 );
 
 /*
 Insert Values into Roles Table
@@ -150,7 +150,7 @@ VALUES
 /*
 Insert Dummy value into Article Table
 */
-INSERT INTO Article
+INSERT INTO Articles
     (ArticleTitle,ArticleSubHeading,ArticleMessage,ArticleDate)
 VALUES
 ('Work being done','Please do not disturb the engineers','Goodbye!','2022-2-18');

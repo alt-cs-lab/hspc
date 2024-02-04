@@ -64,7 +64,12 @@ CREATE TABLE Competitions (
 	EventTime VARCHAR(64),
 	EventName VARCHAR(64),
 	EventDescription VARCHAR(512),
-	TeamCapacity INT,
+	TeamsPerEvent INT,
+	BeginnerTeamsPerEvent INT,
+	AdvancedTeamsPerEvent INT,
+	TeamsPerSchool INT,
+	BeginnerTeamsPerSchool INT,
+	AdvancedTeamsPerSchool INT,
 	PRIMARY KEY (CompetitionID)
 );
 

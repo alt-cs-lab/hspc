@@ -67,7 +67,10 @@ function rejectUpgradeRequest({email}) {
 function acceptUpgradeRequest({email}) {
     // finds a user by email and sets their access level to their request level
     return db.none(`UPDATE Users
-        set AccessLevel = 80,
-        RequestLevel = 80
+        set AccessLevel = (
+            SELECT RequestLevel
+            FROM Users
+            WHERE Email = $(email)
+        )
         where Email = $(email);`, { email });
 }
