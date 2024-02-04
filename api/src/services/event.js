@@ -4,7 +4,7 @@ const db = require("../utils/hspc_db").db;
 
 module.exports = {
     createEvent,
-    getEventHistory,
+    //getEventHistory,
     getAllEvents,
     getCompetitionTeamsInfo,
 };
@@ -34,7 +34,7 @@ function createEvent({
     teamsPerEvent,
     description}) {
     return db.none(
-        `INSERT INTO Competition(
+        `INSERT INTO Competitions(
             EventName,
             EventLocation,
             EventDate,
@@ -92,7 +92,7 @@ function getAllEvents() {
             C.AdvancedTeamsPerEvent,
             C.TeamsPerEvent,
             C.EventDescription
-        FROM Competition AS C`
+        FROM Competitions AS C`
     ).then((events) => renameKeys(events,[
         "name",
         "id",
@@ -112,7 +112,8 @@ function getAllEvents() {
 /*
  * Function to get all the competitions that the user is associated with
  * also returns the name Natalie Laughlin
- */
+ * 
+ * Unused as of 3/2/2024 Trent Powell
 function getEventHistory(userID) {
     return db.any(
         `SELECT C.eventName, C.CompetitionID, C.EventLocation, C.EventDate, C.EventTime, C.TeamsPerSchool, C.TeamsPerEvent, C.EventDescription 
@@ -123,7 +124,7 @@ function getEventHistory(userID) {
         WHERE U.UserID = $(userID);`,
         { userID }
     );
-}
+}*/
 
 // returns the TeamsPerSchool and TeamsPerEvent for a given competition
 function getCompetitionTeamsInfo(competitionID) {
@@ -135,7 +136,7 @@ function getCompetitionTeamsInfo(competitionID) {
             BeginnerTeamsPerEvent,
             AdvancedTeamsPerEvent,
             TeamsPerEvent
-        FROM Competition
+        FROM Competitions
         WHERE CompetitionID = $(competitionID);`,
         { competitionID }
     ).then((teamsInfo) => ({

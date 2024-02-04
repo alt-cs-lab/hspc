@@ -19,19 +19,17 @@ module.exports = {
 function getEventTeams(competition){
     return db.any(`SELECT T.TeamName, 
                 S.SchoolName, 
-                U.FirstName,
-                U.LastName,
+                HSS.FirstName,
+                HSS.LastName,
                 C.EventDate,
                 C.EventDescription,
                 C.EventTime,
-                Q.QuestionLevel
+                SL.SkillLevel
             FROM Teams AS T
-                INNER JOIN TeamsUsers AS E on E.TeamID = T.TeamID
-                INNER JOIN Users AS U on U.UserID = A.UserID
-                INNER JOIN School AS S on S.SchoolID = T.SchoolID
-                INNER JOIN AdvisorAffiliation AS A on A.School = S.SchoolID
-                INNER JOIN Competition AS C on C.CompetitionID = T.CompetitionID
-                INNER JOIN QuestionLevel AS Q on Q.QuestionLevelID = T.QuestionLevelID
+                INNER JOIN Schools S ON S.SchoolID = T.SchoolID
+                INNER JOIN HighSchoolStudents HSS ON HSS.SchoolID = S.SchoolID
+                INNER JOIN Competitions C ON C.CompetitionID = T.CompetitionID
+                INNER JOIN SkillLevels SL ON SL.SkillLevelID = T.SkillLevelID
             WHERE C.CompetitionID = $(competition)`, {
                 competition
             }).then((teams) => renameKeys(teams, ['team','school','first', 'last', 'date', 'description', 'time', 'level']));
@@ -42,8 +40,8 @@ function getEventVolunteers(competition){
     return db.any(`SELECT U.FirstName,
                 U.LastName
             FROM Users AS U
-                INNER JOIN VolunteerAssignment AS V on V.VolunteerID = U.UserID
-                INNER JOIN Competition AS C on C.CompetitionID = V.CompetitionID
+                INNER JOIN Volunteers AS V on V.VolunteerID = U.UserID
+                INNER JOIN Competitions AS C on C.CompetitionID = V.CompetitionID
             WHERE C.CompetitionID = $(competition)`, {
                 competition
             }).then((volunteers) => renameKeys(volunteers, ['first', 'last']));

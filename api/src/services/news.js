@@ -33,6 +33,6 @@ function createNews({title, subheading, body, date}) {
 function getNewsHistory(){
     return db.any(`SELECT 
                 A.ArticleTitle, A.ArticleSubHeading, A.ArticleMessage, A.ArticleDate 
-                FROM Article AS A`)
+                FROM Articles AS A`)
                 .then((news) => renameKeys(news,["title", "subheading", "body", "date"]));
 }

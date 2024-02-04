@@ -25,7 +25,7 @@ module.exports = {
  * @returns {Promise} Promise that resolves to an error if there is one.
  */
 function registerSchool({name, addressLine1, addressLine2, city, state, postalCode, usdCode}){
-    return db.none(`INSERT INTO School (SchoolName, AddressLine1, AddressLine2, City, "State", PostalCode, USDCode)
+    return db.none(`INSERT INTO Schools (SchoolName, AddressLine1, AddressLine2, City, "State", PostalCode, USDCode)
                 VALUES ( $(name), $(addressLine1), $(addressLine2), $(city), $(state), $(postalCode), $(usdCode))`, 
                 {name, addressLine1, addressLine2, city, state, postalCode, usdCode});
 }
@@ -36,6 +36,6 @@ function registerSchool({name, addressLine1, addressLine2, city, state, postalCo
  * @returns {Promise} Promise that resolves to a list of schools.
  */
 function getAllSchools(){
-    return db.any(`SELECT * FROM School;`)
+    return db.any(`SELECT * FROM Schools;`)
         .then((schools) => renameKeys(schools, ["id", "name", "addressLine1", "addressLine2", "city", "state", "postalCode", "usdCode"]));
 }
