@@ -70,10 +70,11 @@ function getDateTime()
  * @param {List?} list A list of all the items needed to make a new user
  * @returns Nothing
  */
-function register({ firstName, lastName, email, phone, requestLevel, schoolId, password, gradDate }) {
-    // newly registered users are automatically given access level 1 unless they are an advisor
+function register({ firstName, lastName, email, phone, requestLevel, schoolId, password }) {
+    // newly registered users are either volunteer or advisor accounts
     // otherwise they must be upgraded by an admin
-    accessLevel = requestLevel == constants.ADVISOR ? constants.ADVISOR : constants.STUDENT;
+    // TODO TWP: Access Level should not equal request level.
+    accessLevel = requestLevel;
     return generateHash(password).then((encryptedPassword) => 
     {
         var dateTime = getDateTime();
@@ -83,14 +84,7 @@ function register({ firstName, lastName, email, phone, requestLevel, schoolId, p
         `, { firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, dateTime });
     }).then(() => 
     {
-        // if they are registering as a student, we also need to create a Student record
-        if (requestLevel == constants.STUDENT) {
-            return db.none(`
-                INSERT INTO HighSchoolStudents (FirstName, LastName, SchoolID, Email, GradDate)
-                VALUES($(firstName), $(lastName), $(schoolID), $(email), $(gradDate))
-            `, { firstName, lastName, schoolID, email, gradDate });
-        }
-        else if (requestLevel == constants.ADVISOR) {
+        if (requestLevel == constants.ADVISOR) {
             // if they are registering as an advisor, we need to add an AdvisorsAffiliation record
             return db.none(`
                 INSERT INTO SchoolAdvisors (UserID, SchoolID)
@@ -100,14 +94,12 @@ function register({ firstName, lastName, email, phone, requestLevel, schoolId, p
     });
 }
 
-/*
 function casRegister(firstName, lastName, email, accessLevel) {
     return db.none(`
         INSERT INTO Users (FirstName, LastName, Email, AccessLevel, RequestLevel)
         VALUES($(firstName), $(lastName), $(email), $(accessLevel), $(accessLevel))`,
         {firstName, lastName, email, accessLevel: constants.VOLUNTEER})
 }
-*/
 
 /**
  * Returns the login information for the user with the given email
@@ -299,24 +291,27 @@ function getstudentsteam(teamName){
     // return db.any(`select Users.Phone, Users.Firstname, Users.LastName, Users.email, Users.AccessLevel  From users inner join teamsusers on teamsUsers.userid = users.userid inner join Teams on teams.teamid = teamsusers.teamid where teams.teamname = $(teamName);`, {teamName})
 }
 
-/*
+
 
 //Function used to check in Volunteers based on userid
 function checkinvolunteer(userid){
+    /* TODO TWP: Not being used 2/5/2024
     return db.none(`UPDATE Users SET Active = 1 WHERE userId = $(userid)`, {userid})
+    */
 }
 
 //Function used to remove volunteer from being checked in
 function checkoutvolunteer(userid){
+    /* TODO TWP: Not being used 2/5/2024
     return db.none(`UPDATE Users SET Active = 0 WHERE userId = $(userid)`, userid)
+    */
 }
 
 //Function used to return all volunteers set as checked in
 function getactivevolunteers(){
+    /* TODO TWP: Not being used 2/5/2024
     return db.any(
     `SELECT U.UserID, U.FirstName, U.LastName, U.Email
     FROM Users AS U
-    WHERE U.AccessLevel = 20 AND U.Active = 1`)
+    WHERE U.AccessLevel = 20 AND U.Active = 1`)*/
 }
-
-*/

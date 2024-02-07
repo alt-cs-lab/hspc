@@ -16,7 +16,7 @@ class NewsService {
     * @param {string} stringified value of the articles publish date
     */
     createNews(articleTitle, articleSubHeading, articleBody, articleDate) {
-        return ServiceUtils.postRequest('/news/create', {
+        return ServiceUtils.postRequest('api/news/create', {
             articleTitle: articleTitle,
             articleSubHeading: articleSubHeading,
             articleBody: articleBody,
@@ -29,7 +29,7 @@ class NewsService {
      * @returns A promise containing a json of news articles
      */
     getNewsHistory() {
-        return ServiceUtils.getRequest('/api/news/view', {});
+        return ServiceUtils.getRequest('api/news/view', {});
     }
 }
 
