@@ -100,14 +100,14 @@ function register({ firstName, lastName, email, phone, requestLevel, schoolId, p
     });
 }
 
-/*
 function casRegister(firstName, lastName, email, accessLevel) {
+    /* TODO DEG: Not being used 2/7/24
     return db.none(`
         INSERT INTO Users (FirstName, LastName, Email, AccessLevel, RequestLevel)
         VALUES($(firstName), $(lastName), $(email), $(accessLevel), $(accessLevel))`,
         {firstName, lastName, email, accessLevel: constants.VOLUNTEER})
+    */
 }
-*/
 
 /**
  * Returns the login information for the user with the given email
@@ -299,24 +299,27 @@ function getstudentsteam(teamName){
     // return db.any(`select Users.Phone, Users.Firstname, Users.LastName, Users.email, Users.AccessLevel  From users inner join teamsusers on teamsUsers.userid = users.userid inner join Teams on teams.teamid = teamsusers.teamid where teams.teamname = $(teamName);`, {teamName})
 }
 
-/*
 
 //Function used to check in Volunteers based on userid
 function checkinvolunteer(userid){
+    /* TODO DEG: Not being used 2/7/24 
     return db.none(`UPDATE Users SET Active = 1 WHERE userId = $(userid)`, {userid})
+    */
 }
 
 //Function used to remove volunteer from being checked in
 function checkoutvolunteer(userid){
+    /* TODO DEG: Not being used 2/7/24
     return db.none(`UPDATE Users SET Active = 0 WHERE userId = $(userid)`, userid)
+    */
 }
 
 //Function used to return all volunteers set as checked in
 function getactivevolunteers(){
+    /* TODO DEG: Not being used 2/7/24
     return db.any(
     `SELECT U.UserID, U.FirstName, U.LastName, U.Email
     FROM Users AS U
     WHERE U.AccessLevel = 20 AND U.Active = 1`)
+    */
 }
-
-*/

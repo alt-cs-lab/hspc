@@ -17,6 +17,7 @@ import Scoreboard from "../scoring/scoreboard.jsx";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-admin.css";
 import AddSchoolAdvisor from "../registration/create/add-school-advisors";
+import AddStudent from "../registration/create/add-student";
 import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
@@ -60,6 +61,11 @@ function AdvisorDash (props)
           <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>
+            <NavDropdown title="Students" id="basic-nav-dropdown">
+              <NavItem eventKey={7} onClick={() => setCurrentView(<AddStudent advisorUser={currentUserName.AdvisorID} />)}>
+                Create Student
+              </NavItem>
+            </NavDropdown>
             <NavDropdown title="School" id="basic-nav-dropdown">
               <NavItem eventKey={7} onClick={() => setCurrentView(<AddSchoolAdvisor advisorUser={currentUserName.AdvisorID} />)}>
                 Add Your School
