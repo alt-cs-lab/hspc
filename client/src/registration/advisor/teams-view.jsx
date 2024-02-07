@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
 
-class ViewTeams extends Component {
+class TeamsView extends Component {
   constructor(props) {
     super(props);
     this.props.dispatchResetErrors();
@@ -266,4 +266,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewTeams);
+export default connect(mapStateToProps, mapDispatchToProps)(TeamsView);

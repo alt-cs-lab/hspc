@@ -8,7 +8,7 @@ import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 import UserService from "../_common/services/user";
 import ViewUsers from "../registration/view/users";
-import ViewTeams from "../registration/view/teams";
+import TeamsView from "../registration/advisor/teams-view";
 import ViewEvents from "../registration/view/events";
 import AddUser from "../registration/create/add-team-member";
 import AddEventTeam from "../registration/create/add-event-team";
@@ -72,7 +72,7 @@ function AdvisorDash (props)
               <NavItem eventKey={2} onClick={() => setCurrentView(<AddUser advisor={props.currentUser} />)}>
                 Add User
               </NavItem>
-              <NavItem eventKey={3} onClick={() => setCurrentView(<ViewTeams advisor={props.currentUser} />)}>
+              <NavItem eventKey={3} onClick={() => setCurrentView(<TeamsView advisor={props.currentUser} />)}>
                 View Teams
               </NavItem>
             </NavDropdown>
