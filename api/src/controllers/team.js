@@ -44,6 +44,8 @@ const statusResponses = require("../utils/status-response.js");
 
 router.get("/view", (req, res) => {useService(teamService.getAll, req, res)})
 
+router.get("/getSchoolTeams", (req, res) => {useService(teamService.ge, req, res)})
+
 /*
 * API Endpoint used to search for teams by event name.
 *

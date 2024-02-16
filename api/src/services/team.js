@@ -24,7 +24,7 @@ function getAll(){
     FROM 
         Teams T
         INNER JOIN Questions Q ON T.SkillLevelID = Q.SkillLevelID
-        INNER JOIN SkillLevels SK ON Q.SkillevelID = SK.SkillLevelID
+        INNER JOIN SkillLevels SK ON Q.SkillLevelID = SK.SkillLevelID
         INNER JOIN Schools S ON T.SchoolID = S.SchoolID  
         INNER JOIN Users U ON T.AdvisorID = U.UserID;`
 )
