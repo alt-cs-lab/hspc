@@ -118,7 +118,6 @@ router.get('/advisors', (req, res) => {
 router.get('/students', (req, res) => {
     let accessLevel = req.query['accessLevel']
     let email = req.query['email'];
-
     if(accessLevel === '60'){
         userService.getStudentsFromAdvisors(email)
         .then((userdata) => {

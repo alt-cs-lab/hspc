@@ -12,7 +12,7 @@ import ViewTeams from "../registration/view/teams";
 import ViewEvents from "../registration/view/events";
 import AddUser from "../registration/create/add-team-member";
 import AddEventTeam from "../registration/create/add-event-team";
-import RegisterTeam from "../registration/create/team";
+import ManageTeam from "../registration/create/manage-team";
 import Scoreboard from "../scoring/scoreboard.jsx";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-admin.css";
@@ -66,7 +66,7 @@ function AdvisorDash (props)
               </NavItem>
             </NavDropdown>
             <NavDropdown title="Teams" id="basic-nav-dropdown">
-              <NavItem eventKey={1} onClick={() => setCurrentView(<RegisterTeam advisor={props.currentUser} />)}>
+              <NavItem eventKey={1} onClick={() => setCurrentView(<ManageTeam advisor={props.currentUser} />)}>
                 Register Team
               </NavItem>
               <NavItem eventKey={2} onClick={() => setCurrentView(<AddUser advisor={props.currentUser} />)}>

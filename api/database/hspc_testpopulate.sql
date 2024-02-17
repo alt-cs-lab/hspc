@@ -66,14 +66,20 @@ VALUES
     (26, '442-555-1020', 'Josh', 'Weese', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 100, 100, 'maggie.perez@email.com', '2024-01-11', '2024-01-29'),
     (27, '745-555-1021', 'Nathan', 'Bean', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 100, 100, 'nathan.kim@email.com', '2024-01-12', '2024-01-28');
 
+INSERT INTO Schools 
+    (SchoolID, SchoolName, AddressLine1, AddressLine2, City, "State", PostalCode, USDCode)
+VALUES
+    (181, 'Manhattan High School', '2100 Poyntz Ave', ' ', 'Manhattan', 'Kansas', '66502', 383),
+    (182, 'Riley County High School', '12451 Fairview Church Rd', ' ', 'Riley', 'Kansas', '66531', 378);
+
 /*
 Insert Dummy Values into School Advisors Table
 */
 INSERT INTO SchoolAdvisors
     (UserID, SchoolID)
 VALUES
-    (22, 194),
-    (23, 137);
+    (22, 181),
+    (23, 182);
 
 /*
 Insert Dummy Values into High School Students Table
@@ -82,8 +88,15 @@ INSERT INTO HighSchoolStudents
     (StudentID, FirstName, LastName, SchoolID, Email, GradDate)
 VALUES
     (16, 'Chris', 'Martin', 181, 'chris.martin@school.com', '2025-05-30'),
-    (17, 'Diana', 'Ross', 182, 'diana.ross@school.com', '2024-06-15');
-
+    (100, 'Ashleigh', 'Toddleson', 181, 'ashleigh.toddleson@school.com', '2025-05-30'),
+    (120, 'Andrew', 'Clyde', 181, 'andrew.clyde@school.com', '2025-05-30'),
+    (130, 'Rose', 'Potter', 181, 'rose.potter@school.com', '2025-05-30'),
+    (140, 'Megan', 'Shrewt', 181, 'megan.shrewt@school.com', '2025-05-30'),
+    (17, 'Diana', 'Ross', 182, 'diana.ross@school.com', '2024-06-15'),
+    (170, 'Matthew', 'Kinder', 182, 'matthew.kinder@school.com', '2024-06-15'),
+    (180, 'Greg', 'Newman', 182, 'greg.newman@school.com', '2024-06-15'),
+    (190, 'Galliard', 'Strauss', 182, 'galliard.strauss@school.com', '2024-06-15'),
+    (200, 'Taylor', 'Lorry', 182, 'taylor.lorry@school.com', '2024-06-15');
 /*
 Insert Dummy Values into Volunteers Table
 */
@@ -101,6 +114,17 @@ INSERT INTO Teams
 VALUES
     (7, 181, 7, 'Maple Coders', 1, 22, 1, '2024-01-15T08:00:00.000'),
     (8, 182, 8, 'Riverdale Hackers', 2, 23, 2, '2024-01-20T09:00:00.000');
+
+/*
+Insert Dummy Values Into Team Members
+*/
+INSERT INTO TeamMembers
+    (StudentID, TeamID)
+VALUES
+    (16, 7),
+    (100, 7),
+    (17, 8),
+    (170, 8);
 
 /*
 Insert Dummy Values into Round Table

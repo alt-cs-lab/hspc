@@ -185,7 +185,7 @@ function getAdvisorSchool(){
  */
 function getStudents(){
     return db.any(`
-        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email
+        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.SchoolID, HS.Email, HS.GradDate
         FROM HighSchoolStudents HS
         WHERE NOT EXISTS (SELECT StudentID FROM TeamMembers TM WHERE HS.StudentID = TM.StudentID)
     `)
@@ -213,7 +213,7 @@ function advisorUpdateSchool(userId, schoolId){
  */
 function getStudentsFromAdvisors(email){
     return db.any(`
-        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email
+        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.SchoolID, HS.Email, HS.GradDate
         FROM HighSchoolStudents HS
             INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
             INNER JOIN SchoolAdvisors SA ON SA.SchoolID = S.SchoolID

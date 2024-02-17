@@ -112,7 +112,7 @@ CREATE TABLE SkillLevels (
 );
 
 CREATE TABLE SchoolAdvisors (
-        AdvisorID SERIAL,
+    AdvisorID SERIAL,
 	UserID INT,
 	SchoolID INT,
 	PRIMARY KEY (AdvisorID),
