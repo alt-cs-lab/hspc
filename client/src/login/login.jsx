@@ -5,7 +5,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 
 import React from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import Button from 'react-bootstrap/Button';

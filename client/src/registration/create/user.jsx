@@ -12,7 +12,6 @@ import ReCAPTCHA from "react-recaptcha";
 import StatusMessages from "../../_common/components/status-messages/status-messages";
 import "../../_common/assets/css/register-user.css";
 import { registerUser } from "../../_store/actions/authActions";
-import UserService from "../../_common/services/user"; //added so students can bee created at the same time they are made into users Natalie Laughlin
 import {
   SET_SCHOOL_DROPDOWN_REQUIRED,
 } from "../../_store/actions/types";
@@ -21,17 +20,14 @@ import FixRequiredSelect from "./FixRequiredSelect";
 import SchoolService from "../../_common/services/school.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
+const constants = require('../../_utilities/constants')
+
 const selectStyles = {
   menu: (base) => ({
     ...base,
     zIndex: 100,
   }),
 };
-
-const Roles = {
-	Volunteer: 20,
-	Advisor: 60
-}
 
 /*
  * @author: Daniel Bell
@@ -49,9 +45,8 @@ class Register extends Component {
       email: "",
       password: "",
       phone: "",
-      schoolid: 0,
-      requestLevel: Roles.Volunteer,
-      advisoremail: "",
+      schoolId: 0,
+      requestLevel: constants.VOLUNTEER,
       teamName: "",
       schoolList: [],
       isVerified: false,
@@ -62,7 +57,7 @@ class Register extends Component {
     Added a componentDidMount to retrieve all the schools from the database
   */
   componentDidMount = () => {
-    this.changeFields(Roles.Volunteer);
+    this.changeFields(constants.VOLUNTEER);
     SchoolService.getAllSchools()
       .then((response) => {
         if (response.ok) {
@@ -86,38 +81,15 @@ class Register extends Component {
   handleRegister(event) {
     event.preventDefault();
     const newUser = this.state;
-    if (this.state.isVerified) {
-      if (this.state.requestLevel === Roles.Volunteer) {
-        this.props.registerUser(newUser, this.props.history);
-      } else {
-        console.log(newUser);
-        //need to make an advisor
-        UserService.addadvisor(
-          newUser.firstName,
-          newUser.lastName,
-          newUser.email.toLowerCase(),
-          newUser.phone,
-          newUser.requestLevel,
-          newUser.password,
-          newUser.schoolList[newUser.schoolid]
-        )
-          .then((response) => {
-            this.props.dispatchSuccess("Registration successful!");
-            this.resetFields();
-          })
-          .catch((error) => {
-            this.props.dispatchError("There was an error creating an Advisor.");
-          });
-
-        // this.props.history.push("/login");
-      }
-    } else {
-      this.props.dispatchError("Please verify you are a human.");
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }
+    //if (this.state.isVerified) {
+        this.props.registerUser(newUser, this.props.router);
+    //} else {
+    //  this.props.dispatchError("Please verify you are a human.");
+    //  window.scrollTo({
+    //    top: 0,
+    //    behavior: "smooth",
+    //  });
+    //}
   }
 
   resetFields = () => {
@@ -127,7 +99,7 @@ class Register extends Component {
     this.setState({ password: "" });
     this.setState({ advisoremail: "" });
     this.setState({ phone: "" });
-    this.setState({ schoolid: 0 });
+    this.setState({ schoolId: 0 });
   };
 
   /*
@@ -157,12 +129,12 @@ class Register extends Component {
    */
   changeFields(value) {
     this.props.dispatchResetErrors();
-    if (value === Roles.Volunteer) {
-      this.setState({ requestLevel: Roles.Volunteer });
+    if (value === constants.VOLUNTEER) {
+      this.setState({ requestLevel: constants.VOLUNTEER });
       document.getElementById("schoolList").hidden = true;
       this.props.dispatchDropdownRequiredUpdate(false);
     } else {
-      this.setState({ requestLevel: Roles.Advisor });
+      this.setState({ requestLevel: constants.ADVISOR });
       document.getElementById("schoolList").hidden = false;
       this.props.dispatchDropdownRequiredUpdate(true);
     }
@@ -172,7 +144,7 @@ class Register extends Component {
    * @Param schoolId: the value to be set for the schoolId
    */
   handleSchoolChange = (schoolId) => {
-    this.setState({ schoolId: schoolId.value });
+    this.setState({ schoolId: (schoolId.value) });
   };
 
   /*
@@ -197,23 +169,24 @@ class Register extends Component {
             className="RoleSelect"
             type="radio"
             name="options"
-            defaultValue={Roles.Volunteer}
+            defaultValue={constants.VOLUNTEER}
             >
             <ToggleButton 
               id="tbg-radio-2"
-              value={Roles.Volunteer} 
-              onClick={(event) => this.changeFields(Roles.Volunteer)}
+              value={constants.VOLUNTEER} 
+              onClick={(event) => this.changeFields(constants.VOLUNTEER)}
               >
               Volunteer
             </ToggleButton>
             <ToggleButton 
               id="tbg-radio-1"
-              value={Roles.Advisor} 
-              onClick={(event) => this.changeFields(Roles.Advisor)}
+              value={constants.ADVISOR} 
+              onClick={(event) => this.changeFields(constants.ADVISOR)}
               >
               Advisor
             </ToggleButton>
           </ToggleButtonGroup>
+          <br/>
           <Form.Group>
             <Form.Label> First Name </Form.Label>
             <Form.Control
@@ -230,6 +203,7 @@ class Register extends Component {
               size="small"
             />
           </Form.Group>
+          <br/>
           <Form.Group>
             <Form.Label> Last Name </Form.Label>
             <Form.Control
@@ -246,6 +220,7 @@ class Register extends Component {
               value={this.state.lastName}
             />
           </Form.Group>
+          <br/>
           <Form.Group>
             <Form.Label> Phone Number (No dashes) </Form.Label>
             <Form.Control
@@ -260,6 +235,7 @@ class Register extends Component {
               value={this.state.phone}
             />
           </Form.Group>
+          <br/>
           <Form.Group>
             <Form.Label> Email Address </Form.Label>
             <Form.Control
@@ -275,6 +251,7 @@ class Register extends Component {
               value={this.state.email}
             />
           </Form.Group>
+          <br/>
           <Form.Group>
             <Form.Label> Password </Form.Label>
             <Form.Control
@@ -292,43 +269,21 @@ class Register extends Component {
               value={this.state.password}
             />
           </Form.Group>
-          {/* Would no longer be necessary with database changes
-          <div name="email-div" id="email">
-            {
-              //added so that the student can put their advisors email in Natalie Laughlin
-            }
-            <Form.Text
-              variant="filled"
-              id="emailField"
-              label="Advisor's Email"
-              required
-              style={{ margin: "5px", width: "15%" }}
-              inputProps={{ style: { fontSize: 14 } }}
-              InputLabelProps={{ style: { fontSize: 14 } }}
-              onChange={(target) =>
-                this.setState({
-                  advisoremail: target.target.value.toLowerCase(),
-                })
-              }
-              size="small"
-              value={this.state.advisoremail}
-            />
-          </div>
-          */}
-          <div name="dropdown-div" id="schoolList" hidden={true}>
+          <br/>
+          <Form.Group name="dropdown-div" id="schoolList" hidden={true}>
+            <Form.Label> School </Form.Label>
             <FixRequiredSelect
               id="dropdown"
+              style={{ margin: "auto", width: "100%" }}
               styles={selectStyles}
               placeholder="Select a School"
               options={this.state.schoolList}
               onChange={this.handleSchoolChange}
               SelectComponent={BaseSelect}
-              setValue={this.state.schoolid}
+              setValue={this.state.schoolId}
             />
-            <br />
-          </div>
-          <br />
-          <br />
+          </Form.Group>
+          <br/>
           <div name="captcha" align="center">
             <ReCAPTCHA
               sitekey="6LdB8YoUAAAAAL5OtI4zXys_QDLidEuqpkwd3sKN"
@@ -338,7 +293,7 @@ class Register extends Component {
               size="small"
             />
           </div>
-          <br />
+          <br/>
           <Button
             variant="primary"
             id="submit-button"
@@ -379,8 +334,8 @@ const mapDispatchToProps = (dispatch) => {
     dispatchSuccess: (message) =>
       dispatch(updateSuccessMsg(message)),
     dispatchResetErrors: () => dispatch(clearErrors()),
-    registerUser: (newUser, history) =>
-      dispatch(registerUser(newUser, history)),
+    registerUser: (newUser, router) =>
+      dispatch(registerUser(newUser, router)),
   };
 };
 
