@@ -24,7 +24,6 @@ module.exports = {
     getStudentsFromAdvisors,
     getstudentsteam,
     getAdvisorSchool,
-    addadvisor,
     checkinvolunteer,
     checkoutvolunteer,
     getactivevolunteers,
@@ -73,7 +72,7 @@ function getDateTime()
 function register({ firstName, lastName, email, phone, requestLevel, schoolId, password }) {
     // newly registered users are either volunteer or advisor accounts
     // otherwise they must be upgraded by an admin
-    // TODO TWP: Access Level should not equal request level.
+    // TODO TWP: Access Level should not implicitly equal request level.
     accessLevel = requestLevel;
     return generateHash(password).then((encryptedPassword) => 
     {
@@ -246,33 +245,6 @@ function addstudent(firstName, lastName, email, phone, accessLevel, requestLevel
 //    return db.none(`INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword) VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword)); 
 //    insert into student values((select userid from users where email= $(email)),(select userid from users where email=$(advisoremail)));`, {firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, advisoremail});
 }
-
-
-/**
- * Adds an advisor to the Users and SchoolAdvisors table
- * @param {string} firstName 
- * @param {string} lastName 
- * @param {string} email 
- * @param {string} phone EX: XXX-XXX-XXXX 
- * @param {short} accessLevel 
- * @param {short} requestLevel 
- * @param {string} encryptedPassword 
- * @param {int} schoolId 
- * @returns Nothing
- */
-function addadvisor(firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, schoolId){
-    var dateTime = getDateTime();
-    return db.none(`
-        INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword, CreatedOn, AccessedOn)
-        VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword), $(dateTime), $(dateTime))
-
-        INSERT INTO SchoolAdvisors (UserID, SchoolID)
-        VALUES((SELECT UserID FROM Users WHERE Email = $(email)), $(schoolId))
-    `, { firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, schoolId, dateTime});
-
-    // return db.none(`INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword) VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword)); 
-    // insert into advisorsaffiliation values((select userid from users where email= $(email)),(select schoolid from school where schoolname=$(schoolname)));`, {firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, schoolname});
- }
 
 /**
  * Gets all the students based off their team name

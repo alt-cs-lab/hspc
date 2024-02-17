@@ -10,22 +10,21 @@ class UserService {
         this.addstudent = this.addstudent.bind(this);//Natalie Laughlin
         this.getStudentsFromAdvisors = this.getStudentsFromAdvisors.bind(this);//Natalie Laughlin
         this.getstudentsteam = this.getstudentsteam.bind(this);//Natalie Laughlin
-        this.addadvisor = this.addadvisor.bind(this);
     }
 
     /*
     * Calls the API and returns a JSON list of all registered users.
     */
     getAllUsers() {
-        return ServiceUtils.getRequest('/api/user/view', {});
+        return ServiceUtils.getRequest('api/user/view', {});
     }
 
     getAllVolunteers() {
-        return ServiceUtils.getRequest('/api/user/volunteers', {});
+        return ServiceUtils.getRequest('api/user/volunteers', {});
     };
 
     getActiveVolunteers() {
-        return ServiceUtils.getRequest('/api/user/activevolunteers', {});
+        return ServiceUtils.getRequest('api/user/activevolunteers', {});
     }
 
     /*
@@ -92,25 +91,6 @@ class UserService {
             accessLevel: accesslevel,
             requestLevel: requestlevel,
             advisoremail: advisoremail,
-        });
-    }
-
-    /*
-    * API Endpoint adds student to table. creates an advisor
-    *
-    * @author: Natalie Laughlin - formate taken from other method authored by Trent Kempker
-    */
-    addadvisor(firstName, lastName, email, phone, accesslevel, requestlevel, hashedPassword, schoolname) {
-
-        return ServiceUtils.postRequest('api/user/addadvisor', {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            phone: phone,
-            password: hashedPassword,
-            accessLevel: accesslevel,
-            requestLevel: requestlevel,
-            schoolname: schoolname,
         });
     }
 
@@ -214,4 +194,6 @@ class UserService {
     }
 }
 
+// TODO TWP: Check if this comment line below is alright
+// eslint-disable-next-line
 export default new UserService();
