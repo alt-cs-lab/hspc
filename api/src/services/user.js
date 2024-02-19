@@ -120,7 +120,6 @@ function casRegister(firstName, lastName, email, accessLevel) {
         {firstName, lastName, email, accessLevel: constants.VOLUNTEER})
     */
 }
-*/
 
 /**
  * Returns the login information for the user with the given email
