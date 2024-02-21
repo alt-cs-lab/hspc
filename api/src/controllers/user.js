@@ -316,6 +316,7 @@ router.post('/register', [
     check('email')
         .not()
         .isEmpty().withMessage("Email is required.")
+        // TODO TWP: Add Back if CAS registration comes back
         //.isEmail({ host_blacklist: ['ksu.edu']}).withMessage("Invalid email format.")
         .normalizeEmail()
         .custom(async value => {
@@ -348,28 +349,6 @@ router.post('/register', [
         .isIn([
             constants.VOLUNTEER,
             constants.ADVISOR]).withMessage('Invalid request level.'),
-    /* check for advisor email is saying that the email should only be there if the request level is 1 (i.e. a Student) */
-    // check('advisorEmail')
-    //     .custom((advisorEmail, {req}) => {
-    //         /*
-    //         if (req.body['requestLevel'] == constants.STUDENT) {
-    //             return !isEmpty(advisorEmail);
-    //         }*/
-    //         return true;
-    //     }).withMessage('Advisor email is required for students.')
-    //     .custom(async (advisorEmail, {req}) => {
-    //         /*if (req.body['requestLevel'] == constants.STUDENT) {
-    //             // return false if we could not find an advisor with that email
-    //             try{
-    //                 const data = await userService.getLogin(advisorEmail);
-    //                 return data.accessLevel == constants.ADVISOR ? Promise.resolve() : Promise.reject();
-    //             }
-    //             catch{
-    //                 return Promise.reject();
-    //             }
-    //         }*/
-    //         return Promise.resolve();
-    //     }).withMessage('An advisor with that email does not exist.'),
     check('schoolId')
         .custom((schoolId, {req}) => {
             if (req.body['requestLevel'] == constants.ADVISOR) {
