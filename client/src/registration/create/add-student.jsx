@@ -99,7 +99,8 @@ class AddStudent extends Component {
     const newStudent = this.state;
     // Sets the graduation date to the 28th day of the month
     const gradDate = new Date(newStudent.gradYear, newStudent.gradMonth.value, 28);
-    StudentService.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, "placeholder", newStudent.email, gradDate);
+    // 181 is a placeholder for schoolID
+    StudentService.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, 181, newStudent.email, gradDate);
   }
 
   /*
