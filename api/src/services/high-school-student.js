@@ -11,17 +11,19 @@ const db = require("../utils/hspc_db").db;
 const bcrypt = require("bcrypt");
 
 module.exports = {
-    addHighSchoolStudent
+    createStudent
 }
 
-function addHighSchoolStudent(firstName, lastName, schoolID, email, gradDate) {
+function createStudent( { firstName, lastName, schoolId, email, gradDate } ) {
     return db.none(
     `
         INSERT INTO HighSchoolStudents (FirstName, LastName, SchoolID, Email, GradDate)
-        VALUES($(firstName), $(lastName), $(schoolID), $(email), $(gradDate))    
+        VALUES($(firstName), $(lastName), $(schoolId), $(email), $(gradDate))    
     `,
     {
-        firstName, lastName, schoolID, email, gradDate
+        firstName, lastName, schoolId, email, gradDate
     }
     );
 }
+
+

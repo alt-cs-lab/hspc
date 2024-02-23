@@ -9,7 +9,7 @@ class StudentService {
     * API Endpoint adds student to table. creates a student
     */
     addHighSchoolStudent(firstName, lastName, schoolID, email, gradDate) {
-        return ServiceUtils.postRequest('api/high-school-student/addHighSchoolStudent', {
+        return ServiceUtils.postRequest('api/high-school-student/createStudent', {
             firstName: firstName,
             lastName: lastName,
             schoolID: schoolID,

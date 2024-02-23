@@ -92,14 +92,27 @@ class AddStudent extends Component {
   // };
 
   getAdvisorSchools() {
+      
+  }
 
+  toDate(year, month, date) {
+    if (month > 9)
+    {
+      return year + "-" + month + "-" + date;
+    }
+    else
+    {
+      return year + "-0" + month + "-" + date;
+    }
   }
 
   createStudent(event) {
     const newStudent = this.state;
     // Sets the graduation date to the 28th day of the month
-    const gradDate = new Date(newStudent.gradYear, newStudent.gradMonth.value, 28);
+    const gradDate = this.toDate(newStudent.gradYear, newStudent.gradMonth.value, 28);
+    //(new Date(newStudent.gradYear, newStudent.gradMonth.value, 28)).toISOString();
     // 181 is a placeholder for schoolID
+    console.log(newStudent);
     StudentService.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, 181, newStudent.email, gradDate);
   }
 
@@ -117,33 +130,33 @@ class AddStudent extends Component {
           <Form onSubmit={(event) => this.createStudent(event)}>
             <Form.Group className="m-3">
               <Form.Label>First Name</Form.Label>
-              <Form.Control placeholder="Ex: Devan" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ firstName: target.value }))} 
+              <Form.Control placeholder="Ex: Devan" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ firstName: target.target.value }))} 
                 value={ this.state.firstName }/>
             </Form.Group>
             <Form.Group className="m-3">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control placeholder="Ex: Griffin" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ lastName: target.value }))} 
+              <Form.Control placeholder="Ex: Griffin" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ lastName: target.target.value }))} 
                 value={ this.state.lastName }/>
             </Form.Group>
             <Form.Group>
               <Form.Label>School</Form.Label>
-              <FixRequiredSelect id="dropdown" options={this.state.schoolList} onChange={(target => this.setState({ schoolID: target.value }))}
+              <FixRequiredSelect id="dropdown" options={this.state.schoolList} onChange={(target => this.setState({ schoolID: target.target.value }))}
                 SelectComponent={BaseSelect} /* setValue={this.state.schoolId} *//>
             </Form.Group>
             <Form.Group className="m-3">
               <Form.Label>Email</Form.Label>
-              <Form.Control placeholder="Ex: devangriffin@email.com" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ email: target.value }))} 
+              <Form.Control placeholder="Ex: devangriffin@email.com" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ email: target.target.value }))} 
                 value={ this.state.email }/>
             </Form.Group>
             <Form.Group className="m-1">
               <Form.Label>Graduation Month</Form.Label>
               <FixRequiredSelect id="dropdown" placeholder="Select a Month" options={months} 
-                  onChange={( target => this.setState({ gradMonth: target.value }))} SelectComponent={BaseSelect} setValue={this.state.gradMonth}
+                  onChange={( target => this.setState({ gradMonth: target.target.value }))} SelectComponent={BaseSelect} setValue={this.state.gradMonth}
                   defaultValue={this.state.gradMonth}/>
             </Form.Group>
             <Form.Group className="m-1">
               <Form.Label>Graduation Year</Form.Label>
-              <Form.Control placeholder="Ex: 2024" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ gradYear: target.value }))} 
+              <Form.Control placeholder="Ex: 2024" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ gradYear: target.target.value }))} 
                 value={ this.state.gradYear }/>
             </Form.Group>
             <Button className="m-3" variant="secondary" type="submit">Create Student</Button>

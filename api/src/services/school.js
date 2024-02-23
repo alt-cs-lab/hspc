@@ -39,3 +39,10 @@ function getAllSchools(){
     return db.any(`SELECT * FROM Schools;`)
         .then((schools) => renameKeys(schools, ["id", "name", "addressLine1", "addressLine2", "city", "state", "postalCode", "usdCode"]));
 }
+
+function getAdvisorSchools() {
+    return db.any(
+    `
+        
+    `,)
+}

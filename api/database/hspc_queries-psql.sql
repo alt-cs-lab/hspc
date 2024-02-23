@@ -184,7 +184,8 @@ CREATE TABLE HighSchoolStudents (
 	Email VARCHAR(320),
 	GradDate DATE,
 	PRIMARY KEY (StudentID),
-	FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
+	FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID),
+	UNIQUE (Email);
 );
 
 CREATE TABLE TeamMembers (
