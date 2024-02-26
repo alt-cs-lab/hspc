@@ -15,6 +15,7 @@ module.exports = {
 }
 
 function createStudent( { firstName, lastName, schoolId, email, gradDate } ) {
+    console.log({ firstName, lastName, schoolId, email, gradDate });
     return db.none(
     `
         INSERT INTO HighSchoolStudents (FirstName, LastName, SchoolID, Email, GradDate)
