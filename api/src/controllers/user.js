@@ -116,41 +116,6 @@ router.get("/advisors", (req, res) => {
 });
 
 /*
- * API Endpoint that returns details of an advisor based on email.
- *
- * @author: Casey Ring
- * @param {string} email - Email of the advisor whose details are being requested.
- * @returns {JSON} - Details of the advisor including school information.
- */
-/*
-router.get(
-  "/advisordetails",
-  passport.authenticate("jwt", { session: false }),
-  minimumAccessLevelCheck(constants.ADVISOR),
-  (req, res) => {
-    const { email } = req.query;
-    if (!email) {
-      return statusResponses.badRequest(
-        res,
-        "Email query parameter is required."
-      );
-    }
-    userService
-      .getAdvisorByEmail(email)
-      .then((advisorDetails) => {
-        if (!advisorDetails) {
-          return statusResponses.notFound(res, "Advisor not found.");
-        }
-        statusResponses.ok(res, advisorDetails);
-      })
-      .catch((err) => {
-        console.error("Error fetching advisor details:", err);
-        statusResponses.serverError(res);
-      });
-  }
-);
-*/
-/*
  * API Endpoint that returns all users who are students with respective info
  *
  * @author: Trent Kempker
