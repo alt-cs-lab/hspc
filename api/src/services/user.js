@@ -197,42 +197,6 @@ function getAdvisors() {
 }
 
 /**
- * Fetches details of an advisor by their email.
- * @param {string} email - The email of the advisor to fetch.
- * @returns {Promise<object>} - A promise that resolves to the advisor's details.
- */
-/*
-function getAdvisorByEmail(email) {
-  return db
-    .oneOrNone(
-      `
-        SELECT U.UserID, U.FirstName, U.LastName, U.Email, U.Phone, SA.SchoolID, S.SchoolName
-        FROM Users U
-        LEFT JOIN SchoolAdvisors SA ON U.UserID = SA.UserID
-        LEFT JOIN Schools S ON SA.SchoolID = S.SchoolID
-        WHERE U.Email = $1 AND U.AccessLevel = ${constants.ADVISOR}
-    `,
-      [email]
-    )
-    .then((data) => {
-      if (data) {
-        // Optionally rename keys or transform data as needed
-        return {
-          userId: data.userid,
-          firstName: data.firstname,
-          lastName: data.lastname,
-          email: data.email,
-          phone: data.phone,
-          schoolId: data.schoolid,
-          schoolName: data.schoolname,
-        };
-      }
-      return null;
-    });
-}
-*/
-
-/**
  * Gets students who are not on a team
  * @returns All the students not on a team
  */

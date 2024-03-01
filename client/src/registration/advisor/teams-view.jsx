@@ -2,233 +2,183 @@
   MIT License
   Copyright (c) 2019 KSU-CS-Software-Engineering
   */
-import React, { Component, useState, useEffect } from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
-import Button from "react-bootstrap/Button";
-import TeamService from "../../_common/services/team";
-import EventService from "../../_common/services/event";
-import UserService from "../../_common/services/user";
-import DataTable from "react-data-table-component";
-import Select from "react-select";
-import { connect } from "react-redux";
-import {
-  clearErrors,
-  updateErrorMsg,
-  updateSuccessMsg,
-} from "../../_store/slices/errorSlice.js";
-
-class TeamsView extends Component {
-  constructor(props) {
-    super(props);
-    this.props.dispatchResetErrors();
-    this.advisor =
-      props.advisor !== undefined ? this.props.advisor.email : undefined;
-    this.state = {
-      expanded: {},
-      teamName: "",
-      teamTable: [],
-      eventList: [],
-      columnsForAllTeams: this.getAllTeamColumns(),
-    };
-  }
-
-  /*
-   * Returns a list of all registered teams when the component is rendered.
-   * If an advisor is logged in, the list of teams registered with that advisor is returned.
-   */
-  componentDidMount = () => {
-    /*
-    if (this.advisor) {
-      UserService.getAdvisorDetails(this.advisor)
-        .then((response) => {
-          if (response.ok) {
-            const advisorDetails = response.data;
-            const schoolId = advisorDetails.schoolId;
-            this.setState({ schoolId: schoolId });
-          } else {
-            console.log(
-              "An error has occurred while fetching advisor details."
-            );
-          }
-        })
-        .catch((error) => {
-          console.log(
-            "Something went wrong while fetching advisor details.",
-            error
-          );
-        });
+  import React, { Component, useState, useEffect } from "react";
+  import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
+  import Button from "react-bootstrap/Button";
+  import TeamService from "../../_common/services/team";
+  import EventService from "../../_common/services/event";
+  import UserService from "../../_common/services/user";
+  import SchoolService from "../../_common/services/school"
+  import DataTable from "react-data-table-component";
+  import { connect } from "react-redux";
+  import {
+    clearErrors,
+    updateErrorMsg,
+    updateSuccessMsg,
+  } from "../../_store/slices/errorSlice.js";
+  
+  class TeamsView extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        teamTable: [],
+        eventList: [],
+        columnsForAllTeams: this.getAllTeamColumns(),
+        competitionId: -1,
+        schoolId: -1,
+        error: null,
+      };
     }
-
-    TeamService.getTeamSchoolEvent(this.state.schoolId)
-      .then((response) => {
-        // Process response
-      })
-      .catch((error) => {
-        console.log("Error fetching team school event", error);
-      });
-    */
-
-    TeamService.getTeamSchoolEvent()
-      .then((response) => {
-        if (response.ok) {
-          this.setState({ teamTable: response.data });
-        } else console.log("An error has occurred, Please try again.");
-      })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
-
-    EventService.getAllEvents(
-      this.props.auth.user.id,
-      this.props.auth.user.accessLevel
-    )
-      .then((response) => {
-        let body = response.data;
-        let events = [];
-        if (response.ok) {
-          for (let i = 0; i < body.length; i++) {
-            events.push({
-              label: body[i].name,
-              value: body[i].name,
-            });
+  
+    async componentDidMount() {
+      try {
+        const eventsResponse = await EventService.getAllEvents(this.props.auth.user.id, this.props.auth.user.accessLevel);
+        const schoolResponse = await SchoolService.getSchoolFromAdvisor(this.props.advisor.email);
+        if (eventsResponse.ok && schoolResponse.ok) {
+          const events = eventsResponse.data;
+          const schoolId = schoolResponse.data.schoolId;
+          this.setMostRecentEventAsCompetitionId(events);
+          if (schoolId && this.state.competitionId) {
+            const teamsResponse = await TeamService.getTeamSchoolEvent(schoolId, this.state.competitionId);
+            if (teamsResponse.ok) {
+              this.setState({
+                teamTable: teamsResponse.data,
+              });
+            } else {
+              console.error("Error fetching team school event: Response not OK");
+              this.setState({ error: "Error fetching team data." });
+            }
           }
         } else {
-          console.log("An error occured, Please try again.");
+          console.error("Error fetching events");
+          this.setState({ error: "Error fetching event data." });
         }
-        this.setState({ eventList: events });
-      })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
-  };
-  /*
-   * Updates the list of teams based on selected event
-   */
-  UpdateTeams(nameofevent) {
-    TeamService.getAllTeamsInCompName(nameofevent).then((response) => {
-      console.log(response.data);
-      this.setState({
-        teamTable: response.data,
-        columns: this.getAllTeamColumns(),
+      } catch (error) {
+        console.error("Error in componentDidMount", error);
+        this.setState({ error: "An unexpected error occurred." });
+      }
+    }
+  
+    updateTeams = (nameofevent) => {
+      TeamService.getAllTeamsInCompName(nameofevent).then((response) => {
+        if (response.ok) {
+          this.setState({
+            teamTable: response.data,
+          });
+        } else {
+          console.error("Error fetching teams: Response not OK");
+          this.setState({ error: "Error fetching team data." });
+        }
+      }).catch(error => {
+        console.error("Error in updateTeams", error);
+        this.setState({ error: "An unexpected error occurred." });
       });
-    });
-    return;
-  }
-
-  // Specifies what information to include in the rendered columns.
-  getAllTeamColumns() {
-    return [
-      {
-        name: "Team Name",
-        selector: (row) => row.teamname,
-        sortable: true,
-      },
-      {
-        name: "Skill Level",
-        selector: (row) => row.skilllevel,
-        sortable: true,
-      },
-    ];
-  }
-
-  // This method is used whenever a user wants to see all of the teams again
-  reloadAllTeams() {
-    TeamService.getAllTeams()
-      .then((response) => {
+    };
+  
+    reloadAllTeams = () => {
+      TeamService.getAllTeams().then((response) => {
         if (response.ok) {
           this.setState({ teamTable: response.data });
-        } else console.log("An error has occurred, Please try again.");
-      })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
-  }
-
-  // Renders the component.
-  render() {
-    const table =
-      this.state.teamTable.length === 0 ? (
+        } else {
+          console.error("Error reloading all teams");
+          this.setState({ error: "Error reloading team data." });
+        }
+      }).catch(error => {
+        console.error("Error in reloadAllTeams", error);
+        this.setState({ error: "An unexpected error occurred." });
+      });
+    };
+  
+    setMostRecentEventAsCompetitionId = (events) => {
+      if (events.length === 0) {
+        return;
+      }
+      const sortedEvents = events.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
+      const mostRecentEvent = sortedEvents[0];
+      this.setState({ competitionId: mostRecentEvent.id }, () => {
+        console.log("Updated competitionId:", this.state.competitionId);
+      });
+    };
+  
+    getAllTeamColumns = () => [
+      { name: "Team Name", selector: (row) => row.teamname, sortable: true },
+      { name: "Skill Level", selector: (row) => row.skilllevel, sortable: true },
+    ];
+  
+    render() {
+      const { teamTable, columnsForAllTeams, error } = this.state;
+      const table = teamTable.length === 0 ? (
         <h3>No teams to display.</h3>
       ) : (
         <DataTable
-          data={this.state.teamTable}
-          columns={this.state.columnsForAllTeams}
+          data={teamTable}
+          columns={columnsForAllTeams}
           pagination
           paginationPerPage={20}
           paginationRowsPerPageOptions={[20, 30, 40, 50]}
           expandableRows
-          expandableRowsComponent={ExpandedComponent}
+          expandableRowsComponent={({ data }) => <ExpandedComponent data={data} />}
         />
       );
-    return (
-      <div>
-        <StatusMessages />
-        <h2>Teams</h2>
-        <Button>Add Team</Button>
-        <section
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-evenly",
-          }}
-        ></section>
-        {table}
-      </div>
-    );
+  
+      return (
+        <div>
+          <StatusMessages />
+          <h2>Teams</h2>
+          <Button>Add Team</Button>
+          {error && <div className="error-message">{error}</div>}
+          {table}
+        </div>
+      );
+    }
   }
-}
-
-// Method that returns a specific team.
-const ExpandedComponent = ({ data }) => {
-  var columnsForSpecficTeams = getSpecficTeamUsersColumns();
-  const [teamUsersTable, setTeamUsersTable] = useState([]);
-  useEffect(() => {
-    UserService.getstudentsteam(data.teamname)
-      .then((response) => {
-        if (response.ok) {
-          console.log(response.data);
-          setTeamUsersTable(response.data);
-        } else console.log("An error has occurred, Please try again.");
-      })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
-  });
-
-  return <DataTable data={teamUsersTable} columns={columnsForSpecficTeams} />;
-};
-
-// Once a specific team is chosen the columns are updated by this function.
-function getSpecficTeamUsersColumns() {
-  return [
-    {
-      name: "First Name",
-      selector: (row) => row.firstname,
-      sortable: true,
-    },
-    {
-      name: "Last Name",
-      selector: (row) => row.lastname,
-      sortable: true,
-    },
-    {
-      name: "Email",
-      selector: (row) => row.email,
-      sortable: true,
-    },
-    {
-      name: "Phone",
-      selector: (row) => row.phone,
-      sortable: true,
-    },
-  ];
-}
-
-const mapStateToProps = (state) => {
-  return {
+  
+  const ExpandedComponent = ({ data }) => {
+    const [teamUsersTable, setTeamUsersTable] = useState([]);
+    const [error, setError] = useState(null);
+  
+    useEffect(() => {
+      UserService.getstudentsteam(data.teamname)
+        .then((response) => {
+          if (response.ok) {
+            setTeamUsersTable(response.data);
+          } else {
+            console.error("Error fetching team users: Response not OK");
+            setError("Error fetching team user data.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error in ExpandedComponent", error);
+          setError("An unexpected error occurred.");
+        });
+    }, [data.teamname]);
+  
+    if (error) {
+      return <div className="error-message">{error}</div>;
+    }
+  
+    return <DataTable data={teamUsersTable} columns={getSpecificTeamUsersColumns()} />;
+  };
+  
+  function getSpecificTeamUsersColumns() {
+    return [
+      { name: "First Name", selector: (row) => row.firstname, sortable: true },
+      { name: "Last Name", selector: (row) => row.lastname, sortable: true },
+      { name: "Email", selector: (row) => row.email, sortable: true },
+      { name: "Phone", selector: (row) => row.phone, sortable: true },
+    ];
+  }
+  
+  const mapStateToProps = (state) => ({
     auth: state.auth,
     errors: state.errors,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
+  });
+  
+  const mapDispatchToProps = (dispatch) => ({
     dispatchResetErrors: () => dispatch(clearErrors()),
     dispatchError: (message) => dispatch(updateErrorMsg(message)),
     dispatchSuccess: (message) => dispatch(updateSuccessMsg(message)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TeamsView);
+  });
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(TeamsView);
+  
