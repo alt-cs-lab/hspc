@@ -95,4 +95,5 @@ router.get("/view", (req, res) => {
     useService(schoolService.getAllSchools, req, res);
 });
 
+
 module.exports = router;

@@ -37,7 +37,6 @@ class SchoolService {
     getAllSchools() {
         return ServiceUtils.getRequest('/api/school/view', {});
     }
-
 }
 
 export default new SchoolService();

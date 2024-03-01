@@ -33,14 +33,13 @@
     async componentDidMount() {
       try {
         const eventsResponse = await EventService.getAllEvents(this.props.auth.user.id, this.props.auth.user.accessLevel);
-        const schoolsResponse = await SchoolService.getAllSchools();
-        if (eventsResponse.ok && schoolsResponse.ok) {
+        const schoolResponse = await SchoolService.getSchoolFromAdvisor(this.props.advisor.email);
+        if (eventsResponse.ok && schoolResponse.ok) {
           const events = eventsResponse.data;
-          const schools = schoolsResponse.data;
+          const schoolId = schoolResponse.data.schoolId;
           this.setMostRecentEventAsCompetitionId(events);
-          this.setSchoolId(schools);
-          if (this.state.schoolId && this.state.competitionId) {
-            const teamsResponse = await TeamService.getTeamSchoolEvent(this.props.advisor.schoolId, this.state.competitionId);
+          if (schoolId && this.state.competitionId) {
+            const teamsResponse = await TeamService.getTeamSchoolEvent(schoolId, this.state.competitionId);
             if (teamsResponse.ok) {
               this.setState({
                 teamTable: teamsResponse.data,
@@ -100,12 +99,6 @@
         console.log("Updated competitionId:", this.state.competitionId);
       });
     };
-
-    setSchoolId = (schools) => {
-      if (schools.length === 0) {
-        return;
-      }
-    }
   
     getAllTeamColumns = () => [
       { name: "Team Name", selector: (row) => row.teamname, sortable: true },
