@@ -1,7 +1,7 @@
 /*
 Name: Devin Richards
 Created On: 02/07/2024
-Last Modified: 02/12/2024
+Last Modified: 02/29/2024
 */
 // PURPOSE: This page is used by an advisor to register a team.
 /* 
@@ -12,6 +12,8 @@ import React, { Component } from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import UserService from "../../_common/services/user.js";
 import SchoolService from "../../_common/services/school.js";
+import teamService from "../../_common/services/team.js";
+import EventService from "../../_common/services/event.js";
 import Button from "react-bootstrap/Button";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
@@ -35,18 +37,16 @@ class CreateTeam extends Component {
             teamName: "",
             schoolId: null,
             competitionId: null,
-            questionLevelId: 1,
+            skillLevelId: null,
             isVerified: false,
             studentList: [],
+            skillLevels: [],
             schoolList: [],
+            eventList: [],
             columns: this.getColumns()
         }
     }
 
-    /*
-    TODO: The 'UserService.getAllStudents' needs to be edited so it 
-    returns the students that are asscoiated with the advisor's schools.
-    */
     // TODO: Update UserService to HighSchoolStudentService
     componentDidMount = () => {
         UserService.getAllStudents(this.advisor.email, this.advisor.accessLevel)
@@ -57,21 +57,55 @@ class CreateTeam extends Component {
         })
         .catch((resErr) => console.log("Something went wrong. Please try again."));
 
+        teamService.getAllSkillLevels()
+        .then((response) => {
+            console.log(response.data);
+            if(response.ok){
+                let skillData = response.data;
+                let skills = [];
+                for (let i=0; i < skillData.length; i++){
+                    skills.push({
+                        label: skillData[i].skilllevel,
+                        value: skillData[i].skilllevelid
+                    })
+                }
+                this.setState({ skillLevels: skills });
+            } else console.log("An error has occured. Please try again");
+        })
+        .catch((resErr) => console.log("Something went wrong. Please try again."));
+
+        EventService.getAllEvents()
+        .then((response) => {
+            if (response.ok){
+                console.log(response.data);
+                let eventData = response.data;
+                let events = [];
+                for (let i=0; i < eventData.length; i++){
+                    events.push({
+                        label: eventData[i].name,
+                        value: eventData[i].id
+                    })
+                }
+                this.setState({eventList: events});
+            } else console.log("An error has occured. Please try again");
+        })
+        .catch((resErr) => console.log("Something went wrong. Please try again."));
+
         SchoolService.getAdvisorSchools(this.advisor.id)
-            .then((response) => {
-                if (response.ok) {
-                    let schoolbody = response.data;
-                    let schools = [];
-                    for (let i = 0; i < schoolbody.length; i++) {
-                        schools.push({
-                            label: schoolbody[i].schoolname,
-                            value: schoolbody[i].schoolid,
-                        });
-                    }
-                    this.setState({ schoolList: schools });
-                } else console.log("An error has occurred, Please try again.");
-            })
-            .catch((resErr) => console.log("Something went wrong. Please try again"));
+        .then((response) => {
+            if (response.ok) {
+                let schoolbody = response.data;
+                let schools = [];
+                for (let i = 0; i < schoolbody.length; i++) {
+                    schools.push({
+                        label: schoolbody[i].schoolname,
+                        value: schoolbody[i].schoolid,
+                    });
+                }
+                this.setState({ schoolList: schools });
+            } else console.log("An error has occurred, Please try again.");
+        })
+        .catch((resErr) => console.log("Something went wrong. Please try again"));
     }
 
     getColumns(){
@@ -109,16 +143,56 @@ class CreateTeam extends Component {
         ]
     }
 
-    /* 
-    TODO: 
-        - Create event handler 'handleRegisterTeam()' for the "Register Team" button.
-        - Create event handler 'handleChange' for selected students in datatable to be placed in an array.
+    /*
+    *  TODO: Investigate error that says handleRegisterTeam is undefined.
     */
-    // handleRegisterTeam(){
-    //     TeamService.registerTeam(teamName, schoolId, competitionId, questionLevelId, advisorId);
-    // }
+    handleRegisterTeam(){
+        if (this.state.teamName === "" || this.state.schoolId === ""){
+            this.props.dispatchError(
+                "Please check that all fields are complete."
+            );
+            return;
+        }
+        teamService.registerTeam(
+            this.state.teamName, 
+            this.state.schoolId, 
+            this.state.competitionId,
+            this.state.skillLevelId,
+            this.state.advisor.id
+        )
+        .then((response) => {
+            if (response.ok) {
+                this.props.dispatchSuccess(
+                    "Registration was succesful."
+                );
+                this.resetFields();
+                window.location.reload();
+            }
+        })
+        .catch((error) => {
+            this.props.dispatchError(
+                "There was an error creating the Team."
+            );
+        });
+    }
+
+    resetFields = () => {
+        console.log("Reset");
+        this.setState({teamName: ""});
+        this.setState({schoolId: null});
+        this.setState({competitionId: null});
+    };
+
     handleSchoolChange = (schoolId) => {
         this.setState({schoolId: schoolId.value});
+    }
+
+    handleSkillLevelChange = (skillLevelId) => {
+        this.setState({skillLevelId: skillLevelId.value});
+    }
+
+    handleEventChange = (competitionId) => {
+        this.setState({competitionId: competitionId.value});
     }
 
     render(){
@@ -136,7 +210,7 @@ class CreateTeam extends Component {
                             type="text"
                             required
                             label=""
-                            style={{margin: "10px"}}
+                            style={{ margin: "auto", width: "25%"}}
                             inputProps={{style: {fontSize: 14}}}
                             InputLabelProps={{style: {fontSize: 13}}}
                             onChange={(event) =>
@@ -146,9 +220,16 @@ class CreateTeam extends Component {
                         </Form.Control>
                     </Form.Group>
                     <Form.Group>
+                        <section
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-evenly",
+                                alignItems: "center",
+                            }}
+                        >
                         <div id ="sub-nav">
                             <p id="sub-nav-item">
-                                <b>School</b>
+                            <b>School</b>
                             </p>
                             <FixRequiredSelect
                                 id="dropdown"
@@ -160,20 +241,49 @@ class CreateTeam extends Component {
                                 setValue={this.state.schoolId}
                             />
                         </div>
+                        <div>
+                            <p id="sub-nav-item">
+                                <b>Event</b>
+                                </p>
+                                <FixRequiredSelect
+                                    id="dropdown"
+                                    styles={selectStyles}
+                                    placeholder="Select an event"
+                                    options={this.state.eventList}
+                                    onChange={this.handleEventChange}
+                                    SelectComponent={BaseSelect}
+                                    setValue={this.state.competitionId}
+                                />
+                        </div>
+                        <div>
+                        <p id="sub-nav-item">
+                            <b>Skill Level</b>
+                            </p>
+                            <FixRequiredSelect
+                                id="dropdown"
+                                styles={selectStyles}
+                                placeholder="Select a skill level"
+                                options={this.state.skillLevels}
+                                onChange={this.handleSkillLevelChange}
+                                SelectComponent={BaseSelect}
+                                setValue={this.state.skillLevelId}
+                            />
+                        </div>
+                        </section>
                     </Form.Group>
                     <Form.Group>
                             {this.state.studentList.map((student, index) => (                                
-                                <Form.Control as="checkbox">
+                            <Form.Control as="checkbox">
                                 <label key={student.studentid}>
                                     <input type="checkbox" value={student.studentid}/>
-                                    {student.firstname}
-                                    {student.lastname}
-                                </label>                                
+                                    <label>
+                                    {student.firstname}, {student.lastname}, {student.email}
+                                    </label>
+                                </label>
                             </Form.Control>
                             ))}
                     </Form.Group>
-                    {/* onClick={() => handleRegisterTeam()}                    */}
-                    <Button type="register">Register Team</Button>
+                    <Button type="register" onClick={() => handleRegisterTeam()}>Register Team </Button>
                 </Form>
             </div>
         )

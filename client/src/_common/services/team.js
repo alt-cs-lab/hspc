@@ -30,8 +30,15 @@ class TeamService {
     }
 
     /*
-  * Calls the API and returns a JSON list of all registered teams.
-  */
+    * Calls the API and returns a JSON list of all skill levels.
+    */
+    getAllSkillLevels(){
+        return ServiceUtils.getRequest('/api/team/levels', {});
+    }
+
+    /*
+    * Calls the API and returns a JSON list of all registered teams.
+    */
     getTeamsNeedingAssignment() {
         return ServiceUtils.getRequest('/api/team/teamsNeedingAssignment', {});
     }
