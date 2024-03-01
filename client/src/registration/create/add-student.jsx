@@ -7,20 +7,22 @@ import StatusMessages from "../../_common/components/status-messages/status-mess
 import Button from 'react-bootstrap/Button';
 // import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/register-user.css";
-import UserService from "../../_common/services/user";
-import Select from "react-select";
+import StudentService from "../../_common/services/high-school-student.js";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 import { Form } from "react-bootstrap";
+import BaseSelect from "react-select";
+import FixRequiredSelect from "./FixRequiredSelect";
+import SchoolService from "../../_common/services/school.js";
 // import Col from 'react-bootstrap/Col';
 // import Row from 'react-bootstrap/Row';
 
-// const selectStyles = {
-//   menu: (base) => ({
-//     ...base,
-//     zIndex: 100
-//   }),
-// };
+const selectStyles = {
+  menu: (base) => ({
+    ...base,
+    zIndex: 100
+  }),
+};
 
 const months = 
 [
@@ -45,14 +47,16 @@ const months =
 class AddStudent extends Component {
   constructor(props) {
     super(props);
-    this.user = this.props.advisorUser;
+    this.advisor = this.props.auth.user;
     this.state = {
       firstName: "",
       lastName: "",
       email: "",
-      gradMonth: months[4],
+      gradMonth: months[4].value,
       gradYear: "",
-      school: ""
+      schoolId: 0,
+      schoolName: "",
+      schoolList: []
     };
   }
 
@@ -67,30 +71,45 @@ class AddStudent extends Component {
   //   return yearList;
   // }
 
-  //Returns a list of all scchools when the component is rendered to be used in the dropdown.
+  // Returns a list of all schools when the component is rendered to be used in the dropdown.
   componentDidMount = () => {
-    /*SchoolService.getAllSchools()
-      .then((response) => {
-        if (response.statusCode === 200) {
-          let schoolbody = JSON.parse(response.body);
-          let schools = [];
-          for (let i = 0; i < schoolbody.length; i++) {
-            schools.push({
-              label: schoolbody[i].schoolname,
-              value: schoolbody[i].schoolid,
-            });
-          }
-          this.setState({ schoolList: schools });
+    SchoolService.getAdvisorSchools(this.advisor.id)
+    .then((response) => {
+        if (response.ok) {
+            let schoolbody = response.data;
+            let schools = [];
+            for (let i = 0; i < schoolbody.length; i++) {
+                schools.push({
+                    label: schoolbody[i].schoolname,
+                    value: schoolbody[i].schoolid,
+                });
+            }
+            this.setState({ schoolList: schools });
         } else console.log("An error has occurred, Please try again.");
-      })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));*/
+    })
+    .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
+
+  getAdvisorSchools() {
+      
+  }
+
+  toDate(year, month, date) {
+    if (month > 9)
+    {
+      return year + "-" + month + "-" + date;
+    }
+    else
+    {
+      return year + "-0" + month + "-" + date;
+    }
+  }
 
   createStudent(event) {
     const newStudent = this.state;
     // Sets the graduation date to the 28th day of the month
-    const gradDate = new Date(newStudent.gradYear, newStudent.gradMonth.value, 28);
-    UserService.addstudent(newStudent.firstName, newStudent.lastName, "placeholder", newStudent.email, gradDate);
+    const gradDate = this.toDate(newStudent.gradYear, newStudent.gradMonth, 28);
+    StudentService.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate);
   }
 
   /*
@@ -115,17 +134,23 @@ class AddStudent extends Component {
               <Form.Control placeholder="Ex: Griffin" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ lastName: target.target.value }))} 
                 value={ this.state.lastName }/>
             </Form.Group>
+            <Form.Group>
+              <Form.Label>School</Form.Label>
+              <FixRequiredSelect id="dropdown" styles={selectStyles} options={this.state.schoolList} onChange={(target => this.setState({ schoolId: target.value }))}
+                SelectComponent={BaseSelect} setValue={this.state.schoolId}/>
+            </Form.Group>
             <Form.Group className="m-3">
               <Form.Label>Email</Form.Label>
               <Form.Control placeholder="Ex: devangriffin@email.com" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ email: target.target.value }))} 
                 value={ this.state.email }/>
             </Form.Group>
-            <Form.Group className="m-3">
+            <Form.Group className="m-1">
               <Form.Label>Graduation Month</Form.Label>
-              <Select options={months} defaultValue={months[4]} onChange={(target => this.setState({ gradMonth: target.target.value }))} 
-                value={ this.state.gradMonth }/>
+              <FixRequiredSelect id="dropdown" styles={selectStyles} placeholder="Select a Month" options={months} 
+                  onChange={( target => this.setState({ gradMonth: target.value }))} SelectComponent={BaseSelect} setValue={this.state.gradMonth}
+                  defaultValue={months[4]}/>
             </Form.Group>
-            <Form.Group className="m-3">
+            <Form.Group className="m-1">
               <Form.Label>Graduation Year</Form.Label>
               <Form.Control placeholder="Ex: 2024" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ gradYear: target.target.value }))} 
                 value={ this.state.gradYear }/>

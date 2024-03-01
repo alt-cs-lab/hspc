@@ -3,9 +3,9 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
---example if created the database already:
+-- example if created the database already:
 --   psql -U postgres -W -d hspc -f hspc_queries-psql.sql
---CREATE DATABASE hspc;
+-- CREATE DATABASE hspc;
 
 -- Devin Richards (01/29/2024)
 -- Below is a prototype for the new database.
@@ -16,9 +16,8 @@ DROP TABLE IF EXISTS Volunteers CASCADE;
 DROP TABLE IF EXISTS Competitions CASCADE;
 DROP TABLE IF EXISTS SchoolAdvisors CASCADE;
 DROP TABLE IF EXISTS Schools CASCADE;
-DROP TABLE IF EXISTS TeamStatus CASCADE; -- Add Drop Tables Below
+DROP TABLE IF EXISTS TeamStatus CASCADE;
 DROP TABLE IF EXISTS SkillLevels CASCADE;
-DROP TABLE IF EXISTS SchoolAdvisors CASCADE;
 DROP TABLE IF EXISTS Teams CASCADE;
 DROP TABLE IF EXISTS "Rounds" CASCADE;
 DROP TABLE IF EXISTS Questions CASCADE;
@@ -175,7 +174,6 @@ CREATE TABLE ScoreAttempts (
 	FOREIGN KEY (VolunteerID) REFERENCES Volunteers(VolunteerID)
 );
 
-
 CREATE TABLE HighSchoolStudents (
 	StudentID SERIAL NOT NULL,
 	FirstName VARCHAR(100),
@@ -184,7 +182,8 @@ CREATE TABLE HighSchoolStudents (
 	Email VARCHAR(320),
 	GradDate DATE,
 	PRIMARY KEY (StudentID),
-	FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
+	FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID),
+	UNIQUE (Email)
 );
 
 CREATE TABLE TeamMembers (

@@ -6,8 +6,9 @@ const db = require("../utils/hspc_db").db;
 const { renameKeys } = require("../utils/extensions.js");
 
 module.exports = {
-  registerSchool: registerSchool,
-  getAllSchools: getAllSchools,
+    registerSchool: registerSchool,
+    getAllSchools: getAllSchools,
+    getAdvisorSchools: getAdvisorSchools
 };
 
 /**
@@ -44,22 +45,24 @@ function registerSchool({
  *
  * @returns {Promise} Promise that resolves to a list of schools.
  */
-function getAllSchools() {
-  return db
-    .any(`SELECT * FROM Schools;`)
-    .then((schools) =>
-      renameKeys(schools, [
-        "id",
-        "name",
-        "addressLine1",
-        "addressLine2",
-        "city",
-        "state",
-        "postalCode",
-        "usdCode",
-      ])
-    );
+function getAllSchools(){
+    return db.any(`SELECT * FROM Schools`)
+        .then((schools) => renameKeys(schools, ["id", "name", "addressLine1", "addressLine2", "city", "state", "postalCode", "usdCode"]));
 }
 
-
-
+/**
+ * Gets all the schools associated with an advisor.
+ * @param {int} userId The advisor's ID
+ * @returns All the schools that an advisor is associated with.
+ */
+function getAdvisorSchools(userId) {
+    return db.any(
+        `
+          SELECT S.SchoolID, S.SchoolName, S.City, S."State", S.USDCode
+          FROM Schools S
+              INNER JOIN SchoolAdvisors SA ON SA.SchoolID = S.SchoolID
+          WHERE SA.UserID = $(userId)
+        `,
+      {userId}
+      );
+  }

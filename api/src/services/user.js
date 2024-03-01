@@ -23,7 +23,6 @@ module.exports = {
     addstudent,
     getStudentsFromAdvisors,
     getstudentsteam,
-    getAdvisorSchool,
     checkinvolunteer,
     checkoutvolunteer,
     getactivevolunteers,
@@ -195,23 +194,6 @@ function getAdvisors() {
             INNER JOIN SchoolAdvisors SA ON SA.UserID = U.UserID
             INNER JOIN Schools S ON S.SchoolID = SA.SchoolID
     `);
-}
-
-// function to get the school associated with an advisor - FINISH??
-function getAdvisorSchool() {
-  return db
-    .any(
-      `
-        SELECT S.SchoolName, S.SchoolID 
-        FROM Schools S
-            INNER JOIN SchoolAdvisors SA ON SA.SchoolID = S.SchoolID
-            INNER JOIN Users U ON U.UserID = SA.UserID
-    `
-    )
-    .then((data) => {
-      data = renameKeys(data, ["name", "id"]);
-      return data.length > 0 ? data[0] : null;
-    });
 }
 
 /**

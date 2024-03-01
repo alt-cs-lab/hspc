@@ -9,6 +9,7 @@ const passport = require("passport");
 const { minimumAccessLevelCheck, badRequestCheck } = require("../utils/extensions.js");
 const {check} = require("express-validator");
 const constants = require("../utils/constants.js");
+const statusResponses = require("../utils/status-response.js");
 
 /**
  * @api {post} /api/school/create Create School
@@ -96,4 +97,41 @@ router.get("/view", (req, res) => {
 });
 
 
+/**
+ * @api {post} /api/user/advisorschool Get school associated with an advisor
+ * @apiName AdvisorSchool
+ * @apiGroup User
+ *
+ * @apiBody {Number} userId User ID of the user.
+ * @apiSuccess (Success 201) {JSON} school name and id of the school associated with the advisor.
+ * @apiError (Bad Request 400) {String} error Error message for invalid request body data.
+ * @apiError (Internal Server Error 500) {String} error Error message for internal server errors.
+ *
+ * @apiErrorExample {json} Error-Response:
+ *    HTTP/1.1 400 Bad Request
+ *   {
+ *       Advisor email is required for students.
+ *   }
+ */
+router.get(
+    "/advisorSchools",
+    // passport.authenticate("jwt", { session: false }),
+    // minimumAccessLevelCheck(constants.ADVISOR),
+    // [
+    //   check("userId").exists().withMessage("User ID is required."),
+    //   // check is number
+    //   check("userId").isNumeric().withMessage("User ID must be a number."),
+    // ],
+    // badRequestCheck,
+    (req, res) => {
+      const userId = req.query["userId"];
+      schoolService.getAdvisorSchools(userId)
+        .then((school) => {
+          statusResponses.ok(res, school);
+        })
+        .catch((err) => {
+          statusResponses.serverError(res);
+        });
+    }
+  );
 module.exports = router;

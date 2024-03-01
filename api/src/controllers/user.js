@@ -126,7 +126,7 @@ router.get("/students", (req, res) => {
   let accessLevel = req.query["accessLevel"];
   let email = req.query["email"];
 
-  if (accessLevel === "60") {
+  if (accessLevel == constants.ADVISOR) {
     userService
       .getStudentsFromAdvisors(email)
       .then((userdata) => {
@@ -168,44 +168,6 @@ router.get("/studentsAdvisor", (req, res) => {
     });
 });
 
-/**
- * @api {post} /api/user/advisorschool Get school associated with an advisor
- * @apiName AdvisorSchool
- * @apiGroup User
- *
- * @apiBody {Number} userId User ID of the user.
- * @apiSuccess (Success 201) {JSON} school name and id of the school associated with the advisor.
- * @apiError (Bad Request 400) {String} error Error message for invalid request body data.
- * @apiError (Internal Server Error 500) {String} error Error message for internal server errors.
- *
- * @apiErrorExample {json} Error-Response:
- *    HTTP/1.1 400 Bad Request
- *   {
- *       Advisor email is required for students.
- *   }
- */
-router.get(
-  "/advisorschool",
-  passport.authenticate("jwt", { session: false }),
-  minimumAccessLevelCheck(constants.ADVISOR),
-  [
-    check("userId").exists().withMessage("User ID is required."),
-    // check is number
-    check("userId").isNumeric().withMessage("User ID must be a number."),
-  ],
-  badRequestCheck,
-  (req, res) => {
-    const userId = Number(req.query.userId);
-    userService
-      .getAdvisorSchool(userId)
-      .then((school) => {
-        statusResponses.ok(res, school);
-      })
-      .catch((err) => {
-        statusResponses.serverError(res);
-      });
-  }
-);
 
 /*
  * API Endpoint that sets a volunteer as checked in
@@ -281,6 +243,7 @@ router.post('/register', [
     check('email')
         .not()
         .isEmpty().withMessage("Email is required.")
+        // TODO TWP: Add Back if CAS registration comes back
         //.isEmail({ host_blacklist: ['ksu.edu']}).withMessage("Invalid email format.")
         .normalizeEmail()
         .custom(async value => {
@@ -313,28 +276,6 @@ router.post('/register', [
         .isIn([
             constants.VOLUNTEER,
             constants.ADVISOR]).withMessage('Invalid request level.'),
-    /* check for advisor email is saying that the email should only be there if the request level is 1 (i.e. a Student) */
-    // check('advisorEmail')
-    //     .custom((advisorEmail, {req}) => {
-    //         /*
-    //         if (req.body['requestLevel'] == constants.STUDENT) {
-    //             return !isEmpty(advisorEmail);
-    //         }*/
-    //         return true;
-    //     }).withMessage('Advisor email is required for students.')
-    //     .custom(async (advisorEmail, {req}) => {
-    //         /*if (req.body['requestLevel'] == constants.STUDENT) {
-    //             // return false if we could not find an advisor with that email
-    //             try{
-    //                 const data = await userService.getLogin(advisorEmail);
-    //                 return data.accessLevel == constants.ADVISOR ? Promise.resolve() : Promise.reject();
-    //             }
-    //             catch{
-    //                 return Promise.reject();
-    //             }
-    //         }*/
-    //         return Promise.resolve();
-    //     }).withMessage('An advisor with that email does not exist.'),
     check('schoolId')
         .custom((schoolId, {req}) => {
             if (req.body['requestLevel'] == constants.ADVISOR) {

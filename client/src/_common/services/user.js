@@ -52,8 +52,8 @@ class UserService {
    * API Endpoint that returns all users with Student access.
    *
    */
-  getAllStudents() {
-    return ServiceUtils.getRequest("api/user/students", {});
+  getAllStudents(email, accessLevel) {
+    return ServiceUtils.getRequest("api/user/students", { email: email, accessLevel: accessLevel });
   }
 
   /*
