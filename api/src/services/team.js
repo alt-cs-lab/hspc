@@ -30,6 +30,10 @@ function getAll(){
 )
 }
 
+function getAllSkillLevels(){
+    return db.any('SELECT * FROM SkillLevels')
+}
+
 function getTeamsInCompetitionName(eventName){
     return db.any(`
     SELECT T.TeamID, T.TeamName, SK.SkillLevel, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
@@ -317,6 +321,7 @@ module.exports = {
     getTeamInfo,
     getTeamsInCompetitionName,
     getAll,
+    getAllSkillLevels,
     getSchoolEvent,
     getWaitlistInfo,
 };

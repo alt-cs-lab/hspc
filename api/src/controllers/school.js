@@ -96,6 +96,7 @@ router.get("/view", (req, res) => {
     useService(schoolService.getAllSchools, req, res);
 });
 
+
 /**
  * @api {post} /api/user/advisorschool Get school associated with an advisor
  * @apiName AdvisorSchool

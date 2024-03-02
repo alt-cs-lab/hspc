@@ -49,15 +49,6 @@ class UserService {
   }
 
   /*
-   * API Endpoint that returns details of an advisor based on email.
-   */
-  /*
-  getAdvisorDetails(email) {
-    return ServiceUtils.getRequest("api/user/advisordetails", { email: email });
-  }
-  */
-
-  /*
    * API Endpoint that returns all users with Student access.
    *
    */
