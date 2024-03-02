@@ -58,24 +58,28 @@ router.post('/createStudent',
         .escape(),
     check('email')
         .not().isEmpty().withMessage("Email is required.")
-        .normalizeEmail(),
+        .normalizeEmail()
         //TWP TODO: Ensure Email is not in database
-        // .custom(async value => {
-        //     try{
-        //         return await userService.getLogin()
-        //             ? Promise.reject()
-        //             : Promise.resolve()
-        //     }
-        //     catch {
-        //         return Promise.reject()
-        //     }
-        // }).withMessage("That email is already in use."),
+        .custom(async value => {
+            try{
+                return await studentService.getEmail(value) === null
+                    ? Promise.resolve()
+                    : Promise.reject()
+            }
+            catch {
+                return Promise.reject()
+            }
+        }).withMessage("That email is already in use."),
     check('schoolId')
         .not().isEmpty().withMessage("School is required."),
     check('gradDate')
         .not().isEmpty().withMessage("Graduation Date is empty.")
 ], badRequestCheck, (req, res) => {
     useService(studentService.createStudent, req, res, 'created');
+});
+
+router.get('/getStudents', (req, res) => {
+    useService(studentService.getStudents, req, res, 'got');
 });
 
 module.exports = router;

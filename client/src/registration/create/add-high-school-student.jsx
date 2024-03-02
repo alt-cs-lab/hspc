@@ -3,19 +3,17 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages";
 import Button from 'react-bootstrap/Button';
-// import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/register-user.css";
-import StudentService from "../../_common/services/high-school-student.js";
+// import StudentService from "../../_common/services/high-school-student.js";
+import { addHighSchoolStudent } from "../../_common/services/high-school-student.js";
 import { connect } from "react-redux";
-import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
-import FixRequiredSelect from "./FixRequiredSelect";
+import FixRequiredSelect from "./FixRequiredSelect.jsx";
 import SchoolService from "../../_common/services/school.js";
-// import Col from 'react-bootstrap/Col';
-// import Row from 'react-bootstrap/Row';
+import { withRouter } from "../../_utilities/routerUtils.jsx";
 
 const selectStyles = {
   menu: (base) => ({
@@ -41,12 +39,13 @@ const months =
 ]
 
 /*
- * @author: Tyler Trammell
- * Class that handles the client side addition of a school to an advisor. Associating an advisor with a school
+ * @author: Devan Griffin
+ * Class that handles the client side of creating a student
  */
 class AddStudent extends Component {
   constructor(props) {
     super(props);
+    this.props.dispatchResetErrors();
     this.advisor = this.props.auth.user;
     this.state = {
       firstName: "",
@@ -55,9 +54,9 @@ class AddStudent extends Component {
       gradMonth: months[4].value,
       gradYear: "",
       schoolId: 0,
-      schoolName: "",
       schoolList: []
     };
+    // this.errorText = "Test";
   }
 
   // returnYears()
@@ -90,10 +89,6 @@ class AddStudent extends Component {
     .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
 
-  getAdvisorSchools() {
-      
-  }
-
   toDate(year, month, date) {
     if (month > 9)
     {
@@ -107,52 +102,52 @@ class AddStudent extends Component {
 
   createStudent(event) {
     const newStudent = this.state;
+
     // Sets the graduation date to the 28th day of the month
     const gradDate = this.toDate(newStudent.gradYear, newStudent.gradMonth, 28);
-    StudentService.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate);
+
+    console.log(this.props);
+    this.props.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate, this.props.router);
   }
 
   /*
-   * Renders the form to be filled out for creating/registering a school
-   * Uses same elements as previous forms
-   *
+   * Renders the form to be filled out for creating/registering a student
    */
   render() {
     return (
       <div className="RegisterBox">
-        <StatusMessages/>
         <h2>Create Students For Your School</h2>
         <div>
           <Form onSubmit={(event) => this.createStudent(event)}>
             <Form.Group className="m-3">
               <Form.Label>First Name</Form.Label>
-              <Form.Control placeholder="Ex: Devan" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ firstName: target.target.value }))} 
+              <Form.Control required placeholder="Ex: Devan" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ firstName: target.target.value }))} 
                 value={ this.state.firstName }/>
             </Form.Group>
             <Form.Group className="m-3">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control placeholder="Ex: Griffin" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ lastName: target.target.value }))} 
+              <Form.Control required placeholder="Ex: Griffin" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ lastName: target.target.value }))} 
                 value={ this.state.lastName }/>
             </Form.Group>
             <Form.Group>
               <Form.Label>School</Form.Label>
-              <FixRequiredSelect id="dropdown" styles={selectStyles} options={this.state.schoolList} onChange={(target => this.setState({ schoolId: target.value }))}
+              <FixRequiredSelect required id="dropdown" styles={selectStyles} options={this.state.schoolList} onChange={(target => this.setState({ schoolId: target.value }))}
                 SelectComponent={BaseSelect} setValue={this.state.schoolId}/>
             </Form.Group>
             <Form.Group className="m-3">
               <Form.Label>Email</Form.Label>
-              <Form.Control placeholder="Ex: devangriffin@email.com" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ email: target.target.value }))} 
-                value={ this.state.email }/>
+              <Form.Control type="email" required placeholder="Ex: devangriffin@email.com" style={{ margin: "auto", width: "25%"}} 
+                onChange={(target => this.setState({ email: target.target.value }))} value={ this.state.email }/>
             </Form.Group>
             <Form.Group className="m-1">
               <Form.Label>Graduation Month</Form.Label>
-              <FixRequiredSelect id="dropdown" styles={selectStyles} placeholder="Select a Month" options={months} 
+              <FixRequiredSelect required id="dropdown" styles={selectStyles} placeholder="Select a Month" options={months} 
                   onChange={( target => this.setState({ gradMonth: target.value }))} SelectComponent={BaseSelect} setValue={this.state.gradMonth}
                   defaultValue={months[4]}/>
             </Form.Group>
             <Form.Group className="m-1">
               <Form.Label>Graduation Year</Form.Label>
-              <Form.Control placeholder="Ex: 2024" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ gradYear: target.target.value }))} 
+              <Form.Control type="number" required placeholder="Ex: 2024" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ gradYear: target.target.value }))} 
                 value={ this.state.gradYear }/>
             </Form.Group>
             <Button className="m-3" variant="secondary" type="submit">Create Student</Button>
@@ -176,8 +171,10 @@ const mapDispatchToProps = (dispatch) => {
 		dispatchError: (message) =>
 			dispatch(updateErrorMsg(message)),
 		dispatchSuccess: (message) =>
-			dispatch(updateSuccessMsg(message))
+			dispatch(updateSuccessMsg(message)),
+    addHighSchoolStudent: (firstName, lastName, schoolId, email, gradDate, router) =>
+      dispatch(addHighSchoolStudent(firstName, lastName, schoolId, email, gradDate, router)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddStudent);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddStudent));

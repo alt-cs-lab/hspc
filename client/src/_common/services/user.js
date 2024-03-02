@@ -7,7 +7,7 @@ class UserService {
         this.logVolunteerAssignment = this.logVolunteerAssignment.bind(this);
         this.getAllStudents = this.getAllStudents.bind(this); //????
         this.getAllAdvisors = this.getAllAdvisors.bind(this);
-        this.addstudent = this.addstudent.bind(this);//Natalie Laughlin
+        // this.addstudent = this.addstudent.bind(this);//Natalie Laughlin
         this.getStudentsFromAdvisors = this.getStudentsFromAdvisors.bind(this);//Natalie Laughlin
         this.getstudentsteam = this.getstudentsteam.bind(this);//Natalie Laughlin
     }
@@ -88,18 +88,18 @@ class UserService {
     * API Endpoint adds student to table. creates a student
     *
     */
-    addstudent(firstName, lastName, email, phone, accesslevel, requestlevel, hashedPassword, advisoremail) {
-        return ServiceUtils.postRequest('api/user/addstudent', {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            phone: phone,
-            password: hashedPassword,
-            accessLevel: accesslevel,
-            requestLevel: requestlevel,
-            advisoremail: advisoremail,
-        });
-    }
+    // addstudent(firstName, lastName, email, phone, accesslevel, requestlevel, hashedPassword, advisoremail) {
+    //     return ServiceUtils.postRequest('api/user/addstudent', {
+    //         firstName: firstName,
+    //         lastName: lastName,
+    //         email: email,
+    //         phone: phone,
+    //         password: hashedPassword,
+    //         accessLevel: accesslevel,
+    //         requestLevel: requestlevel,
+    //         advisoremail: advisoremail,
+    //     });
+    // }
 
   /*
     * API Endpoint that upates Adivsors table with schoolID

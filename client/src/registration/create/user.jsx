@@ -3,7 +3,7 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import { withRouter } from "../../_utilities/routerUtils"
+import { withRouter } from "../../_utilities/routerUtils";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Button, Form, ToggleButtonGroup, ToggleButton } from "react-bootstrap";

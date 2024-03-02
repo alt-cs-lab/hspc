@@ -3,21 +3,22 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
-import React, { Component, useState, useEffect } from "react";
+import React, { /*Component, */ useState, useEffect } from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 import UserService from "../_common/services/user";
-import ViewUsers from "../registration/view/users";
+// import ViewUsers from "../registration/view/users";
 import TeamsView from "../registration/advisor/teams-view";
 import ViewEvents from "../registration/view/events";
 import AddUser from "../registration/create/add-team-member";
-import AddEventTeam from "../registration/create/add-event-team";
+// import AddEventTeam from "../registration/create/add-event-team";
 import CreateTeam from "../registration/create/manage-team";
 import Scoreboard from "../scoring/scoreboard.jsx";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-admin.css";
 import AddSchoolAdvisor from "../registration/create/add-school-advisors";
-import AddStudent from "../registration/create/add-student";
+import AddStudent from "../registration/create/add-high-school-student.jsx";
+import ViewStudents from "../registration/view/high-school-students.jsx";
 import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
@@ -62,7 +63,10 @@ function AdvisorDash (props)
         <Navbar.Collapse>
           <Nav>
             <NavDropdown title="Students" id="basic-nav-dropdown">
-              <NavItem eventKey={7} onClick={() => setCurrentView(<AddStudent advisorUser={currentUserName.AdvisorID} />)}>
+              <NavItem eventKey={7} onClick={() => setCurrentView(<ViewStudents advisorUser={currentUserName.AdvisorID}/>)}>
+                View Students
+              </NavItem>
+              <NavItem eventKey={7} onClick={() => setCurrentView(<AddStudent advisorUser={currentUserName.AdvisorID}/>)}>
                 Create Student
               </NavItem>
             </NavDropdown>
