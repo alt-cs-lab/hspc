@@ -158,7 +158,7 @@ class CreateTeam extends Component {
             this.state.schoolId, 
             this.state.competitionId,
             this.state.skillLevelId,
-            this.state.advisor.id
+            this.advisor.id
         )
         .then((response) => {
             if (response.ok) {
@@ -283,7 +283,7 @@ class CreateTeam extends Component {
                             </Form.Control>
                             ))}
                     </Form.Group>
-                    <Button type="register" onClick={() => handleRegisterTeam()}>Register Team </Button>
+                    <Button type="register" onClick={(event) => this.handleRegisterTeam()}>Register Team </Button>
                 </Form>
             </div>
         )

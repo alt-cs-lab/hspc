@@ -39,6 +39,7 @@ VALUES
     (2, 'Waitlisted'),
     (3, 'Registered'),
     (4, 'Denied');
+    (5, 'Archived');
 
 /*
 Insert Values into Skill Levels Table

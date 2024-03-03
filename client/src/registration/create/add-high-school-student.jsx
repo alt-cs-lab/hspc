@@ -106,7 +106,6 @@ class AddStudent extends Component {
     // Sets the graduation date to the 28th day of the month
     const gradDate = this.toDate(newStudent.gradYear, newStudent.gradMonth, 28);
 
-    console.log(this.props);
     this.props.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate, this.props.router);
   }
 

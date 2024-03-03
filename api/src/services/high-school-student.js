@@ -14,7 +14,8 @@ const { renameKeys } = require("../utils/extensions");
 module.exports = {
     createStudent,
     getEmail,
-    getStudents
+    getStudents,
+    getAdvisorSchoolsTeams,
 }
 
 function createStudent( { firstName, lastName, schoolId, email, gradDate } ) {
@@ -53,4 +54,16 @@ function getStudents(schoolId) {
     `, (schoolId));
 }
 
-
+// Trent Powell function to get all students for an advisor's schools
+function getAdvisorSchoolsTeams(advisorId) {
+    return db.any(`
+    SELECT HS.FirstName, HS.LastName, HS.SchoolID, HS.Email, HS.GradDate
+	FROM HighSchoolStudents HS
+    INNER JOIN Schools S on S.SchoolID = HS.SchoolID
+	WHERE HS.SchoolID IN (
+        SELECT S2.SchoolID
+        FROM Schools S2
+        INNER JOIN SchoolAdvisors SA on S2.SchoolId = SA.SchoolId
+        WHERE SA.UserID = $(advisorId)
+    );`, {advisorId})
+}

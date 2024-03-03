@@ -10,6 +10,7 @@
   import UserService from "../../_common/services/user";
   import SchoolService from "../../_common/services/school"
   import DataTable from "react-data-table-component";
+  import Select from "react-select";
   import { connect } from "react-redux";
   import {
     clearErrors,
@@ -21,25 +22,67 @@
     constructor(props) {
       super(props);
       this.state = {
-        teamTable: [],
+        teamList: [],
+        filteredTeamsTable: [],
+        columnsForTeams: this.getAllTeamColumns(),
         eventList: [],
-        columnsForAllTeams: this.getAllTeamColumns(),
+        schoolList: [],
         competitionId: -1,
         schoolId: -1,
         error: null,
       };
     }
   
-    async componentDidMount() {
-      try {
-        const eventsResponse = await EventService.getAllEvents(this.props.auth.user.id, this.props.auth.user.accessLevel);
-        const schoolResponse = await SchoolService.getSchoolFromAdvisor(this.props.advisor.email);
-        if (eventsResponse.ok && schoolResponse.ok) {
+    componentDidMount = () => {
+      // Get Events
+      EventService.getAllEvents(this.props.auth.user.id, this.props.auth.user.accessLevel)
+      .then((response) => {
+          if (response.ok) {
+              let eventsbody = response.data;
+              let events = [];
+              for (let i = 0; i < eventsbody.length; i++) {
+                events.push({
+                      label: eventsbody[i].name,
+                      value: eventsbody[i].id,
+                  });
+              }
+              this.setState({ eventList: events });
+          } else console.log("An error has occurred fetching events, Please try again.");
+      })
+      .catch((resErr) => console.log("Something went wrong fetching events. Please try again"));
+
+      // Get Advisor's Schools
+      SchoolService.getAdvisorSchools(this.props.auth.user.id)
+      .then((response) => {
+          if (response.ok) {
+              let schoolbody = response.data;
+              let schools = [];
+              for (let i = 0; i < schoolbody.length; i++) {
+                  schools.push({
+                      label: schoolbody[i].schoolname,
+                      value: schoolbody[i].schoolid,
+                  });
+              }
+              this.setState({ schoolList: schools })
+          } else console.log("An error has occurred fetching schools, Please try again.");
+      })
+      .catch((resErr) => console.log("Something went wrong fetching schools. Please try again"));
+
+      // Get Teams for Advisor's Schools
+      TeamService.getAdvisorsTeams( this.props.auth.user.id )
+      .then((response) => {
+          if (response.ok) {
+            this.setState({ teamList: response.data });
+          } else console.log("An error has occurred fetching teams, Please try again.");
+      })
+      .catch((resErr) => console.log("Something went wrong fetching teams. Please try again"))
+
+        /*if (eventsResponse.ok && !this.state.schoolList.isEmpty()) {
           const events = eventsResponse.data;
           const schoolId = schoolResponse.data.schoolId;
           this.setMostRecentEventAsCompetitionId(events);
           if (schoolId && this.state.competitionId) {
-            const teamsResponse = await TeamService.getTeamSchoolEvent(schoolId, this.state.competitionId);
+            const teamsResponse = await TeamService.getSchoolsTeams(schoolId, this.state.competitionId);
             if (teamsResponse.ok) {
               this.setState({
                 teamTable: teamsResponse.data,
@@ -56,78 +99,134 @@
       } catch (error) {
         console.error("Error in componentDidMount", error);
         this.setState({ error: "An unexpected error occurred." });
-      }
+      }*/
     }
   
-    updateTeams = (nameofevent) => {
-      TeamService.getAllTeamsInCompName(nameofevent).then((response) => {
-        if (response.ok) {
-          this.setState({
-            teamTable: response.data,
-          });
-        } else {
-          console.error("Error fetching teams: Response not OK");
-          this.setState({ error: "Error fetching team data." });
+    UpdateTeams = (id, school) => {
+      if(school){
+        this.setState({ schoolId: id })
+        
+        let allTeams = this.state.teamList;
+        let filteredTeams = [];
+        for (let i = 0; i < allTeams.length; i++) {
+          if( allTeams[i].schoolid === id && allTeams[i].competitionid === this.state.competitionId ){
+            filteredTeams.push(allTeams[i]);
+          }
         }
-      }).catch(error => {
-        console.error("Error in updateTeams", error);
-        this.setState({ error: "An unexpected error occurred." });
-      });
+        this.setState({ filteredTeamsTable: filteredTeams })
+      }
+      else{
+        this.setState({ competitionId: id })
+
+        let allTeams = this.state.teamList;
+        let filteredTeams = [];
+        for (let i = 0; i < allTeams.length; i++) {
+          if( allTeams[i].schoolid === this.state.schoolId && allTeams[i].competitionid === id ){
+            filteredTeams.push(allTeams[i]);
+          }
+        }
+        this.setState({ filteredTeamsTable: filteredTeams })
+      }
+
     };
   
     reloadAllTeams = () => {
-      TeamService.getAllTeams().then((response) => {
-        if (response.ok) {
-          this.setState({ teamTable: response.data });
-        } else {
-          console.error("Error reloading all teams");
-          this.setState({ error: "Error reloading team data." });
-        }
-      }).catch(error => {
-        console.error("Error in reloadAllTeams", error);
-        this.setState({ error: "An unexpected error occurred." });
-      });
+      // TeamService.getAllTeams().then((response) => {
+      //   if (response.ok) {
+      //     this.setState({ teamTable: response.data });
+      //   } else {
+      //     console.error("Error reloading all teams");
+      //     this.setState({ error: "Error reloading team data." });
+      //   }
+      // }).catch(error => {
+      //   console.error("Error in reloadAllTeams", error);
+      //   this.setState({ error: "An unexpected error occurred." });
+      // });
     };
   
     setMostRecentEventAsCompetitionId = (events) => {
-      if (events.length === 0) {
-        return;
-      }
-      const sortedEvents = events.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
-      const mostRecentEvent = sortedEvents[0];
-      this.setState({ competitionId: mostRecentEvent.id }, () => {
-        console.log("Updated competitionId:", this.state.competitionId);
-      });
+      // if (events.length === 0) {
+      //   return;
+      // }
+      // const sortedEvents = events.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
+      // const mostRecentEvent = sortedEvents[0];
+      // this.setState({ competitionId: mostRecentEvent.id }, () => {
+      //   console.log("Updated competitionId:", this.state.competitionId);
+      // });
     };
   
-    getAllTeamColumns = () => [
-      { name: "Team Name", selector: (row) => row.teamname, sortable: true },
-      { name: "Skill Level", selector: (row) => row.skilllevel, sortable: true },
-    ];
+    getAllTeamColumns() {
+      return [
+        {
+          name: "Team Name",
+          selector: row => row.teamname,
+          sortable: true,
+        },
+        {
+          name: "Question Level",
+          selector: row => row.skilllevel,
+          sortable: true,
+        },
+        {
+          name: "Team Status",
+          selector: row => row.status,
+          sortable: true,
+        },
+      ];
+    }
   
     render() {
-      const { teamTable, columnsForAllTeams, error } = this.state;
-      const table = teamTable.length === 0 ? (
-        <h3>No teams to display.</h3>
-      ) : (
-        <DataTable
-          data={teamTable}
-          columns={columnsForAllTeams}
-          pagination
-          paginationPerPage={20}
-          paginationRowsPerPageOptions={[20, 30, 40, 50]}
-          expandableRows
-          expandableRowsComponent={({ data }) => <ExpandedComponent data={data} />}
-        />
-      );
-  
+      const table = this.state.filteredTeamsTable.length === 0 ? 
+      <h3>No teams to display.</h3>: 
+      <DataTable
+        data={this.state.filteredTeamsTable} 
+        columns={this.state.columnsForTeams} 
+        pagination 
+        paginationPerPage={20} 
+        paginationRowsPerPageOptions={[20, 30, 40, 50]}
+        expandableRows
+        expandableRowsComponent={ExpandedComponent}
+      />
       return (
-        <div>
-          <StatusMessages />
-          <h2>Teams</h2>
-          <Button>Add Team</Button>
-          {error && <div className="error-message">{error}</div>}
-          {table}
+      <div>
+        <StatusMessages />
+        <h2>Teams</h2>
+        <Button>Add Team</Button>
+        <section
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <div style={{display:"flex", alignItems:"center"}}>
+            <span style={{ marginRight: "5px", fontSize: "16px" }}>
+              Select Event:
+            </span>
+            <div id="sub-nav" className="eventDropDown">
+              <Select
+                id="event-dropdown"
+                placeholder="Select Event"
+                options={this.state.eventList}
+                onChange={target => this.UpdateTeams(target.value, false)}
+              />
+            </div>
+          </div>
+          <div style={{display:"flex", alignItems:"center"}}>
+            <span style={{ marginRight: "5px", fontSize: "16px" }}>
+              Select School:
+            </span>
+            <div id="sub-nav" className="schoolDropdowm">
+              <Select
+                id="event-dropdown"
+                placeholder="Select Event"
+                options={this.state.schoolList}
+                onChange={target => this.UpdateTeams(target.value, true)}
+              />
+            </div>
+          </div>
+        </section>
+        {table}
         </div>
       );
     }

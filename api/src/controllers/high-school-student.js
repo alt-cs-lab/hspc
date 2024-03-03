@@ -15,6 +15,7 @@ const {
 const constants = require("../utils/constants.js");
 //const userService = require("../services/user");
 const studentService = require("../services/high-school-student");
+const statusResponses = require("../utils/status-response.js");
 
 /**
  * @api {post} /api/high-school-student/createStudent Register a new student
@@ -80,6 +81,18 @@ router.post('/createStudent',
 
 router.get('/getStudents', (req, res) => {
     useService(studentService.getStudents, req, res, 'got');
+});
+
+router.get('/getFromAdvisorSchools', (req, res) => {
+    // TWP TODO: Do Role Checking
+    var advisorId = req.query['advisorId'];
+    studentService.getAdvisorSchoolsTeams(advisorId)
+    .then((studentData) => {
+        statusResponses.ok(res, studentData);
+    })
+    .catch((err) => {
+        statusResponses.serverError(res);
+    });
 });
 
 module.exports = router;

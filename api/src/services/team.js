@@ -57,6 +57,22 @@ function getSchoolEvent(schoolId, eventId) {
 }
 
 
+// Trent Powell function to get all teams for an advisor's schools
+function getAdvisorSchoolsTeams(advisorId) {
+    return db.any(`
+    SELECT T.TeamId, T.SchoolID, T.CompetitionID, T.TeamName, SK.SkillLevel, TS.Status
+	FROM Teams T
+    INNER JOIN Schools S on S.SchoolID = T.SchoolID
+    INNER JOIN SkillLevels SK on SK.SkillLevelID = T.SkillLevelID
+    INNER JOIN TeamStatus TS on TS.StatusID = T.TeamStatusID
+	WHERE T.SchoolID IN (
+        SELECT S2.SchoolID
+        FROM Schools S2
+        INNER JOIN SchoolAdvisors SA on S2.SchoolId = SA.SchoolId
+        WHERE SA.UserID = $(advisorId)
+    );`, {advisorId})
+}
+
 
 function getWaitlistInfo({schoolId}) {
     return Promise.all([
@@ -324,4 +340,6 @@ module.exports = {
     getAllSkillLevels,
     getSchoolEvent,
     getWaitlistInfo,
+    //getSchoolTeams,
+    getAdvisorSchoolsTeams,
 };

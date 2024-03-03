@@ -78,6 +78,18 @@ router.get('/schoolevent', (req, res) => {
         });
 
 });
+
+router.get('/getFromAdvisorSchools', (req, res) => {
+    // TWP TODO: Do Role Checking
+    var advisorId = req.query['advisorId'];
+    teamService.getAdvisorSchoolsTeams(advisorId)
+    .then((teamData) => {
+        statusResponses.ok(res, teamData);
+    })
+    .catch((err) => {
+        statusResponses.serverError(res);
+    });
+});
 //******************************************************************************************************************************
 
 /**
