@@ -1,8 +1,6 @@
 import ServiceUtils from "../../_utilities/serviceUtils";
 
 class TeamService {
-    constructor() {
-    }
 
     /*
     * Passes team information to the API and registers a new team object in the database.
@@ -30,8 +28,15 @@ class TeamService {
     }
 
     /*
-  * Calls the API and returns a JSON list of all registered teams.
-  */
+    * Calls the API and returns a JSON list of all skill levels.
+    */
+    getAllSkillLevels(){
+        return ServiceUtils.getRequest('/api/team/levels', {});
+    }
+
+    /*
+    * Calls the API and returns a JSON list of all registered teams.
+    */
     getTeamsNeedingAssignment() {
         return ServiceUtils.getRequest('/api/team/teamsNeedingAssignment', {});
     }
@@ -74,12 +79,11 @@ class TeamService {
     }
 
     /*
-    * Gets teams from a school during an event
+    * Gets Teams from an advisor's schools
     */
-    getTeamSchoolEvent(schoolid, competitionid) {
-        return ServiceUtils.getRequest('/api/team/schoolevent', {
-            schoolId: schoolid,
-            competitionId: competitionid
+    getAdvisorsTeams(advisorId) {
+        return ServiceUtils.getRequest('/api/team/getFromAdvisorSchools', {
+            advisorId: advisorId,
         });
     }
 
@@ -101,4 +105,6 @@ class TeamService {
 
 }
 
+// TODO TWP: Check if this comment line below is alright
+// eslint-disable-next-line
 export default new TeamService();

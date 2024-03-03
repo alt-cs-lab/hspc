@@ -366,8 +366,6 @@ class RegisterTeam extends Component {
                             onChange={this.handleAdvisorChange}
                         />
                     </div>
-
-
                     <br/>
                     <p>
                         <br/>

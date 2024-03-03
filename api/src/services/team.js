@@ -30,6 +30,10 @@ function getAll(){
 )
 }
 
+function getAllSkillLevels(){
+    return db.any('SELECT * FROM SkillLevels')
+}
+
 function getTeamsInCompetitionName(eventName){
     return db.any(`
     SELECT T.TeamID, T.TeamName, SK.SkillLevel, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
@@ -52,6 +56,22 @@ function getSchoolEvent(schoolId, eventId) {
 	WHERE T.CompetitionID = $(eventId) AND T.SchoolID = $(schoolId);`, {eventId, schoolId})
 }
 
+
+// Trent Powell function to get all teams for an advisor's schools
+function getAdvisorSchoolsTeams(advisorId) {
+    return db.any(`
+    SELECT T.TeamId, T.SchoolID, T.CompetitionID, T.TeamName, SK.SkillLevel, TS.Status
+	FROM Teams T
+    INNER JOIN Schools S on S.SchoolID = T.SchoolID
+    INNER JOIN SkillLevels SK on SK.SkillLevelID = T.SkillLevelID
+    INNER JOIN TeamStatus TS on TS.StatusID = T.TeamStatusID
+	WHERE T.SchoolID IN (
+        SELECT S2.SchoolID
+        FROM Schools S2
+        INNER JOIN SchoolAdvisors SA on S2.SchoolId = SA.SchoolId
+        WHERE SA.UserID = $(advisorId)
+    );`, {advisorId})
+}
 
 
 function getWaitlistInfo({schoolId}) {
@@ -317,6 +337,9 @@ module.exports = {
     getTeamInfo,
     getTeamsInCompetitionName,
     getAll,
+    getAllSkillLevels,
     getSchoolEvent,
     getWaitlistInfo,
+    //getSchoolTeams,
+    getAdvisorSchoolsTeams,
 };

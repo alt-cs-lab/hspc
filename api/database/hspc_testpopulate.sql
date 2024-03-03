@@ -39,6 +39,7 @@ VALUES
     (2, 'Waitlisted'),
     (3, 'Registered'),
     (4, 'Denied');
+    (5, 'Archived');
 
 /*
 Insert Values into Skill Levels Table
@@ -65,12 +66,6 @@ VALUES
     (25, '321-555-1019', 'Leo', 'Garcia', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 80, 80, 'leo.garcia@email.com', '2024-01-10', '2024-01-22'),
     (26, '442-555-1020', 'Josh', 'Weese', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 100, 100, 'maggie.perez@email.com', '2024-01-11', '2024-01-29'),
     (27, '745-555-1021', 'Nathan', 'Bean', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 100, 100, 'nathan.kim@email.com', '2024-01-12', '2024-01-28');
-
-INSERT INTO Schools 
-    (SchoolID, SchoolName, AddressLine1, AddressLine2, City, "State", PostalCode, USDCode)
-VALUES
-    (181, 'Manhattan High School', '2100 Poyntz Ave', ' ', 'Manhattan', 'Kansas', '66502', 383),
-    (182, 'Riley County High School', '12451 Fairview Church Rd', ' ', 'Riley', 'Kansas', '66531', 378);
 
 /*
 Insert Dummy Values into School Advisors Table

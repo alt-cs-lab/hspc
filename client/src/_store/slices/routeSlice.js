@@ -1,6 +1,4 @@
-import StudentDash from "../../dashboards/student";
 import VolunteerDash from "../../dashboards/volunteer";
-
 import JudgeDash from "../../dashboards/judge";
 import AdvisorDash from "../../dashboards/advisor";
 import AdminDash from "../../dashboards/admin";
@@ -11,11 +9,6 @@ import { selectAuth } from "./authSlice";
 
 
 const dashboardRoutes = {
-    "/student/studentdash": {
-        element: <StudentDash />,
-        accessLevel: 1,
-        requireExact: true
-    },
     "/volunteer/volunteerdash": {
         element: <VolunteerDash />,
         accessLevel: 20,

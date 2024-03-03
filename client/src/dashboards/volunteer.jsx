@@ -8,6 +8,7 @@ import StatusMessages from "../_common/components/status-messages/status-message
 import ViewEvents from "../registration/view/events";
 import ViewUsers from "../registration/view/users";
 import ViewTeams from "../registration/view/teams";
+import VolunteerSignUp from "../registration/create/volunteer-sign-up"
 //import Questions from "../judging/volunteerAssignmentQuestion";
 //import StartJudging from "../judging/startJudging";
 
@@ -67,6 +68,9 @@ function VolunteerDash(props)
                 Event Schedule
               </NavItem>
             </NavDropdown>
+            <NavItem eventKey={4} onClick={() => setCurrentView(<VolunteerSignUp />)}>
+              Competition Sign-up
+            </NavItem>
             <NavItem eventKey={4} onClick={() => setCurrentView(<Scoreboard />)}>
               View Board
             </NavItem>

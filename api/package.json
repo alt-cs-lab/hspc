@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./src/start.js",
     "dev": "nodemon ./src/start.js",
-    "debug": "node --inspect ./src/start.js",
+    "debug": "nodemon --inspect ./src/start.js",
     "build": "cd react && npm run build",
     "docs": "apidoc -i src/ -o apidoc/",
     "test": "jest",

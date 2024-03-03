@@ -38,6 +38,9 @@ class SchoolService {
         return ServiceUtils.getRequest('/api/school/view', {});
     }
 
+    getAdvisorSchools(userId){
+        return ServiceUtils.getRequest("/api/school/advisorSchools", { userId: userId });
+    }
 }
 
 export default new SchoolService();

@@ -23,7 +23,6 @@ module.exports = {
     addstudent,
     getStudentsFromAdvisors,
     getstudentsteam,
-    getAdvisorSchool,
     checkinvolunteer,
     checkoutvolunteer,
     getactivevolunteers,
@@ -196,59 +195,6 @@ function getAdvisors() {
             INNER JOIN Schools S ON S.SchoolID = SA.SchoolID
     `);
 }
-
-// function to get the school associated with an advisor - FINISH??
-function getAdvisorSchool() {
-  return db
-    .any(
-      `
-        SELECT S.SchoolName, S.SchoolID 
-        FROM Schools S
-            INNER JOIN SchoolAdvisors SA ON SA.SchoolID = S.SchoolID
-            INNER JOIN Users U ON U.UserID = SA.UserID
-    `
-    )
-    .then((data) => {
-      data = renameKeys(data, ["name", "id"]);
-      return data.length > 0 ? data[0] : null;
-    });
-}
-
-/**
- * Fetches details of an advisor by their email.
- * @param {string} email - The email of the advisor to fetch.
- * @returns {Promise<object>} - A promise that resolves to the advisor's details.
- */
-/*
-function getAdvisorByEmail(email) {
-  return db
-    .oneOrNone(
-      `
-        SELECT U.UserID, U.FirstName, U.LastName, U.Email, U.Phone, SA.SchoolID, S.SchoolName
-        FROM Users U
-        LEFT JOIN SchoolAdvisors SA ON U.UserID = SA.UserID
-        LEFT JOIN Schools S ON SA.SchoolID = S.SchoolID
-        WHERE U.Email = $1 AND U.AccessLevel = ${constants.ADVISOR}
-    `,
-      [email]
-    )
-    .then((data) => {
-      if (data) {
-        // Optionally rename keys or transform data as needed
-        return {
-          userId: data.userid,
-          firstName: data.firstname,
-          lastName: data.lastname,
-          email: data.email,
-          phone: data.phone,
-          schoolId: data.schoolid,
-          schoolName: data.schoolname,
-        };
-      }
-      return null;
-    });
-}
-*/
 
 /**
  * Gets students who are not on a team
