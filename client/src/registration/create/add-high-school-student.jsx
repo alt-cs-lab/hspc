@@ -5,7 +5,6 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { Component } from "react";
 import Button from 'react-bootstrap/Button';
 import "../../_common/assets/css/register-user.css";
-// import StudentService from "../../_common/services/high-school-student.js";
 import { addHighSchoolStudent } from "../../_common/services/high-school-student.js";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
@@ -59,18 +58,10 @@ class AddStudent extends Component {
     // this.errorText = "Test";
   }
 
-  // returnYears()
-  // {
-  //   var yearList = [];
-  //   for (let i = 0; i < 100; i++)
-  //   {
-  //     yearList[i] = 2024 + i;
-  //   }
-
-  //   return yearList;
-  // }
-
-  // Returns a list of all schools when the component is rendered to be used in the dropdown.
+  /**
+   * Runs when the page is opened
+   * Returns a list of all schools when the component is rendered to be used in the dropdown.
+   */
   componentDidMount = () => {
     SchoolService.getAdvisorSchools(this.advisor.id)
     .then((response) => {
@@ -89,17 +80,28 @@ class AddStudent extends Component {
     .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
 
-  toDate(year, month, date) {
+  /**
+   * Creates a date compatable with the database
+   * @param {int} year
+   * @param {int} month 
+   * @param {int} day
+   * @returns 
+   */
+  toDate(year, month, day) {
     if (month > 9)
     {
-      return year + "-" + month + "-" + date;
+      return year + "-" + month + "-" + day;
     }
     else
     {
-      return year + "-0" + month + "-" + date;
+      return year + "-0" + month + "-" + day;
     }
   }
 
+  /**
+   * Sends the new student to that database
+   * @param {*} event 
+   */
   createStudent(event) {
     const newStudent = this.state;
 

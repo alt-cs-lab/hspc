@@ -38,7 +38,7 @@ VALUES
     (1, 'Unregistered'),
     (2, 'Waitlisted'),
     (3, 'Registered'),
-    (4, 'Denied');
+    (4, 'Denied'),
     (5, 'Archived');
 
 /*
