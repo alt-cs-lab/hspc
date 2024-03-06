@@ -2,9 +2,6 @@ import ServiceUtils from "../../_utilities/serviceUtils";
 
 
 class EventService {
-    constructor() {
-        this.event = null;
-    }
 
     /*
     * Calls the API and registers a new Event object in the database.
@@ -36,6 +33,15 @@ class EventService {
             accessLevel: accessLevel
         });
     }
+
+    /*
+    * Calls the API and returns the most upcoming event or if there are none, the most recent.
+    */
+    getHighlightEvent() {
+        return ServiceUtils.getRequest('/api/event/highlightEvent');
+    }
 }
 
+// TODO TWP: Check if this comment line below is alright
+// eslint-disable-next-line
 export default new EventService;

@@ -54,6 +54,21 @@ router.get("/view", (req, res) => {
     useService(eventService.getAllEvents, req, res);
 });
 
+/*
+* Calls the API and returns the most upcoming event or if there are none, the most recent.
+* Author: Trent Powell
+*/
+router.get("/highlightEvent", (req, res) => {
+    useService(eventService.getHighlightEvent, req, res);
+    // eventService.getHighlightEvent()
+    // .then((eventData) => {
+    //     statusResponses.ok(res, eventDataZ);
+    // })
+    // .catch((err) => {
+    //     statusResponses.serverError(res);
+    // });
+});
+
 /**
  * @api {post} /api/event/create Create Event
  * @apiName CreateEvent

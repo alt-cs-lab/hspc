@@ -109,8 +109,8 @@ class ViewStudents extends Component {
               </span>
               <div id="sub-nav" className="schoolDropdown">
               <Select
-                  id="event-dropdown"
-                  placeholder="Select Event"
+                  id="school-dropdown"
+                  placeholder="Select School"
                   options={this.state.schoolList}
                   onChange={target => this.UpdateStudents(target.value)}
                 />
