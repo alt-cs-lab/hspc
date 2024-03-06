@@ -31,8 +31,8 @@ function AdvisorDash (props)
     props.dispatchResetErrors();
     UserService.getAllUsers()
       .then((response) => {
-        let body = response.body;
-        if (response.statusCode === 200) {
+        let body = response.data;
+        if (response.status === 200) {
           let user = [];
           for (let i = 0; i < body.length; i++) {
             if (body[i].email === props.currentUser.email) {
@@ -48,7 +48,7 @@ function AdvisorDash (props)
         }
       })
       .catch((resErr) => {
-        console.log("Error: ",resErr);
+        console.log("Error: ", resErr);
       });
   }, [props]);
 
@@ -56,9 +56,11 @@ function AdvisorDash (props)
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Navbar.Brand onClick={() => setCurrentView(<h2 id="welcome">Welcome {currentUserName.FirstName} {currentUserName.LastName}!</h2>)}>
-            Advisor Portal
-          </Navbar.Brand>
+          <Nav>
+            <Nav.Link onClick={() => setCurrentView(<h2 id="welcome">Welcome {currentUserName.FirstName} {currentUserName.LastName}!</h2>)}>
+              Advisor Portal
+            </Nav.Link>
+          </Nav>
           <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>
@@ -91,9 +93,9 @@ function AdvisorDash (props)
                 View Events
               </NavItem>
             </NavDropdown>
-            <NavItem eventKey={6} onClick={() => setCurrentView(<Scoreboard />)}>
+            <Nav.Link eventKey={6} onClick={() => setCurrentView(<Scoreboard />)}>
               View Board
-            </NavItem>
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

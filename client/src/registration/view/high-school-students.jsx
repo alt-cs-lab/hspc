@@ -75,6 +75,11 @@ class ViewStudents extends Component {
         selector: row => row.email,
         sortable: true,
       },
+      {
+        name: "Graduation Date",
+        selector: row => row.graddate,
+        sortable: true,
+      }
     ];
   }
 
@@ -112,7 +117,7 @@ class ViewStudents extends Component {
               <div id="sub-nav" className="schoolDropdown">
               <Select
                   id="event-dropdown"
-                  placeholder="Select Event"
+                  placeholder="Select School"
                   options={this.state.schoolList}
                   onChange={target => this.UpdateStudents(target.value)}
                 />
