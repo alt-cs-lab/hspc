@@ -7,6 +7,7 @@ module.exports = {
     //getEventHistory,
     getAllEvents,
     getCompetitionTeamsInfo,
+    getHighlightEvent,
 };
 
 /**
@@ -110,21 +111,40 @@ function getAllEvents() {
 }
 
 /*
- * Function to get all the competitions that the user is associated with
- * also returns the name Natalie Laughlin
- * 
- * Unused as of 3/2/2024 Trent Powell
-function getEventHistory(userID) {
+ * Function to get "Highlight" Compeitition which means next upcoming or if there is none then the most recent.
+ */
+function getHighlightEvent() {
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${year}-${month}-${day}`;
+
     return db.any(
-        `SELECT C.eventName, C.CompetitionID, C.EventLocation, C.EventDate, C.EventTime, C.TeamsPerSchool, C.TeamsPerEvent, C.EventDescription 
-        FROM Users AS U
-        INNER JOIN TeamsUsers as TU on U.UserID = TU.UserID
-        INNER JOIN Teams as T on TU.TeamID = T.TeamID
-        INNER JOIN Competition as C on T.CompetitionID = C.CompetitionID
-        WHERE U.UserID = $(userID);`,
-        { userID }
-    );
-}*/
+        `SELECT C.EventLocation, C.EventDate, C.EventTime, C.EventName, C.EventDescription
+        FROM Competitions AS C
+        WHERE C.EventDate > $(currentDate)
+        ORDER BY C.EventDate DESC
+        LIMIT 1`, {currentDate})
+    .then((data)=>{
+        if (data[0] != null) {
+            return db.any(
+                `SELECT C.EventLocation, C.EventDate, C.EventTime, C.EventName, C.EventDescription
+                FROM Competitions AS C
+                WHERE C.EventDate > $(currentDate)
+                ORDER BY C.EventDate DESC
+                LIMIT 1`, {currentDate})
+        }
+        else{
+            return db.any(
+                `SELECT C.EventLocation, C.EventDate, C.EventTime, C.EventName, C.EventDescription
+                FROM Competitions AS C
+                ORDER BY C.EventDate DESC
+                LIMIT 1`)
+        }
+    })
+}
 
 // returns the TeamsPerSchool and TeamsPerEvent for a given competition
 function getCompetitionTeamsInfo(competitionID) {

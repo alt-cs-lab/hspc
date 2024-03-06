@@ -79,6 +79,10 @@ router.get('/schoolevent', (req, res) => {
 
 });
 
+/*
+* Calls the API and returns the teams from all schools associated with an advisor.
+* Author: Trent Powell
+*/
 router.get('/getFromAdvisorSchools', (req, res) => {
     // TWP TODO: Do Role Checking
     var advisorId = req.query['advisorId'];
