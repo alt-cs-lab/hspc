@@ -14,6 +14,8 @@ import FixRequiredSelect from "./FixRequiredSelect.jsx";
 import SchoolService from "../../_common/services/school.js";
 import { withRouter } from "../../_utilities/routerUtils.jsx";
 
+const constants = require('../../_utilities/constants')
+
 const selectStyles = {
   menu: (base) => ({
     ...base,
@@ -81,24 +83,6 @@ class AddStudent extends Component {
   };
 
   /**
-   * Creates a date compatable with the database
-   * @param {int} year
-   * @param {int} month 
-   * @param {int} day
-   * @returns 
-   */
-  toDate(year, month, day) {
-    if (month > 9)
-    {
-      return year + "-" + month + "-" + day;
-    }
-    else
-    {
-      return year + "-0" + month + "-" + day;
-    }
-  }
-
-  /**
    * Sends the new student to that database
    * @param {*} event 
    */
@@ -106,7 +90,7 @@ class AddStudent extends Component {
     const newStudent = this.state;
 
     // Sets the graduation date to the 28th day of the month
-    const gradDate = this.toDate(newStudent.gradYear, newStudent.gradMonth, 28);
+    const gradDate = constants.toDatabaseDate(newStudent.gradYear, newStudent.gradMonth, 28);
 
     this.props.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate, this.props.router);
   }
