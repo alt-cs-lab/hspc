@@ -60,13 +60,6 @@ router.get("/view", (req, res) => {
 */
 router.get("/highlightEvent", (req, res) => {
     useService(eventService.getHighlightEvent, req, res);
-    // eventService.getHighlightEvent()
-    // .then((eventData) => {
-    //     statusResponses.ok(res, eventDataZ);
-    // })
-    // .catch((err) => {
-    //     statusResponses.serverError(res);
-    // });
 });
 
 /**

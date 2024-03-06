@@ -1,6 +1,7 @@
 const { renameKeys } = require("../utils/extensions");
 
 const db = require("../utils/hspc_db").db;
+const constants = require('../utils/constants')
 
 module.exports = {
     createEvent,
@@ -119,21 +120,19 @@ function getHighlightEvent() {
     let month = date.getMonth() + 1;
     let year = date.getFullYear();
     // This arrangement can be altered based on how we want the date's format to appear.
-    let currentDate = `${year}-${month}-${day}`;
+    let currentDate = constants.toDatabaseDate(year, month, day);
 
     return db.any(
         `SELECT C.EventLocation, C.EventDate, C.EventTime, C.EventName, C.EventDescription
         FROM Competitions AS C
-        WHERE C.EventDate > $(currentDate)
-        ORDER BY C.EventDate DESC
-        LIMIT 1`, {currentDate})
+        WHERE C.EventDate > $(currentDate)`, {currentDate})
     .then((data)=>{
         if (data[0] != null) {
             return db.any(
                 `SELECT C.EventLocation, C.EventDate, C.EventTime, C.EventName, C.EventDescription
                 FROM Competitions AS C
                 WHERE C.EventDate > $(currentDate)
-                ORDER BY C.EventDate DESC
+                ORDER BY C.EventDate ASC
                 LIMIT 1`, {currentDate})
         }
         else{
