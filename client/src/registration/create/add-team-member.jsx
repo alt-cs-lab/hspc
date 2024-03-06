@@ -3,7 +3,7 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages";
+// import StatusMessages from "../../_common/components/status-messages/status-messages";
 import Button from 'react-bootstrap/Button';
 import AuthService from "../../_common/services/auth";
 import EventService from "../../_common/services/event";
@@ -350,12 +350,12 @@ class AddUser extends Component {
   render() {
     return (
       <div name="status-div" className="RegisterBox">
-        {this.props.errors.errorMsg !== "" ||
+        {/* {this.props.errors.errorMsg !== "" ||
         this.props.errors.successMsg !== "" ? (
           <StatusMessages />
         ) : (
           ""
-        )}
+        )} */}
         <h2>Add a Student</h2>
         <section
           style={{
@@ -400,14 +400,8 @@ class AddUser extends Component {
           <Table data={this.state.eventTable} columns={this.state.columns}/>
           <br />
           <Button
-            variant="primary"
+            variant="secondary"
             className="RegisterButton"
-            style={{
-              margin: 15,
-              backgroundColor: "#00a655",
-              color: "white",
-              fontSize: 14,
-            }}
             onClick={(event) => this.handleAddToTeam()}
           >
             Add to Team

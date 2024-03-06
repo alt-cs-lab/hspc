@@ -9,7 +9,7 @@ TODO: The file '/workspaces/hspc/client/src/registration/create/team.jsx' will n
 deleted after this page is completed because it is an older file that serves the same function.
 */
 import React, { Component } from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
+// import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import UserService from "../../_common/services/user.js";
 import SchoolService from "../../_common/services/school.js";
 import teamService from "../../_common/services/team.js";
@@ -198,7 +198,6 @@ class CreateTeam extends Component {
     render(){
         return(
             <div>
-                <StatusMessages/>
                 <h2>Team Creation</h2>
                 <p>
                     <b>Please fill out the information below.</b>
@@ -283,7 +282,7 @@ class CreateTeam extends Component {
                             </Form.Control>
                             ))}
                     </Form.Group>
-                    <Button type="register" onClick={(event) => this.handleRegisterTeam()}>Register Team </Button>
+                    <Button type="register" variant="secondary" onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
                 </Form>
             </div>
         )

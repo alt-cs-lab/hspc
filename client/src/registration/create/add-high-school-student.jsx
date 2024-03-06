@@ -14,12 +14,12 @@ import FixRequiredSelect from "./FixRequiredSelect.jsx";
 import SchoolService from "../../_common/services/school.js";
 import { withRouter } from "../../_utilities/routerUtils.jsx";
 
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100
-  }),
-};
+// const selectStyles = {
+//   menu: (base) => ({
+//     ...base,
+//     zIndex: 100
+//   }),
+// };
 
 const months = 
 [
@@ -52,7 +52,7 @@ class AddStudent extends Component {
       email: "",
       gradMonth: months[4].value,
       gradYear: "",
-      schoolId: 0,
+      schoolId: -1,
       schoolList: []
     };
     // this.errorText = "Test";
@@ -88,12 +88,10 @@ class AddStudent extends Component {
    * @returns 
    */
   toDate(year, month, day) {
-    if (month > 9)
-    {
+    if (month > 9) {
       return year + "-" + month + "-" + day;
     }
-    else
-    {
+    else {
       return year + "-0" + month + "-" + day;
     }
   }
@@ -132,7 +130,7 @@ class AddStudent extends Component {
             </Form.Group>
             <Form.Group>
               <Form.Label>School</Form.Label>
-              <FixRequiredSelect required id="dropdown" styles={selectStyles} options={this.state.schoolList} onChange={(target => this.setState({ schoolId: target.value }))}
+              <FixRequiredSelect required id="dropdown" options={this.state.schoolList} onChange={(target => this.setState({ schoolId: target.value }))}
                 SelectComponent={BaseSelect} setValue={this.state.schoolId}/>
             </Form.Group>
             <Form.Group className="m-3">
@@ -142,16 +140,19 @@ class AddStudent extends Component {
             </Form.Group>
             <Form.Group className="m-1">
               <Form.Label>Graduation Month</Form.Label>
-              <FixRequiredSelect required id="dropdown" styles={selectStyles} placeholder="Select a Month" options={months} 
+              <FixRequiredSelect required id="dropdown" placeholder="Select a Month" options={months} 
                   onChange={( target => this.setState({ gradMonth: target.value }))} SelectComponent={BaseSelect} setValue={this.state.gradMonth}
                   defaultValue={months[4]}/>
             </Form.Group>
             <Form.Group className="m-1">
               <Form.Label>Graduation Year</Form.Label>
-              <Form.Control type="number" required placeholder="Ex: 2024" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ gradYear: target.target.value }))} 
-                value={ this.state.gradYear }/>
+              <Form.Control type="number" required placeholder="Ex: 2024" style={{ margin: "auto", width: "25%"}} 
+                onChange={(target => this.setState({ gradYear: target.target.value }))} value={ this.state.gradYear }/>
             </Form.Group>
-            <Button className="m-3" variant="secondary" type="submit">Create Student</Button>
+            <Button className="m-3" variant="secondary" type="submit" 
+              style={{margin: 15, backgroundColor: "#512888", color: "white", fontSize: 16,}}>
+              Create Student
+            </Button>
           </Form>
         </div>
       </div>

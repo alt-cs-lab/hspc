@@ -205,7 +205,7 @@ export class RegisterSchool extends Component {
                             />
                         </div>
                         <Button
-                            variant="primary"
+                            variant="secondary"
                             className="RegisterButton"
                             style={{
                                 margin: 15,
