@@ -10,6 +10,7 @@ import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Select from "react-select";
+import { Button } from "react-bootstrap";
 // import { getAllStudents } from "../../_common/services/high-school-student.js";
 
 // This class inherits functionality of the Component class and extends it.
@@ -95,7 +96,8 @@ class ViewStudents extends Component {
     return (
       <div>
         <StatusMessages/>
-        <h2>Students</h2>
+        <h2> Students </h2>
+        <Button className="mb-3"> Add Student </Button>
         <section
           style={{
             display: "flex",
