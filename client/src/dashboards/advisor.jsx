@@ -3,20 +3,16 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
-import React, { /*Component, */ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 import UserService from "../_common/services/user";
-// import ViewUsers from "../registration/view/users";
 import TeamsView from "../registration/advisor/teams-view";
 import ViewEvents from "../registration/view/events";
-import AddUser from "../registration/create/add-team-member";
-// import AddEventTeam from "../registration/create/add-event-team";
 import CreateTeam from "../registration/create/manage-team";
 import Scoreboard from "../scoring/scoreboard.jsx";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-admin.css";
-import AddSchoolAdvisor from "../registration/create/add-school-advisors";
 import AddStudent from "../registration/create/add-high-school-student.jsx";
 import ViewStudents from "../registration/view/high-school-students.jsx";
 import { connect } from "react-redux";
@@ -52,7 +48,6 @@ function AdvisorDash (props)
       });
   }, [props]);
 
-  
   return (
     <div>
       <Navbar inverse collapseOnSelect>
@@ -72,17 +67,9 @@ function AdvisorDash (props)
                 Create Student
               </NavItem>
             </NavDropdown>
-            <NavDropdown title="School" id="basic-nav-dropdown">
-              <NavItem eventKey={7} onClick={() => setCurrentView(<AddSchoolAdvisor advisorUser={currentUserName.AdvisorID} />)}>
-                Add Your School
-              </NavItem>
-            </NavDropdown>
             <NavDropdown title="Teams" id="basic-nav-dropdown">
               <NavItem eventKey={1} onClick={() => setCurrentView(<CreateTeam advisor={props.currentUser} />)}>
                 Create Team
-              </NavItem>
-              <NavItem eventKey={2} onClick={() => setCurrentView(<AddUser advisor={props.currentUser} />)}>
-                Add User
               </NavItem>
               <NavItem eventKey={3} onClick={() => setCurrentView(<TeamsView advisor={props.currentUser} />)}>
                 View Teams

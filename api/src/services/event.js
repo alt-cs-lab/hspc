@@ -82,32 +82,32 @@ function createEvent({
 function getAllEvents() {
     return db.any(
         `SELECT
-            C.eventName,
             C.CompetitionID,
+            C.EventName,
             C.EventLocation,
             C.EventDate,
             C.EventTime,
+            C.EventDescription,
             C.BeginnerTeamsPerSchool,
             C.AdvancedTeamsPerSchool,
             C.TeamsPerSchool,
             C.BeginnerTeamsPerEvent,
             C.AdvancedTeamsPerEvent,
-            C.TeamsPerEvent,
-            C.EventDescription
+            C.TeamsPerEvent
         FROM Competitions AS C`
     ).then((events) => renameKeys(events,[
-        "name",
         "id",
+        "name",
         "location",
         "date",
         "time",
-        "advancedTeamsPerSchool",
+        "description",
         "beginnerTeamsPerSchool",
+        "advancedTeamsPerSchool",
         "teamsPerSchool",
         "beginnerTeamsPerEvent",
         "advancedTeamsPerEvent",
-        "teamsPerEvent",
-        "description"
+        "teamsPerEvent"
     ]));
 }
 

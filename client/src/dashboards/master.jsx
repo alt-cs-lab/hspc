@@ -4,12 +4,9 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { useState, useEffect} from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 
-import AddEventTeam from "../registration/create/add-event-team";
-import BoardSetup from "../scoring/create-scoreboard";
 import Email from "../email/create-email";
 import EventSignIn from "../registration/create/event-signin";
 import CreateEvent from "../registration/create/event";
@@ -18,7 +15,6 @@ import ViewEvents from "../registration/view/events";
 import ViewUsers from "../registration/view/users";
 import ViewTeams from "../registration/view/teams";
 import UpgradeRequests from "../registration/view/upgrade-requests";
-import AddUser from "../registration/create/add-team-member";
 import Register from "../registration/create/user";
 import RegisterTeam from "../registration/create/team";
 import Scoreboard from "../scoring/scoreboard.jsx";
@@ -41,7 +37,7 @@ function MasterDash(props)
 {
   const [currentUserName, setCurrentUserName] = useState({ FirstName: "", LastName: ""});
   const [currentView, setCurrentView] = useState(<></>);
-  const [state, setCurrentState] = useState({userTable: [], eventTable: [],});
+  // TODO TWP: NOT SURE WHAT THIS DOES const [state, setCurrentState] = useState({userTable: [], eventTable: [],});
   const defaultView = <h2 id="welcome">Welcome {currentUserName.FirstName} {currentUserName.LastName}!</h2>;
 
   useEffect(() =>{
@@ -109,9 +105,6 @@ return(
                 </NavItem>
                 <NavItem onClick={() => setCurrentView(<RegisterTeam />)}>
                   Create Team
-                </NavItem>
-                <NavItem onClick={() => setCurrentView(<AddUser />)}>
-                  Add User
                 </NavItem>
                 <NavItem onClick={() => setCurrentView(<ViewTeams />)}>
                   View Teams

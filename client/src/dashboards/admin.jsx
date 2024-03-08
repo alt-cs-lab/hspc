@@ -5,8 +5,6 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { useState, useEffect } from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
-import AddEventTeam from "../registration/create/add-event-team";
-import BoardSetup from "../scoring/create-scoreboard";
 import Email from "../email/create-email";
 import EventSignIn from "../registration/create/event-signin";
 import CreateEvent from "../registration/create/event";
@@ -15,7 +13,6 @@ import ViewEvents from "../registration/view/events";
 import ViewUsers from "../registration/view/users";
 import ViewTeams from "../registration/view/teams";
 import UpgradeRequests from "../registration/view/upgrade-requests";
-import AddUser from "../registration/create/add-team-member";
 import Register from "../registration/create/user";
 import RegisterTeam from "../registration/create/team";
 import Scoreboard from "../scoring/scoreboard.jsx";
@@ -95,9 +92,6 @@ function AdminDash(props)
             <NavDropdown title="Teams" id="basic-nav-dropdown">
               <NavItem eventKey={4} onClick={() => setCurrentView(<RegisterTeam />)}>
                 Create Team
-              </NavItem>
-              <NavItem eventKey={5} onClick={() => setCurrentView(<AddUser />)}>
-                Add User
               </NavItem>
               <NavItem eventKey={6} onClick={() => setCurrentView(<ViewTeams />)}>
                 View Teams
