@@ -21,7 +21,7 @@ class SchoolService {
     */
     registerSchool(schoolName, addressLine1, addressLine2, city, state, postalCode, usdCode) {
         return ServiceUtils.postRequest('/api/school/create', {
-            schoolName: schoolName,
+            name: schoolName,
             addressLine1: addressLine1,
             addressline2: addressLine2,
             city: city,
