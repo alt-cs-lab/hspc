@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Button, Form, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
-import ReCAPTCHA from "react-recaptcha";
+//import ReCAPTCHA from "react-recaptcha";
 import StatusMessages from "../../_common/components/status-messages/status-messages";
 import "../../_common/assets/css/register-user.css";
 import { registerUser } from "../../_store/actions/authActions";
@@ -37,8 +37,8 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.props.dispatchResetErrors();
-    this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
-    this.verifyCallback = this.verifyCallback.bind(this);
+    //this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
+    //this.verifyCallback = this.verifyCallback.bind(this);
     this.state = {
       firstName: "",
       lastName: "",
@@ -105,17 +105,17 @@ class Register extends Component {
   /*
    * Indicates successful loading of the captcha for debugging purposes
    */
-  recaptchaLoaded() {
-    console.log("captcha successfully loaded.");
-  }
+  // recaptchaLoaded() {
+  //   console.log("captcha successfully loaded.");
+  // }
 
   /*
    * Changes the verfied state to true following a verified captcha result.
    */
-  verifyCallback(response) {
-    if (response) this.setState({ isVerified: true });
-    else this.setState({ isVerified: false });
-  }
+  // verifyCallback(response) {
+  //   if (response) this.setState({ isVerified: true });
+  //   else this.setState({ isVerified: false });
+  // }
 
   onChange(event) {
     this.setState({
@@ -284,7 +284,7 @@ class Register extends Component {
             />
           </Form.Group>
           <br/>
-          <div name="captcha" align="center">
+          {/* <div name="captcha" align="center">
             <ReCAPTCHA
               sitekey="6LdB8YoUAAAAAL5OtI4zXys_QDLidEuqpkwd3sKN"
               render="explicit"
@@ -292,7 +292,7 @@ class Register extends Component {
               verifyCallback={this.verifyCallback}
               size="small"
             />
-          </div>
+          </div> */}
           <br/>
           <Button
             variant="primary"

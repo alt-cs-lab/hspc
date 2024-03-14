@@ -4,7 +4,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, {Component} from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages";
-import ReCAPTCHA from "react-recaptcha";
+//import ReCAPTCHA from "react-recaptcha";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import schoolService from "../../_common/services/school.js";
@@ -77,17 +77,17 @@ export class RegisterSchool extends Component {
     /*
      * Indicates successful loading of the captcha for debugging purposes
      */
-    recaptchaLoaded = () => {
-        console.log("captcha successfully loaded.");
-    };
+    // recaptchaLoaded = () => {
+    //     console.log("captcha successfully loaded.");
+    // };
 
     /*
      * Changes the verfied state to true following a verified captcha result.
      */
-    verifyCallback = (response) => {
-        if (response) this.setState({isVerified: true});
-        else this.setState({isVerified: false});
-    };
+    // verifyCallback = (response) => {
+    //     if (response) this.setState({isVerified: true});
+    //     else this.setState({isVerified: false});
+    // };
 
     /*
      * Renders the form to be filled out for creating/registering a school
@@ -195,7 +195,7 @@ export class RegisterSchool extends Component {
                                 size="small">
                             </Form.Control>
                         </Form.Group>
-                        <div align="center">
+                        {/* <div align="center">
                             <ReCAPTCHA
                                 class="Captcha"
                                 sitekey="6LdB8YoUAAAAAL5OtI4zXys_QDLidEuqpkwd3sKN"
@@ -203,7 +203,7 @@ export class RegisterSchool extends Component {
                                 onloadCallback={this.recaptchaLoaded}
                                 verifyCallback={this.verifyCallback}
                             />
-                        </div>
+                        </div> */}
                         <Button
                             variant="primary"
                             className="RegisterButton"
