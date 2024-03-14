@@ -36,7 +36,6 @@ export class RegisterSchool extends Component {
      */
     handleRegisterSchool = () => {
         // if (this.state.isVerified) {
-        console.log(this.state)
         schoolService.registerSchool(
                 this.state.schoolName,
                 this.state.addressLine1,

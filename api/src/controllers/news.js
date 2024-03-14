@@ -5,7 +5,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 const router = require('express').Router();
 const newsService = require('../services/news');
 const passport = require('passport');
-const { minimumAccessLevelCheck, badRequestCheck } = require('../utils/extensions.js');
+const { accessLevelCheck, badRequestCheck } = require('../utils/extensions.js');
 const constants = require('../utils/constants.js');
 const { useService } = require('../utils/extensions.js');
 const {check} = require('express-validator');
@@ -39,7 +39,7 @@ const {check} = require('express-validator');
  */
 router.post('/create', 
     passport.authenticate('jwt', { session: false }),
-    minimumAccessLevelCheck(constants.ADMIN), 
+    accessLevelCheck(constants.ADMIN), 
     [check('title').isString().withMessage('title is required'), 
     check('body').isString().withMessage('body is required'), 
     check('date').isString().withMessage('date is required')],

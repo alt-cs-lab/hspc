@@ -17,11 +17,9 @@ module.exports = {
     getAllUsers,
     getAllRoles,
     getAllVolunteers,
-    getAdvisors,
     getStudents,
     advisorUpdateSchool,
     addstudent,
-    getStudentsFromAdvisors,
     getstudentsteam,
     checkinvolunteer,
     checkoutvolunteer,
@@ -184,19 +182,6 @@ function getAllRoles() {
 }
 
 /**
- * Gets all the advisors
- * @returns All the Advisors
- */
-function getAdvisors() {
-  return db.any(`
-        SELECT U.UserID, U.FirstName, U.LastName, U.Email, U.Phone, S.SchoolName
-        FROM Users U
-            INNER JOIN SchoolAdvisors SA ON SA.UserID = U.UserID
-            INNER JOIN Schools S ON S.SchoolID = SA.SchoolID
-    `);
-}
-
-/**
  * Gets students who are not on a team
  * @returns All the students not on a team
  */
@@ -222,23 +207,6 @@ function advisorUpdateSchool(userId, schoolId) {
         WHERE UserID = $(userId)
     `,
     { userId, schoolId }
-  );
-}
-
-/**
- * Gets all the students for an advisor
- * @param {string} email The email of the advisor
- * @returns All the students for an advisor
- */
-function getStudentsFromAdvisors(email){
-    return db.any(`
-        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.SchoolID, HS.Email, HS.GradDate
-        FROM HighSchoolStudents HS
-            INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
-            INNER JOIN SchoolAdvisors SA ON SA.SchoolID = S.SchoolID
-                WHERE SA.UserID IN (SELECT U.UserID FROM Users U WHERE U.Email = $(email))
-    `,
-    { email }
   );
 }
 

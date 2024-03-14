@@ -10,7 +10,7 @@ deleted after this page is completed because it is an older file that serves the
 */
 import React, { Component } from "react";
 import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
-import UserService from "../../_common/services/user.js";
+import StudentService from "../../_common/services/high-school-student";
 import SchoolService from "../../_common/services/school.js";
 import teamService from "../../_common/services/team.js";
 import EventService from "../../_common/services/event.js";
@@ -49,7 +49,7 @@ class CreateTeam extends Component {
 
     // TODO: Update UserService to HighSchoolStudentService
     componentDidMount = () => {
-        UserService.getAllStudents(this.advisor.email, this.advisor.accessLevel)
+        StudentService.getAdvisorsStudents(this.advisor.idZZ)
         .then((response) => {
             if(response.ok){
                 this.setState({ studentList: response.data });

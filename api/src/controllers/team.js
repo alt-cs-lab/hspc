@@ -34,7 +34,7 @@ const router = require("express").Router();
 const teamService = require("../services/team");
 const eventService = require("../services/event");
 const passport = require("passport");
-const { minimumAccessLevelCheck, badRequestCheck, useService } = require("../utils/extensions");
+const { accessLevelCheck, badRequestCheck, useService } = require("../utils/extensions");
 const constants = require("../utils/constants");
 const { query, body } = require("express-validator");
 
@@ -128,7 +128,7 @@ router.get('/getFromAdvisorSchools', (req, res) => {
 router.get(
     "/",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR),
     [
         // generally just checking the optional parameters are the right type
         query("schoolId").optional().isInt().withMessage("schoolId must be an integer"),
@@ -159,7 +159,7 @@ router.get(
 router.get(
     "/waitlistinfo",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR),
     [
         query("schoolId")
             .exists().withMessage("schoolId is required")
@@ -191,7 +191,7 @@ router.get(
 router.post(
     "/",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR),
     [
         // checking that there is a all the required parameters and that they are the right type
         body("schoolId")
@@ -288,7 +288,7 @@ router.post(
 router.put(
     "/",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR),
     [
         // checking that there is a all the required parameters and that they are the right type
         body("teamId").exists().withMessage("teamId is required").isInt().withMessage("teamId must be an integer"),
@@ -367,7 +367,7 @@ router.put(
 router.delete(
     "/",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR),
     [
         // checking that there is a all the required parameters and that they are the right type
         body("teamId").isInt().withMessage("teamId must be an integer"),

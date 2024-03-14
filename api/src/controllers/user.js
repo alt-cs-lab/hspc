@@ -12,7 +12,7 @@ const statusResponses = require("../utils/status-response.js");
 const {
   badRequestCheck,
   useService,
-  minimumAccessLevelCheck,
+  accessLevelCheck,
 } = require("../utils/extensions.js");
 const constants = require("../utils/constants.js");
 const userService = require("../services/user");
@@ -25,18 +25,8 @@ const schoolService = require("../services/school.js");
  * @param {string} endpoint location
  * @param {JSON} callback function containing request and response data from the client.
  */
-router.get("/view", (req, res) => {
-  userService
-    .getAllUsers()
-    /*
-        TODO: Trent Powell
-        .then (user => {
-            if( CHECK ROLE PRIVELEGES HERE)
-                Show Filtered Users
-            else
-                Show all users
-        })
-        */
+router.get("/view", passport.authenticate("jwt", { session: false }), accessLevelCheck(constants.ADMIN), (req, res) => {
+  userService.getAllUsers()
     .then((userdata) => {
       statusResponses.ok(res, userdata);
     })
@@ -54,8 +44,7 @@ router.get("/view", (req, res) => {
  */
 router.get("/viewteam", (req, res) => {
   let teamName = req.query["teamName"]; //need user email
-  userService
-    .getstudentsteam(teamName)
+  userService.getstudentsteam(teamName)
     // TODO: Create .then for filtering what informtaion is returned based on role
     .then((userdata) => {
       statusResponses.ok(res, userdata);
@@ -96,78 +85,6 @@ router.get("/activevolunteers", (req, res) => {
       statusResponses.serverError(res);
     });
 });
-
-/*
- * API Endpoint that returns all users who are advisors with respective info
- *
- * @author: Tyler Trammell
- * @param {string} endpoint location
- * @param {JSON} callback function containing request and response data from the client.
- */
-router.get("/advisors", (req, res) => {
-  userService
-    .getAdvisors()
-    .then((userdata) => {
-      statusResponses.ok(res, userdata);
-    })
-    .catch((err) => {
-      statusResponses.serverError(res);
-    });
-});
-
-/*
- * API Endpoint that returns all users who are students with respective info
- *
- * @author: Trent Kempker
- * @param {string} endpoint location
- * @param {JSON} callback function containing request and response data from the client.
- */
-router.get("/students", (req, res) => {
-  let accessLevel = req.query["accessLevel"];
-  let email = req.query["email"];
-
-  if (accessLevel == constants.ADVISOR) {
-    userService
-      .getStudentsFromAdvisors(email)
-      .then((userdata) => {
-        statusResponses.ok(res, userdata);
-      })
-      .catch((err) => {
-        statusResponses.serverError(res);
-      });
-  } else {
-    userService
-      .getStudents()
-      .then((userdata) => {
-        statusResponses.ok(res, userdata);
-      })
-      .catch((err) => {
-        statusResponses.serverError(res);
-      });
-  }
-});
-
-/*
- * API Endpoint that returns all users who are students with respective info based on the advisor
- *
- * @author: Trent Kempker
- * @edited: Natalie Laughlin - needed to pass in the advisors email
- * @param {string} endpoint location
- * @param {JSON} callback function containing request and response data from the client.
- */
-router.get("/studentsAdvisor", (req, res) => {
-  console.log("in router.post/assignment.");
-  const email = req.query["email"];
-  userService
-    .getStudentsFromAdvisors(email)
-    .then((userdata) => {
-      statusResponses.ok(res, userdata);
-    })
-    .catch((err) => {
-      statusResponses.serverError(res);
-    });
-});
-
 
 /*
  * API Endpoint that sets a volunteer as checked in

@@ -6,7 +6,7 @@ const router = require("express").Router();
 const schoolService = require("../services/school.js");
 const { useService } = require("../utils/extensions.js");
 const passport = require("passport");
-const { minimumAccessLevelCheck, badRequestCheck } = require("../utils/extensions.js");
+const { accessLevelCheck, badRequestCheck } = require("../utils/extensions.js");
 const {check} = require("express-validator");
 const constants = require("../utils/constants.js");
 const statusResponses = require("../utils/status-response.js");
@@ -43,7 +43,7 @@ const statusResponses = require("../utils/status-response.js");
  */
 router.post("/create",
     passport.authenticate("jwt", { session: false }), //authenticate with JWT
-    minimumAccessLevelCheck(constants.ADMIN), //check if user is admin
+    accessLevelCheck(constants.ADMIN), //check if user is admin
     [
         check('name').not().isEmpty().withMessage('School name is required'),
         check('addressLine1').not().isEmpty().isString().withMessage('Address line 1 is required'),
@@ -115,7 +115,7 @@ router.get("/view", (req, res) => {
 router.get(
     "/advisorSchools",
     // passport.authenticate("jwt", { session: false }),
-    // minimumAccessLevelCheck(constants.ADVISOR),
+    // accessLevelCheck(constants.ADVISOR),
     // [
     //   check("userId").exists().withMessage("User ID is required."),
     //   // check is number

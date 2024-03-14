@@ -16,7 +16,7 @@ import ViewUsers from "../registration/view/users";
 import ViewTeams from "../registration/view/teams";
 import UpgradeRequests from "../registration/view/upgrade-requests";
 import Register from "../registration/create/user";
-import RegisterTeam from "../registration/create/team";
+import CreateTeam from "../registration/create/manage-team";
 import Scoreboard from "../scoring/scoreboard.jsx";
 import PublishPractice from "../problems/practice";
 import PublishScores from "../scoring/scores";
@@ -25,7 +25,6 @@ import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-master.css";
 import RegisterSchool from "../registration/create/school";
 import ViewSchools from "../registration/view/school";
-import ViewAdvisors from "../registration/view/advisors";
 import TeamRequests from "../registration/view/team-requests.jsx";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
@@ -85,9 +84,6 @@ return(
                 <NavItem onClick={() => setCurrentView(<ViewUsers />)}>
                   View Users
                 </NavItem>
-                <NavItem onClick={() => setCurrentView(<ViewAdvisors />)}>
-                  View Advisors
-                </NavItem>
               </NavDropdown>
 
               <NavDropdown title="Schools" id="basic-nav-dropdown">
@@ -103,7 +99,7 @@ return(
                 <NavItem onClick={() => setCurrentView(<TeamRequests />)}>
                   Team Request
                 </NavItem>
-                <NavItem onClick={() => setCurrentView(<RegisterTeam />)}>
+                <NavItem onClick={() => setCurrentView(<CreateTeam advisor={props.currentUser} />)}>
                   Create Team
                 </NavItem>
                 <NavItem onClick={() => setCurrentView(<ViewTeams />)}>

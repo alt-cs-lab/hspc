@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
-// import { getAllStudents } from "../../_common/services/high-school-student.js";
 
 // This class inherits functionality of the Component class and extends it.
 class ViewStudents extends Component {

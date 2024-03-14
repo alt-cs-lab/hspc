@@ -5,7 +5,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 const router = require("express").Router();
 const upgradeService = require("../services/upgrade");
 const passport = require("passport");
-const { minimumAccessLevelCheck, badRequestCheck, useService } = require("../utils/extensions");
+const { accessLevelCheck, badRequestCheck, useService } = require("../utils/extensions");
 const constants = require("../utils/constants");
 const { check } = require("express-validator");
 
@@ -42,7 +42,7 @@ const { check } = require("express-validator");
 router.get(
     "/view",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADMIN),
+    accessLevelCheck(constants.ADMIN),
     (req, res) => {
         useService(upgradeService.getAllUpgrades, req, res);
     }
@@ -80,7 +80,7 @@ router.get(
 router.get(
     "/admin/view",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADMIN),
+    accessLevelCheck(constants.ADMIN),
     (req, res) => {
         useService(upgradeService.getAdminUpgrades, req, res);
     }
@@ -114,7 +114,7 @@ router.get(
 router.post(
     "/accept",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADMIN),
+    accessLevelCheck(constants.ADMIN),
     [
         check("email").not().isEmpty().withMessage("`email` must be present in the request body."),
     ],
@@ -152,7 +152,7 @@ router.post(
 router.post(
     "/reject",
     passport.authenticate("jwt", { session: false }), // authenticate with JWT
-    minimumAccessLevelCheck(constants.ADMIN), // check if user is admin
+    accessLevelCheck(constants.ADMIN), // check if user is admin
     [check("email").not().isEmpty().withMessage("`email` must be present in the request body.")], // check if email is present
     badRequestCheck, // check if there are any bad requests
     (req, res) => {
