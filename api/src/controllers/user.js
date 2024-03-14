@@ -230,14 +230,12 @@ router.post("/checkoutvolunteer", (req, res) => {
 router.post('/register', [
     check('firstName')
         .isLength({max: 100}).withMessage('First name must be less than 100 characters.')
-        .not()
-        .isEmpty().withMessage("First name is required.")
+        .not().isEmpty().withMessage("First name is required.")
         .trim()
         .escape(),
     check('lastName')
         .isLength({max: 100}).withMessage('Last name must be less than 100 characters.')
-        .not()
-        .isEmpty().withMessage("Last name is required.")
+        .not().isEmpty().withMessage("Last name is required.")
         .trim()
         .escape(),
     check('email')
@@ -268,11 +266,9 @@ router.post('/register', [
         }).withMessage("Please enter your phone number without dashes or slashes, ex: 5553331111 or 15553331111"),
     check('password')
         .isLength({min: 8, max: 32}).withMessage('Passwords must be at least 8 characters and no more than 32.')
-        .not()
-        .isEmpty().withMessage("Password is required"),
+        .not().isEmpty().withMessage("Password is required"),
     check('requestLevel')
-        .not()
-        .isEmpty().withMessage('Invalid request level.')
+        .not().isEmpty().withMessage('Invalid request level.')
         .isIn([
             constants.VOLUNTEER,
             constants.ADVISOR]).withMessage('Invalid request level.'),

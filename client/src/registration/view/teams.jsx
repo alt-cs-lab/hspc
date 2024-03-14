@@ -68,7 +68,6 @@ class ViewTeams extends Component {
    */
   UpdateTeams(nameofevent) {
     TeamService.getAllTeamsInCompName(nameofevent).then((response) => {
-      console.log(response.data);
       this.setState({ teamTable: response.data, columns: this.getAllTeamColumns() });
     });
     return;

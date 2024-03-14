@@ -10,13 +10,15 @@ class TeamService {
     * @param {string} question level of the team
     * @param {string} user id of the advisor who the team belongs to
     */
-    registerTeam(teamName, schoolId, competitionId, questionLevelId, advisorId) {
+    registerTeam(teamName, schoolId, competitionId, skillLevelId, advisorId, studentIds, waitlisted) {
         return ServiceUtils.postRequest('/api/team/create', {
             teamName: teamName,
             schoolId: schoolId,
             competitionId: competitionId,
-            questionLevelId: questionLevelId,
-            advisorId: advisorId
+            skillLevelId: skillLevelId,
+            advisorId: advisorId,
+            studentIds: studentIds,
+            waitlisted: waitlisted
         });
     }
 

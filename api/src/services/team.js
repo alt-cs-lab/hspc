@@ -174,7 +174,7 @@ function get({ schoolId, competitionId, questionLevelId, advisorId, teamId, wait
 }
 
 // create creates a new team and adds any students in studentIds
-function create({ schoolId, competitionId, teamName, questionLevelId, advisorId, waitlisted, studentIds }) {
+function create({ teamName, schoolId, competitionId, skillLevelId, advisorId, studentIds, waitlisted }) {
     // if waitlisted is not given, set it to false
     if (!waitlisted) {
         waitlisted = false;
@@ -183,8 +183,8 @@ function create({ schoolId, competitionId, teamName, questionLevelId, advisorId,
     return db.tx(async (t) => {
         // insert the team into the Teams table
         const result = await t.one(
-            `INSERT INTO Teams (SchoolID, CompetitionID, TeamName, QuestionLevelID, AdvisorID, Waitlisted) VALUES ($(schoolId), $(competitionId), $(teamName), $(questionLevelId), $(advisorId), $(waitlisted)) RETURNING TeamID`,
-            { schoolId, competitionId, teamName, questionLevelId, advisorId, waitlisted }
+            `INSERT INTO Teams (SchoolID, CompetitionID, TeamName, SkillLevelID, AdvisorID) VALUES ($(schoolId), $(competitionId), $(teamName), $(skillLevelId), $(advisorId)) RETURNING TeamID`,
+            { schoolId, competitionId, teamName, skillLevelId, advisorId}
         );
         const teamId = result.teamid;
 
@@ -196,10 +196,10 @@ function create({ schoolId, competitionId, teamName, questionLevelId, advisorId,
         // add the students to the team if there are any (studentIds might be null or an empty array)
         if (studentIds?.length > 0) {
             // create an array of objects to pass to pgp.helpers.insert
-            const values = studentIds.map((studentId) => ({ UserID: studentId, TeamID: teamId }));
+            const values = studentIds.map((studentId) => ({ StudentID: studentId, TeamID: teamId }));
 
             // generate the insert query using pgp.helpers.insert
-            const insertQuery = pgp.helpers.insert(values, ["UserID", "TeamID"], "TeamsUsers");
+            const insertQuery = pgp.helpers.insert(values, ["StudentID", "TeamID"], "TeamMembers");
 
             // execute the insert query as part of the transaction
             await t.none(insertQuery.toLowerCase());
@@ -298,7 +298,8 @@ function teamsInCompetitionBySchool(competitionId, schoolId, waitlisted = false)
 
 // checks if any student ids in the given array are a member of a team in the given competition, returns true if any are
 function isAnyStudentsInCompetition(competitionId, studentIds, waitlisted = false){
-    return db.oneOrNone(`SELECT COUNT(*) FROM TeamsUsers WHERE TeamID IN (SELECT TeamID FROM Teams WHERE CompetitionID = $1) AND UserID IN ($2:csv) AND Waitlisted = $(waitlisted)`, [competitionId, studentIds, waitlisted]).then((result) => parseInt(result.count) > 0);
+    return db.oneOrNone(`SELECT COUNT(*) FROM TeamsUsers WHERE TeamID IN (SELECT TeamID FROM Teams WHERE CompetitionID = $1) 
+    AND UserID IN ($2:csv) AND Waitlisted = $(waitlisted)`, [competitionId, studentIds, waitlisted]).then((result) => parseInt(result.count) > 0);
 }
 
 function getCompetitionId(teamId){

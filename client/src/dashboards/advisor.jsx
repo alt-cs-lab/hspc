@@ -4,7 +4,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
 import React, { /*Component, */ useState, useEffect } from "react";
-import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
+import { Navbar, NavItem, Nav, NavDropdown, NavLink } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 import UserService from "../_common/services/user";
 // import ViewUsers from "../registration/view/users";
@@ -54,7 +54,7 @@ function AdvisorDash (props)
 
   
   return (
-    <div>
+    <>
       <Navbar inverse collapseOnSelect>
           <Navbar.Brand onClick={() => setCurrentView(<h2 id="welcome">Welcome {currentUserName.FirstName} {currentUserName.LastName}!</h2>)}>
             Advisor Portal
@@ -91,9 +91,9 @@ function AdvisorDash (props)
                 View Events
               </NavItem>
             </NavDropdown>
-            <NavItem eventKey={6} onClick={() => setCurrentView(<Scoreboard />)}>
+            <NavLink eventKey={6} onClick={() => setCurrentView(<Scoreboard />)}>
               View Board
-            </NavItem>
+            </NavLink>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -101,7 +101,7 @@ function AdvisorDash (props)
         <StatusMessages />
         {currentView}
       </div>
-    </div>
+    </>
   );  
 }
 
