@@ -47,17 +47,10 @@ function getTeamsInCompetitionName(eventName){
     WHERE C.EventName = $(eventName);`, {eventName})
 }
 
-//Function to get all teams a school has registered for an event
-function getSchoolEvent(schoolId, eventId) {
-    return db.any(`
-    SELECT T.TeamId, T.TeamName, C.TeamCapacity
-	FROM Teams T
-    INNER JOIN Competition C on T.CompetitionID = C.competitionID
-	WHERE T.CompetitionID = $(eventId) AND T.SchoolID = $(schoolId);`, {eventId, schoolId})
-}
-
-
-// Trent Powell function to get all teams for an advisor's schools
+/*
+* Returns the teams from all schools associated with an advisor.
+* Author: Trent Powell
+*/
 function getAdvisorSchoolsTeams(advisorId) {
     return db.any(`
     SELECT T.TeamId, T.SchoolID, T.CompetitionID, T.TeamName, SK.SkillLevel, TS.Status
@@ -339,8 +332,6 @@ module.exports = {
     getTeamsInCompetitionName,
     getAll,
     getAllSkillLevels,
-    getSchoolEvent,
     getWaitlistInfo,
-    //getSchoolTeams,
     getAdvisorSchoolsTeams,
 };

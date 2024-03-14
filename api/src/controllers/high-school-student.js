@@ -10,7 +10,7 @@ const passport = require("passport");
 const {
   badRequestCheck,
   useService,
-  minimumAccessLevelCheck,
+  accessLevelCheck,
 } = require("../utils/extensions.js");
 const constants = require("../utils/constants.js");
 //const userService = require("../services/user");
@@ -40,7 +40,7 @@ const statusResponses = require("../utils/status-response.js");
  */
 router.post('/createStudent',
 //passport.authenticate("jwt", { session: false }),
-//minimumAccessLevelCheck(constants.ADVISOR),
+//accessLevelCheck(constants.ADVISOR),
 //[
 //  check("userId").exists().withMessage("User ID is required."),
 //  // check is number

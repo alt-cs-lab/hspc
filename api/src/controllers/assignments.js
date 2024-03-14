@@ -22,7 +22,7 @@
 const router = require("express").Router();
 const assignmentsService = require("../services/assignments");
 const passport = require("passport");
-const { minimumAccessLevelCheck, badRequestCheck, useService } = require("../utils/extensions");
+const { accessLevelCheck, badRequestCheck, useService } = require("../utils/extensions");
 const constants = require("../utils/constants");
 const { query, body } = require("express-validator");
 
@@ -70,7 +70,7 @@ const { query, body } = require("express-validator");
  */
 router.get('/',
     passport.authenticate('jwt', { session: false }),
-    minimumAccessLevelCheck(constants.VOLUNTEER),
+    accessLevelCheck(constants.VOLUNTEER),
     [
         query("eventId").optional().isInt().withMessage("eventId must be an integer"),
         // Only admins can view assignments for other volunteers
@@ -118,7 +118,7 @@ router.get('/',
  */
 router.post('/',
     passport.authenticate('jwt', { session: false }),
-    minimumAccessLevelCheck(constants.VOLUNTEER),
+    accessLevelCheck(constants.VOLUNTEER),
     [
         body("eventId").exists().isInt().withMessage("eventId must be an integer"),
         // only allow volunteerId if the user is an admin
@@ -156,7 +156,7 @@ router.post('/',
  */
 router.put('/',
     passport.authenticate('jwt', { session: false }),
-    minimumAccessLevelCheck(constants.ADMIN), // Only admins can approve volunteer assignments
+    accessLevelCheck(constants.ADMIN), // Only admins can approve volunteer assignments
     [
         // the approval can be either for a volunteer assignment or a judge assignment
         body("volunteerAssignmentId").optional().isInt().withMessage("volunteerAssignmentId must be an integer"),
@@ -194,7 +194,7 @@ router.put('/',
 router.delete(
     "/",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.VOLUNTEER),
+    accessLevelCheck(constants.VOLUNTEER),
     [
         // a judge assignment or volunteer assignment must be specified, but not both
         body("judgeAssignmentId").optional().isInt().withMessage("judgeAssignmentId must be an integer"),

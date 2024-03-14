@@ -13,6 +13,7 @@ import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slic
 /*
  * @author: Daniel Bell
  * @Updated: Natalie Laughlin - Viewing the Event Name
+ * @Refactored: Trent Powell- Use Data Tables
  */
 class ViewEvents extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class ViewEvents extends Component {
   }
 
   /*
-   * Returns a list of all previous events when the component is rendered.
+   * Returns a list of all events when the component is rendered.
    */
   componentDidMount = () => {
     EventService.getAllEvents(
@@ -34,13 +35,16 @@ class ViewEvents extends Component {
     )
       .then((response) => {
         if (response.ok) {
+          console.log(response.data)
           this.setState({ eventTable: response.data });
-        } else console.log("An error has occurred, Please try again.");
+        } else console.log("An error has occurred fetching the events, Please try again.");
       })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
+      .catch((resErr) => console.log("Something went wrong fetching the events. Please try again"));
   };
 
-  // Specifies what information to include in the columns
+  /*
+  * Specifies what information to include in the columns
+  */
   getColumns() {
     return [
       {
@@ -64,22 +68,12 @@ class ViewEvents extends Component {
         selector: row => row.time,
         sortable: true,
       },
-      {
-        name: "Description",
-        selector: row => row.description
-      },
-      {
-        name: "School Limit",
-        selector: row => row.teamsPerSchool
-      },
-      {
-        name: "Event Limit",
-        selector: row => row.teamsPerEvent
-      },
     ];
   }
   
-  // Renders the component UI.
+  /*
+  * Renders the component UI.
+  */
   render() {
     return (
       <div>
@@ -91,13 +85,17 @@ class ViewEvents extends Component {
           pagination 
           paginationPerPage={20} 
           paginationRowsPerPageOptions={[20, 30, 40, 50]}
+          expandableRows
+          expandableRowsComponent={ExpandedComponent}
         />
       </div>
     );
   }
 }
 
-// Sorting method for the date column
+/*
+* Sorting method for the date column
+*/
 const dateSort = (rowA, rowB) => {
   const a = Date.parse(rowA.date);
   const b = Date.parse(rowB.date);
@@ -126,6 +124,16 @@ const mapDispatchToProps = (dispatch) => {
 		dispatchSuccess: (message) =>
 			dispatch(updateSuccessMsg(message))
   };
+};
+
+const ExpandedComponent = ({ data }) => {
+
+  return <div>
+    <h6>Description:</h6>
+    <p>{data.description}</p>
+    <p>Teams allowed per School: {data.teamsPerSchool}</p>
+    <p>Teams allowed For Event: {data.teamsPerEvent}</p>
+  </div>;
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewEvents);

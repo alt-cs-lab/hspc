@@ -1,6 +1,6 @@
 /*
   MIT License
-  Copyright (c) 2019 KSU-CS-Software-Engineering
+  Copyright (c) 2024 KSU-CS-Software-Engineering
   */
   import React, { Component, useState, useEffect } from "react";
   import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
@@ -18,6 +18,9 @@
     updateSuccessMsg,
   } from "../../_store/slices/errorSlice.js";
   
+  /*
+  * Page to view an advisor's schools' teams
+  */
   class TeamsView extends Component {
     constructor(props) {
       super(props);
@@ -34,7 +37,9 @@
     }
   
     componentDidMount = () => {
-      // Get Events
+      /*
+      * Get Events
+      */
       EventService.getAllEvents(this.props.auth.user.id, this.props.auth.user.accessLevel)
       .then((response) => {
           if (response.ok) {
@@ -51,7 +56,9 @@
       })
       .catch((resErr) => console.log("Something went wrong fetching events. Please try again"));
 
-      // Get Advisor's Schools
+      /*
+      * Get Advisor's Schools
+      */
       SchoolService.getAdvisorSchools(this.props.auth.user.id)
       .then((response) => {
           if (response.ok) {
@@ -68,7 +75,9 @@
       })
       .catch((resErr) => console.log("Something went wrong fetching schools. Please try again"));
 
-      // Get Teams for Advisor's Schools
+      /* 
+      * Get Teams for Advisor's Schools
+      */
       TeamService.getAdvisorsTeams( this.props.auth.user.id )
       .then((response) => {
           if (response.ok) {
@@ -77,31 +86,11 @@
       })
       .catch((resErr) => console.log("Something went wrong fetching teams. Please try again"))
 
-        /*if (eventsResponse.ok && !this.state.schoolList.isEmpty()) {
-          const events = eventsResponse.data;
-          const schoolId = schoolResponse.data.schoolId;
-          this.setMostRecentEventAsCompetitionId(events);
-          if (schoolId && this.state.competitionId) {
-            const teamsResponse = await TeamService.getSchoolsTeams(schoolId, this.state.competitionId);
-            if (teamsResponse.ok) {
-              this.setState({
-                teamTable: teamsResponse.data,
-              });
-            } else {
-              console.error("Error fetching team school event: Response not OK");
-              this.setState({ error: "Error fetching team data." });
-            }
-          }
-        } else {
-          console.error("Error fetching events");
-          this.setState({ error: "Error fetching event data." });
-        }
-      } catch (error) {
-        console.error("Error in componentDidMount", error);
-        this.setState({ error: "An unexpected error occurred." });
-      }*/
     }
   
+    /*
+    * Update Teams when a filter of school or event changes
+    */
     UpdateTeams = (id, school) => {
       if(school){
         this.setState({ schoolId: id })
@@ -130,31 +119,9 @@
 
     };
   
-    reloadAllTeams = () => {
-      // TeamService.getAllTeams().then((response) => {
-      //   if (response.ok) {
-      //     this.setState({ teamTable: response.data });
-      //   } else {
-      //     console.error("Error reloading all teams");
-      //     this.setState({ error: "Error reloading team data." });
-      //   }
-      // }).catch(error => {
-      //   console.error("Error in reloadAllTeams", error);
-      //   this.setState({ error: "An unexpected error occurred." });
-      // });
-    };
-  
-    setMostRecentEventAsCompetitionId = (events) => {
-      // if (events.length === 0) {
-      //   return;
-      // }
-      // const sortedEvents = events.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
-      // const mostRecentEvent = sortedEvents[0];
-      // this.setState({ competitionId: mostRecentEvent.id }, () => {
-      //   console.log("Updated competitionId:", this.state.competitionId);
-      // });
-    };
-  
+  /*
+  * Specifies what information to include in the columns
+  */
     getAllTeamColumns() {
       return [
         {

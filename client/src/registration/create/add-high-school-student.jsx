@@ -5,7 +5,6 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { Component } from "react";
 import Button from 'react-bootstrap/Button';
 import "../../_common/assets/css/register-user.css";
-// import StudentService from "../../_common/services/high-school-student.js";
 import { addHighSchoolStudent } from "../../_common/services/high-school-student.js";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
@@ -14,6 +13,8 @@ import BaseSelect from "react-select";
 import FixRequiredSelect from "./FixRequiredSelect.jsx";
 import SchoolService from "../../_common/services/school.js";
 import { withRouter } from "../../_utilities/routerUtils.jsx";
+
+const constants = require('../../_utilities/constants')
 
 const selectStyles = {
   menu: (base) => ({
@@ -59,18 +60,10 @@ class AddStudent extends Component {
     // this.errorText = "Test";
   }
 
-  // returnYears()
-  // {
-  //   var yearList = [];
-  //   for (let i = 0; i < 100; i++)
-  //   {
-  //     yearList[i] = 2024 + i;
-  //   }
-
-  //   return yearList;
-  // }
-
-  // Returns a list of all schools when the component is rendered to be used in the dropdown.
+  /**
+   * Runs when the page is opened
+   * Returns a list of all schools when the component is rendered to be used in the dropdown.
+   */
   componentDidMount = () => {
     SchoolService.getAdvisorSchools(this.advisor.id)
     .then((response) => {
@@ -89,22 +82,15 @@ class AddStudent extends Component {
     .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
 
-  toDate(year, month, date) {
-    if (month > 9)
-    {
-      return year + "-" + month + "-" + date;
-    }
-    else
-    {
-      return year + "-0" + month + "-" + date;
-    }
-  }
-
+  /**
+   * Sends the new student to that database
+   * @param {*} event 
+   */
   createStudent(event) {
     const newStudent = this.state;
 
     // Sets the graduation date to the 28th day of the month
-    const gradDate = this.toDate(newStudent.gradYear, newStudent.gradMonth, 28);
+    const gradDate = constants.toDatabaseDate(newStudent.gradYear, newStudent.gradMonth, 28);
 
     this.props.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate, this.props.router);
   }
