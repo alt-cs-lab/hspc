@@ -60,7 +60,7 @@ class ViewEvents extends Component {
       },
       {
         name: "Date (YYYY-MM-DD)",
-        selector: row => row.date,
+        selector: row => constants.dateFormat(row.date),
         sortable: true,
         sortFunction: constants.dateSort,
       },

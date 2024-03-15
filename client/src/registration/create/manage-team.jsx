@@ -20,6 +20,7 @@ import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slic
 import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
 import FixRequiredSelect from "./FixRequiredSelect";
+const constants = require('../../_utilities/constants');
 
 const selectStyles = {
     menu: (base) => ({
@@ -109,12 +110,7 @@ class CreateTeam extends Component {
     }
 
     getColumns(){
-        return [ 
-            {
-                name: "Student ID",
-                selector: row => row.studentid,
-                sortable: true,
-            },
+        return [
             {
                 name: "First Name",
                 selector: row => row.firstname,
@@ -137,7 +133,7 @@ class CreateTeam extends Component {
             },
             {
                 name: "GradDate",
-                selector: row => row.graddate,
+                selector: row => constants.dateFormat(row.graddate),
                 sortable: true,
             }
         ]

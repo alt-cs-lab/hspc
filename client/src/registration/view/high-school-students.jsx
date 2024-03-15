@@ -77,7 +77,7 @@ class ViewStudents extends Component {
       },
       {
         name: "Grad Date (YYYY-MM-DD)",
-        selector: row => row.graddate,
+        selector: row => constants.dateFormat(row.graddate),
         sortable: true,
         sortFunction: constants.dateSort,
       }

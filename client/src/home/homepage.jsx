@@ -5,6 +5,7 @@ import '../_common/assets/css/public-homepage.css';
 import powercat from '../_common/assets/img/powercat.png';
 //import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
+const constants = require('../_utilities/constants');
 
 /**
  * 
@@ -40,7 +41,7 @@ export default function Home(){
             <div>
                 <h1 id="title">{highlightEvent.eventname}</h1>
                 <h2 id="location">{highlightEvent.eventlocation}</h2>
-                <h2 id="date">{highlightEvent.eventdate} @ {highlightEvent.eventstarttime}-{highlightEvent.eventendtime}</h2>
+                <h2 id="date">{constants.dateFormat(highlightEvent.eventdate)} @ {highlightEvent.eventstarttime}-{highlightEvent.eventendtime}</h2>
                 <h5 id="description">{highlightEvent.eventdescription}</h5>
             </div>
             ) : (

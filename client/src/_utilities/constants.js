@@ -12,22 +12,12 @@ const ADMIN = 80;
 const MASTER = 100;
 const legalLevels = [VOLUNTEER, JUDGE, ADVISOR, ADMIN, MASTER];
 
-/**
- * Creates a date compatable with the database
- * @param {int} year
- * @param {int} month 
- * @param {int} day
- * @returns 
- */
+/*
+* Formats a date compatable with the database
+*/
 function toDatabaseDate(year, month, day) {
-    if (month > 9)
-    {
-        return year + "-" + month + "-" + day;
-    }
-    else
-    {
-        return year + "-0" + month + "-" + day;
-    }
+    if (month > 9) return year + "-" + month + "-" + day;
+    else return year + "-0" + month + "-" + day;
 };
 
 /*
@@ -37,14 +27,17 @@ const dateSort = (rowA, rowB) => {
     const a = Date.parse(rowA.date);
     const b = Date.parse(rowB.date);
     
-    if (a > b){
-      return 1;
-    }
-    if (b > a){
-      return -1;
-    }
+    if (a > b) return 1;
+    if (b > a) return -1;
     return 0;
   };
+
+/*
+* Format Date From Database
+*/
+const dateFormat = (date) => {
+  return date.substring(0,10);
+};
 
 module.exports = {
     VOLUNTEER,
@@ -54,5 +47,6 @@ module.exports = {
     MASTER,
     legalLevels,
     toDatabaseDate,
-    dateSort
+    dateSort,
+    dateFormat
 }
