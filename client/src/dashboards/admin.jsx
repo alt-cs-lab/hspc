@@ -15,10 +15,9 @@ import ViewTeams from "../registration/view/teams";
 import UpgradeRequests from "../registration/view/upgrade-requests";
 import Register from "../registration/create/user";
 import CreateTeam from "../registration/create/manage-team";
-import Scoreboard from "../scoring/scoreboard.jsx";
+//import Scoreboard from "../scoring/scoreboard.jsx";
 import PublishPractice from "../problems/practice";
 import PublishScores from "../scoring/scores";
-import UserService from "../_common/services/user";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-admin.css";
 import RegisterSchool from "../registration/create/school";
@@ -28,37 +27,16 @@ import { clearErrors } from "../_store/slices/errorSlice.js";
 
 function AdminDash(props)
 {
-  const [currentView, setCurrentView] = useState(<></>);
-  const [currentUserName, setCurrentUserName] = useState({FirstName: "", LastName:"",});
+  const [currentView, setCurrentView] = useState(<h2 id="welcome">Welcome {props.currentUser.name}!</h2>);
 
   useEffect(() =>{
     props.dispatchResetErrors();
-      UserService.getAllUsers()
-      .then((response) => {
-        let body = response.data
-        if (response.status === 200) {
-          let user = [];
-          for (let i = 0; i < body.length; i++) {
-            if (body[i].email === props.currentUser.email) {
-              user = {
-                FirstName: body[i].firstname,
-                LastName: body[i].lastname,
-              };
-            }
-          }
-          setCurrentUserName(user);
-          setCurrentView(<h2 id="welcome">Welcome {user.FirstName} {user.LastName}!</h2>)
-        }
-      })
-      .catch((resErr) => {
-        console.log("Error: ",resErr);
-      })
     }, [props]);
   
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Navbar.Brand onClick={() => setCurrentView(<h2 id="welcome">Welcome {currentUserName.FirstName} {currentUserName.LastName}!</h2>)}>
+          <Navbar.Brand onClick={() => setCurrentView(<h2 id="welcome">Welcome {props.currentUser.name}!</h2>)}>
             Admin Portal
           </Navbar.Brand>
           <Navbar.Toggle />
@@ -106,11 +84,11 @@ function AdminDash(props)
               </NavItem>
             </NavDropdown>
 
-            <NavDropdown title="Scoreboard" id="basic-nav-dropdown">
+            {/* <NavDropdown title="Scoreboard" id="basic-nav-dropdown">
               <NavItem eventKey={11} onClick={() => setCurrentView(<Scoreboard />)}>
                 View Board
               </NavItem>
-            </NavDropdown>
+            </NavDropdown> */}
 
             <NavDropdown title="Resources" id="basic-nav-dropdown">
               <NavItem eventKey={13} onClick={() => setCurrentView(<PublishPractice />)}>

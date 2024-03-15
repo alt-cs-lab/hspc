@@ -36,25 +36,6 @@ router.get("/view", passport.authenticate("jwt", { session: false }), accessLeve
 });
 
 /*
- * API Endpoint that returns all users on a given team
- *
- * @author: Daniel Bell  Modified by Natalie Laughlin
- * @param {string} endpoint location
- * @param {JSON} callback function containing request and response data from the client.
- */
-router.get("/viewteam", (req, res) => {
-  let teamName = req.query["teamName"]; //need user email
-  userService.getstudentsteam(teamName)
-    // TODO: Create .then for filtering what informtaion is returned based on role
-    .then((userdata) => {
-      statusResponses.ok(res, userdata);
-    })
-    .catch((err) => {
-      statusResponses.serverError(res);
-    });
-});
-
-/*
  * API Endpoint that returns all users where with volunteer access level stored within the database.
  *
  * @author: Trey Moddelmog

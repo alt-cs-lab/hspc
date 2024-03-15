@@ -62,7 +62,7 @@ function getAdvisorSchoolsTeams(advisorId) {
         SELECT S2.SchoolID
         FROM Schools S2
         INNER JOIN SchoolAdvisors SA on S2.SchoolId = SA.SchoolId
-        WHERE SA.UserID = $(advisorId)
+        WHERE SA.UserID = $(advisorId) AND SA.Approved = true
     );`, {advisorId})
 }
 

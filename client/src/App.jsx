@@ -1,6 +1,5 @@
 import React from "react";
-import {HashRouter, Route, Routes} from "react-router-dom";
-import {Container} from "react-bootstrap";
+import {Route, Routes} from "react-router-dom";
 import Home from "./home/homepage";
 import Login from "./login/login";
 import RequireAuth from "./_common/guards/privateRoute";

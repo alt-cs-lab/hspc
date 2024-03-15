@@ -40,7 +40,8 @@ function createEvent({
             EventName,
             EventLocation,
             EventDate,
-            EventTime,
+            EventStartTime,
+            EventEndTime,
             BeginnerTeamsPerSchool,
             AdvancedTeamsPerSchool,
             TeamsPerSchool,
@@ -52,7 +53,8 @@ function createEvent({
             $(name),
             $(location),
             $(date),
-            $(time),
+            $(startTime),
+            $(endTime),
             $(beginnerTeamsPerSchool),
             $(advancedTeamsPerSchool),
             $(teamsPerSchool),
@@ -86,7 +88,8 @@ function getAllEvents() {
             C.EventName,
             C.EventLocation,
             C.EventDate,
-            C.EventTime,
+            C.EventStartTime, 
+            C.EventEndTime, 
             C.EventDescription,
             C.BeginnerTeamsPerSchool,
             C.AdvancedTeamsPerSchool,
@@ -100,7 +103,8 @@ function getAllEvents() {
         "name",
         "location",
         "date",
-        "time",
+        "startTime",
+        "endTime",
         "description",
         "beginnerTeamsPerSchool",
         "advancedTeamsPerSchool",
@@ -123,13 +127,13 @@ function getHighlightEvent() {
     let currentDate = constants.toDatabaseDate(year, month, day);
 
     return db.any(
-        `SELECT C.EventLocation, C.EventDate, C.EventTime, C.EventName, C.EventDescription
+        `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
         FROM Competitions AS C
         WHERE C.EventDate > $(currentDate)`, {currentDate})
     .then((data)=>{
         if (data[0] != null) {
             return db.any(
-                `SELECT C.EventLocation, C.EventDate, C.EventTime, C.EventName, C.EventDescription
+                `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
                 FROM Competitions AS C
                 WHERE C.EventDate > $(currentDate)
                 ORDER BY C.EventDate ASC
@@ -137,7 +141,7 @@ function getHighlightEvent() {
         }
         else{
             return db.any(
-                `SELECT C.EventLocation, C.EventDate, C.EventTime, C.EventName, C.EventDescription
+                `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
                 FROM Competitions AS C
                 ORDER BY C.EventDate DESC
                 LIMIT 1`)

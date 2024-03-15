@@ -12,7 +12,7 @@ import VolunteerSignUp from "../registration/create/volunteer-sign-up"
 //import Questions from "../judging/volunteerAssignmentQuestion";
 //import StartJudging from "../judging/startJudging";
 
-import Scoreboard from "../scoring/scoreboard.jsx";
+//import Scoreboard from "../scoring/scoreboard.jsx";
 import UserService from "../_common/services/user";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-volunteer.css";
@@ -45,12 +45,12 @@ const handleCurrentTeam = () => {
 
 function VolunteerDash(props)
 {
-  const [currentView, setCurrentView] = useState(<></>);
+  const [currentView, setCurrentView] = useState(<h2 id="welcome"> Welcome {props.currentUser.name}!</h2>);
   
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Navbar.Brand onClick={() => setCurrentView(<h2 id="welcome"> Welcome {this.currentUserName.FirstName} {this.currentUserName.LastName}!</h2>)}>
+          <Navbar.Brand onClick={() => setCurrentView(<h2 id="welcome"> Welcome {props.currentUser.name}!</h2>)}>
             Volunteer Portal
           </Navbar.Brand>
           <Navbar.Toggle />
@@ -71,9 +71,9 @@ function VolunteerDash(props)
             <NavItem eventKey={4} onClick={() => setCurrentView(<VolunteerSignUp />)}>
               Competition Sign-up
             </NavItem>
-            <NavItem eventKey={4} onClick={() => setCurrentView(<Scoreboard />)}>
+            {/* <NavItem eventKey={4} onClick={() => setCurrentView(<Scoreboard />)}>
               View Board
-            </NavItem>
+            </NavItem> */}
             <NavItem eventKey={5} onClick={handleCurrentTeam()}>
               View Assigned Team
             </NavItem>

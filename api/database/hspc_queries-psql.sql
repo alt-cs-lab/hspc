@@ -59,8 +59,9 @@ CREATE TABLE Users (
 CREATE TABLE Competitions (
 	CompetitionID SERIAL NOT NULL,
 	EventLocation VARCHAR(64),
-	EventDate VARCHAR(64),
-	EventTime VARCHAR(64),
+	EventDate DATE,
+	EventStartTime TIME,
+	EventEndTime TIME,
 	EventName VARCHAR(64),
 	EventDescription VARCHAR(1250),
 	TeamsPerEvent INT,
@@ -114,6 +115,7 @@ CREATE TABLE SchoolAdvisors (
     AdvisorID SERIAL,
 	UserID INT,
 	SchoolID INT,
+	Approved BOOLEAN,
 	PRIMARY KEY (AdvisorID),
 	FOREIGN KEY (UserID) REFERENCES Users(UserID),
 	FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)

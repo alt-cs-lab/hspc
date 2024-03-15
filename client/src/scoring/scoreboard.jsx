@@ -7,19 +7,19 @@ import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import Select from "react-select";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
-import ScoreboardTile from "./scoreboard-tile";
+//import ScoreboardTile from "./scoreboard-tile";
 import "../_common/assets/css/scoreboard.css";
 import EventService from "../_common/services/event";
 //import Websocket from 'react-websocket';
-import ScoreCardService from "../_common/services/scorecard";
+//import ScoreCardService from "../_common/services/scorecard";
 import ViewScore from "../_common/services/scoreboard";
-import io from "socket.io-client";
+//import io from "socket.io-client";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../_store/slices/errorSlice.js";
 
-const URL = "ws://localhost:3001"; //for mine Natalie Laughlin
+//const URL = "ws://localhost:3001"; //for mine Natalie Laughlin
 var currentView = null;
-var socket = io("http://localhost:8000");
+//var socket = io("http://localhost:8000");
 
 const selectStyles = {
   menu: (base) => ({
@@ -48,7 +48,7 @@ class Scoreboard extends Component {
       teamTable: [],
       scoreTable: [],
       wrongTable: [],
-      questions: [],
+      //questions: [],
       eventName: "",
     };
     this.getcurrentView();
@@ -66,11 +66,12 @@ class Scoreboard extends Component {
    * Returns a list of all events when the component is rendered.
    * @Natalie Laughlin Needed the date to get the proper data from the score table
    */
-  componentDidMount = () => {
+  /* Handles the inital socket connection when the scoreboard page loads.*/
+  componentDidMount() {
     EventService.getAllEvents(
       this.props.auth.user.id,
       this.props.auth.user.accessLevel
-    )
+      )
       .then((response) => {
         if (response.statusCode === 200) {
           let body = JSON.parse(response.body);
@@ -86,10 +87,8 @@ class Scoreboard extends Component {
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
-  };
-  /* Handles the inital socket connection when the scoreboard page loads.*/
 
-  componentDidMount() {
+
     this.generateBoard();
 
     this.ws.onopen = () => {
@@ -198,7 +197,7 @@ class Scoreboard extends Component {
    */
   generateName() {
     if (this.state.teamTable.length > 1) {
-      this.state.eventName = this.state.teamTable[0].eventname;
+      this.setState({ eventName: this.state.teamTable[0].eventname });
       var title = document.getElementById("name");
       title.value = this.state.eventName;
       title.style.fontSize = "xxx-large";

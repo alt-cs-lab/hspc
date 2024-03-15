@@ -1,11 +1,10 @@
 import React from 'react';
-import NewsService from '../_common/services/news';
+//import NewsService from '../_common/services/news';
 import EventService from '../_common/services/event';
 import '../_common/assets/css/public-homepage.css';
 import powercat from '../_common/assets/img/powercat.png';
-import Card from 'react-bootstrap/Card';
+//import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
-import { render } from 'react-dom';
 
 /**
  * 
@@ -14,7 +13,7 @@ import { render } from 'react-dom';
  */
 export default function Home(){
 
-    const [news, setNews] = useState([]);
+    //const [news, setNews] = useState([]);
     // Highlight Event is either the most upcoming event or if there are none upcoming, the most recent event passed.
     const [highlightEvent, setHighlightEvent] = useState(null);
 
@@ -41,7 +40,7 @@ export default function Home(){
             <div>
                 <h1 id="title">{highlightEvent.eventname}</h1>
                 <h2 id="location">{highlightEvent.eventlocation}</h2>
-                <h2 id="date">{highlightEvent.eventdate} @ {highlightEvent.eventtime}</h2>
+                <h2 id="date">{highlightEvent.eventdate} @ {highlightEvent.eventstarttime}-{highlightEvent.eventendtime}</h2>
                 <h5 id="description">{highlightEvent.eventdescription}</h5>
             </div>
             ) : (
@@ -50,9 +49,9 @@ export default function Home(){
             }
             <img src={powercat} alt="Powercat" id="logo"></img>
             </div>
-            <div id="article-field">
+            {/* <div id="article-field">
                 {news}
-            </div>
+            </div> */}
         </div>
     );
 }
@@ -63,22 +62,22 @@ export default function Home(){
  * @returns {list} a list of divs containing html for news articles
  * @author Riley Mueller
  */
-function generateNewsTable(news) {
-    const notes = [];
-    news.forEach((data, index) => {
-        notes.push(
-            <div key={index} id="news-article">
-                <Card>
-                    <Card.Body>
-                        <Card.Title>{data.articletitle}</Card.Title>
-                        <Card.Subtitle>{data.articlesubheading}</Card.Subtitle>
-                        <Card.Text>
-                        {data.articlemessage}
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-            </div>
-        );
-    });
-    return notes;
-}
+// function generateNewsTable(news) {
+//     const notes = [];
+//     news.forEach((data, index) => {
+//         notes.push(
+//             <div key={index} id="news-article">
+//                 <Card>
+//                     <Card.Body>
+//                         <Card.Title>{data.articletitle}</Card.Title>
+//                         <Card.Subtitle>{data.articlesubheading}</Card.Subtitle>
+//                         <Card.Text>
+//                         {data.articlemessage}
+//                         </Card.Text>
+//                     </Card.Body>
+//                 </Card>
+//             </div>
+//         );
+//     });
+//     return notes;
+// }

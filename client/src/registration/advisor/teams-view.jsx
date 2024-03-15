@@ -7,7 +7,7 @@
   import Button from "react-bootstrap/Button";
   import TeamService from "../../_common/services/team";
   import EventService from "../../_common/services/event";
-  import UserService from "../../_common/services/user";
+  import StudentService from "../../_common/services/high-school-student";
   import SchoolService from "../../_common/services/school"
   import DataTable from "react-data-table-component";
   import Select from "react-select";
@@ -17,6 +17,7 @@
     updateErrorMsg,
     updateSuccessMsg,
   } from "../../_store/slices/errorSlice.js";
+  const constants = require('../../_utilities/constants');
   
   /*
   * Page to view an advisor's schools' teams
@@ -204,7 +205,7 @@
     const [error, setError] = useState(null);
   
     useEffect(() => {
-      UserService.getstudentsteam(data.teamname)
+      StudentService.getStudentsInTeam(data.competitionid, data.teamname)
         .then((response) => {
           if (response.ok) {
             setTeamUsersTable(response.data);
@@ -217,7 +218,7 @@
           console.error("Error in ExpandedComponent", error);
           setError("An unexpected error occurred.");
         });
-    }, [data.teamname]);
+    }, [data.competitionid, data.teamname]);
   
     if (error) {
       return <div className="error-message">{error}</div>;
@@ -231,7 +232,7 @@
       { name: "First Name", selector: (row) => row.firstname, sortable: true },
       { name: "Last Name", selector: (row) => row.lastname, sortable: true },
       { name: "Email", selector: (row) => row.email, sortable: true },
-      { name: "Phone", selector: (row) => row.phone, sortable: true },
+      { name: "Graduation Date", selector: (row) => row.gradDate, sortable: true, sortFunction: constants.dateSort,},
     ];
   }
   

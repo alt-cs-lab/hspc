@@ -17,10 +17,9 @@ import ViewTeams from "../registration/view/teams";
 import UpgradeRequests from "../registration/view/upgrade-requests";
 import Register from "../registration/create/user";
 import CreateTeam from "../registration/create/manage-team";
-import Scoreboard from "../scoring/scoreboard.jsx";
+//import Scoreboard from "../scoring/scoreboard.jsx";
 import PublishPractice from "../problems/practice";
 import PublishScores from "../scoring/scores";
-import UserService from "../_common/services/user";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-master.css";
 import RegisterSchool from "../registration/create/school";
@@ -34,41 +33,16 @@ import { clearErrors } from "../_store/slices/errorSlice.js";
 
 function MasterDash(props)
 {
-  const [currentUserName, setCurrentUserName] = useState({ FirstName: "", LastName: ""});
-  const [currentView, setCurrentView] = useState(<></>);
-  // TODO TWP: NOT SURE WHAT THIS DOES const [state, setCurrentState] = useState({userTable: [], eventTable: [],});
-  const defaultView = <h2 id="welcome">Welcome {currentUserName.FirstName} {currentUserName.LastName}!</h2>;
+  const [currentView, setCurrentView] = useState(<h2 id="welcome">Welcome {props.currentUser.name}!</h2>);
 
   useEffect(() =>{
     props.dispatchResetErrors();
-      UserService.getAllUsers()
-      .then((response) => {
-        let body = response.data
-        if (response.status === 200) {
-          let user = [];
-          for (let i = 0; i < body.length; i++) {
-            if (body[i].email === props.currentUser.email) {
-              user = {
-                FirstName: body[i].firstname,
-                LastName: body[i].lastname,
-              };
-            }
-          }
-          setCurrentUserName(user);
-          setCurrentView(<h2 id="welcome">Welcome {user.FirstName} {user.LastName}!</h2>)
-        }
-      })
-      .catch((resErr) => {
-        console.log("Error: ",resErr);
-      })
     }, [props]);
-
-   
 
 return(
   <div>
         <Navbar>
-          <Navbar.Brand onClick={() => setCurrentView(defaultView)}>
+          <Navbar.Brand onClick={() => setCurrentView(<h2 id="welcome">Welcome {props.currentUser.name}!</h2>)}>
             Master Portal
           </Navbar.Brand>
           <Navbar.Toggle />
@@ -119,11 +93,11 @@ return(
                 </NavItem>
               </NavDropdown>
 
-              <NavDropdown title="Scoreboard" id="basic-nav-dropdown">
+              {/* <NavDropdown title="Scoreboard" id="basic-nav-dropdown">
                 <NavItem onClick={() => setCurrentView(<Scoreboard />)}>
                   View Board
                 </NavItem>
-              </NavDropdown>
+              </NavDropdown> */}
 
               <NavDropdown title="Resources" id="basic-nav-dropdown">
                 <NavItem onClick={() => setCurrentView(<PublishPractice />)}>

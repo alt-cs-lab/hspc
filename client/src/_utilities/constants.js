@@ -30,6 +30,22 @@ function toDatabaseDate(year, month, day) {
     }
 };
 
+/*
+* Sorting method for the date column
+*/
+const dateSort = (rowA, rowB) => {
+    const a = Date.parse(rowA.date);
+    const b = Date.parse(rowB.date);
+    
+    if (a > b){
+      return 1;
+    }
+    if (b > a){
+      return -1;
+    }
+    return 0;
+  };
+
 module.exports = {
     VOLUNTEER,
     JUDGE,
@@ -37,5 +53,6 @@ module.exports = {
     ADMIN,
     MASTER,
     legalLevels,
-    toDatabaseDate
+    toDatabaseDate,
+    dateSort
 }

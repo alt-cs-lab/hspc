@@ -5,7 +5,6 @@ class UserService {
         this.getAllUsers = this.getAllUsers.bind(this);
         this.getAllVolunteers = this.getAllVolunteers.bind(this);
         this.logVolunteerAssignment = this.logVolunteerAssignment.bind(this);
-        this.getstudentsteam = this.getstudentsteam.bind(this);//Natalie Laughlin
     }
 
     /*
@@ -35,16 +34,6 @@ class UserService {
    */
   getAllTeamAssignments() {
     return ServiceUtils.getRequest("api/user/getallteamassignments", {});
-  }
-
-
-
-  /*
-  * API Endpoint that returns all users with Student based on team name
-  * TODO TWP: MOVE TO STUDENT SERVICE
-  */
-  getstudentsteam(teamName) {
-    return ServiceUtils.getRequest("api/user/viewteam", { teamName: teamName });
   }
 
   /*

@@ -9,6 +9,7 @@ import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
+const constants = require('../../_utilities/constants');
 
 /*
  * @author: Daniel Bell
@@ -61,13 +62,12 @@ class ViewEvents extends Component {
         name: "Date (YYYY-MM-DD)",
         selector: row => row.date,
         sortable: true,
-        sortFunction: dateSort,
+        sortFunction: constants.dateSort,
       },
       {
         name: "Time",
-        selector: row => row.time,
-        sortable: true,
-      },
+        selector: row => (row.startTime + ' - ' + row.endTime),
+      }
     ];
   }
   
@@ -92,22 +92,6 @@ class ViewEvents extends Component {
     );
   }
 }
-
-/*
-* Sorting method for the date column
-*/
-const dateSort = (rowA, rowB) => {
-  const a = Date.parse(rowA.date);
-  const b = Date.parse(rowB.date);
-  
-  if (a > b){
-    return 1;
-  }
-  if (b > a){
-    return -1;
-  }
-  return 0;
-};
 
 const mapStateToProps = (state) => {
   return {

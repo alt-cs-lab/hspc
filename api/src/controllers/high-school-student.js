@@ -39,6 +39,7 @@ const statusResponses = require("../utils/status-response.js");
  *   }
  */
 router.post('/createStudent',
+// TWP TODO: Do Role Checking Like Commented Below
 //passport.authenticate("jwt", { session: false }),
 //accessLevelCheck(constants.ADVISOR),
 //[
@@ -60,7 +61,6 @@ router.post('/createStudent',
     check('email')
         .not().isEmpty().withMessage("Email is required.")
         .normalizeEmail()
-        //TWP TODO: Ensure Email is not in database
         .custom(async value => {
             try{
                 return await studentService.getEmail(value) === null
@@ -94,5 +94,19 @@ router.get('/getFromAdvisorSchools', (req, res) => {
         statusResponses.serverError(res);
     });
 });
+
+
+router.get("/teamStudents", (req, res) => {
+    // TWP TODO: Do Role Checking
+    let teamName = req.query["teamName"];
+    let competitionid = req.query["competitionid"];
+    studentService.getStudentsInTeam(competitionid, teamName)
+      .then((studentData) => {
+        statusResponses.ok(res, studentData);
+      })
+      .catch((err) => {
+        statusResponses.serverError(res);
+      });
+  });
 
 module.exports = router;

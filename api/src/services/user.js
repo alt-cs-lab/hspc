@@ -20,7 +20,6 @@ module.exports = {
     getStudents,
     advisorUpdateSchool,
     addstudent,
-    getstudentsteam,
     checkinvolunteer,
     checkoutvolunteer,
     getactivevolunteers,
@@ -257,27 +256,6 @@ function addstudent(
 //    return db.none(`INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword) VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword)); 
 //    insert into student values((select userid from users where email= $(email)),(select userid from users where email=$(advisoremail)));`, {firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, advisoremail});
 }
-
-/**
- * Gets all the students based off their team name
- * @param {string} teamName The name of the team
- * @returns All students of a certain team
- */
-function getstudentsteam(teamName) {
-  return db.any(
-    `
-        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email, HS.SchoolID
-        FROM HighSchoolStudents HS
-            INNER JOIN TeamMembers TM ON TM.StudentID = HS.StudentID
-            INNER JOIN Teams T ON T.TeamID = TM.TeamID
-                WHERE T.TeamName = $(teamName)
-    `,
-    { teamName }
-  );
-
-  // return db.any(`select Users.Phone, Users.Firstname, Users.LastName, Users.email, Users.AccessLevel  From users inner join teamsusers on teamsUsers.userid = users.userid inner join Teams on teams.teamid = teamsusers.teamid where teams.teamname = $(teamName);`, {teamName})
-}
-
 
 //Function used to check in Volunteers based on userid
 function checkinvolunteer(userid) {

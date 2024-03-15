@@ -4,13 +4,12 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
 import React, { useState, useEffect } from "react";
-import { Navbar, NavItem, Nav, NavDropdown, NavLink } from "react-bootstrap";
+import { Navbar, NavItem, Nav, NavDropdown/*, NavLink*/ } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
-import UserService from "../_common/services/user";
 import TeamsView from "../registration/advisor/teams-view";
 import ViewEvents from "../registration/view/events";
 import CreateTeam from "../registration/create/manage-team";
-import Scoreboard from "../scoring/scoreboard.jsx";
+//import Scoreboard from "../scoring/scoreboard.jsx";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-admin.css";
 import AddStudent from "../registration/create/add-high-school-student.jsx";
@@ -20,39 +19,17 @@ import { clearErrors } from "../_store/slices/errorSlice.js";
 
 function AdvisorDash (props)
 { 
-  const [currentUserName, setCurrentUserName] = useState({FirstName: "", LastName: "", AdvisorID:0,})
-  const [currentView, setCurrentView] = useState(<h2 id="welcome">Welcome {currentUserName.FirstName} {currentUserName.LastName}!</h2>);
+  const [currentView, setCurrentView] = useState(<h2 id="welcome">Welcome {props.currentUser.name}!</h2>);
 
   useEffect(() =>{
     props.dispatchResetErrors();
-    UserService.getAllUsers()
-      .then((response) => {
-        let body = response.data;
-        if (response.status === 200) {
-          let user = [];
-          for (let i = 0; i < body.length; i++) {
-            if (body[i].email === props.currentUser.email) {
-              user = {
-                FirstName: body[i].firstname,
-                LastName: body[i].lastname,
-                AdvisorID: body[i].userid,
-              };
-            }
-          }
-          setCurrentUserName(user);
-          setCurrentView(<h2 id="welcome">Welcome {user.FirstName} {user.LastName}!</h2>)
-        }
-      })
-      .catch((resErr) => {
-        console.log("Error: ", resErr);
-      });
   }, [props]);
 
   return (
     <>
       <Navbar inverse collapseOnSelect>
           <Nav>
-            <Nav.Link onClick={() => setCurrentView(<h2 id="welcome">Welcome {currentUserName.FirstName} {currentUserName.LastName}!</h2>)}>
+            <Nav.Link onClick={() => setCurrentView(<h2 id="welcome">Welcome {props.currentUser.name}!</h2>)}>
               Advisor Portal
             </Nav.Link>
           </Nav>
@@ -60,10 +37,10 @@ function AdvisorDash (props)
         <Navbar.Collapse>
           <Nav>
             <NavDropdown title="Students" id="basic-nav-dropdown">
-              <NavItem eventKey={7} onClick={() => setCurrentView(<ViewStudents advisorUser={currentUserName.AdvisorID}/>)}>
+              <NavItem eventKey={7} onClick={() => setCurrentView(<ViewStudents advisorUser={props.currentUser.id}/>)}>
                 View Students
               </NavItem>
-              <NavItem eventKey={7} onClick={() => setCurrentView(<AddStudent advisorUser={currentUserName.AdvisorID}/>)}>
+              <NavItem eventKey={7} onClick={() => setCurrentView(<AddStudent advisorUser={props.currentUser.id}/>)}>
                 Create Student
               </NavItem>
             </NavDropdown>
@@ -80,9 +57,9 @@ function AdvisorDash (props)
                 View Events
               </NavItem>
             </NavDropdown>
-            <NavLink eventKey={6} onClick={() => setCurrentView(<Scoreboard />)}>
+            {/* <NavLink eventKey={6} onClick={() => setCurrentView(<Scoreboard />)}>
               View Board
-            </NavLink>
+            </NavLink> */}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
