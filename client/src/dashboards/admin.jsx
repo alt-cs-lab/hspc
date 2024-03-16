@@ -6,20 +6,19 @@ import React, { useState, useEffect } from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
-import Email from "../email/create-email";
+//import Email from "../email/create-email";
 import EventSignIn from "../registration/create/event-signin";
 import CreateEvent from "../registration/create/event";
-import CreateNews from "../home/news";
+//import CreateNews from "../home/news";
 import ViewEvents from "../registration/view/events";
 import ViewUsers from "../registration/view/users";
 import SchoolRequests from "../registration/view/advisor-school-requests"
 import ViewTeams from "../registration/view/teams";
-import UpgradeRequests from "../registration/view/upgrade-requests";
 import Register from "../registration/create/user";
 import CreateTeam from "../registration/create/manage-team";
 //import Scoreboard from "../scoring/scoreboard.jsx";
-import PublishPractice from "../problems/practice";
-import PublishScores from "../scoring/scores";
+//import PublishPractice from "../problems/practice";
+//import PublishScores from "../scoring/scores";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-admin.css";
 import RegisterSchool from "../registration/create/school";
@@ -45,9 +44,6 @@ function AdminDash(props)
         <Navbar.Collapse>
           <Nav>
             <NavDropdown title="Users" id="basic-nav-dropdown">
-              <NavItem eventKey={1} onClick={() => setCurrentView(<UpgradeRequests />)}>
-                Upgrade Requests
-              </NavItem>
               <NavItem eventKey={2} onClick={() => setCurrentView(<Register />)}>
                 Create User
               </NavItem>
@@ -95,7 +91,7 @@ function AdminDash(props)
               </NavItem>
             </NavDropdown> */}
 
-            <NavDropdown title="Resources" id="basic-nav-dropdown">
+            {/* <NavDropdown title="Resources" id="basic-nav-dropdown">
               <NavItem eventKey={13} onClick={() => setCurrentView(<PublishPractice />)}>
                 Publish Practice Questions
               </NavItem>
@@ -108,7 +104,7 @@ function AdminDash(props)
               <NavItem eventKey={16} onClick={() => setCurrentView(<CreateNews />)}>
                 Update Newsfeed
               </NavItem>
-            </NavDropdown>
+            </NavDropdown> */}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

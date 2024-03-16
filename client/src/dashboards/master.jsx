@@ -7,20 +7,19 @@ import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import { connect } from "react-redux";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
-import Email from "../email/create-email";
+//import Email from "../email/create-email";
 import EventSignIn from "../registration/create/event-signin";
 import CreateEvent from "../registration/create/event";
-import CreateNews from "../home/news";
+//import CreateNews from "../home/news";
 import ViewEvents from "../registration/view/events";
 import ViewUsers from "../registration/view/users";
 import SchoolRequests from "../registration/view/advisor-school-requests"
 import ViewTeams from "../registration/view/teams";
-import UpgradeRequests from "../registration/view/upgrade-requests";
 import Register from "../registration/create/user";
 import CreateTeam from "../registration/create/manage-team";
 //import Scoreboard from "../scoring/scoreboard.jsx";
-import PublishPractice from "../problems/practice";
-import PublishScores from "../scoring/scores";
+//import PublishPractice from "../problems/practice";
+//import PublishScores from "../scoring/scores";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-master.css";
 import RegisterSchool from "../registration/create/school";
@@ -50,9 +49,6 @@ return(
           <Navbar.Collapse>
             <Nav>
               <NavDropdown title="Users" id="basic-nav-dropdown">
-                <NavItem onClick={() => setCurrentView(<UpgradeRequests />)}>
-                  Upgrade Requests
-                </NavItem>
                 <NavItem onClick={() => setCurrentView(<Register />)}>
                   Create User
                 </NavItem>
@@ -103,7 +99,7 @@ return(
                 </NavItem>
               </NavDropdown> */}
 
-              <NavDropdown title="Resources" id="basic-nav-dropdown">
+              {/* <NavDropdown title="Resources" id="basic-nav-dropdown">
                 <NavItem onClick={() => setCurrentView(<PublishPractice />)}>
                   Publish Practice Questions
                 </NavItem>
@@ -116,7 +112,7 @@ return(
                 <NavItem onClick={() => setCurrentView(<CreateNews />)}>
                   Update Newsfeed
                 </NavItem>
-              </NavDropdown>
+              </NavDropdown> */}
             </Nav>
           </Navbar.Collapse>
         </Navbar>
