@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { Navbar, Nav, Container, NavLink } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import StatusMessages from "../_common/components/status-messages/status-messages";

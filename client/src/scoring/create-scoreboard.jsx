@@ -5,14 +5,13 @@ import "../_common/assets/css/create-scoreboard.css";
 import UserService from "../_common/services/scorecard.js";
 import { Table } from "react-bootstrap";
 
-const columns = [
-  { dataField: "index", text: "ID" },
-  { dataField: "team", text: "Team" },
-  { dataField: "school", text: "School" },
-  { dataField: "state", text: "State" },
-  { dataField: "level", text: "Level" },
-];
-var currentView = null;
+// const columns = [
+//   { dataField: "index", text: "ID" },
+//   { dataField: "team", text: "Team" },
+//   { dataField: "school", text: "School" },
+//   { dataField: "state", text: "State" },
+//   { dataField: "level", text: "Level" },
+// ];
 
 var currentView = null;
 

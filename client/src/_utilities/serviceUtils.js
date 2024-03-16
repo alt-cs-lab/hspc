@@ -9,7 +9,7 @@ class RequestUtils {
                 params: urlParams
             })
             .then(response => {
-                response.ok = (response.status >= 200 && response.status < 300 || response.status === 304);
+                response.ok = (response.status >= 200 && response.status < 300) || response.status === 304;
                 return response;
             })
             .catch(function (error) {

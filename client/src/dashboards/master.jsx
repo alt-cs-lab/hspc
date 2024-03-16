@@ -24,7 +24,7 @@ import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-master.css";
 import RegisterSchool from "../registration/create/school";
 import ViewSchools from "../registration/view/school";
-import TeamRequests from "../registration/view/team-requests.jsx";
+// import TeamRequests from "../registration/view/team-requests.jsx";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
 /*
@@ -70,9 +70,9 @@ return(
               </NavDropdown>
 
               <NavDropdown title="Teams" id="basic-nav-dropdown">
-                <NavItem onClick={() => setCurrentView(<TeamRequests />)}>
+                {/* <NavItem onClick={() => setCurrentView(<TeamRequests />)}>
                   Team Request
-                </NavItem>
+                </NavItem> */}
                 <NavItem onClick={() => setCurrentView(<CreateTeam advisor={props.currentUser} />)}>
                   Create Team
                 </NavItem>
