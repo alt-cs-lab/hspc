@@ -13,7 +13,6 @@ const {
   accessLevelCheck,
 } = require("../utils/extensions.js");
 const constants = require("../utils/constants.js");
-//const userService = require("../services/user");
 const studentService = require("../services/high-school-student");
 const statusResponses = require("../utils/status-response.js");
 

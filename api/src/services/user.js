@@ -99,8 +99,8 @@ function register({ firstName, lastName, email, phone, requestLevel, schoolId, p
         // if they are registering as an advisor, we need to add an AdvisorsAffiliation record
         return db.none(
           `
-                INSERT INTO SchoolAdvisors (UserID, SchoolID)
-                VALUES((SELECT UserID FROM Users WHERE Email = $(email)), $(schoolId))
+                INSERT INTO SchoolAdvisors (UserID, SchoolID, Approved)
+                VALUES((SELECT UserID FROM Users WHERE Email = $(email)), $(schoolId), false)
             `,
           { email, schoolId }
         );
@@ -126,7 +126,7 @@ function getLogin(email) {
   return db
     .any(
       `
-        SELECT U.UserID, U.Email, U.EncryptedPassword, U.AccessLevel, U.FirstName, U.LastName
+        SELECT U.UserID, U.Email, U.EncryptedPassword, U.AccessLevel, U.FirstName, U.LastName, U.Phone
         FROM Users AS U
         WHERE Email = $(email)
     `,
@@ -140,6 +140,7 @@ function getLogin(email) {
         "accessLevel",
         "firstName",
         "lastName",
+        "phone",
       ]);
       return data.length > 0 ? data[0] : null;
     });

@@ -16,7 +16,7 @@ import {
   SET_SCHOOL_DROPDOWN_REQUIRED,
 } from "../../_store/actions/types";
 import BaseSelect from "react-select";
-import FixRequiredSelect from "./FixRequiredSelect";
+import FixRequiredSelect from "../../_common/components/FixRequiredSelect.jsx";
 import SchoolService from "../../_common/services/school.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
@@ -70,9 +70,9 @@ class Register extends Component {
             });
           }
           this.setState({ schoolList: schools });
-        } else console.log("An error has occurred, Please try again.");
+        } else console.log("An error has occurred retrieving schools, Please try again.");
       })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
+      .catch((resErr) => console.log("Something went wrong attempting to connect to the server. Please try again"));
   };
 
   /*
@@ -81,6 +81,8 @@ class Register extends Component {
   handleRegister(event) {
     event.preventDefault();
     const newUser = this.state;
+    // TODO TWP: Do additional Error Checking
+
     //if (this.state.isVerified) {
         this.props.registerUser(newUser, this.props.router);
     //} else {
@@ -294,17 +296,7 @@ class Register extends Component {
             />
           </div> */}
           <br/>
-          <Button
-            variant="primary"
-            id="submit-button"
-            label="Create Account"
-            style={{
-              fontSize: "14px",
-              backgroundColor: "#00a655",
-              color: "white",
-            }}
-            type="submit"
-          >
+          <Button variant="primary" id="submit-button" label="Create Account" type="submit">
             Create Account
           </Button>
         </Form>

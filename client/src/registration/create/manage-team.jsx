@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
-import FixRequiredSelect from "./FixRequiredSelect";
+import FixRequiredSelect from "../../_common/components/FixRequiredSelect.jsx";
 const constants = require('../../_utilities/constants');
 
 const selectStyles = {
@@ -91,7 +91,7 @@ class CreateTeam extends Component {
         })
         .catch((resErr) => console.log("Something went wrong. Please try again."));
 
-        SchoolService.getAdvisorSchools(this.advisor.id)
+        SchoolService.getAdvisorApprovedSchools(this.advisor.id)
         .then((response) => {
             if (response.ok) {
                 console.log(response.data)
@@ -135,6 +135,7 @@ class CreateTeam extends Component {
                 name: "GradDate",
                 selector: row => constants.dateFormat(row.graddate),
                 sortable: true,
+                sortFunction: constants.dateSort,
             }
         ]
     }
@@ -163,7 +164,7 @@ class CreateTeam extends Component {
             if (response.ok) {
                 console.log(response.data);
                 this.props.dispatchSuccess(
-                    "Registration was succesful."
+                    "Registration was successful."
                 );
                 this.resetFields();
                 window.location.reload();

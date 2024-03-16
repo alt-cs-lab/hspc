@@ -36,7 +36,6 @@ class ViewEvents extends Component {
     )
       .then((response) => {
         if (response.ok) {
-          console.log(response.data)
           this.setState({ eventTable: response.data });
         } else console.log("An error has occurred fetching the events, Please try again.");
       })

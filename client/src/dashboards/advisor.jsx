@@ -6,6 +6,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { useState, useEffect } from "react";
 import { Navbar, NavItem, Nav, NavDropdown/*, NavLink*/ } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
+import DashboardHome from "../home/dashboard-home"
 import TeamsView from "../registration/advisor/teams-view";
 import ViewEvents from "../registration/view/events";
 import CreateTeam from "../registration/create/manage-team";
@@ -19,7 +20,7 @@ import { clearErrors } from "../_store/slices/errorSlice.js";
 
 function AdvisorDash (props)
 { 
-  const [currentView, setCurrentView] = useState(<h2 id="welcome">Welcome {props.currentUser.name}!</h2>);
+  const [currentView, setCurrentView] = useState(<DashboardHome user={props.currentUser} />);
 
   useEffect(() =>{
     props.dispatchResetErrors();
@@ -29,7 +30,7 @@ function AdvisorDash (props)
     <>
       <Navbar inverse collapseOnSelect>
           <Nav>
-            <Nav.Link onClick={() => setCurrentView(<h2 id="welcome">Welcome {props.currentUser.name}!</h2>)}>
+            <Nav.Link onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
               Advisor Portal
             </Nav.Link>
           </Nav>

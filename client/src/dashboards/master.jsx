@@ -6,13 +6,14 @@ import React, { useState, useEffect} from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import { connect } from "react-redux";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
-
+import DashboardHome from "../home/dashboard-home"
 import Email from "../email/create-email";
 import EventSignIn from "../registration/create/event-signin";
 import CreateEvent from "../registration/create/event";
 import CreateNews from "../home/news";
 import ViewEvents from "../registration/view/events";
 import ViewUsers from "../registration/view/users";
+import SchoolRequests from "../registration/view/advisor-school-requests"
 import ViewTeams from "../registration/view/teams";
 import UpgradeRequests from "../registration/view/upgrade-requests";
 import Register from "../registration/create/user";
@@ -33,7 +34,7 @@ import { clearErrors } from "../_store/slices/errorSlice.js";
 
 function MasterDash(props)
 {
-  const [currentView, setCurrentView] = useState(<h2 id="welcome">Welcome {props.currentUser.name}!</h2>);
+  const [currentView, setCurrentView] = useState(<DashboardHome user={props.currentUser} />);
 
   useEffect(() =>{
     props.dispatchResetErrors();
@@ -42,7 +43,7 @@ function MasterDash(props)
 return(
   <div>
         <Navbar>
-          <Navbar.Brand onClick={() => setCurrentView(<h2 id="welcome">Welcome {props.currentUser.name}!</h2>)}>
+          <Navbar.Brand onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
             Master Portal
           </Navbar.Brand>
           <Navbar.Toggle />
@@ -57,6 +58,9 @@ return(
                 </NavItem>
                 <NavItem onClick={() => setCurrentView(<ViewUsers />)}>
                   View Users
+                </NavItem>
+                <NavItem eventKey={3} onClick={() => setCurrentView(<SchoolRequests />)}>
+                  School Requests
                 </NavItem>
               </NavDropdown>
 

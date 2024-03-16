@@ -38,6 +38,10 @@ class SchoolService {
         return ServiceUtils.getRequest('/api/school/view', {});
     }
 
+    getAdvisorApprovedSchools(userId){
+        return ServiceUtils.getRequest("/api/school/advisorApprovedSchools", { userId: userId });
+    }
+
     getAdvisorSchools(userId){
         return ServiceUtils.getRequest("/api/school/advisorSchools", { userId: userId });
     }

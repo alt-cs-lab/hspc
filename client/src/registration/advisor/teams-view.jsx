@@ -58,9 +58,9 @@
       .catch((resErr) => console.log("Something went wrong fetching events. Please try again"));
 
       /*
-      * Get Advisor's Schools
+      * Get Advisor's Approved Schools
       */
-      SchoolService.getAdvisorSchools(this.props.auth.user.id)
+      SchoolService.getAdvisorApprovedSchools(this.props.auth.user.id)
       .then((response) => {
           if (response.ok) {
               let schoolbody = response.data;
@@ -232,7 +232,7 @@
       { name: "First Name", selector: (row) => row.firstname, sortable: true },
       { name: "Last Name", selector: (row) => row.lastname, sortable: true },
       { name: "Email", selector: (row) => row.email, sortable: true },
-      { name: "Graduation Date", selector: (row) => constants.dateFormat(row.gradDate), sortable: true, sortFunction: constants.dateSort,},
+      { name: "Graduation Date", selector: (row) => constants.dateFormat(row.graddate), sortable: true, sortFunction: constants.dateSort,},
     ];
   }
   

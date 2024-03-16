@@ -97,8 +97,8 @@ router.get("/view", (req, res) => {
 
 
 /**
- * @api {post} /api/user/advisorschool Get school associated with an advisor
- * @apiName AdvisorSchool
+ * @api {post} /api/user/advisorApprovedSchools Get approved schools associated with an advisor
+ * @apiName AdvisorApprovedSchools
  * @apiGroup User
  *
  * @apiBody {Number} userId User ID of the user.
@@ -112,15 +112,29 @@ router.get("/view", (req, res) => {
  *       Advisor email is required for students.
  *   }
  */
-router.get(
-    "/advisorSchools",
+router.get("/advisorApprovedSchools",
     // passport.authenticate("jwt", { session: false }),
     // accessLevelCheck(constants.ADVISOR),
-    // [
-    //   check("userId").exists().withMessage("User ID is required."),
-    //   // check is number
-    //   check("userId").isNumeric().withMessage("User ID must be a number."),
-    // ],
+    // badRequestCheck,
+    (req, res) => {
+      const userId = req.query["userId"];
+      schoolService.getAdvisorApprovedSchools(userId)
+        .then((school) => {
+          statusResponses.ok(res, school);
+        })
+        .catch((err) => {
+          statusResponses.serverError(res);
+        });
+    }
+  );
+module.exports = router;
+
+/*
+* Same as advisorApprovedSchools, except all schools including unapproved ones.
+*/
+router.get("/advisorSchools",
+    // passport.authenticate("jwt", { session: false }),
+    // accessLevelCheck(constants.ADVISOR),
     // badRequestCheck,
     (req, res) => {
       const userId = req.query["userId"];

@@ -118,7 +118,8 @@ CREATE TABLE SchoolAdvisors (
 	Approved BOOLEAN,
 	PRIMARY KEY (AdvisorID),
 	FOREIGN KEY (UserID) REFERENCES Users(UserID),
-	FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID)
+	FOREIGN KEY (SchoolID) REFERENCES Schools(SchoolID),
+	UNIQUE (UserID, SchoolID)
 );
 
 CREATE TABLE Teams (

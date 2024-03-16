@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
-import FixRequiredSelect from "./FixRequiredSelect.jsx";
+import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
 import SchoolService from "../../_common/services/school.js";
 import { withRouter } from "../../_utilities/routerUtils.jsx";
 
@@ -65,7 +65,7 @@ class AddStudent extends Component {
    * Returns a list of all schools when the component is rendered to be used in the dropdown.
    */
   componentDidMount = () => {
-    SchoolService.getAdvisorSchools(this.advisor.id)
+    SchoolService.getAdvisorApprovedSchools(this.advisor.id)
     .then((response) => {
         if (response.ok) {
             let schoolbody = response.data;
