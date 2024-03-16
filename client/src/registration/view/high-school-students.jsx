@@ -3,7 +3,6 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import SchoolService from "../../_common/services/school";
 import StudentService from "../../_common/services/high-school-student";
 import DataTable from "react-data-table-component";
@@ -101,7 +100,6 @@ class ViewStudents extends Component {
   render() {
     return (
       <div>
-        <StatusMessages/>
         <h2> Students </h2>
         <Button className="mb-3"> Add Student </Button>
         <section
