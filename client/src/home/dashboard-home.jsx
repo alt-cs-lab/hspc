@@ -7,14 +7,9 @@ import RequestService from "../_common/services/request";
 import DataTable from "react-data-table-component";
 import BaseSelect from "react-select";
 import FixRequiredSelect from "../_common/components/FixRequiredSelect";
-const constants = require('../_utilities/constants');
 
-const selectStyles = {
-    menu: (base) => ({
-      ...base,
-      zIndex: 100
-    }),
-  };
+const constants = require('../_utilities/constants');
+const styles = require('../_utilities/styleConstants.js');
 
 /**
  * @returns The Dashboard Home Page which allows account changes
@@ -74,7 +69,7 @@ export default function DashboardHome(props){
                                 required
                                 id="dropdown"
                                 style={{ margin: "auto", width: "100%" }}
-                                styles={selectStyles}
+                                styles={styles.selectStyles}
                                 placeholder="Select a School"
                                 options={allSchoolsList}
                                 onChange={(target) => setAdditionalSchoolid(target.value)}
@@ -82,7 +77,7 @@ export default function DashboardHome(props){
                                 setValue={additionalSchoolid}
                                 />
                         </Form.Group>
-                        <Button variant="primary" id="submit-button" label="Select School" type="submit">
+                        <Button style={styles.buttonStyles} variant="secondary" id="submit-button" label="Select School" type="submit">
                             Select School
                         </Button>
                     </Form>
@@ -153,7 +148,7 @@ export default function DashboardHome(props){
                     />
                 </Form.Group>
                 <br/> */}
-                <Button variant="primary" id="submit-button" label="Update Account" type="submit">
+                <Button style={styles.buttonStyles} variant="secondary" id="submit-button" label="Update Account" type="submit">
                     Update Account
                 </Button>
             </Form>

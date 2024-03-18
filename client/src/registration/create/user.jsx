@@ -21,13 +21,7 @@ import SchoolService from "../../_common/services/school.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
 const constants = require('../../_utilities/constants')
-
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100,
-  }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell
@@ -168,12 +162,15 @@ class Register extends Component {
         <Form name="form" onSubmit={(event) => this.handleRegister(event)}>
           <p>Please select an account type.</p>
           <ToggleButtonGroup
+            style={styles.buttonStyles}
             className="RoleSelect"
             type="radio"
             name="options"
             defaultValue={constants.VOLUNTEER}
             >
             <ToggleButton 
+              style={styles.buttonStyles}
+              variant="secondary"
               id="tbg-radio-2"
               value={constants.VOLUNTEER} 
               onClick={(event) => this.changeFields(constants.VOLUNTEER)}
@@ -181,6 +178,7 @@ class Register extends Component {
               Volunteer
             </ToggleButton>
             <ToggleButton 
+              variant="secondary"
               id="tbg-radio-1"
               value={constants.ADVISOR} 
               onClick={(event) => this.changeFields(constants.ADVISOR)}
@@ -277,7 +275,7 @@ class Register extends Component {
             <FixRequiredSelect
               id="dropdown"
               style={{ margin: "auto", width: "100%" }}
-              styles={selectStyles}
+              styles={styles.selectStyles}
               placeholder="Select a School"
               options={this.state.schoolList}
               onChange={this.handleSchoolChange}
@@ -296,7 +294,7 @@ class Register extends Component {
             />
           </div> */}
           <br/>
-          <Button variant="primary" id="submit-button" label="Create Account" type="submit">
+          <Button style={styles.buttonStyles} variant="secondary" id="submit-button" label="Create Account" type="submit">
             Create Account
           </Button>
         </Form>

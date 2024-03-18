@@ -15,5 +15,5 @@ export const selectStyles = {
 export const buttonStyles = {
     backgroundColor: "#512888", 
     color: "white", 
-    fontSize: 16
+    fontSize: 16,
 };

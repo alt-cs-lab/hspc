@@ -10,13 +10,14 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-
 import StatusMessages from "../_common/components/status-messages/status-messages";
 import "../_common/assets/css/public-login.css";
 import "../home/homepage";
 import { login, selectAuth } from "../_store/slices/authSlice";
 import { selectDashboardRoute } from "../_store/slices/routeSlice";
 import { clearErrors, updateErrorMsg } from "../_store/slices/errorSlice";
+
+const styles = require('../_utilities/styleConstants.js');
 
 function Login(props) {
     const dispatch = useDispatch();
@@ -95,18 +96,21 @@ function Login(props) {
                             required
                         />
                     </Form.Group>
-
+                
                     <Button
-                        variant="primary"
-                        className="login-button login-form-button"
+                        style={styles.buttonStyles}
+                        variant="secondary"
+                        className="m-3"
+                        // className="login-button login-form-button"
                         type="submit"
                         data-testid="login-button"
                     >
                         Sign In
                     </Button>
                     <Button
-                        variant="primary"
-                        className="register-button login-form-button"
+                        variant="secondary"
+                        className="m-3"
+                        // className="register-button login-form-button"
                         onClick={(_)=> {setIsRegistering(true)}}
                         type="button"
                     >

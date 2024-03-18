@@ -145,7 +145,7 @@ export class RegisterSchool extends Component {
                                 onloadCallback={this.recaptchaLoaded}
                                 verifyCallback={this.verifyCallback}
                             />
-                        </div>
+                </div> */}
                         <Button
                             variant="secondary"
                             className="RegisterButton"

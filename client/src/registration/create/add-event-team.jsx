@@ -13,12 +13,7 @@ import participantService from "../../_common/services/participant";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100,
-  }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell, Trent Kempker
@@ -209,7 +204,7 @@ class AddEventTeam extends Component {
           </p>
           <Select
             id="dropdown"
-            styles={selectStyles}
+            styles={styles.selectStyles}
             placeholder="Select a Date"
             options={this.state.eventList}
             onChange={(e) => (this.eventdate = e.label)}

@@ -21,12 +21,7 @@ import { Table } from "react-bootstrap";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 // // import "react-table/react-table.css";
 
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100,
-  }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell, Trent Kempker
@@ -382,7 +377,7 @@ class AddUser extends Component {
             <div id="sub-nav">
               <Select
                 id="dropdown"
-                styles={selectStyles}
+                styles={styles.selectStyles}
                 placeholder="Select a Team Name"
                 options={this.state.teamList}
                 onChange={(opt) => this.setState({ teamName: opt.label })}

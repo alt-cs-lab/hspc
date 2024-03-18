@@ -18,7 +18,7 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
-import FixRequiredSelect from "./FixRequiredSelect";
+import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
 
 const constants = require('../../_utilities/constants');
 const styles = require('../../_utilities/styleConstants.js');
@@ -278,7 +278,7 @@ class CreateTeam extends Component {
                             />
                             ))}
                     </Form.Group>
-                    <Button type="register" styles={{backgroundColor: "#512888", color: "white", fontSize: 16}} 
+                    <Button type="register" variant="secondary" style={styles.buttonStyles} 
                         onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
                 </Form>
             </div>

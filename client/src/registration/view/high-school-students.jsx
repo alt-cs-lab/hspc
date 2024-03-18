@@ -103,7 +103,7 @@ class ViewStudents extends Component {
     return (
       <div>
         <h2> Students </h2>
-        <Button className="mb-3" style={styles.buttonStyles}> Add Student </Button>
+        <Button className="mb-3" variant="secondary" style={styles.buttonStyles}> Add Student </Button>
         <section
           style={{
             display: "flex",
