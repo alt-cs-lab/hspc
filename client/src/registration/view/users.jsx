@@ -3,7 +3,6 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import UserService from "../../_common/services/user";
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
@@ -76,7 +75,6 @@ class ViewUsers extends Component {
   render() {
     return (
       <div>
-        <StatusMessages/>
         <h2>Users</h2>
         <DataTable
           data={this.state.userTable} 

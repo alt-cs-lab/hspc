@@ -3,7 +3,6 @@
   Copyright (c) 2024 KSU-CS-Software-Engineering
   */
   import React, { Component, useState, useEffect } from "react";
-  import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
   import Button from "react-bootstrap/Button";
   import TeamService from "../../_common/services/team";
   import EventService from "../../_common/services/event";
@@ -157,7 +156,6 @@
       />
       return (
       <div>
-        <StatusMessages />
         <h2>Teams</h2>
         <Button>Add Team</Button>
         <section

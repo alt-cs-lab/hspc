@@ -3,7 +3,6 @@ MIT License
 Copyright (c) 2022 KSU-CS-Software-Engineering
 */
 import React, {Component} from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import UpgradeService from "../../_common/services/team-request";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -14,7 +13,7 @@ import {connect} from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import { Table } from "react-bootstrap"
 
-var currentView = null;
+// var currentView = null;
 
 /*
  * @author: Daniel Bell and Jacob Beck
@@ -154,11 +153,8 @@ class TeamRequests extends Component {
     render() {
         return (
             <div>
-                <StatusMessages/>
                 <h2>Team Requests</h2>
-
                 <Table data={this.state.eventTable} columns={this.state.columns}/>
-                
             </div>
         );
     }

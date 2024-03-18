@@ -6,7 +6,6 @@ import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import Select from "react-select";
 import Button from 'react-bootstrap/Button';
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import TeamService from "../../_common/services/team";
 import EventService from "../../_common/services/event";
 import participantService from "../../_common/services/participant";
@@ -215,7 +214,6 @@ class AddEventTeam extends Component {
             onChange={(e) => (this.eventdate = e.label)}
           />
         </div>
-        <StatusMessages />
         {this.currentView}
         <div>
           <Button

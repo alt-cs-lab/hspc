@@ -3,7 +3,6 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, {Component} from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages";
 //import ReCAPTCHA from "react-recaptcha";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
@@ -83,12 +82,6 @@ export class RegisterSchool extends Component {
     render() {
         return (
             <div className="RegisterBox">
-                {this.props.errors.errorMsg !== "" ||
-                this.props.errors.successMsg !== "" ? (
-                    <StatusMessages/>
-                ) : (
-                    ""
-                )}
                 <h2>Register School</h2>
                 <p>
                 <b>Please fill out the information below.</b>

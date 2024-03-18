@@ -31,7 +31,6 @@ function login({ email, password }) {
         return checkPassword(password, user.encryptedPassword).then(() => {
             // we only get here if the password is correct
             // Create JWT Payload
-            console.log(user)
             const payload = {
                 id: user.id,
                 firstName: user.firstName,

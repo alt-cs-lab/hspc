@@ -3,7 +3,6 @@ MIT License
 Copyright (c) 2024 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 // import Button from 'react-bootstrap/Button';
 // import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/register-user.css";
@@ -67,7 +66,6 @@ class VolunteerSignUp extends Component {
   render() {
     return (
       <div className="signupBox">
-        <StatusMessages/>
         <h2>Sign Up To Volunteer</h2>
         <div>
         </div>

@@ -10,7 +10,6 @@ import BoardSetup from "../../scoring/create-scoreboard";
 import AddScore from "../../_common/services/scoreboard";
 import Scoreboard from "../../scoring/scoreboard";
 import EventService from "../../_common/services/event";
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import "../../_common/assets/css/event-signin.css";
 import TeamService from "../../_common/services/team";
 import { connect } from "react-redux";
@@ -216,7 +215,6 @@ class EventSignIn extends Component {
               onChange={(e) => this.showRegisteredTeams(e.label)}
             />
           </div>
-          <StatusMessages />
           {this.dataView}
           <div>
             <Button

@@ -3,7 +3,6 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, {Component} from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages";
 import {ToggleButtonGroup, ToggleButton} from "react-bootstrap";
 //import ReCAPTCHA from "react-recaptcha";
 import Button from 'react-bootstrap/Button';
@@ -51,9 +50,7 @@ class RegisterTeam extends Component {
     }
 
     /*
-     * Returns a list of all events when the component is rendered.
-     * Returns a list of all schools when the component is rendered.
-     * Returns a list of all advisors when the component is rendered.
+     * Returns a list of all events, schools, and advisors when the component is rendered.
      */
     componentDidMount = () => {
         EventService.getAllEvents(
@@ -300,12 +297,6 @@ class RegisterTeam extends Component {
     render() {
         return (
             <div name="status-div" className="RegisterBox">
-                {this.props.errors.errorMsg !== "" ||
-                this.props.errors.successMsg !== "" ? (
-                    <StatusMessages/>
-                ) : (
-                    ""
-                )}
                 <h2>New Team?</h2>
                 <p>
                     <b>Please fill out the information below.</b>

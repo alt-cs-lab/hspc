@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Form } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import userService from "../_common/services/user";
-import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 //import { Transport } from './Transport';
 import "../_common/assets/css/create-email.css";
 
@@ -82,7 +81,6 @@ export default class Email extends Component {
   render() {
     return (
       <div>
-        <StatusMessages />
         <h2>Create Email</h2>
         <p>
           <b>Please fill out the information below.</b>

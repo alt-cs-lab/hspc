@@ -7,6 +7,8 @@ import React from "react";
 import "./status-messages.css";
 import Alert from 'react-bootstrap/Alert';
 import { connect } from "react-redux";
+import CloseButton from 'react-bootstrap/CloseButton';
+import { clearErrors } from "../../../_store/slices/errorSlice";
 /*
  * Class to dislay status messages - success or errors
  *
@@ -33,6 +35,9 @@ export function StatusMessages(props){
           }}
         >
           {props.errors.errorMsg}
+          <div>
+            <CloseButton onClick={() => props.dispatchResetErrors()} />
+          </div>
         </Alert>
       ) : props.errors.successMsg ? (
         <Alert
@@ -44,6 +49,9 @@ export function StatusMessages(props){
           }}
         >
           {props.errors.successMsg}
+          <div>
+            <CloseButton onClick={() => props.dispatchResetErrors()} />
+          </div>
         </Alert>
       ) : (
         ""
@@ -58,4 +66,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(StatusMessages);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchResetErrors: () => dispatch(clearErrors()),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StatusMessages);

@@ -5,7 +5,6 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, {Component} from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 //import ReCAPTCHA from "react-recaptcha";
 import eventService from "../../_common/services/event";
 import "../../_common/assets/css/create-event.css";
@@ -84,7 +83,6 @@ class CreateEvent extends Component {
     render() {
         return (
             <div className="RegisterBox">
-                <StatusMessages/>
                 <h2>Schedule Event</h2>
                 <p>
                     <b>Please fill out the information below.</b>

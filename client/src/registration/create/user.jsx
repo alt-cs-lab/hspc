@@ -9,7 +9,6 @@ import { connect } from "react-redux";
 import { Button, Form, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
 //import ReCAPTCHA from "react-recaptcha";
-import StatusMessages from "../../_common/components/status-messages/status-messages";
 import "../../_common/assets/css/register-user.css";
 import { registerUser } from "../../_store/actions/authActions";
 import {
@@ -155,12 +154,6 @@ class Register extends Component {
   render() {
     return (
       <div name="status-div" className="RegisterBox">
-        {this.props.errors.errorMsg !== "" ||
-        this.props.errors.successMsg !== "" ? (
-          <StatusMessages />
-        ) : (
-          ""
-        )}
         <h2>New User?</h2>
         <p>
           <b>Please fill out the information below.</b>
