@@ -21,12 +21,7 @@ import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
 import FixRequiredSelect from "./FixRequiredSelect";
 
-const selectStyles = {
-    menu: (base) => ({
-        ...base,
-        zIndex: 100,
-    }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 class CreateTeam extends Component {
     constructor(props) {
@@ -232,7 +227,7 @@ class CreateTeam extends Component {
                             </p>
                             <FixRequiredSelect
                                 id="dropdown"
-                                styles={selectStyles}
+                                styles={styles.selectStyles}
                                 placeholder="Select a school"
                                 options={this.state.schoolList}
                                 onChange={this.handleSchoolChange}
@@ -246,7 +241,7 @@ class CreateTeam extends Component {
                                 </p>
                                 <FixRequiredSelect
                                     id="dropdown"
-                                    styles={selectStyles}
+                                    styles={styles.selectStyles}
                                     placeholder="Select an event"
                                     options={this.state.eventList}
                                     onChange={this.handleEventChange}
@@ -260,7 +255,7 @@ class CreateTeam extends Component {
                             </p>
                             <FixRequiredSelect
                                 id="dropdown"
-                                styles={selectStyles}
+                                styles={styles.selectStyles}
                                 placeholder="Select a skill level"
                                 options={this.state.skillLevels}
                                 onChange={this.handleSkillLevelChange}
@@ -282,7 +277,8 @@ class CreateTeam extends Component {
                             </Form.Control>
                             ))}
                     </Form.Group>
-                    <Button type="register" variant="secondary" onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
+                    <Button type="register" styles={{backgroundColor: "#512888", color: "white", fontSize: 16}} 
+                        onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
                 </Form>
             </div>
         )

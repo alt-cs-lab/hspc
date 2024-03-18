@@ -13,6 +13,8 @@ import Select from "react-select";
 import { Button } from "react-bootstrap";
 // import { getAllStudents } from "../../_common/services/high-school-student.js";
 
+const styles = require('../../_utilities/styleConstants.js');
+
 // This class inherits functionality of the Component class and extends it.
 class ViewStudents extends Component {
   constructor(props) {
@@ -102,7 +104,7 @@ class ViewStudents extends Component {
       <div>
         {/* <StatusMessages/> */}
         <h2> Students </h2>
-        <Button className="mb-3" style={{backgroundColor: "#512888", color: "white", fontSize: 16,}}> Add Student </Button>
+        <Button className="mb-3" style={styles.buttonStyles}> Add Student </Button>
         <section
           style={{
             display: "flex",

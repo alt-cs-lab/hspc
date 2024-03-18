@@ -14,14 +14,8 @@ import FixRequiredSelect from "./FixRequiredSelect.jsx";
 import SchoolService from "../../_common/services/school.js";
 import { withRouter } from "../../_utilities/routerUtils.jsx";
 
-const constants = require('../../_utilities/constants')
-
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100
-  }),
-};
+const constants = require('../../_utilities/constants');
+const styles = require('../../_utilities/styleConstants.js');
 
 const months = 
 [
@@ -136,7 +130,7 @@ class AddStudent extends Component {
                 onChange={(target => this.setState({ gradYear: target.target.value }))} value={ this.state.gradYear }/>
             </Form.Group>
             <Button className="m-3" variant="secondary" type="submit" 
-              style={{margin: 15, backgroundColor: "#512888", color: "white", fontSize: 16,}}>
+              style={styles.buttonStyles}>
               Create Student
             </Button>
           </Form>

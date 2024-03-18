@@ -13,6 +13,7 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
+const styles = require('../../_utilities/styleConstants.js');
 
 class ViewTeams extends Component {
   constructor(props) {
@@ -178,12 +179,7 @@ class ViewTeams extends Component {
             </span>
             <Button
               className="RegisterButton"
-              style={{
-                margin: 15,
-                backgroundColor: "#512888",
-                color: "white",
-                fontSize: 14,
-              }}
+              style={styles.buttonStyles}
               onClick={() => {
                 this.reloadAllTeams()
               }}
