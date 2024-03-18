@@ -10,7 +10,9 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
+
 const constants = require('../../_utilities/constants');
+const styles = require('../../_utilities/styleConstants.js');
 
 // This class inherits functionality of the Component class and extends it.
 class ViewStudents extends Component {
@@ -101,7 +103,7 @@ class ViewStudents extends Component {
     return (
       <div>
         <h2> Students </h2>
-        <Button className="mb-3"> Add Student </Button>
+        <Button className="mb-3" variant="secondary" style={styles.buttonStyles}> Add Student </Button>
         <section
           style={{
             display: "flex",

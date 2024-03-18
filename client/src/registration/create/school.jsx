@@ -138,8 +138,20 @@ export class RegisterSchool extends Component {
                                 onloadCallback={this.recaptchaLoaded}
                                 verifyCallback={this.verifyCallback}
                             />
-                        </div> */}
-                        <Button className="RegisterButton" variant="primary" type="submit">Register School</Button>
+                </div> */}
+                        <Button
+                            variant="secondary"
+                            className="RegisterButton"
+                            style={{
+                                margin: 15,
+                                backgroundColor: "#00a655",
+                                fontSize: 14,
+                                color: "white",
+                            }}
+                            onClick={(event) => this.handleRegisterSchool(event)}
+                        >
+                            Register School
+                        </Button>
                     </Form>
                 </div>
             </div>

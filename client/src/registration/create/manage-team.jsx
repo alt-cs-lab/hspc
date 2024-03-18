@@ -18,15 +18,10 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
-import FixRequiredSelect from "../../_common/components/FixRequiredSelect.jsx";
-const constants = require('../../_utilities/constants');
+import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
 
-const selectStyles = {
-    menu: (base) => ({
-        ...base,
-        zIndex: 100,
-    }),
-};
+const constants = require('../../_utilities/constants');
+const styles = require('../../_utilities/styleConstants.js');
 
 class CreateTeam extends Component {
     constructor(props) {
@@ -234,7 +229,7 @@ class CreateTeam extends Component {
                             </p>
                             <FixRequiredSelect
                                 id="dropdown"
-                                styles={selectStyles}
+                                styles={styles.selectStyles}
                                 placeholder="Select a school"
                                 options={this.state.schoolList}
                                 onChange={(opt) => this.updateStudentList(opt.id)}
@@ -248,7 +243,7 @@ class CreateTeam extends Component {
                                 </p>
                                 <FixRequiredSelect
                                     id="dropdown"
-                                    styles={selectStyles}
+                                    styles={styles.selectStyles}
                                     placeholder="Select an event"
                                     options={this.state.eventList}
                                     onChange={this.handleEventChange}
@@ -262,7 +257,7 @@ class CreateTeam extends Component {
                             </p>
                             <FixRequiredSelect
                                 id="dropdown"
-                                styles={selectStyles}
+                                styles={styles.selectStyles}
                                 placeholder="Select a skill level"
                                 options={this.state.skillLevels}
                                 onChange={this.handleSkillLevelChange}
@@ -283,8 +278,8 @@ class CreateTeam extends Component {
                             />
                             ))}
                     </Form.Group>
-                    <br></br>
-                    <Button type="register" onClick={(event) => this.handleRegisterTeam()}>Register Team </Button>
+                    <Button type="register" variant="secondary" style={styles.buttonStyles} 
+                        onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
                 </Form>
             </div>
         )

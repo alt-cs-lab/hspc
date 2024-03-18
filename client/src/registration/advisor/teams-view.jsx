@@ -16,7 +16,9 @@
     updateErrorMsg,
     updateSuccessMsg,
   } from "../../_store/slices/errorSlice.js";
+
   const constants = require('../../_utilities/constants');
+  const styles = require('../../_utilities/styleConstants.js');
   
   /*
   * Page to view an advisor's schools' teams
@@ -157,7 +159,7 @@
       return (
       <div>
         <h2>Teams</h2>
-        <Button>Add Team</Button>
+        <Button style={styles.buttonStyles} variant="secondary">Add Team</Button>
         <section
           style={{
             display: "flex",

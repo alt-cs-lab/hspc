@@ -17,12 +17,7 @@ import Select from "react-select";
 import {connect} from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
-const selectStyles = {
-    menu: (base) => ({
-        ...base,
-        zIndex: 100,
-    }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell, Tyler Trammell
@@ -325,7 +320,7 @@ class RegisterTeam extends Component {
                         </p>
                         <Select
                             id="dropdown"
-                            styles={selectStyles}
+                            styles={styles.selectStyles}
                             placeholder="Select a school"
                             options={this.state.schoolList}
                             onChange={this.handleSchoolChange}
@@ -338,7 +333,7 @@ class RegisterTeam extends Component {
                         <Select
                             id="dropdown"
                             required
-                            styles={selectStyles}
+                            styles={styles.selectStyles}
                             placeholder="Select an event"
                             options={this.state.eventList}
                             onChange={this.handleCompetitionChange}
@@ -351,7 +346,7 @@ class RegisterTeam extends Component {
                         <Select
                             id="dropdown"
                             required
-                            styles={selectStyles}
+                            styles={styles.selectStyles}
                             placeholder="Select an advisor"
                             options={this.state.advisorList}
                             onChange={this.handleAdvisorChange}
@@ -392,7 +387,7 @@ class RegisterTeam extends Component {
                         className="RegisterButton"
                         style={{
                             margin: 15,
-                            backgroundColor: "#00a655",
+                            backgroundColor: "#003434",
                             fontSize: 14,
                             color: "white",
                         }}
