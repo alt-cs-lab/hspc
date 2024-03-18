@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Navbar, Nav, Container, NavLink } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
-import StatusMessages from "../_common/components/status-messages/status-messages";
+import StatusMessages from "../_common/components/status-messages";
 import "../_common/assets/css/public-competitions.css";
 
 import beginner2018 from "../_common/assets/beginner2018.pdf";

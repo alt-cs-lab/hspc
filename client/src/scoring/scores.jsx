@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
+import StatusMessages from "../_common/components/status-messages.jsx";
 import Button from 'react-bootstrap/Button';
 import scorecardService from "../_common/services/scorecard";
 import { FilePond } from "react-filepond";

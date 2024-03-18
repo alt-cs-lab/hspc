@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import StatusMessages from "../_common/components/status-messages/status-messages";
+import StatusMessages from "../_common/components/status-messages";
 import "../_common/assets/css/public-login.css";
 import "../home/homepage";
 import { login, selectAuth } from "../_store/slices/authSlice";

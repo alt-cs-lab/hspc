@@ -3,9 +3,8 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-// import StatusMessages from "../../_common/components/status-messages/status-messages";
+// import StatusMessages from "../../_common/components/status-messages";
 import Button from 'react-bootstrap/Button';
-import AuthService from "../../_common/services/auth";
 import EventService from "../../_common/services/event";
 import TeamService from "../../_common/services/team";
 import UserService from "../../_common/services/user";

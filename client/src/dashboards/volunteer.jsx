@@ -4,7 +4,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { useState } from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
-import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
+import StatusMessages from "../_common/components/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
 import ViewEvents from "../registration/view/events";
 import VolunteerSignUp from "../registration/create/volunteer-sign-up"
