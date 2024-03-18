@@ -12,7 +12,7 @@ import { clearErrors } from "../../../_store/slices/errorSlice";
 /*
  * Class to dislay status messages - success or errors
  *
- * @updated 2020: Tyler Trammell
+ * @updated 2024: Trent Powell
  */
 
 /*
