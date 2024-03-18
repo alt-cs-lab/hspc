@@ -5,18 +5,13 @@ class UserService {
         this.getAllUsers = this.getAllUsers.bind(this);
         this.getAllVolunteers = this.getAllVolunteers.bind(this);
         this.logVolunteerAssignment = this.logVolunteerAssignment.bind(this);
-        this.getAllStudents = this.getAllStudents.bind(this); //????
-        this.getAllAdvisors = this.getAllAdvisors.bind(this);
-        // this.addstudent = this.addstudent.bind(this);//Natalie Laughlin
-        this.getStudentsFromAdvisors = this.getStudentsFromAdvisors.bind(this);//Natalie Laughlin
-        this.getstudentsteam = this.getstudentsteam.bind(this);//Natalie Laughlin
     }
 
     /*
     * Calls the API and returns a JSON list of all registered users.
     */
     getAllUsers() {
-        return ServiceUtils.getRequest('api/user/view', {});
+      return ServiceUtils.getRequest('/api/user/view', {});
     }
 
     getAllVolunteers() {
@@ -42,61 +37,8 @@ class UserService {
   }
 
   /*
-   * API Endpoint that returns all users with Advisor access.
-   */
-  getAllAdvisors() {
-    return ServiceUtils.getRequest("api/user/advisors", {});
-  }
-
-  /*
-   * API Endpoint that returns all users with Student access.
-   *
-   */
-  getAllStudents(email, accessLevel) {
-    return ServiceUtils.getRequest("api/user/students", { email: email, accessLevel: accessLevel });
-  }
-
-  /*
-   * API Endpoint that returns all users with Student based on the advisor.
-   *
-   * @author: Trent Kempker
-   * @edited: Natalie Laughlin - passes in the email
-   *
-   * modified to get the users assiated with an advisor Natalie Laughlin
-   */
-  getStudentsFromAdvisors(email) {
-    return ServiceUtils.getRequest("api/user/studentsAvisor", { email: email });
-  }
-
-  /*
-   * API Endpoint that returns all users with Student based on team name
-   */
-  getstudentsteam(teamName) {
-    return ServiceUtils.getRequest("api/user/viewteam", { teamName: teamName });
-  }
-
-    /*
-    * API Endpoint adds student to table. creates a student
-    *
-    */
-    // addstudent(firstName, lastName, email, phone, accesslevel, requestlevel, hashedPassword, advisoremail) {
-    //     return ServiceUtils.postRequest('api/user/addstudent', {
-    //         firstName: firstName,
-    //         lastName: lastName,
-    //         email: email,
-    //         phone: phone,
-    //         password: hashedPassword,
-    //         accessLevel: accesslevel,
-    //         requestLevel: requestlevel,
-    //         advisoremail: advisoremail,
-    //     });
-    // }
-
-  /*
-    * API Endpoint that upates Adivsors table with schoolID
-    *
-
-    */
+  * API Endpoint that updates Adivsors table with schoolID
+  */
   updateAdvisorSchool(userId, schoolId) {
     return ServiceUtils.postRequest("api/user/addschool", {
       userId: userId,

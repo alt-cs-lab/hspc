@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Button, Form, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
-import ReCAPTCHA from "react-recaptcha";
+//import ReCAPTCHA from "react-recaptcha";
 import StatusMessages from "../../_common/components/status-messages/status-messages";
 import "../../_common/assets/css/register-user.css";
 import { registerUser } from "../../_store/actions/authActions";
@@ -16,7 +16,7 @@ import {
   SET_SCHOOL_DROPDOWN_REQUIRED,
 } from "../../_store/actions/types";
 import BaseSelect from "react-select";
-import FixRequiredSelect from "./FixRequiredSelect";
+import FixRequiredSelect from "../../_common/components/FixRequiredSelect.jsx";
 import SchoolService from "../../_common/services/school.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
@@ -37,8 +37,8 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.props.dispatchResetErrors();
-    this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
-    this.verifyCallback = this.verifyCallback.bind(this);
+    //this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
+    //this.verifyCallback = this.verifyCallback.bind(this);
     this.state = {
       firstName: "",
       lastName: "",
@@ -70,9 +70,9 @@ class Register extends Component {
             });
           }
           this.setState({ schoolList: schools });
-        } else console.log("An error has occurred, Please try again.");
+        } else console.log("An error has occurred retrieving schools, Please try again.");
       })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
+      .catch((resErr) => console.log("Something went wrong attempting to connect to the server. Please try again"));
   };
 
   /*
@@ -81,6 +81,8 @@ class Register extends Component {
   handleRegister(event) {
     event.preventDefault();
     const newUser = this.state;
+    // TODO TWP: Do additional Error Checking
+
     //if (this.state.isVerified) {
         this.props.registerUser(newUser, this.props.router);
     //} else {
@@ -105,17 +107,17 @@ class Register extends Component {
   /*
    * Indicates successful loading of the captcha for debugging purposes
    */
-  recaptchaLoaded() {
-    console.log("captcha successfully loaded.");
-  }
+  // recaptchaLoaded() {
+  //   console.log("captcha successfully loaded.");
+  // }
 
   /*
    * Changes the verfied state to true following a verified captcha result.
    */
-  verifyCallback(response) {
-    if (response) this.setState({ isVerified: true });
-    else this.setState({ isVerified: false });
-  }
+  // verifyCallback(response) {
+  //   if (response) this.setState({ isVerified: true });
+  //   else this.setState({ isVerified: false });
+  // }
 
   onChange(event) {
     this.setState({
@@ -284,7 +286,7 @@ class Register extends Component {
             />
           </Form.Group>
           <br/>
-          <div name="captcha" align="center">
+          {/* <div name="captcha" align="center">
             <ReCAPTCHA
               sitekey="6LdB8YoUAAAAAL5OtI4zXys_QDLidEuqpkwd3sKN"
               render="explicit"
@@ -292,19 +294,9 @@ class Register extends Component {
               verifyCallback={this.verifyCallback}
               size="small"
             />
-          </div>
+          </div> */}
           <br/>
-          <Button
-            variant="primary"
-            id="submit-button"
-            label="Create Account"
-            style={{
-              fontSize: "14px",
-              backgroundColor: "#00a655",
-              color: "white",
-            }}
-            type="submit"
-          >
+          <Button variant="primary" id="submit-button" label="Create Account" type="submit">
             Create Account
           </Button>
         </Form>

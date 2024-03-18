@@ -5,81 +5,53 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { useState, useEffect } from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
-import AddEventTeam from "../registration/create/add-event-team";
-import BoardSetup from "../scoring/create-scoreboard";
-import Email from "../email/create-email";
+import DashboardHome from "../home/dashboard-home"
+//import Email from "../email/create-email";
 import EventSignIn from "../registration/create/event-signin";
 import CreateEvent from "../registration/create/event";
-import CreateNews from "../home/news";
+//import CreateNews from "../home/news";
 import ViewEvents from "../registration/view/events";
 import ViewUsers from "../registration/view/users";
+import SchoolRequests from "../registration/view/advisor-school-requests"
 import ViewTeams from "../registration/view/teams";
-import UpgradeRequests from "../registration/view/upgrade-requests";
-import AddUser from "../registration/create/add-team-member";
 import Register from "../registration/create/user";
-import RegisterTeam from "../registration/create/team";
-import Scoreboard from "../scoring/scoreboard.jsx";
-import PublishPractice from "../problems/practice";
-import PublishScores from "../scoring/scores";
-import UserService from "../_common/services/user";
+import CreateTeam from "../registration/create/manage-team";
+//import Scoreboard from "../scoring/scoreboard.jsx";
+//import PublishPractice from "../problems/practice";
+//import PublishScores from "../scoring/scores";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-admin.css";
 import RegisterSchool from "../registration/create/school";
 import ViewSchools from "../registration/view/school";
-import ViewAdvisors from "../registration/view/advisors";
 import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
 function AdminDash(props)
 {
-  const [currentView, setCurrentView] = useState(<></>);
-  const [currentUserName, setCurrentUserName] = useState({FirstName: "", LastName:"",});
+  const [currentView, setCurrentView] = useState(<DashboardHome user={props.currentUser} />);
 
   useEffect(() =>{
     props.dispatchResetErrors();
-      UserService.getAllUsers()
-      .then((response) => {
-        let body = response.data
-        if (response.status === 200) {
-          let user = [];
-          for (let i = 0; i < body.length; i++) {
-            if (body[i].email === props.currentUser.email) {
-              user = {
-                FirstName: body[i].firstname,
-                LastName: body[i].lastname,
-              };
-            }
-          }
-          setCurrentUserName(user);
-          setCurrentView(<h2 id="welcome">Welcome {user.FirstName} {user.LastName}!</h2>)
-        }
-      })
-      .catch((resErr) => {
-        console.log("Error: ",resErr);
-      })
     }, [props]);
   
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Navbar.Brand onClick={() => setCurrentView(<h2 id="welcome">Welcome {currentUserName.FirstName} {currentUserName.LastName}!</h2>)}>
+          <Navbar.Brand onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
             Admin Portal
           </Navbar.Brand>
           <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>
             <NavDropdown title="Users" id="basic-nav-dropdown">
-              <NavItem eventKey={1} onClick={() => setCurrentView(<UpgradeRequests />)}>
-                Upgrade Requests
-              </NavItem>
               <NavItem eventKey={2} onClick={() => setCurrentView(<Register />)}>
                 Create User
               </NavItem>
               <NavItem eventKey={3} onClick={() => setCurrentView(<ViewUsers />)}>
                 View Users
               </NavItem>
-              <NavItem eventKey={19} onClick={() => setCurrentView(<ViewAdvisors />)}>
-                View Advisors
+              <NavItem eventKey={3} onClick={() => setCurrentView(<SchoolRequests />)}>
+                School Requests
               </NavItem>
             </NavDropdown>
 
@@ -93,11 +65,8 @@ function AdminDash(props)
             </NavDropdown>
 
             <NavDropdown title="Teams" id="basic-nav-dropdown">
-              <NavItem eventKey={4} onClick={() => setCurrentView(<RegisterTeam />)}>
+              <NavItem eventKey={4} onClick={() => setCurrentView(<CreateTeam advisor={props.currentUser} />)}>
                 Create Team
-              </NavItem>
-              <NavItem eventKey={5} onClick={() => setCurrentView(<AddUser />)}>
-                Add User
               </NavItem>
               <NavItem eventKey={6} onClick={() => setCurrentView(<ViewTeams />)}>
                 View Teams
@@ -116,13 +85,13 @@ function AdminDash(props)
               </NavItem>
             </NavDropdown>
 
-            <NavDropdown title="Scoreboard" id="basic-nav-dropdown">
+            {/* <NavDropdown title="Scoreboard" id="basic-nav-dropdown">
               <NavItem eventKey={11} onClick={() => setCurrentView(<Scoreboard />)}>
                 View Board
               </NavItem>
-            </NavDropdown>
+            </NavDropdown> */}
 
-            <NavDropdown title="Resources" id="basic-nav-dropdown">
+            {/* <NavDropdown title="Resources" id="basic-nav-dropdown">
               <NavItem eventKey={13} onClick={() => setCurrentView(<PublishPractice />)}>
                 Publish Practice Questions
               </NavItem>
@@ -135,7 +104,7 @@ function AdminDash(props)
               <NavItem eventKey={16} onClick={() => setCurrentView(<CreateNews />)}>
                 Update Newsfeed
               </NavItem>
-            </NavDropdown>
+            </NavDropdown> */}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

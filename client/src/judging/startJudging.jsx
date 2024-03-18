@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import UserService from "../_common/services/user";
 
 import TeamService from "../_common/services/team";
-import Questions from "./volunteerAssignmentQuestion";
+// import Questions from "./volunteerAssignmentQuestion";
 
 import "./stylesheet.css";
 import "../_common/assets/css/register-user.css";
@@ -21,10 +21,10 @@ export default class StartJudging extends Component {
 
     this.state = {
       userId: this.props.currentUser,
-      currentTeam: this.props.currentTeam,
+      // currentTeam: this.props.currentTeam,
       currentTeamID: 0,
       currentTeamName: "",
-      currentTeam: [],
+      // currentTeam: [],
       show: false,
     };
   }

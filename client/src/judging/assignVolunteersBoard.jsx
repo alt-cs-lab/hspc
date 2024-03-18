@@ -12,14 +12,14 @@ import { Button } from "react-bootstrap";
 import VolunteerList from "./volunteerList";
 import ActiveVolunteerList from "./activeVolunteerList";
 import TeamsNeedingAssignmentList from "./teamsNeedingAssignmentList";
-import TeamList from "./teamList";
+// import TeamList from "./teamList";
 import Modal from "./modal";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 import UserService from "../_common/services/user";
 import TeamService from "../_common/services/team";
 import "./stylesheet.css";
-import ActiveTeamsNeedingAssignmentList from "./activeTeamsNeedingAssignmentList";
-import teamsNeedingAssignment from "./teamsNeedingAssignment";
+// import ActiveTeamsNeedingAssignmentList from "./activeTeamsNeedingAssignmentList";
+// import teamsNeedingAssignment from "./teamsNeedingAssignment";
 
 /*
  *   @author: Trey Moddelmog
@@ -40,7 +40,6 @@ export default class VolunteersBoard extends React.Component {
       showTeamNeedingAssignmentModal: false,
       currentTeamID: null,
       currentVolunteerID: null,
-      currentTeamID: null,
     };
   }
 

@@ -66,11 +66,11 @@ function badRequestCheck(req, res, next) {
     next();
 }
 
-function minimumAccessLevelCheck(minLevel) {
+function accessLevelCheck(level) {
     return (req, res, next) => {
         if (
             req?.user?.accessLevel !== undefined &&
-            req.user.accessLevel >= minLevel &&
+            (req.user.accessLevel == level || req.user.accessLevel == constants.MASTER) &&
             constants.legalLevels.includes(req.user.accessLevel)
         ) {
             next();
@@ -109,6 +109,6 @@ module.exports = {
     fromLowerCaseArr,
     renameKeys,
     badRequestCheck,
-    minimumAccessLevelCheck,
+    accessLevelCheck,
     useService,
 };

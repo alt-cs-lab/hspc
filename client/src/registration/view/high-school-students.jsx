@@ -3,7 +3,6 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-// import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import SchoolService from "../../_common/services/school";
 import StudentService from "../../_common/services/high-school-student";
 import DataTable from "react-data-table-component";
@@ -11,8 +10,8 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
-// import { getAllStudents } from "../../_common/services/high-school-student.js";
 
+const constants = require('../../_utilities/constants');
 const styles = require('../../_utilities/styleConstants.js');
 
 // This class inherits functionality of the Component class and extends it.
@@ -33,7 +32,7 @@ class ViewStudents extends Component {
   // Updates advisor's schools and the schools' students when the component is rendered.
   componentDidMount = () => {
     // Get Advisor's Schools
-    SchoolService.getAdvisorSchools(this.advisor.id)
+    SchoolService.getAdvisorApprovedSchools(this.advisor.id)
     .then((response) => {
         if (response.ok) {
             let schoolbody = response.data;
@@ -78,9 +77,10 @@ class ViewStudents extends Component {
         sortable: true,
       },
       {
-        name: "Graduation Date",
-        selector: row => row.graddate,
+        name: "Grad Date (YYYY-MM-DD)",
+        selector: row => constants.dateFormat(row.graddate),
         sortable: true,
+        sortFunction: constants.dateSort,
       }
     ];
   }
@@ -102,7 +102,6 @@ class ViewStudents extends Component {
   render() {
     return (
       <div>
-        {/* <StatusMessages/> */}
         <h2> Students </h2>
         <Button className="mb-3" style={styles.buttonStyles}> Add Student </Button>
         <section

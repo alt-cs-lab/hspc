@@ -34,7 +34,7 @@ const router = require("express").Router();
 const teamService = require("../services/team");
 const eventService = require("../services/event");
 const passport = require("passport");
-const { minimumAccessLevelCheck, badRequestCheck, useService } = require("../utils/extensions");
+const { accessLevelCheck, badRequestCheck, useService } = require("../utils/extensions");
 const constants = require("../utils/constants");
 const { query, body } = require("express-validator");
 
@@ -128,7 +128,7 @@ router.get('/getFromAdvisorSchools', (req, res) => {
 router.get(
     "/",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR),
     [
         // generally just checking the optional parameters are the right type
         query("schoolId").optional().isInt().withMessage("schoolId must be an integer"),
@@ -159,7 +159,7 @@ router.get(
 router.get(
     "/waitlistinfo",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR),
     [
         query("schoolId")
             .exists().withMessage("schoolId is required")
@@ -189,11 +189,18 @@ router.get(
  * @apiError (500 Internal Server Error) {String} message Error message.
  */
 router.post(
-    "/",
+    "/create",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR),
     [
-        // checking that there is a all the required parameters and that they are the right type
+        body("teamName")
+            .exists()
+            .withMessage("teamName is required")
+            .isString()
+            .withMessage("teamName must be a string")
+            .not()
+            .isEmpty()
+            .withMessage("teamName cannot be an empty string"),
         body("schoolId")
             .exists()
             .withMessage("schoolId is required")
@@ -204,20 +211,11 @@ router.post(
             .withMessage("competitionId is required")
             .isInt()
             .withMessage("competitionId must be an integer"),
-        // teamName can't be an empty string
-        body("teamName")
+        body("skillLevelId")
             .exists()
-            .withMessage("teamName is required")
-            .isString()
-            .withMessage("teamName must be a string")
-            .not()
-            .isEmpty()
-            .withMessage("teamName cannot be an empty string"),
-        body("questionLevelId")
-            .exists()
-            .withMessage("questionLevelId is required")
+            .withMessage("skillLevelId is required")
             .isInt()
-            .withMessage("questionLevelId must be an integer"),
+            .withMessage("skillLevelId must be an integer"),
         body("advisorId")
             .exists()
             .withMessage("advisorId is required")
@@ -230,7 +228,7 @@ router.post(
             if (waitlisted || req.user.accessLevel >= constants.ADMIN) {
                 return true;
             }
-            const isBeginner = req.body.questionLevelId === 1
+            const isBeginner = req.body.skillLevelId === 1
 
             return Promise.all([
                 eventService.getCompetitionTeamsInfo(req.body.competitionId),
@@ -288,7 +286,7 @@ router.post(
 router.put(
     "/",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR),
     [
         // checking that there is a all the required parameters and that they are the right type
         body("teamId").exists().withMessage("teamId is required").isInt().withMessage("teamId must be an integer"),
@@ -367,7 +365,7 @@ router.put(
 router.delete(
     "/",
     passport.authenticate("jwt", { session: false }),
-    minimumAccessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR),
     [
         // checking that there is a all the required parameters and that they are the right type
         body("teamId").isInt().withMessage("teamId must be an integer"),

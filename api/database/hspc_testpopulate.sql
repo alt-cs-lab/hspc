@@ -12,11 +12,11 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
 INSERT INTO Competitions
-    (CompetitionID, EventLocation, EventDate, EventTime, EventName, EventDescription, TeamsperEvent, BeginnerTeamsperEvent, AdvancedTeamsperEvent, TeamsPerSchool, BeginnerTeamsPerSchool, AdvancedTeamsPerSchool )
+    (CompetitionID, EventLocation, EventDate, EventStartTime, EventEndTime, EventName, EventDescription, TeamsperEvent, BeginnerTeamsperEvent, AdvancedTeamsperEvent, TeamsPerSchool, BeginnerTeamsPerSchool, AdvancedTeamsPerSchool )
 VALUES
-    (7, 'Central High School', '2024-03-15', '9:00am', 'Spring Coding Challenge', 'An engaging competition for high school students to showcase their programming skills.', 100, 50, 50, 5, 3, 3 ),
-    (8, 'Eastside Community College', '2024-04-20', '10:00am', 'ECC Tech Fest', 'A technology festival and competition for local high school and college students.', 120, 80, 80, 3, 2, 2 ),
-    (9, 'Kansas State Alumni Center', '2025-09-20', '11:00am', 'High School Programming Contest', 'The contest is open to all high school students. Each team will consist of up to four students with only one laptop per team. In order that beginners as well as more experienced programmers may compete, there will be two divisions: a beginning division consisting of students who have completed at most one semester of programming and have no more than one year programming experience, and an advanced division open to all high school students. Because different schools use different types of machines and different programming languages in their instruction, teams must provide their own computers and software. Any programming language may be used for the contest. Solutions to the contest problems will require numerical calculations, simple string manipulation and logical decisions. The main difference between the two divisions will be in the complexity of the programming logic required to solve the problems. For example, more use of nested loops will be required to solve some advanced division problems. Also, double-dimensioned arrays may be needed to solve advanced problems, whereas single-dimensioned arrays should be sufficient to solve the beginning problems.', 120, 80, 80, 3, 2, 2 );
+    (7, 'Central High School', '2024-03-15', '09:00:00 CST', '15:00:00 CST', 'Spring Coding Challenge', 'An engaging competition for high school students to showcase their programming skills.', 100, 50, 50, 5, 3, 3 ),
+    (8, 'Eastside Community College', '2024-04-20', '10:00:00 CST', '17:00:00 CST', 'ECC Tech Fest', 'A technology festival and competition for local high school and college students.', 120, 80, 80, 3, 2, 2 ),
+    (9, 'Kansas State Alumni Center', '2025-09-20', '11:00:00 CST', '16:00:00 CST', 'High School Programming Contest', 'The contest is open to all high school students. Each team will consist of up to four students with only one laptop per team. In order that beginners as well as more experienced programmers may compete, there will be two divisions: a beginning division consisting of students who have completed at most one semester of programming and have no more than one year programming experience, and an advanced division open to all high school students. Because different schools use different types of machines and different programming languages in their instruction, teams must provide their own computers and software. Any programming language may be used for the contest. Solutions to the contest problems will require numerical calculations, simple string manipulation and logical decisions. The main difference between the two divisions will be in the complexity of the programming logic required to solve the problems. For example, more use of nested loops will be required to solve some advanced division problems. Also, double-dimensioned arrays may be needed to solve advanced problems, whereas single-dimensioned arrays should be sufficient to solve the beginning problems.', 120, 80, 80, 3, 2, 2 );
 
 /*
 Insert Values into Roles Table
@@ -57,25 +57,26 @@ Insert Dummy Values into Users Table
 INSERT INTO Users
     (UserID, Phone, FirstName, LastName, EncryptedPassword, AccessLevel, RequestLevel, Email, CreatedOn, AccessedOn)
 VALUES
-    (18, '234-555-1012', 'Evelyn', 'Smith', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 20, 20, 'evelyn.smith@email.com', '2024-01-03', '2024-01-29'),
-    (19, '213-555-1013', 'Frank', 'Wright', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 20, 20, 'frank.wright@email.com', '2024-01-04', '2024-01-28'),
-    (20, '762-555-1014', 'Gina', 'Davis', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 40, 40, 'gina.davis@email.com', '2024-01-05', '2024-01-27'),
-    (21, '127-555-1015', 'Harry', 'Miller', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 40, 40, 'harry.miller@email.com', '2024-01-06', '2024-01-26'),
-    (22, '932-555-1016', 'Irene', 'Wilson', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 60, 60, 'irene.wilson@email.com', '2024-01-07', '2024-01-25'),
-    (23, '328-555-1017', 'Jack', 'Thomas', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 60, 60, 'jack.thomas@email.com', '2024-01-08', '2024-01-24'),
-    (24, '421-555-1018', 'Kathy', 'Lee', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 80, 80, 'kathy.lee@email.com', '2024-01-09', '2024-01-23'),
-    (25, '321-555-1019', 'Leo', 'Garcia', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 80, 80, 'leo.garcia@email.com', '2024-01-10', '2024-01-22'),
-    (26, '442-555-1020', 'Josh', 'Weese', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 100, 100, 'maggie.perez@email.com', '2024-01-11', '2024-01-29'),
-    (27, '745-555-1021', 'Nathan', 'Bean', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 100, 100, 'nathan.kim@email.com', '2024-01-12', '2024-01-28');
+    (18, '2345551012', 'Evelyn', 'Smith', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 20, 20, 'evelyn.smith@email.com', '2024-01-03', '2024-01-29'),
+    (19, '2135551013', 'Frank', 'Wright', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 20, 20, 'frank.wright@email.com', '2024-01-04', '2024-01-28'),
+    (20, '7625551014', 'Gina', 'Davis', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 40, 40, 'gina.davis@email.com', '2024-01-05', '2024-01-27'),
+    (21, '1275551015', 'Harry', 'Miller', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 40, 40, 'harry.miller@email.com', '2024-01-06', '2024-01-26'),
+    (22, '9325551016', 'Irene', 'Wilson', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 60, 60, 'irene.wilson@email.com', '2024-01-07', '2024-01-25'),
+    (23, '3285551017', 'Jack', 'Thomas', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 60, 60, 'jack.thomas@email.com', '2024-01-08', '2024-01-24'),
+    (24, '4215551018', 'Kathy', 'Lee', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 80, 80, 'kathy.lee@email.com', '2024-01-09', '2024-01-23'),
+    (25, '3215551019', 'Leo', 'Garcia', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 80, 80, 'leo.garcia@email.com', '2024-01-10', '2024-01-22'),
+    (26, '4425551020', 'Josh', 'Weese', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 100, 100, 'maggie.perez@email.com', '2024-01-11', '2024-01-29'),
+    (27, '7455551021', 'Nathan', 'Bean', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 100, 100, 'nathan.kim@email.com', '2024-01-12', '2024-01-28');
 
 /*
 Insert Dummy Values into School Advisors Table
 */
 INSERT INTO SchoolAdvisors
-    (UserID, SchoolID, appr)
+    (UserID, SchoolID, Approved)
 VALUES
-    (22, 181),
-    (23, 182);
+    (22, 181, true),
+    (22, 182, false),
+    (23, 182, true);
 
 /*
 Insert Dummy Values into High School Students Table

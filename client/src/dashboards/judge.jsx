@@ -3,9 +3,10 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
+import DashboardHome from "../home/dashboard-home"
 import EventSignIn from "../registration/create/event-signin";
 import ViewEvents from "../registration/view/events";
 import ViewUsers from "../registration/view/users";
@@ -13,50 +14,28 @@ import ViewTeams from "../registration/view/teams";
 import ViewAssignVolunteers from "../judging/assignVolunteersBoard";
 import EditScores from "../judging/editScores";
 import EditQuestions from "../judging/editQuestions";
-import Scoreboard from "../scoring/scoreboard";
-import UserService from "../_common/services/user";
+//import Scoreboard from "../scoring/scoreboard";
 import "../_common/assets/css/register-user.css";
 import "../_common/assets/css/dashboard-admin.css";
 import { connect } from "react-redux";
-import Websocket from "react-websocket";
+//import Websocket from "react-websocket";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
-const URL = "ws://localhost:8000";
+//const URL = "ws://localhost:8000";
 //var currentView = "";
 function JudgeDash(props)
 {
-  const [currentView, setCurrentView] = useState(<></>);
-  const [currentUserName, setCurrentUserName] = useState({FirstName: "", LastName: "",});
-  const ws = new WebSocket(URL);
+  const [currentView, setCurrentView] = useState(<DashboardHome user={props.currentUser} />);
+  //const ws = new WebSocket(URL);
 
   useEffect(() => {
     props.dispatchResetErrors();
-    UserService.getAllUsers()
-      .then((response) => {
-        let body = response.body;
-        if (response.statusCode === 200) {
-          let user = [];
-          for (let i = 0; i < body.length; i++) {
-            if (body[i].email === props.currentUser.email) {
-              user = {
-                FirstName: body[i].firstname,
-                LastName: body[i].lastname,
-              };
-            }
-          }
-          setCurrentUserName(user);
-          setCurrentView(<h2 id="welcome">Welcome {user.FirstName} {user.LastName}!</h2>);
-        }
-      })
-      .catch((resErr) => {
-        console.log("Error: ",resErr);
-      });
   }, [props])
 
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Navbar.Brand onClick={() => setCurrentView(<h2 id="welcome">Welcome {currentUserName.FirstName} {currentUserName.LastName}!</h2>)}>
+          <Navbar.Brand onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
             Judge Portal
           </Navbar.Brand>
           <Navbar.Toggle />
@@ -85,9 +64,9 @@ function JudgeDash(props)
             <NavItem eventKey={7} onClick={() => setCurrentView(<EditQuestions />)}>
               Questions
             </NavItem>
-            <NavItem eventKey={5} onClick={() => setCurrentView(<Scoreboard />)}>
+            {/* <NavItem eventKey={5} onClick={() => setCurrentView(<Scoreboard />)}>
               View Board
-            </NavItem>
+            </NavItem> */}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
