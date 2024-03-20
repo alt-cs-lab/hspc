@@ -5,7 +5,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 
 import React, { useState, useEffect } from "react";
 import { Navbar, NavItem, Nav, NavDropdown/*, NavLink*/ } from "react-bootstrap";
-import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
+import StatusMessages from "../_common/components/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
 import TeamsView from "../registration/advisor/teams-view";
 import ViewEvents from "../registration/view/events";

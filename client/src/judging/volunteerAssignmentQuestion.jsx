@@ -6,7 +6,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React from "react";
 import "./volunteerAssignmentQuestion.css";
 import { Table } from "react-bootstrap";
-import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
+import StatusMessages from "../_common/components/status-messages.jsx";
 import QuestionService from "../_common/services/questions";
 import Result from "./testcaseResult";
 

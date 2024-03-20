@@ -4,11 +4,10 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 React Bootstrap for CSS
 */
 import React from "react";
-import "./status-messages.css";
 import Alert from 'react-bootstrap/Alert';
 import { connect } from "react-redux";
 import CloseButton from 'react-bootstrap/CloseButton';
-import { clearErrors } from "../../../_store/slices/errorSlice";
+import { clearErrors } from "../../_store/slices/errorSlice";
 /*
  * Class to dislay status messages - success or errors
  *
@@ -32,6 +31,7 @@ export function StatusMessages(props){
             fontSize: "16px",
             display: "flex",
             justifyContent: "center",
+            background: "red"
           }}
         >
           {props.errors.errorMsg}
@@ -46,6 +46,7 @@ export function StatusMessages(props){
             fontSize: "16px",
             display: "flex",
             justifyContent: "center",
+            background: "green"
           }}
         >
           {props.errors.successMsg}

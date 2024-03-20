@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import StatusMessages from "../_common/components/status-messages/status-messages";
+import StatusMessages from "../_common/components/status-messages.jsx";
 
 import "../_common/assets/css/create-scoreboard.css";
 import UserService from "../_common/services/scorecard.js";
