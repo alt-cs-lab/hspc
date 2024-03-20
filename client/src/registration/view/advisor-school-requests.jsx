@@ -9,6 +9,8 @@ import DataTable from "react-data-table-component";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import { Button } from "react-bootstrap"
 
+const styles = require('../../_utilities/styleConstants.js');
+
 class SchoolRequests extends Component {
     constructor(props) {
         super(props);
@@ -95,7 +97,7 @@ class SchoolRequests extends Component {
                 name: "Approve Request",
                 cell: row => {
                 return(
-                    <Button onClick={() => {this.handleCompleteRequest(true, row.userid, row.schoolid);}}>
+                    <Button variant="secondary" style={styles.buttonStyles} onClick={() => {this.handleCompleteRequest(true, row.userid, row.schoolid);}}>
                         Approve
                     </Button>
                     );
@@ -105,7 +107,7 @@ class SchoolRequests extends Component {
                 name: "Deny Request",
                 cell: row => {
                     return(
-                    <Button onClick={() => this.handleCompleteRequest(false, row.userid, row.schoolid)} >
+                    <Button variant="secondary" onClick={() => this.handleCompleteRequest(false, row.userid, row.schoolid)} >
                         Deny
                     </Button>
                     );

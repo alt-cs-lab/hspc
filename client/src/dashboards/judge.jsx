@@ -35,9 +35,11 @@ function JudgeDash(props)
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Navbar.Brand onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
-            Judge Portal
-          </Navbar.Brand>
+          <Nav>
+            <Nav.Link onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
+              Judge Portal
+            </Nav.Link>
+          </Nav>
           <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>

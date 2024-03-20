@@ -4,7 +4,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
 import Button from 'react-bootstrap/Button';
-import "../../_common/assets/css/register-user.css";
+// import "../../_common/assets/css/register-user.css";
 import { addHighSchoolStudent } from "../../_common/services/high-school-student.js";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";

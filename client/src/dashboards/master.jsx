@@ -42,9 +42,11 @@ function MasterDash(props)
 return(
   <div>
         <Navbar>
-          <Navbar.Brand onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
-            Master Portal
-          </Navbar.Brand>
+          <Nav>
+            <Nav.Link onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
+              Master Portal
+            </Nav.Link>
+          </Nav>
           <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav>

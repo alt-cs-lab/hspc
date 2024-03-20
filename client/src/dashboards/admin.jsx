@@ -37,9 +37,11 @@ function AdminDash(props)
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Navbar.Brand onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
-            Admin Portal
-          </Navbar.Brand>
+          <Nav>
+            <Nav.Link onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
+              Admin Portal
+            </Nav.Link>
+          </Nav>
           <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>

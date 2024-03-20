@@ -11,6 +11,8 @@ import "../../_common/assets/css/register-user.css";
 import {connect} from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
+const styles = require('../../_utilities/styleConstants.js');
+
 /*
  * @author: Tyler Trammell
  * Class that hangdles the client side creation of a school. UI of school creation and passes data service
@@ -142,12 +144,7 @@ export class RegisterSchool extends Component {
                         <Button
                             variant="secondary"
                             className="RegisterButton"
-                            style={{
-                                margin: 15,
-                                backgroundColor: "#00a655",
-                                fontSize: 14,
-                                color: "white",
-                            }}
+                            style={styles.buttonStyles}
                             onClick={(event) => this.handleRegisterSchool(event)}
                         >
                             Register School

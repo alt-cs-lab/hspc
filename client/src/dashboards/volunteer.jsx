@@ -48,9 +48,11 @@ function VolunteerDash(props)
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Navbar.Brand onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
-            Volunteer Portal
-          </Navbar.Brand>
+          <Nav>
+            <Nav.Link onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
+              Volunteer Portal
+            </Nav.Link>
+          </Nav>
           <Navbar.Toggle />
         
         <Navbar.Collapse>

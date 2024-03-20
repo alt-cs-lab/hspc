@@ -14,12 +14,7 @@ import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
 import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
 
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100
-  }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Trent Powell
@@ -131,7 +126,7 @@ class VolunteerSignUp extends Component {
             <FixRequiredSelect
               required
               id="dropdown"
-              styles={selectStyles}
+              style={styles.selectStyles}
               placeholder="Select an event"
               options={this.state.eventList}
               onChange={(target) => this.updateCompetition(target)}

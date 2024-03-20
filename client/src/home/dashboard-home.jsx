@@ -1,5 +1,5 @@
 import React from 'react';
-import '../_common/assets/css/public-homepage.css';
+// import '../_common/assets/css/public-homepage.css';
 import { useEffect, useState } from 'react';
 import { Button, Form } from "react-bootstrap";
 import SchoolService from "../_common/services/school"
@@ -78,7 +78,7 @@ export default function DashboardHome(props){
                                 />
                         </Form.Group>
                         <Button style={styles.buttonStyles} variant="secondary" id="submit-button" label="Select School" type="submit">
-                            Select School
+                            Request School
                         </Button>
                     </Form>
                 </div>
