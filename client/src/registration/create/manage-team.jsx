@@ -45,7 +45,9 @@ class CreateTeam extends Component {
 
     // TODO: Update UserService to HighSchoolStudentService
     componentDidMount = () => {
-        StudentService.getAdvisorsStudents(this.advisor.idZZ)
+        
+    console.log(this.props)
+        StudentService.getAdvisorsStudents(this.advisor.id)
         .then((response) => {
             if(response.ok){
                 this.setState({ studentList: response.data });

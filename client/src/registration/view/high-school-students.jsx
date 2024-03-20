@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
+import AddStudent from "../create/add-high-school-student.jsx";
 
 const constants = require('../../_utilities/constants');
 const styles = require('../../_utilities/styleConstants.js');
@@ -103,7 +104,11 @@ class ViewStudents extends Component {
     return (
       <div>
         <h2> Students </h2>
-        <Button className="mb-3" variant="secondary" style={styles.buttonStyles}> Add Student </Button>
+        <Button className="mb-3" variant="secondary" style={styles.buttonStyles} 
+          onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}
+          > 
+          Add Student 
+        </Button>
         <section
           style={{
             display: "flex",

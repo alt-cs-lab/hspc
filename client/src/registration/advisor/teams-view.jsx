@@ -11,6 +11,7 @@
   import DataTable from "react-data-table-component";
   import Select from "react-select";
   import { connect } from "react-redux";
+  import CreateTeam from "../create/manage-team.jsx";
   import {
     clearErrors,
     updateErrorMsg,
@@ -159,7 +160,11 @@
       return (
       <div>
         <h2>Teams</h2>
-        <Button style={styles.buttonStyles} variant="secondary">Add Team</Button>
+        <Button style={styles.buttonStyles} variant="secondary"
+          onClick={() => this.props.setCurrentView(<CreateTeam advisor={this.props.advisor} />)}
+          >
+          Add Team
+        </Button>
         <section
           style={{
             display: "flex",
