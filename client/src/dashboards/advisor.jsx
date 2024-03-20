@@ -38,19 +38,19 @@ function AdvisorDash (props)
         <Navbar.Collapse>
           <Nav>
             <NavDropdown title="Students" id="basic-nav-dropdown">
-              <NavItem eventKey={7} onClick={() => setCurrentView(<ViewStudents advisorUser={props.currentUser.id}/>)}>
+              <NavItem eventKey={7} onClick={() => setCurrentView(<ViewStudents advisorUser={props.currentUser.id} setCurrentView={setCurrentView} />)}>
                 View Students
               </NavItem>
-              <NavItem eventKey={7} onClick={() => setCurrentView(<AddStudent advisorUser={props.currentUser.id}/>)}>
+              <NavItem eventKey={7} onClick={() => setCurrentView(<AddStudent advisorUser={props.currentUser.id} />)}>
                 Create Student
               </NavItem>
             </NavDropdown>
             <NavDropdown title="Teams" id="basic-nav-dropdown">
+              <NavItem eventKey={3} onClick={() => setCurrentView(<TeamsView advisor={props.currentUser} setCurrentView={setCurrentView}/>)}>
+                View Teams
+              </NavItem>
               <NavItem eventKey={1} onClick={() => setCurrentView(<CreateTeam advisor={props.currentUser} />)}>
                 Create Team
-              </NavItem>
-              <NavItem eventKey={3} onClick={() => setCurrentView(<TeamsView advisor={props.currentUser} />)}>
-                View Teams
               </NavItem>
             </NavDropdown>
             <NavDropdown title="Events" id="basic-nav-dropdown">
