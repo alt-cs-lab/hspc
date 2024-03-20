@@ -4,6 +4,7 @@ import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../assets/css/public-navbar.css";
 import ksuLogo from '../assets/img/ksu_logo.png';
+import Image from 'react-bootstrap/Image';
 
 import { selectDashboardRoute } from "../../_store/slices/routeSlice";
 import { logout, selectAuth } from "../../_store/slices/authSlice";
@@ -34,8 +35,11 @@ export default function TopNavbar(props) {
 
 	return (
 		<Navbar collapseOnSelect default>
-			<div>
-				<img src={ksuLogo} alt="ksuLogo" id="logo"/>
+			<div inline class="m-3" style={{width: "8%"}}>
+			    <Image src={ksuLogo} fluid/>				
+			</div>
+			<div style={{"font-size": "200%", "margin-bottom": "6px"}}>
+				|
 			</div>
 			<Navbar.Brand>
 				<Nav.Link as={Link} href='/' to="/">High School Programming Competition</Nav.Link>
