@@ -12,7 +12,7 @@ import VolunteerSignUp from "../registration/create/volunteer-sign-up"
 //import StartJudging from "../judging/startJudging";
 
 //import Scoreboard from "../scoring/scoreboard.jsx";
-import "../_common/assets/css/dashboard-home.css";
+import "../_common/assets/css/public-dashboard.css";
 import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 

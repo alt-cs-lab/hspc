@@ -15,7 +15,7 @@ import ViewAssignVolunteers from "../judging/assignVolunteersBoard";
 import EditScores from "../judging/editScores";
 import EditQuestions from "../judging/editQuestions";
 //import Scoreboard from "../scoring/scoreboard";
-import "../_common/assets/css/dashboard-home.css";
+import "../_common/assets/css/public-dashboard.css";
 import { connect } from "react-redux";
 //import Websocket from "react-websocket";
 import { clearErrors } from "../_store/slices/errorSlice.js";

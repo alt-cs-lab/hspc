@@ -1,9 +1,13 @@
-.navbar{
+/* Classes - Can be used by multiple components */
+.navbar
+{
     margin: 0px;
     padding: 0px;
     border: none;
 }
-.page-body{
+
+.page-body
+{
     padding: 10px;
     border: none;
     text-align: center;

@@ -11,6 +11,7 @@ import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slic
 import Select from "react-select";
 import { Button, FormCheck } from "react-bootstrap";
 import AddStudent from "../create/add-high-school-student.jsx";
+import "../../_common/assets/css/standard.css";
 
 const constants = require('../../_utilities/constants');
 const styles = require('../../_utilities/styleConstants.js');
@@ -133,13 +134,11 @@ class ViewStudents extends Component {
               </div>
           </div>
         </section>
-        <DataTable
-            data={this.state.filteredStudentTable} 
-            columns={this.state.columnsForStudents} 
-            pagination 
-            paginationPerPage={20} 
-            paginationRowsPerPageOptions={[20, 30, 40, 50]}
-          />
+        <br/>
+        <div id="student-data-table">
+          <DataTable data={this.state.filteredStudentTable} columns={this.state.columnsForStudents} 
+              pagination paginationPerPage={20} paginationRowsPerPageOptions={[20, 30, 40, 50]}/>
+        </div>
       </div>
     );
   }

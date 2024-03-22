@@ -1,0 +1,17 @@
+/* Classes - Can be used by multiple components */
+.add-margin 
+{
+    width: 25%;
+    margin: auto;
+    align-content: left;
+    text-align: left;
+}
+
+/* IDs - Component Specific */
+#purple-button 
+{
+    background-color: #512888;
+    color: white;
+    border: 1px solid #512888;
+    font-size: 16;
+}
