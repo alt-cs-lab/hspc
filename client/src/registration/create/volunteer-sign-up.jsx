@@ -4,8 +4,6 @@ Copyright (c) 2024 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
 import EventService from "../../_common/services/event"
-// import Button from 'react-bootstrap/Button';
-// import SchoolService from "../../_common/services/school.js";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Button from "react-bootstrap/Button";
@@ -52,9 +50,7 @@ class VolunteerSignUp extends Component {
   };
 
   submitSignup(event) {
-    //const newStudent = this.state;
-    //const gradDate = this.toDate(newStudent.gradYear, newStudent.gradMonth, 28);
-    //StudentService.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate);
+    // TODO TWP
   }
 
   updateCompetition(target) {

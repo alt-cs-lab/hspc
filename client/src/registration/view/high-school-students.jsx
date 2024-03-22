@@ -26,7 +26,8 @@ class ViewStudents extends Component {
       filteredStudentTable: [],
       columnsForStudents: this.getColumns(),
       schoolList: [],
-      schoolId: -1,
+      schoolid: -1,
+      gradFilter: true,
     };
   }
 
@@ -86,14 +87,31 @@ class ViewStudents extends Component {
     ];
   }
 
-  UpdateStudentsBySchool = (id) => {
-    this.setState({ schoolId: id })
+  UpdateStudents = (id, gradFilter) => {
+    if( id != null){
+      this.setState({ schoolid: id })
+    }
+    else{
+      id = this.state.schoolid
+    }
+    if( gradFilter != null ){
+      this.setState({ gradFilter: gradFilter })
+    }
+    else{
+      gradFilter = this.state.gradFilter
+    }
+    let today = new Date();
     
     let allStudents = this.state.studentList;
     let filteredStudents = [];
     for (let i = 0; i < allStudents.length; i++) {
       if( allStudents[i].schoolid === id ){
-        filteredStudents.push(allStudents[i]);
+        if( gradFilter && constants.dateFormat(allStudents[i].graddate).substring(0,7).localeCompare(constants.toDatabaseDate(today.getFullYear(), today.getMonth(), 28).substring(0,7)) === 1){
+          filteredStudents.push(allStudents[i]);
+        }
+        else if( !gradFilter ) {
+          filteredStudents.push(allStudents[i]);
+        }
       }
     }
     this.setState({ filteredStudentTable: filteredStudents })
@@ -104,11 +122,6 @@ class ViewStudents extends Component {
     return (
       <div>
         <h2> Students </h2>
-        <Button className="mb-3" variant="secondary" style={styles.buttonStyles} 
-          onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}
-          >
-          Add Student 
-        </Button>
         <section
           style={{
             display: "flex",
@@ -121,16 +134,22 @@ class ViewStudents extends Component {
                 Select School:
               </span>
               <div id="sub-nav" className="schoolDropdown">
-              <Select
-                  id="school-dropdown"
-                  placeholder="Select School"
-                  options={this.state.schoolList}
-                  onChange={target => this.UpdateStudentsBySchool(target.value)}
-                />
-              {/* TODO TWP: Add Filter <FormCheck>
-
-              </FormCheck> */}
+                <Select
+                    id="school-dropdown"
+                    placeholder="Select School"
+                    options={this.state.schoolList}
+                    onChange={target => this.UpdateStudents(target.value, null)}
+                  />
               </div>
+              <Button className="mb-3" variant="secondary" style={styles.buttonStyles} 
+                onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}>
+                  Add Student 
+              </Button>
+              <span style={{ marginRight: "5px", fontSize: "16px" }}>
+                Graduated Excluded:
+              </span>
+              <FormCheck defaultChecked={true} 
+              onChange={() => { this.UpdateStudents(null, !this.state.gradFilter) }} />
           </div>
         </section>
         <DataTable

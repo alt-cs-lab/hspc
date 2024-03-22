@@ -89,11 +89,13 @@ VALUES
     (120, 'Andrew', 'Clyde', 181, 'andrew.clyde@school.com', '2025-05-30'),
     (130, 'Rose', 'Potter', 181, 'rose.potter@school.com', '2025-05-30'),
     (140, 'Megan', 'Shrewt', 181, 'megan.shrewt@school.com', '2025-05-30'),
-    (17, 'Diana', 'Ross', 182, 'diana.ross@school.com', '2024-06-15'),
-    (170, 'Matthew', 'Kinder', 182, 'matthew.kinder@school.com', '2024-06-15'),
-    (180, 'Greg', 'Newman', 182, 'greg.newman@school.com', '2024-06-15'),
-    (190, 'Galliard', 'Strauss', 182, 'galliard.strauss@school.com', '2024-06-15'),
-    (200, 'Taylor', 'Lorry', 182, 'taylor.lorry@school.com', '2024-06-15');
+    (141, 'Grant', 'Grad', 181, 'grant.grad@school.com', '2023-05-30'),
+    (17, 'Diana', 'Ross', 182, 'diana.ross@school.com', '2025-06-15'),
+    (170, 'Matthew', 'Kinder', 182, 'matthew.kinder@school.com', '2025-06-15'),
+    (180, 'Greg', 'Newman', 182, 'greg.newman@school.com', '2025-06-15'),
+    (190, 'Galliard', 'Strauss', 182, 'galliard.strauss@school.com', '2025-06-15'),
+    (200, 'Taylor', 'Lorry', 182, 'taylor.lorry@school.com', '2025-06-15'),
+    (201, 'Greg', 'Grad', 182, 'greg.grad@school.com', '2023-05-30');
 /*
 Insert Dummy Values into Volunteers Table
 */

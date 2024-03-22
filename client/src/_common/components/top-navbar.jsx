@@ -44,7 +44,8 @@ export default function TopNavbar(props) {
 			<Navbar.Brand>
 				<Nav.Link as={Link} href='/' to="/">High School Programming Competition</Nav.Link>
 			</Navbar.Brand>
-			<Navbar.Collapse id='basic-navbar-nav'>
+          	<Navbar.Toggle />
+			<Navbar.Collapse>
 				<Nav>
 					<Nav.Link as={Link} eventKey={1} href="/" to="/">
 						Home
