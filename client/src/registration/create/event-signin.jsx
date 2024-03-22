@@ -10,7 +10,7 @@ import BoardSetup from "../../scoring/create-scoreboard";
 import AddScore from "../../_common/services/scoreboard";
 import Scoreboard from "../../scoring/scoreboard";
 import EventService from "../../_common/services/event";
-import "../../_common/assets/css/event-signin.css";
+// import "../../_common/assets/css/event-signin.css";
 import TeamService from "../../_common/services/team";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";

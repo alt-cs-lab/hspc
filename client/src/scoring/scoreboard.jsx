@@ -8,7 +8,7 @@ import { Table } from "react-bootstrap";
 import Select from "react-select";
 import StatusMessages from "../_common/components/status-messages.jsx";
 //import ScoreboardTile from "./scoreboard-tile";
-import "../_common/assets/css/scoreboard.css";
+// import "../_common/assets/css/scoreboard.css";
 import EventService from "../_common/services/event";
 //import Websocket from 'react-websocket';
 //import ScoreCardService from "../_common/services/scorecard";

@@ -9,7 +9,6 @@ import { connect } from "react-redux";
 import { Button, Form, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
 //import ReCAPTCHA from "react-recaptcha";
-import "../../_common/assets/css/register-user.css";
 import { registerUser } from "../../_store/actions/authActions";
 import {
   SET_SCHOOL_DROPDOWN_REQUIRED,

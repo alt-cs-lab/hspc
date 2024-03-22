@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import StatusMessages from "../_common/components/status-messages.jsx";
 
-import "../_common/assets/css/create-scoreboard.css";
+// import "../_common/assets/css/create-scoreboard.css";
 import UserService from "../_common/services/scorecard.js";
 import { Table } from "react-bootstrap";
 

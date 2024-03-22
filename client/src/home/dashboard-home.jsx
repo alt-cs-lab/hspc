@@ -1,5 +1,4 @@
 import React from 'react';
-// import '../_common/assets/css/public-homepage.css';
 import { useEffect, useState } from 'react';
 import { Button, Form } from "react-bootstrap";
 import SchoolService from "../_common/services/school"
@@ -52,7 +51,7 @@ export default function DashboardHome(props){
 
     
     return (
-        <div className="home">
+        <div>
             <h2 id="welcome">Welcome {props.user.firstName} {props.user.lastName}!</h2>
             {props.user.accessLevel === constants.ADVISOR ? (
                 <div>

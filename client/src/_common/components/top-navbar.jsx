@@ -34,8 +34,8 @@ export default function TopNavbar(props) {
 	}
 
 	return (
-		<Navbar collapseOnSelect default>
-			<div inline class="m-3" style={{width: "8%"}}>
+		<Navbar expand='lg' collapseOnSelect default>
+			<div class="m-3" style={{width: "8%"}}>
 			    <Image src={ksuLogo} fluid/>				
 			</div>
 			<div style={{"font-size": "200%", "margin-bottom": "6px"}}>
@@ -44,8 +44,8 @@ export default function TopNavbar(props) {
 			<Navbar.Brand>
 				<Nav.Link as={Link} href='/' to="/">High School Programming Competition</Nav.Link>
 			</Navbar.Brand>
-			<Navbar.Collapse id="responsive-navbar-nav">
-				<Nav className="ms-auto">
+			<Navbar.Collapse id='basic-navbar-nav'>
+				<Nav>
 					<Nav.Link as={Link} eventKey={1} href="/" to="/">
 						Home
 					</Nav.Link>

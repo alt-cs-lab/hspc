@@ -10,7 +10,6 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import teamService from "../../_common/services/team";
 import UserService from "../../_common/services/user";
-import "../../_common/assets/css/register-user.css";
 import EventService from "../../_common/services/event";
 import SchoolService from "../../_common/services/school.js";
 import Select from "react-select";

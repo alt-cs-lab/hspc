@@ -9,7 +9,7 @@ import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Select from "react-select";
-import { Button } from "react-bootstrap";
+import { Button, FormCheck } from "react-bootstrap";
 import AddStudent from "../create/add-high-school-student.jsx";
 
 const constants = require('../../_utilities/constants');
@@ -86,7 +86,7 @@ class ViewStudents extends Component {
     ];
   }
 
-  UpdateStudents = (id, school) => {
+  UpdateStudentsBySchool = (id) => {
     this.setState({ schoolId: id })
     
     let allStudents = this.state.studentList;
@@ -106,7 +106,7 @@ class ViewStudents extends Component {
         <h2> Students </h2>
         <Button className="mb-3" variant="secondary" style={styles.buttonStyles} 
           onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}
-          > 
+          >
           Add Student 
         </Button>
         <section
@@ -125,8 +125,11 @@ class ViewStudents extends Component {
                   id="school-dropdown"
                   placeholder="Select School"
                   options={this.state.schoolList}
-                  onChange={target => this.UpdateStudents(target.value)}
+                  onChange={target => this.UpdateStudentsBySchool(target.value)}
                 />
+              {/* TODO TWP: Add Filter <FormCheck>
+
+              </FormCheck> */}
               </div>
           </div>
         </section>

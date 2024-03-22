@@ -11,8 +11,7 @@ import TeamsView from "../registration/advisor/teams-view";
 import ViewEvents from "../registration/view/events";
 import CreateTeam from "../registration/create/manage-team";
 //import Scoreboard from "../scoring/scoreboard.jsx";
-import "../_common/assets/css/register-user.css";
-import "../_common/assets/css/dashboard-admin.css";
+import "../_common/assets/css/dashboard-home.css";
 import AddStudent from "../registration/create/add-high-school-student.jsx";
 import ViewStudents from "../registration/view/high-school-students.jsx";
 import { connect } from "react-redux";
@@ -28,7 +27,7 @@ function AdvisorDash (props)
 
   return (
     <>
-      <Navbar inverse collapseOnSelect>
+      <Navbar expand='lg' inverse collapseOnSelect>
           <Nav>
             <Nav.Link onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
               Advisor Portal

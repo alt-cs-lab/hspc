@@ -13,8 +13,6 @@ import Select from "react-select";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import "../../_common/assets/css/register-user.css";
-import "../../_common/assets/css/team-member-dropdown.css";
 import { Table } from "react-bootstrap";
 // import ReactTable from "react-table";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";

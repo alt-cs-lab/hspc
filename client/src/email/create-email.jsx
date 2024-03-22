@@ -3,7 +3,6 @@ import { Form } from "react-bootstrap";
 import Button from 'react-bootstrap/Button';
 import userService from "../_common/services/user";
 //import { Transport } from './Transport';
-import "../_common/assets/css/create-email.css";
 
 /*
  * @author: Daniel Bell

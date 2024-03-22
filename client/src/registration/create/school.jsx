@@ -7,7 +7,6 @@ import React, {Component} from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import schoolService from "../../_common/services/school.js";
-import "../../_common/assets/css/register-user.css";
 import {connect} from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 

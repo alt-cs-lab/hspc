@@ -4,10 +4,8 @@
     border: none;
 }
 .page-body{
-    margin: 0px;
-    padding: 0px;
+    padding: 10px;
     border: none;
-    height: 700px;
     text-align: center;
     align-content: center;
     background-color: #ffffff;

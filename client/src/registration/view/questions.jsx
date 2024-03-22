@@ -5,7 +5,6 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import QuestionService from "../../_common/services/questions";
-import "../../_common/assets/css/ReactTableCSS.css";
 
 var currentView = null;
 

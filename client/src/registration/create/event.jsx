@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 //import ReCAPTCHA from "react-recaptcha";
 import eventService from "../../_common/services/event";
-import "../../_common/assets/css/create-event.css";
+// import "../../_common/assets/css/create-event.css";
 import { withRouter } from "../../_utilities/routerUtils"
 import PropTypes from "prop-types";
 import {connect} from "react-redux";

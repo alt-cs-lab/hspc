@@ -6,7 +6,6 @@ import React, { Component } from "react";
 import EventService from "../../_common/services/event"
 // import Button from 'react-bootstrap/Button';
 // import SchoolService from "../../_common/services/school.js";
-import "../../_common/assets/css/register-user.css";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Button from "react-bootstrap/Button";

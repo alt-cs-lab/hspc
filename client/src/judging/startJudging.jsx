@@ -12,8 +12,7 @@ import TeamService from "../_common/services/team";
 // import Questions from "./volunteerAssignmentQuestion";
 
 import "./stylesheet.css";
-import "../_common/assets/css/register-user.css";
-import "../_common/assets/css/dashboard-volunteer.css";
+import "../_common/assets/css/dashboard-home.css";
 
 export default class StartJudging extends Component {
   constructor(props) {
