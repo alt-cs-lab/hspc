@@ -12,7 +12,7 @@ import TeamService from "../_common/services/team";
 // import Questions from "./volunteerAssignmentQuestion";
 
 import "./stylesheet.css";
-import "../_common/assets/css/dashboard-home.css";
+import "../_common/assets/css/public-dashboard.css";
 
 export default class StartJudging extends Component {
   constructor(props) {

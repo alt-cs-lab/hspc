@@ -17,6 +17,8 @@ import BaseSelect from "react-select";
 import FixRequiredSelect from "../../_common/components/FixRequiredSelect.jsx";
 import SchoolService from "../../_common/services/school.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
+import "../../_common/assets/css/standard.css";
+import "../../_common/assets/css/public-login.css";
 
 const constants = require('../../_utilities/constants')
 const styles = require('../../_utilities/styleConstants.js');
@@ -146,16 +148,19 @@ class Register extends Component {
    */
   render() {
     return (
-      <div name="status-div" className="RegisterBox">
-        <h2>New User?</h2>
-        <p>
+      <div name="status-div" 
+      // className="RegisterBox"
+      class="page-body"
+      >
+        <h2>Register Account</h2>
+        {/* <p>
           <b>Please fill out the information below.</b>
-        </p>
+        </p> */}
         <Form name="form" onSubmit={(event) => this.handleRegister(event)}>
-          <p>Please select an account type.</p>
+          {/* <p>Please select an account type.</p> */}
           <ToggleButtonGroup
-            style={styles.buttonStyles}
-            className="RoleSelect"
+            // style={styles.buttonStyles}
+            // className="RoleSelect"
             type="radio"
             name="options"
             defaultValue={constants.VOLUNTEER}
@@ -179,102 +184,94 @@ class Register extends Component {
             </ToggleButton>
           </ToggleButtonGroup>
           <br/>
-          <Form.Group>
-            <Form.Label> First Name </Form.Label>
-            <Form.Control
-              name="first"
-              required
-              placeholder = "Input First Name"
-              style={{ margin:"auto", width:"25%" }}
-              inputProps={{ style: { fontSize: 14 } }}
-              InputLabelProps={{ style: { fontSize: 14 } }}
-              onChange={(target) =>
-                this.setState({ firstName: target.target.value })
-              }
-              value={this.state.firstName}
-              size="small"
-            />
-          </Form.Group>
-          <br/>
-          <Form.Group>
-            <Form.Label> Last Name </Form.Label>
-            <Form.Control
-              name="last"
-              required
-              style={{ margin: "auto", width: "25%" }}
-              placeholder = "Input Last Name"
-              inputProps={{ style: { fontSize: 14 } }}
-              InputLabelProps={{ style: { fontSize: 14 } }}
-              onChange={(target) =>
-                this.setState({ lastName: target.target.value })
-              }
-              size="small"
-              value={this.state.lastName}
-            />
-          </Form.Group>
-          <br/>
-          <Form.Group>
-            <Form.Label> Phone Number (No dashes) </Form.Label>
-            <Form.Control
-              name="phone"
-              required
-              style={{ margin: "auto", width: "25%" }}
-              placeholder = "Input Phone Number"
-              inputProps={{ style: { fontSize: 14 } }}
-              InputLabelProps={{ style: { fontSize: 14 } }}
-              onChange={(target) => this.setState({ phone: target.target.value })}
-              size="small"
-              value={this.state.phone}
-            />
-          </Form.Group>
-          <br/>
-          <Form.Group>
-            <Form.Label> Email Address </Form.Label>
-            <Form.Control
-              name="email"
-              type="email"
-              required
-              style={{ margin: "auto", width: "25%" }}
-              placeholder = "email@example.com"
-              inputProps={{ style: { fontSize: 14 } }}
-              InputLabelProps={{ style: { fontSize: 14 } }}
-              onChange={(target) => this.setState({ email: target.target.value })}
-              size="small"
-              value={this.state.email}
-            />
-          </Form.Group>
-          <br/>
-          <Form.Group>
-            <Form.Label> Password </Form.Label>
-            <Form.Control
-              name="password"
-              type="password"
-              required
-              style={{ margin: "auto", width: "25%" }}
-              placeholder = "Input Password"
-              inputProps={{ style: { fontSize: 14 } }}
-              InputLabelProps={{ style: { fontSize: 14 } }}
-              onChange={(target) =>
-                this.setState({ password: target.target.value })
-              }
-              size="small"
-              value={this.state.password}
-            />
-          </Form.Group>
-          <br/>
-          <Form.Group name="dropdown-div" id="schoolList" hidden={true}>
-            <Form.Label> School </Form.Label>
-            <FixRequiredSelect
-              id="dropdown"
-              style={{ margin: "auto", width: "100%" }}
-              styles={styles.selectStyles}
-              placeholder="Select a School"
-              options={this.state.schoolList}
-              onChange={this.handleSchoolChange}
-              SelectComponent={BaseSelect}
-              setValue={this.state.schoolId}
-            />
-          </Form.Group>
+          <div class="add-margin">
+            <Form.Group>
+              <Form.Label> First Name </Form.Label>
+              <Form.Control
+                name="first"
+                required
+                placeholder = "Input First Name"
+                inputProps={{ style: { fontSize: 14 } }}
+                InputLabelProps={{ style: { fontSize: 14 } }}
+                onChange={(target) =>
+                  this.setState({ firstName: target.target.value })
+                }
+                value={this.state.firstName}
+              />
+            </Form.Group>
+            <br/>
+            <Form.Group>
+              <Form.Label> Last Name </Form.Label>
+              <Form.Control
+                name="last"
+                required
+                placeholder = "Input Last Name"
+                inputProps={{ style: { fontSize: 14 } }}
+                InputLabelProps={{ style: { fontSize: 14 } }}
+                onChange={(target) =>
+                  this.setState({ lastName: target.target.value })
+                }
+                value={this.state.lastName}
+              />
+            </Form.Group>
+            <br/>
+            <Form.Group>
+              <Form.Label> Phone Number (No dashes) </Form.Label>
+              <Form.Control
+                name="phone"
+                required
+                placeholder = "Input Phone Number"
+                inputProps={{ style: { fontSize: 14 } }}
+                InputLabelProps={{ style: { fontSize: 14 } }}
+                onChange={(target) => this.setState({ phone: target.target.value })}
+                value={this.state.phone}
+              />
+            </Form.Group>
+            <br/>
+            <Form.Group>
+              <Form.Label> Email Address </Form.Label>
+              <Form.Control
+                name="email"
+                type="email"
+                required
+                placeholder = "email@example.com"
+                inputProps={{ style: { fontSize: 14 } }}
+                InputLabelProps={{ style: { fontSize: 14 } }}
+                onChange={(target) => this.setState({ email: target.target.value })}
+                value={this.state.email}
+              />
+            </Form.Group>
+            <br/>
+            <Form.Group>
+              <Form.Label> Password </Form.Label>
+              <Form.Control
+                name="password"
+                type="password"
+                required
+                placeholder = "Input Password"
+                inputProps={{ style: { fontSize: 14 } }}
+                InputLabelProps={{ style: { fontSize: 14 } }}
+                onChange={(target) =>
+                  this.setState({ password: target.target.value })
+                }
+                value={this.state.password}
+              />
+            </Form.Group>
+            <br/>
+            <Form.Group name="dropdown-div" id="schoolList" hidden={true}>
+              <Form.Label> School </Form.Label>
+              <FixRequiredSelect
+                id="dropdown"
+                style={{ margin: "auto", width: "100%" }}
+                styles={styles.selectStyles}
+                placeholder="Select a School"
+                options={this.state.schoolList}
+                onChange={this.handleSchoolChange}
+                SelectComponent={BaseSelect}
+                setValue={this.state.schoolId}
+              />
+            </Form.Group>
+          </div>
           <br/>
           {/* <div name="captcha" align="center">
             <ReCAPTCHA
@@ -285,8 +282,7 @@ class Register extends Component {
               size="small"
             />
           </div> */}
-          <br/>
-          <Button style={styles.buttonStyles} variant="secondary" id="submit-button" label="Create Account" type="submit">
+          <Button id="purple-button" label="Create Account" type="submit">
             Create Account
           </Button>
         </Form>

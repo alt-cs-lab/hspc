@@ -11,7 +11,7 @@ import TeamsView from "../registration/advisor/teams-view";
 import ViewEvents from "../registration/view/events";
 import CreateTeam from "../registration/create/manage-team";
 //import Scoreboard from "../scoring/scoreboard.jsx";
-import "../_common/assets/css/dashboard-home.css";
+import "../_common/assets/css/public-dashboard.css";
 import AddStudent from "../registration/create/add-high-school-student.jsx";
 import ViewStudents from "../registration/view/high-school-students.jsx";
 import { connect } from "react-redux";

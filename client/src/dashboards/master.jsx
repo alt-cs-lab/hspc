@@ -20,7 +20,7 @@ import CreateTeam from "../registration/create/manage-team";
 //import Scoreboard from "../scoring/scoreboard.jsx";
 //import PublishPractice from "../problems/practice";
 //import PublishScores from "../scoring/scores";
-import "../_common/assets/css/dashboard-home.css";
+import "../_common/assets/css/public-dashboard.css";
 import RegisterSchool from "../registration/create/school";
 import ViewSchools from "../registration/view/school";
 // import TeamRequests from "../registration/view/team-requests.jsx";
