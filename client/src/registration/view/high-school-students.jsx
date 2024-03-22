@@ -123,6 +123,10 @@ class ViewStudents extends Component {
     return (
       <div>
         <h2> Students </h2>
+        <Button className="mb-3" variant="secondary" style={styles.buttonStyles} 
+          onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}>
+            Add Student 
+        </Button>
         <section
           style={{
             display: "flex",
@@ -136,16 +140,13 @@ class ViewStudents extends Component {
               </span>
               <div id="sub-nav" className="schoolDropdown">
                 <Select
+                    className="m-3"
                     id="school-dropdown"
                     placeholder="Select School"
                     options={this.state.schoolList}
                     onChange={target => this.UpdateStudents(target.value, null)}
                   />
               </div>
-              <Button className="mb-3" variant="secondary" style={styles.buttonStyles} 
-                onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}>
-                  Add Student 
-              </Button>
               <span style={{ marginRight: "5px", fontSize: "16px" }}>
                 Graduated Excluded:
               </span>
