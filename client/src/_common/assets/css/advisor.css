@@ -1,0 +1,15 @@
+#advisor-data-table
+{
+    border-radius: 8px;
+    width: 50%;
+    margin: auto;
+    border: 1px solid grey;
+}
+
+#student-data-table
+{
+    border-radius: 8px;
+    width: 75%;
+    margin: auto;
+    border: 1px solid grey;
+}

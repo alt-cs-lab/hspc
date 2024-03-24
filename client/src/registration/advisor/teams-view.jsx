@@ -11,6 +11,7 @@
   import DataTable from "react-data-table-component";
   import Select from "react-select";
   import { connect } from "react-redux";
+  import CreateTeam from "../create/manage-team.jsx";
   import {
     clearErrors,
     updateErrorMsg,
@@ -159,7 +160,11 @@
       return (
       <div>
         <h2>Teams</h2>
-        <Button style={styles.buttonStyles} variant="secondary">Add Team</Button>
+        <Button style={styles.buttonStyles} variant="secondary"
+          onClick={() => this.props.setCurrentView(<CreateTeam advisor={this.props.advisor} />)}
+          >
+          Add Team
+        </Button>
         <section
           style={{
             display: "flex",
@@ -232,7 +237,7 @@
       { name: "First Name", selector: (row) => row.firstname, sortable: true },
       { name: "Last Name", selector: (row) => row.lastname, sortable: true },
       { name: "Email", selector: (row) => row.email, sortable: true },
-      { name: "Graduation Date", selector: (row) => constants.dateFormat(row.graddate), sortable: true, sortFunction: constants.dateSort,},
+      { name: "GradDate (YYYY-MM-DD)", selector: (row) => constants.dateFormat(row.graddate), sortable: true, sortFunction: constants.dateSort,},
     ];
   }
   

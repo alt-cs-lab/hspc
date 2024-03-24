@@ -4,9 +4,6 @@ Copyright (c) 2024 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
 import EventService from "../../_common/services/event"
-// import Button from 'react-bootstrap/Button';
-// import SchoolService from "../../_common/services/school.js";
-import "../../_common/assets/css/register-user.css";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Button from "react-bootstrap/Button";
@@ -14,12 +11,7 @@ import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
 import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
 
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100
-  }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Trent Powell
@@ -58,9 +50,7 @@ class VolunteerSignUp extends Component {
   };
 
   submitSignup(event) {
-    //const newStudent = this.state;
-    //const gradDate = this.toDate(newStudent.gradYear, newStudent.gradMonth, 28);
-    //StudentService.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate);
+    // TODO TWP
   }
 
   updateCompetition(target) {
@@ -131,7 +121,7 @@ class VolunteerSignUp extends Component {
             <FixRequiredSelect
               required
               id="dropdown"
-              styles={selectStyles}
+              style={styles.selectStyles}
               placeholder="Select an event"
               options={this.state.eventList}
               onChange={(target) => this.updateCompetition(target)}

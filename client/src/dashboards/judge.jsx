@@ -15,8 +15,7 @@ import ViewAssignVolunteers from "../judging/assignVolunteersBoard";
 import EditScores from "../judging/editScores";
 import EditQuestions from "../judging/editQuestions";
 //import Scoreboard from "../scoring/scoreboard";
-import "../_common/assets/css/register-user.css";
-import "../_common/assets/css/dashboard-admin.css";
+import "../_common/assets/css/public-dashboard.css";
 import { connect } from "react-redux";
 //import Websocket from "react-websocket";
 import { clearErrors } from "../_store/slices/errorSlice.js";
@@ -35,9 +34,11 @@ function JudgeDash(props)
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Navbar.Brand onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
-            Judge Portal
-          </Navbar.Brand>
+          <Nav>
+            <Nav.Link onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
+              Judge Portal
+            </Nav.Link>
+          </Nav>
           <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>

@@ -10,17 +10,12 @@ import BoardSetup from "../../scoring/create-scoreboard";
 import AddScore from "../../_common/services/scoreboard";
 import Scoreboard from "../../scoring/scoreboard";
 import EventService from "../../_common/services/event";
-import "../../_common/assets/css/event-signin.css";
+// import "../../_common/assets/css/event-signin.css";
 import TeamService from "../../_common/services/team";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100,
-  }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell
@@ -209,7 +204,7 @@ class EventSignIn extends Component {
             </p>
             <Select
               id="dropdown"
-              styles={selectStyles}
+              style={styles.selectStyles}
               placeholder="Select an Event"
               options={this.state.eventList}
               onChange={(e) => this.showRegisteredTeams(e.label)}
@@ -220,12 +215,7 @@ class EventSignIn extends Component {
             <Button
               variant="primary"
               className="register-button"
-              style={{
-                margin: 10,
-                backgroundColor: "#00a655",
-                color: "white",
-                fontSize: 14,
-              }}
+              style={styles.buttonStyles}
               onClick={() => this.handleSaveChanges()}
             >
               Begin Event

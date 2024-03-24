@@ -1,5 +1,4 @@
 import React from 'react';
-import '../_common/assets/css/public-homepage.css';
 import { useEffect, useState } from 'react';
 import { Button, Form } from "react-bootstrap";
 import SchoolService from "../_common/services/school"
@@ -7,7 +6,8 @@ import RequestService from "../_common/services/request";
 import DataTable from "react-data-table-component";
 import BaseSelect from "react-select";
 import FixRequiredSelect from "../_common/components/FixRequiredSelect";
-
+import "../_common/assets/css/standard.css";
+import "../_common/assets/css/advisor.css";
 const constants = require('../_utilities/constants');
 const styles = require('../_utilities/styleConstants.js');
 
@@ -52,33 +52,36 @@ export default function DashboardHome(props){
 
     
     return (
-        <div className="home">
+        <div>
             <h2 id="welcome">Welcome {props.user.firstName} {props.user.lastName}!</h2>
             {props.user.accessLevel === constants.ADVISOR ? (
                 <div>
                     <hr/>
                     <h4>Advisor Schools</h4>
-                    <DataTable
-                        data={schoolList} 
-                        columns={getColumns()}
-                        />
-                    <h5>Request an additional school:</h5>
+                    <div id="advisor-data-table">
+                        <DataTable data={schoolList} columns={getColumns()}/>
+                    </div>
+                    <br/>
                     <Form name="form" onSubmit={(event) => handleRequestNewSchool(event, additionalSchoolid, props.user.id)}>
                         <Form.Group name="dropdown-div" id="schoolList">
-                            <FixRequiredSelect
-                                required
-                                id="dropdown"
-                                style={{ margin: "auto", width: "100%" }}
-                                styles={styles.selectStyles}
-                                placeholder="Select a School"
-                                options={allSchoolsList}
-                                onChange={(target) => setAdditionalSchoolid(target.value)}
-                                SelectComponent={BaseSelect}
-                                setValue={additionalSchoolid}
-                                />
+                            <div className="add-margin">
+                                <Form.Label>
+                                    <b>Request an additional school:</b>
+                                </Form.Label>
+                                <FixRequiredSelect
+                                    required
+                                    style={{ margin: "auto", width: "25%" }}
+                                    styles={styles.selectStyles}
+                                    placeholder="Select a School"
+                                    options={allSchoolsList}
+                                    onChange={(target) => setAdditionalSchoolid(target.value)}
+                                    SelectComponent={BaseSelect}
+                                    setValue={additionalSchoolid}
+                                    />
+                            </div>
                         </Form.Group>
-                        <Button style={styles.buttonStyles} variant="secondary" id="submit-button" label="Select School" type="submit">
-                            Select School
+                        <Button id="purple-button" type="submit">
+                            Request School
                         </Button>
                     </Form>
                 </div>
@@ -91,64 +94,63 @@ export default function DashboardHome(props){
             ) : ( "" )}
             <hr/>
             <h4>Account Profile</h4>
-            <p>Update profile settings below if something has changed.</p>
+            <h6>Update profile settings below if something has changed.</h6>
+            <br/>
             <Form name="form" onSubmit={(event) => handleProfileUpdate(event)}>
-                <Form.Group>
-                    <Form.Label> First Name </Form.Label>
-                    <Form.Control
-                    name="first"
-                    placeholder = {props.user.firstName}
-                    style={{ margin:"auto", width:"25%" }}
-                    onChange={(target) => setFirstName(target.target.value)}
-                    size="small" value={firstName}
-                    />
-                </Form.Group>
-                <br/>
-                <Form.Group>
-                    <Form.Label> Last Name </Form.Label>
-                    <Form.Control
-                    name="last"
-                    style={{ margin: "auto", width: "25%" }}
-                    placeholder = {props.user.lastName}
-                    onChange={(target) => setLastName(target.target.value)}
-                    size="small" value={lastName}
-                    />
-                </Form.Group>
-                <br/>
-                <Form.Group>
-                    <Form.Label> Phone Number (No dashes) </Form.Label>
-                    <Form.Control name="phone"
-                    style={{ margin: "auto", width: "25%" }}
-                    placeholder = {props.user.phone}
-                    onChange={(target) => setPhoneNumber(target.target.value)}
-                    size="small" value={phoneNumber}
-                    />
-                </Form.Group>
-                <br/>
-                <Form.Group>
-                    <Form.Label> Email Address </Form.Label>
-                    <Form.Control name="email" type="email"
-                    style={{ margin: "auto", width: "25%" }}
-                    placeholder = {props.user.email}
-                    onChange={(target) => setEmail(target.target.value)}
-                    size="small" value={email}
-                    />
-                </Form.Group>
-                <br/>
-                {/* TODO TWP: Allow Update Password Somehow
-                <Form.Group>
-                    <Form.Label> Password </Form.Label>
-                    <Form.Control
-                    name="password"
-                    type="password"
-                    style={{ margin: "auto", width: "25%" }}
-                    placeholder = "Input Password"
-                    onChange={(target) => this.setState({ password: target.target.value })}
-                    size="small" value={this.state.password}
-                    />
-                </Form.Group>
-                <br/> */}
-                <Button style={styles.buttonStyles} variant="secondary" id="submit-button" label="Update Account" type="submit">
+                <div class="add-margin">
+                    <Form.Group>
+                        <Form.Label id="left-label"> First Name </Form.Label>
+                        <Form.Control
+                        name="first"
+                        placeholder = {props.user.firstName}
+                        onChange={(target) => setFirstName(target.target.value)}
+                        value={firstName}
+                        />
+                    </Form.Group>
+                    <br/>
+                    <Form.Group>
+                        <Form.Label> Last Name </Form.Label>
+                        <Form.Control
+                        name="last"
+                        placeholder = {props.user.lastName}
+                        onChange={(target) => setLastName(target.target.value)}
+                        value={lastName}
+                        />
+                    </Form.Group>
+                    <br/>
+                    <Form.Group>
+                        <Form.Label> Phone Number (No dashes) </Form.Label>
+                        <Form.Control name="phone"
+                        placeholder = {props.user.phone}
+                        onChange={(target) => setPhoneNumber(target.target.value)}
+                        value={phoneNumber}
+                        />
+                    </Form.Group>
+                    <br/>
+                    <Form.Group>
+                        <Form.Label> Email Address </Form.Label>
+                        <Form.Control name="email" type="email"
+                        placeholder = {props.user.email}
+                        onChange={(target) => setEmail(target.target.value)}
+                        value={email}
+                        />
+                    </Form.Group>
+                    <br/>
+                    {/* TODO TWP: Allow Update Password Somehow
+                    <Form.Group>
+                        <Form.Label> Password </Form.Label>
+                        <Form.Control
+                        name="password"
+                        type="password"
+                        style={{ margin: "auto", width: "25%" }}
+                        placeholder = "Input Password"
+                        onChange={(target) => this.setState({ password: target.target.value })}
+                        size="small" value={this.state.password}
+                        />
+                    </Form.Group>
+                    <br/> */}  
+                </div>
+                <Button id="purple-button" label="Update Account" type="submit">
                     Update Account
                 </Button>
             </Form>

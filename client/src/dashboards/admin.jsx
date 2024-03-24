@@ -19,8 +19,7 @@ import CreateTeam from "../registration/create/manage-team";
 //import Scoreboard from "../scoring/scoreboard.jsx";
 //import PublishPractice from "../problems/practice";
 //import PublishScores from "../scoring/scores";
-import "../_common/assets/css/register-user.css";
-import "../_common/assets/css/dashboard-admin.css";
+import "../_common/assets/css/public-dashboard.css";
 import RegisterSchool from "../registration/create/school";
 import ViewSchools from "../registration/view/school";
 import { connect } from "react-redux";
@@ -37,9 +36,11 @@ function AdminDash(props)
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Navbar.Brand onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
-            Admin Portal
-          </Navbar.Brand>
+          <Nav>
+            <Nav.Link onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
+              Admin Portal
+            </Nav.Link>
+          </Nav>
           <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>

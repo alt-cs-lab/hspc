@@ -12,8 +12,7 @@ import VolunteerSignUp from "../registration/create/volunteer-sign-up"
 //import StartJudging from "../judging/startJudging";
 
 //import Scoreboard from "../scoring/scoreboard.jsx";
-import "../_common/assets/css/register-user.css";
-import "../_common/assets/css/dashboard-volunteer.css";
+import "../_common/assets/css/public-dashboard.css";
 import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
@@ -48,16 +47,18 @@ function VolunteerDash(props)
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Navbar.Brand onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
-            Volunteer Portal
-          </Navbar.Brand>
+          <Nav>
+            <Nav.Link onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
+              Volunteer Portal
+            </Nav.Link>
+          </Nav>
           <Navbar.Toggle />
         
         <Navbar.Collapse>
           <Nav>
             <NavDropdown title="Events" id="basic-nav-dropdown">
               <NavItem eventKey={1} onClick={() => setCurrentView(<ViewEvents />)}>
-                View Upcoming Events
+                View Events
               </NavItem>
               <NavItem eventKey={2} onClick={() => setCurrentView(<VolunteerSignUp />)}>
                 Sign Up To Volunteer

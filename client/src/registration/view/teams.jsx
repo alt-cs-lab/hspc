@@ -177,6 +177,7 @@ class ViewTeams extends Component {
             </span>
             <Button
               className="RegisterButton"
+              variant="secondary"
               style={styles.buttonStyles}
               onClick={() => {
                 this.reloadAllTeams()

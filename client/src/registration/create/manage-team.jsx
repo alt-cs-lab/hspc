@@ -44,6 +44,16 @@ class CreateTeam extends Component {
     }
 
     componentDidMount = () => {
+        
+    console.log(this.props)
+        StudentService.getAdvisorsStudents(this.advisor.id)
+        .then((response) => {
+            if(response.ok){
+                this.setState({ studentList: response.data });
+            } else console.log("An error has occured. Please try again");
+        })
+        .catch((resErr) => console.log("Something went wrong. Please try again."));
+
         teamService.getAllSkillLevels()
         .then((response) => {
             if(response.ok){
@@ -117,7 +127,7 @@ class CreateTeam extends Component {
                 sortable: true,
             },
             {
-                name: "GradDate",
+                name: "GradDate (YYYY-MM-DD)",
                 selector: row => constants.dateFormat(row.graddate),
                 sortable: true,
                 sortFunction: constants.dateSort,

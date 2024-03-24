@@ -1,6 +1,7 @@
 .home{
-    height:1000px;
-    width:auto;
+    height: 1000px;
+    width: auto;
+    background-image: url("../img/website-background.png");
 }
 .banner{
     height: 150px;
@@ -33,8 +34,24 @@
 }
 #title{
     text-align: center;
+    color: white;
+    font-size: 4em;
+    font-family: Playfair Display, Times, serif;
+    font-weight: 700;
 }
-
+#header{
+    text-align: center;
+    color: white;
+    font-family: Playfair Display, Times, serif;
+}
+p{
+    text-align: justify;
+    color: white;
+    font-family: Playfair Display, Times, serif;
+    font-size: 20px;
+    margin-left: 20%;
+    margin-right: 20%;
+}
 .card{
     background-color: #D1D1D1;
     margin: auto;

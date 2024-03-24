@@ -20,8 +20,7 @@ import CreateTeam from "../registration/create/manage-team";
 //import Scoreboard from "../scoring/scoreboard.jsx";
 //import PublishPractice from "../problems/practice";
 //import PublishScores from "../scoring/scores";
-import "../_common/assets/css/register-user.css";
-import "../_common/assets/css/dashboard-master.css";
+import "../_common/assets/css/public-dashboard.css";
 import RegisterSchool from "../registration/create/school";
 import ViewSchools from "../registration/view/school";
 // import TeamRequests from "../registration/view/team-requests.jsx";
@@ -42,9 +41,11 @@ function MasterDash(props)
 return(
   <div>
         <Navbar>
-          <Navbar.Brand onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
-            Master Portal
-          </Navbar.Brand>
+          <Nav>
+            <Nav.Link onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
+              Master Portal
+            </Nav.Link>
+          </Nav>
           <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav>

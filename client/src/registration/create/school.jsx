@@ -7,9 +7,10 @@ import React, {Component} from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import schoolService from "../../_common/services/school.js";
-import "../../_common/assets/css/register-user.css";
 import {connect} from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
+
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Tyler Trammell
@@ -142,12 +143,7 @@ export class RegisterSchool extends Component {
                         <Button
                             variant="secondary"
                             className="RegisterButton"
-                            style={{
-                                margin: 15,
-                                backgroundColor: "#00a655",
-                                fontSize: 14,
-                                color: "white",
-                            }}
+                            style={styles.buttonStyles}
                             onClick={(event) => this.handleRegisterSchool(event)}
                         >
                             Register School

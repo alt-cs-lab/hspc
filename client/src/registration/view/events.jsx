@@ -6,7 +6,6 @@ import React, { Component } from "react";
 import EventService from "../../_common/services/event";
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
-import "../../_common/assets/css/ReactTableCSS.css";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 const constants = require('../../_utilities/constants');
 

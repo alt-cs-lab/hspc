@@ -2,7 +2,6 @@ import React from 'react';
 //import NewsService from '../_common/services/news';
 import EventService from '../_common/services/event';
 import '../_common/assets/css/public-homepage.css';
-import powercat from '../_common/assets/img/powercat.png';
 //import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
 const constants = require('../_utilities/constants');
@@ -38,17 +37,17 @@ export default function Home(){
             <div className="banner">
             {
             highlightEvent !== null ? (
-            <div>
+            <div id="back-layout">
                 <h1 id="title">{highlightEvent.eventname}</h1>
-                <h2 id="location">{highlightEvent.eventlocation}</h2>
-                <h2 id="date">{constants.dateFormat(highlightEvent.eventdate)} @ {highlightEvent.eventstarttime}-{highlightEvent.eventendtime}</h2>
-                <h5 id="description">{highlightEvent.eventdescription}</h5>
+                <h2 id="header">{highlightEvent.eventlocation}</h2>
+                <h2 id="header">{constants.dateFormat(highlightEvent.eventdate)} @ {highlightEvent.eventstarttime}-{highlightEvent.eventendtime}</h2>
+                <p>{highlightEvent.eventdescription}</p>
             </div>
             ) : (
             <h1 id="title">No Contests</h1>
             )
             }
-            <img src={powercat} alt="Powercat" id="logo"></img>
+            {/* <img src={powercat} alt="Powercat" id="logo"></img> */}
             </div>
             {/* <div id="article-field">
                 {news}
