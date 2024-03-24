@@ -4,13 +4,14 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 React Bootstrap for CSS
 */
 import React from "react";
-import "./status-messages.css";
 import Alert from 'react-bootstrap/Alert';
 import { connect } from "react-redux";
+import CloseButton from 'react-bootstrap/CloseButton';
+import { clearErrors } from "../../_store/slices/errorSlice";
 /*
  * Class to dislay status messages - success or errors
  *
- * @updated 2020: Tyler Trammell
+ * @updated 2024: Trent Powell
  */
 
 /*
@@ -30,9 +31,13 @@ export function StatusMessages(props){
             fontSize: "16px",
             display: "flex",
             justifyContent: "center",
+            background: "red"
           }}
         >
           {props.errors.errorMsg}
+          <div>
+            <CloseButton onClick={() => props.dispatchResetErrors()} />
+          </div>
         </Alert>
       ) : props.errors.successMsg ? (
         <Alert
@@ -41,9 +46,13 @@ export function StatusMessages(props){
             fontSize: "16px",
             display: "flex",
             justifyContent: "center",
+            background: "green"
           }}
         >
           {props.errors.successMsg}
+          <div>
+            <CloseButton onClick={() => props.dispatchResetErrors()} />
+          </div>
         </Alert>
       ) : (
         ""
@@ -58,4 +67,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(StatusMessages);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchResetErrors: () => dispatch(clearErrors()),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StatusMessages);

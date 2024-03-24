@@ -1,10 +1,6 @@
-import axios from 'axios';
 import ServiceUtils from "../../_utilities/serviceUtils";
 
 class ScorecardService {
-    constructor() {
-    }
-
     /*
     * Calls the API and adds the given scorecard file to the database.
     * @param {file} multipart data from the uploaded practice problem file
@@ -23,4 +19,6 @@ class ScorecardService {
     }
 }
 
+// TODO TWP: Check if this comment line below is alright
+// eslint-disable-next-line
 export default new ScorecardService();

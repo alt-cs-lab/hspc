@@ -4,22 +4,19 @@ Copyright (c) 2024 KSU-CS-Software-Engineering
 */
 
 require("dotenv").config();
-
 const db = require("../utils/hspc_db").db;
-// const constants = require("../utils/constants");
-// const { renameKeys } = require("../utils/extensions");
-const bcrypt = require("bcrypt");
 const { renameKeys } = require("../utils/extensions");
 
 module.exports = {
     createStudent,
     getEmail,
-    getStudents,
+    getAllStudents,
     getAdvisorSchoolsTeams,
+    getStudentsInTeam,
+    getStudentsWithNoTeam
 }
 
 function createStudent( { firstName, lastName, schoolId, email, gradDate } ) {
-    console.log({ firstName, lastName, schoolId, email, gradDate });
     return db.none(
     `
         INSERT INTO HighSchoolStudents (FirstName, LastName, SchoolID, Email, GradDate)
@@ -44,14 +41,12 @@ function getEmail(email) {
     });
 }
 
-function getStudents(schoolId) {
+function getAllStudents() {
     return db.any(
     `
         SELECT HS.FirstName, HS.LastName, S.SchoolName, HS.Email, HS.GradDate
         FROM HighSchoolStudent HS
-            INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
-            WHERE HS.SchoolID = $(schoolId)
-    `, (schoolId));
+    `);
 }
 
 // Trent Powell function to get all students for an advisor's schools
@@ -64,6 +59,39 @@ function getAdvisorSchoolsTeams(advisorId) {
         SELECT S2.SchoolID
         FROM Schools S2
         INNER JOIN SchoolAdvisors SA on S2.SchoolId = SA.SchoolId
-        WHERE SA.UserID = $(advisorId)
+        WHERE SA.UserID = $(advisorId) AND SA.Approved = true
     );`, {advisorId})
+}
+
+/**
+ * Gets all the students based off their team name
+ * @param {string} teamName The name of the team
+ * @param {string} competitionid The id of the competition
+ * @returns All students of a certain team
+ */
+function getStudentsInTeam(competitionid, teamName) {
+    return db.any(
+      `
+          SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email, HS.GradDate
+          FROM HighSchoolStudents HS
+              INNER JOIN TeamMembers TM ON TM.StudentID = HS.StudentID
+              INNER JOIN Teams T ON T.TeamID = TM.TeamID
+              INNER JOIN Competitions C ON T.CompetitionID = C.CompetitionID
+          WHERE T.TeamName = $(teamName) AND C.CompetitionID = $(competitionid)
+      `,
+      { teamName, competitionid }
+    );
+}
+
+function getStudentsWithNoTeam(schoolId){
+    return db.any(
+        `
+            SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email
+            FROM HighSchoolStudents HS
+                INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
+                INNER JOIN TeamMembers TM ON TM.StudentID = HS.StudentID
+            WHERE HS.SchoolID = $(schoolId)
+        `,
+        {schoolId}
+    );
 }

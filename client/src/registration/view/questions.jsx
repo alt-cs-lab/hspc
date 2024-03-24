@@ -4,9 +4,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import QuestionService from "../../_common/services/questions";
-import "../../_common/assets/css/ReactTableCSS.css";
 
 var currentView = null;
 
@@ -85,7 +83,6 @@ export default class ViewSchools extends Component {
   render() {
     return (
       <div>
-        <StatusMessages />
         {currentView}
       </div>
     );

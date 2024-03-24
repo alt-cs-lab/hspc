@@ -17,12 +17,9 @@ module.exports = {
     getAllUsers,
     getAllRoles,
     getAllVolunteers,
-    getAdvisors,
     getStudents,
     advisorUpdateSchool,
     addstudent,
-    getStudentsFromAdvisors,
-    getstudentsteam,
     checkinvolunteer,
     checkoutvolunteer,
     getactivevolunteers,
@@ -102,8 +99,8 @@ function register({ firstName, lastName, email, phone, requestLevel, schoolId, p
         // if they are registering as an advisor, we need to add an AdvisorsAffiliation record
         return db.none(
           `
-                INSERT INTO SchoolAdvisors (UserID, SchoolID)
-                VALUES((SELECT UserID FROM Users WHERE Email = $(email)), $(schoolId))
+                INSERT INTO SchoolAdvisors (UserID, SchoolID, Approved)
+                VALUES((SELECT UserID FROM Users WHERE Email = $(email)), $(schoolId), false)
             `,
           { email, schoolId }
         );
@@ -129,7 +126,7 @@ function getLogin(email) {
   return db
     .any(
       `
-        SELECT U.UserID, U.Email, U.EncryptedPassword, U.AccessLevel, U.FirstName, U.LastName
+        SELECT U.UserID, U.Email, U.EncryptedPassword, U.AccessLevel, U.FirstName, U.LastName, U.Phone
         FROM Users AS U
         WHERE Email = $(email)
     `,
@@ -143,6 +140,7 @@ function getLogin(email) {
         "accessLevel",
         "firstName",
         "lastName",
+        "phone",
       ]);
       return data.length > 0 ? data[0] : null;
     });
@@ -184,19 +182,6 @@ function getAllRoles() {
 }
 
 /**
- * Gets all the advisors
- * @returns All the Advisors
- */
-function getAdvisors() {
-  return db.any(`
-        SELECT U.UserID, U.FirstName, U.LastName, U.Email, U.Phone, S.SchoolName
-        FROM Users U
-            INNER JOIN SchoolAdvisors SA ON SA.UserID = U.UserID
-            INNER JOIN Schools S ON S.SchoolID = SA.SchoolID
-    `);
-}
-
-/**
  * Gets students who are not on a team
  * @returns All the students not on a team
  */
@@ -222,23 +207,6 @@ function advisorUpdateSchool(userId, schoolId) {
         WHERE UserID = $(userId)
     `,
     { userId, schoolId }
-  );
-}
-
-/**
- * Gets all the students for an advisor
- * @param {string} email The email of the advisor
- * @returns All the students for an advisor
- */
-function getStudentsFromAdvisors(email){
-    return db.any(`
-        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.SchoolID, HS.Email, HS.GradDate
-        FROM HighSchoolStudents HS
-            INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
-            INNER JOIN SchoolAdvisors SA ON SA.SchoolID = S.SchoolID
-                WHERE SA.UserID IN (SELECT U.UserID FROM Users U WHERE U.Email = $(email))
-    `,
-    { email }
   );
 }
 
@@ -289,27 +257,6 @@ function addstudent(
 //    return db.none(`INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword) VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword)); 
 //    insert into student values((select userid from users where email= $(email)),(select userid from users where email=$(advisoremail)));`, {firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, advisoremail});
 }
-
-/**
- * Gets all the students based off their team name
- * @param {string} teamName The name of the team
- * @returns All students of a certain team
- */
-function getstudentsteam(teamName) {
-  return db.any(
-    `
-        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email, HS.SchoolID
-        FROM HighSchoolStudents HS
-            INNER JOIN TeamMembers TM ON TM.StudentID = HS.StudentID
-            INNER JOIN Teams T ON T.TeamID = TM.TeamID
-                WHERE T.TeamName = $(teamName)
-    `,
-    { teamName }
-  );
-
-  // return db.any(`select Users.Phone, Users.Firstname, Users.LastName, Users.email, Users.AccessLevel  From users inner join teamsusers on teamsUsers.userid = users.userid inner join Teams on teams.teamid = teamsusers.teamid where teams.teamname = $(teamName);`, {teamName})
-}
-
 
 //Function used to check in Volunteers based on userid
 function checkinvolunteer(userid) {

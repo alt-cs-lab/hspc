@@ -6,7 +6,7 @@ const router = require("express").Router();
 const schoolService = require("../services/school.js");
 const { useService } = require("../utils/extensions.js");
 const passport = require("passport");
-const { minimumAccessLevelCheck, badRequestCheck } = require("../utils/extensions.js");
+const { accessLevelCheck, badRequestCheck } = require("../utils/extensions.js");
 const {check} = require("express-validator");
 const constants = require("../utils/constants.js");
 const statusResponses = require("../utils/status-response.js");
@@ -43,16 +43,15 @@ const statusResponses = require("../utils/status-response.js");
  */
 router.post("/create",
     passport.authenticate("jwt", { session: false }), //authenticate with JWT
-    minimumAccessLevelCheck(constants.ADMIN), //check if user is admin
+    accessLevelCheck(constants.ADMIN), //check if user is admin
     [
         check('name').not().isEmpty().withMessage('School name is required'),
-        // everything else does not have to be there but should be of the correct type
-        check('addressLine1').optional().isString().withMessage('Address line 1 must be a string'),
+        check('addressLine1').not().isEmpty().isString().withMessage('Address line 1 is required'),
         check('addressLine2').optional().isString().withMessage('Address line 2 must be a string'),
-        check('city').optional().isString().withMessage('City must be a string'),
-        check('state').optional().isString().withMessage('State must be a string'),
-        check('postalCode').optional().isInt().withMessage('Postal code must be an integer'),
-        check('usdCode').optional().isString().withMessage('USD code must be a string')
+        check('city').not().isEmpty().isString().withMessage('City is required'),
+        check('state').not().isEmpty().isString().withMessage('State is required'),
+        check('postalCode').not().isEmpty().isInt().withMessage('Postal code is required as a number'),
+        check('usdCode').not().isEmpty().isString().withMessage('USD code is required')
     ], 
     badRequestCheck, //check if there are any bad requests
     (req, res) => {
@@ -98,8 +97,8 @@ router.get("/view", (req, res) => {
 
 
 /**
- * @api {post} /api/user/advisorschool Get school associated with an advisor
- * @apiName AdvisorSchool
+ * @api {post} /api/user/advisorApprovedSchools Get approved schools associated with an advisor
+ * @apiName AdvisorApprovedSchools
  * @apiGroup User
  *
  * @apiBody {Number} userId User ID of the user.
@@ -113,15 +112,29 @@ router.get("/view", (req, res) => {
  *       Advisor email is required for students.
  *   }
  */
-router.get(
-    "/advisorSchools",
+router.get("/advisorApprovedSchools",
     // passport.authenticate("jwt", { session: false }),
-    // minimumAccessLevelCheck(constants.ADVISOR),
-    // [
-    //   check("userId").exists().withMessage("User ID is required."),
-    //   // check is number
-    //   check("userId").isNumeric().withMessage("User ID must be a number."),
-    // ],
+    // accessLevelCheck(constants.ADVISOR),
+    // badRequestCheck,
+    (req, res) => {
+      const userId = req.query["userId"];
+      schoolService.getAdvisorApprovedSchools(userId)
+        .then((school) => {
+          statusResponses.ok(res, school);
+        })
+        .catch((err) => {
+          statusResponses.serverError(res);
+        });
+    }
+  );
+module.exports = router;
+
+/*
+* Same as advisorApprovedSchools, except all schools including unapproved ones.
+*/
+router.get("/advisorSchools",
+    // passport.authenticate("jwt", { session: false }),
+    // accessLevelCheck(constants.ADVISOR),
     // badRequestCheck,
     (req, res) => {
       const userId = req.query["userId"];

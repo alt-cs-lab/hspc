@@ -1,23 +1,29 @@
 /*
   MIT License
-  Copyright (c) 2019 KSU-CS-Software-Engineering
+  Copyright (c) 2024 KSU-CS-Software-Engineering
   */
   import React, { Component, useState, useEffect } from "react";
-  import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
   import Button from "react-bootstrap/Button";
   import TeamService from "../../_common/services/team";
   import EventService from "../../_common/services/event";
-  import UserService from "../../_common/services/user";
+  import StudentService from "../../_common/services/high-school-student";
   import SchoolService from "../../_common/services/school"
   import DataTable from "react-data-table-component";
   import Select from "react-select";
   import { connect } from "react-redux";
+  import CreateTeam from "../create/manage-team.jsx";
   import {
     clearErrors,
     updateErrorMsg,
     updateSuccessMsg,
   } from "../../_store/slices/errorSlice.js";
+
+  const constants = require('../../_utilities/constants');
+  const styles = require('../../_utilities/styleConstants.js');
   
+  /*
+  * Page to view an advisor's schools' teams
+  */
   class TeamsView extends Component {
     constructor(props) {
       super(props);
@@ -34,7 +40,9 @@
     }
   
     componentDidMount = () => {
-      // Get Events
+      /*
+      * Get Events
+      */
       EventService.getAllEvents(this.props.auth.user.id, this.props.auth.user.accessLevel)
       .then((response) => {
           if (response.ok) {
@@ -51,8 +59,10 @@
       })
       .catch((resErr) => console.log("Something went wrong fetching events. Please try again"));
 
-      // Get Advisor's Schools
-      SchoolService.getAdvisorSchools(this.props.auth.user.id)
+      /*
+      * Get Advisor's Approved Schools
+      */
+      SchoolService.getAdvisorApprovedSchools(this.props.auth.user.id)
       .then((response) => {
           if (response.ok) {
               let schoolbody = response.data;
@@ -68,7 +78,9 @@
       })
       .catch((resErr) => console.log("Something went wrong fetching schools. Please try again"));
 
-      // Get Teams for Advisor's Schools
+      /* 
+      * Get Teams for Advisor's Schools
+      */
       TeamService.getAdvisorsTeams( this.props.auth.user.id )
       .then((response) => {
           if (response.ok) {
@@ -77,31 +89,11 @@
       })
       .catch((resErr) => console.log("Something went wrong fetching teams. Please try again"))
 
-        /*if (eventsResponse.ok && !this.state.schoolList.isEmpty()) {
-          const events = eventsResponse.data;
-          const schoolId = schoolResponse.data.schoolId;
-          this.setMostRecentEventAsCompetitionId(events);
-          if (schoolId && this.state.competitionId) {
-            const teamsResponse = await TeamService.getSchoolsTeams(schoolId, this.state.competitionId);
-            if (teamsResponse.ok) {
-              this.setState({
-                teamTable: teamsResponse.data,
-              });
-            } else {
-              console.error("Error fetching team school event: Response not OK");
-              this.setState({ error: "Error fetching team data." });
-            }
-          }
-        } else {
-          console.error("Error fetching events");
-          this.setState({ error: "Error fetching event data." });
-        }
-      } catch (error) {
-        console.error("Error in componentDidMount", error);
-        this.setState({ error: "An unexpected error occurred." });
-      }*/
     }
   
+    /*
+    * Update Teams when a filter of school or event changes
+    */
     UpdateTeams = (id, school) => {
       if(school){
         this.setState({ schoolId: id })
@@ -130,31 +122,9 @@
 
     };
   
-    reloadAllTeams = () => {
-      // TeamService.getAllTeams().then((response) => {
-      //   if (response.ok) {
-      //     this.setState({ teamTable: response.data });
-      //   } else {
-      //     console.error("Error reloading all teams");
-      //     this.setState({ error: "Error reloading team data." });
-      //   }
-      // }).catch(error => {
-      //   console.error("Error in reloadAllTeams", error);
-      //   this.setState({ error: "An unexpected error occurred." });
-      // });
-    };
-  
-    setMostRecentEventAsCompetitionId = (events) => {
-      // if (events.length === 0) {
-      //   return;
-      // }
-      // const sortedEvents = events.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
-      // const mostRecentEvent = sortedEvents[0];
-      // this.setState({ competitionId: mostRecentEvent.id }, () => {
-      //   console.log("Updated competitionId:", this.state.competitionId);
-      // });
-    };
-  
+  /*
+  * Specifies what information to include in the columns
+  */
     getAllTeamColumns() {
       return [
         {
@@ -189,9 +159,12 @@
       />
       return (
       <div>
-        <StatusMessages />
         <h2>Teams</h2>
-        <Button>Add Team</Button>
+        <Button style={styles.buttonStyles} variant="secondary"
+          onClick={() => this.props.setCurrentView(<CreateTeam advisor={this.props.advisor} />)}
+          >
+          Add Team
+        </Button>
         <section
           style={{
             display: "flex",
@@ -237,7 +210,7 @@
     const [error, setError] = useState(null);
   
     useEffect(() => {
-      UserService.getstudentsteam(data.teamname)
+      StudentService.getStudentsInTeam(data.competitionid, data.teamname)
         .then((response) => {
           if (response.ok) {
             setTeamUsersTable(response.data);
@@ -250,7 +223,7 @@
           console.error("Error in ExpandedComponent", error);
           setError("An unexpected error occurred.");
         });
-    }, [data.teamname]);
+    }, [data.competitionid, data.teamname]);
   
     if (error) {
       return <div className="error-message">{error}</div>;
@@ -264,7 +237,7 @@
       { name: "First Name", selector: (row) => row.firstname, sortable: true },
       { name: "Last Name", selector: (row) => row.lastname, sortable: true },
       { name: "Email", selector: (row) => row.email, sortable: true },
-      { name: "Phone", selector: (row) => row.phone, sortable: true },
+      { name: "GradDate (YYYY-MM-DD)", selector: (row) => constants.dateFormat(row.graddate), sortable: true, sortFunction: constants.dateSort,},
     ];
   }
   

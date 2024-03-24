@@ -10,13 +10,15 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-
-import StatusMessages from "../_common/components/status-messages/status-messages";
-import "../_common/assets/css/public-login.css";
+import StatusMessages from "../_common/components/status-messages";
+import "../_common/assets/css/public-dashboard.css";
+import "../_common/assets/css/standard.css";
 import "../home/homepage";
 import { login, selectAuth } from "../_store/slices/authSlice";
 import { selectDashboardRoute } from "../_store/slices/routeSlice";
 import { clearErrors, updateErrorMsg } from "../_store/slices/errorSlice";
+
+const styles = require('../_utilities/styleConstants.js');
 
 function Login(props) {
     const dispatch = useDispatch();
@@ -66,53 +68,54 @@ function Login(props) {
     let errorComponent = errorMsg || successMsg ? <StatusMessages /> : ""
 
     return (
-        <div className="LoginBox">
+        <div 
+            // className="LoginBox"
+            class="page-body"
+            >
             {errorComponent}
             <div>
-                <h2>Returning User?</h2>
-                <p>Please enter your email and password below.</p>
-
-                <Form onSubmit={onSubmit} >
-                    <Form.Group controlId="email-input">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            type="email"
-                            id="email-input"
-                            value={email}
-                            onChange={(event) => setEmail(event.target.value)}
-                            size="small"
-                            required
-                        />
-                    </Form.Group>
-                    <Form.Group controlId="password-input">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            id="password-input"
-                            value={password}
-                            onChange={(event) => setPassword(event.target.value)}
-                            size="small"
-                            required
-                        />
-                    </Form.Group>
-
+                <h2>Sign In</h2>
+                {/* <p>Please enter your email and password below.</p> */}
+            
+                    <Form onSubmit={onSubmit} >
+                    <div class="add-margin">
+                        <Form.Group controlId="email-input">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                className="mb-3"
+                                type="email"
+                                // id="email-input"
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="password-input">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                // id="password-input"
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                    </div>
                     <Button
-                        variant="primary"
-                        className="login-button login-form-button"
+                        id="purple-button"
+                        variant="secondary"
+                        className="m-3"
+                        // className="login-button login-form-button"
                         type="submit"
-                        data-testid="login-button"
-                    >
+                        data-testid="login-button">
                         Sign In
                     </Button>
-                    <Button
-                        variant="primary"
-                        className="register-button login-form-button"
+                    <Button variant="secondary" className="m-3"
                         onClick={(_)=> {setIsRegistering(true)}}
-                        type="button"
-                    >
-                        Register
+                        type="button">
+                            Register
                     </Button>
-                </Form>
+                    </Form>  
                 <br />
             </div>
         </div>

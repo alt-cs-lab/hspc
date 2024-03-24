@@ -3,7 +3,6 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component, useState, useEffect } from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import Button from 'react-bootstrap/Button';
 import TeamService from "../../_common/services/team";
 import EventService from "../../_common/services/event";
@@ -13,6 +12,7 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
+const styles = require('../../_utilities/styleConstants.js');
 
 class ViewTeams extends Component {
   constructor(props) {
@@ -68,7 +68,6 @@ class ViewTeams extends Component {
    */
   UpdateTeams(nameofevent) {
     TeamService.getAllTeamsInCompName(nameofevent).then((response) => {
-      console.log(response.data);
       this.setState({ teamTable: response.data, columns: this.getAllTeamColumns() });
     });
     return;
@@ -151,7 +150,6 @@ class ViewTeams extends Component {
       />
     return (
       <div>
-        <StatusMessages />
         <h2>Teams</h2>
         <section
           style={{
@@ -178,14 +176,9 @@ class ViewTeams extends Component {
               View All Teams:
             </span>
             <Button
-              variant="primary"
               className="RegisterButton"
-              style={{
-                margin: 15,
-                backgroundColor: "#00a655",
-                color: "white",
-                fontSize: 14,
-              }}
+              variant="secondary"
+              style={styles.buttonStyles}
               onClick={() => {
                 this.reloadAllTeams()
               }}

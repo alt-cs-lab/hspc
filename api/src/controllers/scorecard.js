@@ -11,7 +11,7 @@ const upload = multer({
 }).single('scorecard');
 const { useService } = require("../utils/extensions.js");
 const passport = require("passport");
-const { minimumAccessLevelCheck, badRequestCheck } = require("../utils/extensions.js");
+const { accessLevelCheck, badRequestCheck } = require("../utils/extensions.js");
 const {check} = require("express-validator");
 const constants = require("../utils/constants.js");
 

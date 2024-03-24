@@ -3,7 +3,6 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
 import SchoolService from "../../_common/services/school";
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
@@ -28,17 +27,17 @@ class ViewSchools extends Component {
       .then((response) => {
         if (response.ok) {
           this.setState({ schoolTable: response.data });
-        } else console.log("An error has occurred, Please try again.");
+        } else console.log("An error has occurred retrieving schools, Please try again.");
       })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
+      .catch((resErr) => console.log("Something went wrong retrieving schools. Please try again"));
   };
 
   // This method maps the database call and the columns to the correct positioning
   getColumns() {
     return [
       {
-        name: "State",
-        selector: row => row.state,
+        name: "USD Code",
+        selector: row => row.usdCode,
         sortable: true,
       },
       {
@@ -47,23 +46,13 @@ class ViewSchools extends Component {
         sortable: true,
       },
       {
-        name: "Address Line 1",
-        selector: row => row.addressLine1,
-        sortable: true,
-      },
-      {
-        name: "Address Line 2",
-        selector: row => row.addressLine2,
-        sortable: true,
-      },
-      {
         name: "City",
         selector: row => row.city,
         sortable: true,
       },
       {
-        name: "USD Code",
-        selector: row => row.usdCode,
+        name: "State",
+        selector: row => row.state,
         sortable: true,
       },
       {
@@ -78,7 +67,6 @@ class ViewSchools extends Component {
   render() {
     return (
       <div>
-        <StatusMessages/>
         <h2>Schools</h2>
         <DataTable
           data={this.state.schoolTable} 
@@ -86,6 +74,8 @@ class ViewSchools extends Component {
           pagination 
           paginationPerPage={20} 
           paginationRowsPerPageOptions={[20, 30, 40, 50]}
+          expandableRows
+          expandableRowsComponent={ExpandedComponent}
         />
       </div>
     );
@@ -107,6 +97,15 @@ const mapDispatchToProps = (dispatch) => {
 		dispatchSuccess: (message) =>
 			dispatch(updateSuccessMsg(message))
   };
+};
+
+const ExpandedComponent = ({ data }) => {
+
+  return <div>
+    <h6>Address:</h6>
+    <p>{data.addressLine1}</p>
+    <p>{data.addressLine2}</p>
+  </div>;
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewSchools);

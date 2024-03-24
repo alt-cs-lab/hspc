@@ -32,7 +32,7 @@ This is a guide for how to setup the api side of high school programming competi
 Source files live in src/. <br/>
 Controllers (enpoints) use express-validator Validation Chain API.
 > https://express-validator.github.io/docs/validation-chain-api <br />
-> Use the `badRequestCheck` and `minimumAccessLevelCheck` as in the /team endpoint (teams.js controller file).
+> Use the `badRequestCheck` and `accessLevelCheck` as in the /team endpoint (teams.js controller file).
 
 Services back the controllers and contact the database.
 

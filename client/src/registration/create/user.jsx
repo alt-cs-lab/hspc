@@ -8,26 +8,20 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Button, Form, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
-import ReCAPTCHA from "react-recaptcha";
-import StatusMessages from "../../_common/components/status-messages/status-messages";
-import "../../_common/assets/css/register-user.css";
+//import ReCAPTCHA from "react-recaptcha";
 import { registerUser } from "../../_store/actions/authActions";
 import {
   SET_SCHOOL_DROPDOWN_REQUIRED,
 } from "../../_store/actions/types";
 import BaseSelect from "react-select";
-import FixRequiredSelect from "./FixRequiredSelect";
+import FixRequiredSelect from "../../_common/components/FixRequiredSelect.jsx";
 import SchoolService from "../../_common/services/school.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
+import "../../_common/assets/css/standard.css";
+import "../../_common/assets/css/public-login.css";
 
 const constants = require('../../_utilities/constants')
-
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100,
-  }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell
@@ -37,8 +31,8 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.props.dispatchResetErrors();
-    this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
-    this.verifyCallback = this.verifyCallback.bind(this);
+    //this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
+    //this.verifyCallback = this.verifyCallback.bind(this);
     this.state = {
       firstName: "",
       lastName: "",
@@ -70,9 +64,9 @@ class Register extends Component {
             });
           }
           this.setState({ schoolList: schools });
-        } else console.log("An error has occurred, Please try again.");
+        } else console.log("An error has occurred retrieving schools, Please try again.");
       })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
+      .catch((resErr) => console.log("Something went wrong attempting to connect to the server. Please try again"));
   };
 
   /*
@@ -81,6 +75,8 @@ class Register extends Component {
   handleRegister(event) {
     event.preventDefault();
     const newUser = this.state;
+    // TODO TWP: Do additional Error Checking
+
     //if (this.state.isVerified) {
         this.props.registerUser(newUser, this.props.router);
     //} else {
@@ -105,17 +101,17 @@ class Register extends Component {
   /*
    * Indicates successful loading of the captcha for debugging purposes
    */
-  recaptchaLoaded() {
-    console.log("captcha successfully loaded.");
-  }
+  // recaptchaLoaded() {
+  //   console.log("captcha successfully loaded.");
+  // }
 
   /*
    * Changes the verfied state to true following a verified captcha result.
    */
-  verifyCallback(response) {
-    if (response) this.setState({ isVerified: true });
-    else this.setState({ isVerified: false });
-  }
+  // verifyCallback(response) {
+  //   if (response) this.setState({ isVerified: true });
+  //   else this.setState({ isVerified: false });
+  // }
 
   onChange(event) {
     this.setState({
@@ -152,26 +148,26 @@ class Register extends Component {
    */
   render() {
     return (
-      <div name="status-div" className="RegisterBox">
-        {this.props.errors.errorMsg !== "" ||
-        this.props.errors.successMsg !== "" ? (
-          <StatusMessages />
-        ) : (
-          ""
-        )}
-        <h2>New User?</h2>
-        <p>
+      <div name="status-div" 
+      // className="RegisterBox"
+      class="page-body"
+      >
+        <h2>Register Account</h2>
+        {/* <p>
           <b>Please fill out the information below.</b>
-        </p>
+        </p> */}
         <Form name="form" onSubmit={(event) => this.handleRegister(event)}>
-          <p>Please select an account type.</p>
+          {/* <p>Please select an account type.</p> */}
           <ToggleButtonGroup
-            className="RoleSelect"
+            // style={styles.buttonStyles}
+            // className="RoleSelect"
             type="radio"
             name="options"
             defaultValue={constants.VOLUNTEER}
             >
             <ToggleButton 
+              style={styles.buttonStyles}
+              variant="secondary"
               id="tbg-radio-2"
               value={constants.VOLUNTEER} 
               onClick={(event) => this.changeFields(constants.VOLUNTEER)}
@@ -179,6 +175,7 @@ class Register extends Component {
               Volunteer
             </ToggleButton>
             <ToggleButton 
+              variant="secondary"
               id="tbg-radio-1"
               value={constants.ADVISOR} 
               onClick={(event) => this.changeFields(constants.ADVISOR)}
@@ -187,104 +184,96 @@ class Register extends Component {
             </ToggleButton>
           </ToggleButtonGroup>
           <br/>
-          <Form.Group>
-            <Form.Label> First Name </Form.Label>
-            <Form.Control
-              name="first"
-              required
-              placeholder = "Input First Name"
-              style={{ margin:"auto", width:"25%" }}
-              inputProps={{ style: { fontSize: 14 } }}
-              InputLabelProps={{ style: { fontSize: 14 } }}
-              onChange={(target) =>
-                this.setState({ firstName: target.target.value })
-              }
-              value={this.state.firstName}
-              size="small"
-            />
-          </Form.Group>
+          <div class="add-margin">
+            <Form.Group>
+              <Form.Label> First Name </Form.Label>
+              <Form.Control
+                name="first"
+                required
+                placeholder = "Input First Name"
+                inputProps={{ style: { fontSize: 14 } }}
+                InputLabelProps={{ style: { fontSize: 14 } }}
+                onChange={(target) =>
+                  this.setState({ firstName: target.target.value })
+                }
+                value={this.state.firstName}
+              />
+            </Form.Group>
+            <br/>
+            <Form.Group>
+              <Form.Label> Last Name </Form.Label>
+              <Form.Control
+                name="last"
+                required
+                placeholder = "Input Last Name"
+                inputProps={{ style: { fontSize: 14 } }}
+                InputLabelProps={{ style: { fontSize: 14 } }}
+                onChange={(target) =>
+                  this.setState({ lastName: target.target.value })
+                }
+                value={this.state.lastName}
+              />
+            </Form.Group>
+            <br/>
+            <Form.Group>
+              <Form.Label> Phone Number (No dashes) </Form.Label>
+              <Form.Control
+                name="phone"
+                required
+                placeholder = "Input Phone Number"
+                inputProps={{ style: { fontSize: 14 } }}
+                InputLabelProps={{ style: { fontSize: 14 } }}
+                onChange={(target) => this.setState({ phone: target.target.value })}
+                value={this.state.phone}
+              />
+            </Form.Group>
+            <br/>
+            <Form.Group>
+              <Form.Label> Email Address </Form.Label>
+              <Form.Control
+                name="email"
+                type="email"
+                required
+                placeholder = "email@example.com"
+                inputProps={{ style: { fontSize: 14 } }}
+                InputLabelProps={{ style: { fontSize: 14 } }}
+                onChange={(target) => this.setState({ email: target.target.value })}
+                value={this.state.email}
+              />
+            </Form.Group>
+            <br/>
+            <Form.Group>
+              <Form.Label> Password </Form.Label>
+              <Form.Control
+                name="password"
+                type="password"
+                required
+                placeholder = "Input Password"
+                inputProps={{ style: { fontSize: 14 } }}
+                InputLabelProps={{ style: { fontSize: 14 } }}
+                onChange={(target) =>
+                  this.setState({ password: target.target.value })
+                }
+                value={this.state.password}
+              />
+            </Form.Group>
+            <br/>
+            <Form.Group name="dropdown-div" id="schoolList" hidden={true}>
+              <Form.Label> School </Form.Label>
+              <FixRequiredSelect
+                id="dropdown"
+                style={{ margin: "auto", width: "100%" }}
+                styles={styles.selectStyles}
+                placeholder="Select a School"
+                options={this.state.schoolList}
+                onChange={this.handleSchoolChange}
+                SelectComponent={BaseSelect}
+                setValue={this.state.schoolId}
+              />
+            </Form.Group>
+          </div>
           <br/>
-          <Form.Group>
-            <Form.Label> Last Name </Form.Label>
-            <Form.Control
-              name="last"
-              required
-              style={{ margin: "auto", width: "25%" }}
-              placeholder = "Input Last Name"
-              inputProps={{ style: { fontSize: 14 } }}
-              InputLabelProps={{ style: { fontSize: 14 } }}
-              onChange={(target) =>
-                this.setState({ lastName: target.target.value })
-              }
-              size="small"
-              value={this.state.lastName}
-            />
-          </Form.Group>
-          <br/>
-          <Form.Group>
-            <Form.Label> Phone Number (No dashes) </Form.Label>
-            <Form.Control
-              name="phone"
-              required
-              style={{ margin: "auto", width: "25%" }}
-              placeholder = "Input Phone Number"
-              inputProps={{ style: { fontSize: 14 } }}
-              InputLabelProps={{ style: { fontSize: 14 } }}
-              onChange={(target) => this.setState({ phone: target.target.value })}
-              size="small"
-              value={this.state.phone}
-            />
-          </Form.Group>
-          <br/>
-          <Form.Group>
-            <Form.Label> Email Address </Form.Label>
-            <Form.Control
-              name="email"
-              type="email"
-              required
-              style={{ margin: "auto", width: "25%" }}
-              placeholder = "email@example.com"
-              inputProps={{ style: { fontSize: 14 } }}
-              InputLabelProps={{ style: { fontSize: 14 } }}
-              onChange={(target) => this.setState({ email: target.target.value })}
-              size="small"
-              value={this.state.email}
-            />
-          </Form.Group>
-          <br/>
-          <Form.Group>
-            <Form.Label> Password </Form.Label>
-            <Form.Control
-              name="password"
-              type="password"
-              required
-              style={{ margin: "auto", width: "25%" }}
-              placeholder = "Input Password"
-              inputProps={{ style: { fontSize: 14 } }}
-              InputLabelProps={{ style: { fontSize: 14 } }}
-              onChange={(target) =>
-                this.setState({ password: target.target.value })
-              }
-              size="small"
-              value={this.state.password}
-            />
-          </Form.Group>
-          <br/>
-          <Form.Group name="dropdown-div" id="schoolList" hidden={true}>
-            <Form.Label> School </Form.Label>
-            <FixRequiredSelect
-              id="dropdown"
-              style={{ margin: "auto", width: "100%" }}
-              styles={selectStyles}
-              placeholder="Select a School"
-              options={this.state.schoolList}
-              onChange={this.handleSchoolChange}
-              SelectComponent={BaseSelect}
-              setValue={this.state.schoolId}
-            />
-          </Form.Group>
-          <br/>
-          <div name="captcha" align="center">
+          {/* <div name="captcha" align="center">
             <ReCAPTCHA
               sitekey="6LdB8YoUAAAAAL5OtI4zXys_QDLidEuqpkwd3sKN"
               render="explicit"
@@ -292,19 +281,8 @@ class Register extends Component {
               verifyCallback={this.verifyCallback}
               size="small"
             />
-          </div>
-          <br/>
-          <Button
-            variant="primary"
-            id="submit-button"
-            label="Create Account"
-            style={{
-              fontSize: "14px",
-              backgroundColor: "#00a655",
-              color: "white",
-            }}
-            type="submit"
-          >
+          </div> */}
+          <Button id="purple-button" label="Create Account" type="submit">
             Create Account
           </Button>
         </Form>

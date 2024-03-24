@@ -4,8 +4,8 @@ import TeamList from "./teamList";
 import TeamsNeedingAssignmentList from "./teamsNeedingAssignmentList";
 import VolunteerList from "./volunteerList";
 import "./modalStyleSheet.css";
-import teamsNeedingAssignment from "./teamsNeedingAssignment";
-import teamsNeedingAssignmentList from "./teamsNeedingAssignmentList";
+// import teamsNeedingAssignment from "./teamsNeedingAssignment";
+// import teamsNeedingAssignmentList from "./teamsNeedingAssignmentList";
 
 // set differently depending on type prop of modal
 let content;

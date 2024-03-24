@@ -3,9 +3,8 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages";
+// import StatusMessages from "../../_common/components/status-messages";
 import Button from 'react-bootstrap/Button';
-import AuthService from "../../_common/services/auth";
 import EventService from "../../_common/services/event";
 import TeamService from "../../_common/services/team";
 import UserService from "../../_common/services/user";
@@ -14,19 +13,12 @@ import Select from "react-select";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import "../../_common/assets/css/register-user.css";
-import "../../_common/assets/css/team-member-dropdown.css";
 import { Table } from "react-bootstrap";
 // import ReactTable from "react-table";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 // // import "react-table/react-table.css";
 
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100,
-  }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell, Trent Kempker
@@ -350,12 +342,12 @@ class AddUser extends Component {
   render() {
     return (
       <div name="status-div" className="RegisterBox">
-        {this.props.errors.errorMsg !== "" ||
+        {/* {this.props.errors.errorMsg !== "" ||
         this.props.errors.successMsg !== "" ? (
           <StatusMessages />
         ) : (
           ""
-        )}
+        )} */}
         <h2>Add a Student</h2>
         <section
           style={{
@@ -382,7 +374,7 @@ class AddUser extends Component {
             <div id="sub-nav">
               <Select
                 id="dropdown"
-                styles={selectStyles}
+                styles={styles.selectStyles}
                 placeholder="Select a Team Name"
                 options={this.state.teamList}
                 onChange={(opt) => this.setState({ teamName: opt.label })}
@@ -400,14 +392,8 @@ class AddUser extends Component {
           <Table data={this.state.eventTable} columns={this.state.columns}/>
           <br />
           <Button
-            variant="primary"
+            variant="secondary"
             className="RegisterButton"
-            style={{
-              margin: 15,
-              backgroundColor: "#00a655",
-              color: "white",
-              fontSize: 14,
-            }}
             onClick={(event) => this.handleAddToTeam()}
           >
             Add to Team

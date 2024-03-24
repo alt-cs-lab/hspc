@@ -1,13 +1,15 @@
-.navbar{
+/* Classes - Can be used by multiple components */
+.navbar
+{
     margin: 0px;
     padding: 0px;
     border: none;
 }
-.page-body{
-    margin: 0px;
-    padding: 0px;
+
+.page-body
+{
+    padding: 10px;
     border: none;
-    height: 700px;
     text-align: center;
     align-content: center;
     background-color: #ffffff;

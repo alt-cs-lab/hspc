@@ -1,12 +1,14 @@
 const { renameKeys } = require("../utils/extensions");
 
 const db = require("../utils/hspc_db").db;
+const constants = require('../utils/constants')
 
 module.exports = {
     createEvent,
     //getEventHistory,
     getAllEvents,
     getCompetitionTeamsInfo,
+    getHighlightEvent,
 };
 
 /**
@@ -38,7 +40,8 @@ function createEvent({
             EventName,
             EventLocation,
             EventDate,
-            EventTime,
+            EventStartTime,
+            EventEndTime,
             BeginnerTeamsPerSchool,
             AdvancedTeamsPerSchool,
             TeamsPerSchool,
@@ -50,7 +53,8 @@ function createEvent({
             $(name),
             $(location),
             $(date),
-            $(time),
+            $(startTime),
+            $(endTime),
             $(beginnerTeamsPerSchool),
             $(advancedTeamsPerSchool),
             $(teamsPerSchool),
@@ -80,51 +84,70 @@ function createEvent({
 function getAllEvents() {
     return db.any(
         `SELECT
-            C.eventName,
             C.CompetitionID,
+            C.EventName,
             C.EventLocation,
             C.EventDate,
-            C.EventTime,
+            C.EventStartTime, 
+            C.EventEndTime, 
+            C.EventDescription,
             C.BeginnerTeamsPerSchool,
             C.AdvancedTeamsPerSchool,
             C.TeamsPerSchool,
             C.BeginnerTeamsPerEvent,
             C.AdvancedTeamsPerEvent,
-            C.TeamsPerEvent,
-            C.EventDescription
+            C.TeamsPerEvent
         FROM Competitions AS C`
     ).then((events) => renameKeys(events,[
-        "name",
         "id",
+        "name",
         "location",
         "date",
-        "time",
-        "advancedTeamsPerSchool",
+        "startTime",
+        "endTime",
+        "description",
         "beginnerTeamsPerSchool",
+        "advancedTeamsPerSchool",
         "teamsPerSchool",
         "beginnerTeamsPerEvent",
         "advancedTeamsPerEvent",
-        "teamsPerEvent",
-        "description"
+        "teamsPerEvent"
     ]));
 }
 
 /*
- * Function to get all the competitions that the user is associated with
- * also returns the name Natalie Laughlin
- * 
- * Unused as of 3/2/2024 Trent Powell
-function getEventHistory(userID) {
+ * Function to get "Highlight" Compeitition which means next upcoming or if there is none then the most recent.
+ */
+function getHighlightEvent() {
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = constants.toDatabaseDate(year, month, day);
+
     return db.any(
-        `SELECT C.eventName, C.CompetitionID, C.EventLocation, C.EventDate, C.EventTime, C.TeamsPerSchool, C.TeamsPerEvent, C.EventDescription 
-        FROM Users AS U
-        INNER JOIN TeamsUsers as TU on U.UserID = TU.UserID
-        INNER JOIN Teams as T on TU.TeamID = T.TeamID
-        INNER JOIN Competition as C on T.CompetitionID = C.CompetitionID
-        WHERE U.UserID = $(userID);`,
-        { userID }
-    );
-}*/
+        `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
+        FROM Competitions AS C
+        WHERE C.EventDate > $(currentDate)`, {currentDate})
+    .then((data)=>{
+        if (data[0] != null) {
+            return db.any(
+                `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
+                FROM Competitions AS C
+                WHERE C.EventDate > $(currentDate)
+                ORDER BY C.EventDate ASC
+                LIMIT 1`, {currentDate})
+        }
+        else{
+            return db.any(
+                `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
+                FROM Competitions AS C
+                ORDER BY C.EventDate DESC
+                LIMIT 1`)
+        }
+    })
+}
 
 // returns the TeamsPerSchool and TeamsPerEvent for a given competition
 function getCompetitionTeamsInfo(competitionID) {

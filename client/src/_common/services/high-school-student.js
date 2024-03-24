@@ -14,6 +14,16 @@ export const addHighSchoolStudent = (firstName, lastName, schoolId, email, gradD
 
 class StudentService {
 
+    getAllStudents() {
+        return ServiceUtils.getRequest('api/high-school-student/getAllStudents');
+    }
+
+    getStudentsWithNoTeam(schoolId) {
+        return ServiceUtils.getRequest('api/high-school-student/getStudentsWithNoTeam', {
+            schoolId: schoolId
+        });
+    }
+
     /*
     * API Endpoint retrieves all students from an advisor's schools
     */
@@ -22,6 +32,14 @@ class StudentService {
             advisorId: advisorId
         });
     };
+
+    /*
+    * API Endpoint that returns all users with Student based on team name
+    * TODO TWP: MOVE TO STUDENT SERVICE
+    */
+    getStudentsInTeam(competitionid, teamName) {
+        return ServiceUtils.getRequest("api/high-school-student/teamStudents", { competitionid: competitionid, teamName: teamName });
+    }
 }
 
 // TODO TWP: Check if this comment line below is alright

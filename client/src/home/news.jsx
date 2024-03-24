@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import NewsService from "../_common/services/news";
-import StatusMessages from "../_common/components/status-messages/status-messages";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import "../_common/assets/css/create-news.css";
@@ -87,7 +86,6 @@ class CreateNews extends Component {
     render() {
         return (
             <div>
-                <StatusMessages/>
                 <h2>Create News</h2>
                 <p>
                     <b>Please fill out the information below.</b>

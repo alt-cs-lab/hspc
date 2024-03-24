@@ -4,23 +4,18 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
 import Button from 'react-bootstrap/Button';
-import "../../_common/assets/css/register-user.css";
-// import StudentService from "../../_common/services/high-school-student.js";
 import { addHighSchoolStudent } from "../../_common/services/high-school-student.js";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
-import FixRequiredSelect from "./FixRequiredSelect.jsx";
+import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
 import SchoolService from "../../_common/services/school.js";
 import { withRouter } from "../../_utilities/routerUtils.jsx";
+import "../../_common/assets/css/standard.css";
 
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100
-  }),
-};
+const constants = require('../../_utilities/constants');
+const styles = require('../../_utilities/styleConstants.js');
 
 const months = 
 [
@@ -53,26 +48,18 @@ class AddStudent extends Component {
       email: "",
       gradMonth: months[4].value,
       gradYear: "",
-      schoolId: 0,
+      schoolId: -1,
       schoolList: []
     };
     // this.errorText = "Test";
   }
 
-  // returnYears()
-  // {
-  //   var yearList = [];
-  //   for (let i = 0; i < 100; i++)
-  //   {
-  //     yearList[i] = 2024 + i;
-  //   }
-
-  //   return yearList;
-  // }
-
-  // Returns a list of all schools when the component is rendered to be used in the dropdown.
+  /**
+   * Runs when the page is opened
+   * Returns a list of all schools when the component is rendered to be used in the dropdown.
+   */
   componentDidMount = () => {
-    SchoolService.getAdvisorSchools(this.advisor.id)
+    SchoolService.getAdvisorApprovedSchools(this.advisor.id)
     .then((response) => {
         if (response.ok) {
             let schoolbody = response.data;
@@ -89,22 +76,15 @@ class AddStudent extends Component {
     .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
 
-  toDate(year, month, date) {
-    if (month > 9)
-    {
-      return year + "-" + month + "-" + date;
-    }
-    else
-    {
-      return year + "-0" + month + "-" + date;
-    }
-  }
-
+  /**
+   * Sends the new student to that database
+   * @param {*} event 
+   */
   createStudent(event) {
     const newStudent = this.state;
 
     // Sets the graduation date to the 28th day of the month
-    const gradDate = this.toDate(newStudent.gradYear, newStudent.gradMonth, 28);
+    const gradDate = constants.toDatabaseDate(newStudent.gradYear, newStudent.gradMonth, 28);
 
     this.props.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate, this.props.router);
   }
@@ -115,43 +95,45 @@ class AddStudent extends Component {
   render() {
     return (
       <div className="RegisterBox">
-        <h2>Create Students For Your School</h2>
-        <div>
-          <Form onSubmit={(event) => this.createStudent(event)}>
-            <Form.Group className="m-3">
+        <h2>Create Students For Your School</h2>  
+        <Form onSubmit={(event) => this.createStudent(event)}>
+          <div class="add-margin">
+            <Form.Group className="mb-3">
               <Form.Label>First Name</Form.Label>
-              <Form.Control required placeholder="Ex: Devan" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ firstName: target.target.value }))} 
+              <Form.Control required placeholder="Ex: Devan" onChange={(target => this.setState({ firstName: target.target.value }))} 
                 value={ this.state.firstName }/>
             </Form.Group>
-            <Form.Group className="m-3">
+            <Form.Group className="mb-3">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control required placeholder="Ex: Griffin" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ lastName: target.target.value }))} 
+              <Form.Control required placeholder="Ex: Griffin" onChange={(target => this.setState({ lastName: target.target.value }))} 
                 value={ this.state.lastName }/>
             </Form.Group>
             <Form.Group>
               <Form.Label>School</Form.Label>
-              <FixRequiredSelect required id="dropdown" styles={selectStyles} options={this.state.schoolList} onChange={(target => this.setState({ schoolId: target.value }))}
+              <FixRequiredSelect required options={this.state.schoolList} onChange={(target => this.setState({ schoolId: target.value }))}
                 SelectComponent={BaseSelect} setValue={this.state.schoolId}/>
             </Form.Group>
-            <Form.Group className="m-3">
+            <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" required placeholder="Ex: devangriffin@email.com" style={{ margin: "auto", width: "25%"}} 
+              <Form.Control type="email" required placeholder="Ex: devangriffin@email.com" 
                 onChange={(target => this.setState({ email: target.target.value }))} value={ this.state.email }/>
             </Form.Group>
-            <Form.Group className="m-1">
+            <Form.Group>
               <Form.Label>Graduation Month</Form.Label>
-              <FixRequiredSelect required id="dropdown" styles={selectStyles} placeholder="Select a Month" options={months} 
+              <FixRequiredSelect required placeholder="Select a Month" options={months} 
                   onChange={( target => this.setState({ gradMonth: target.value }))} SelectComponent={BaseSelect} setValue={this.state.gradMonth}
                   defaultValue={months[4]}/>
             </Form.Group>
-            <Form.Group className="m-1">
+            <Form.Group className="mb-4">
               <Form.Label>Graduation Year</Form.Label>
-              <Form.Control type="number" required placeholder="Ex: 2024" style={{ margin: "auto", width: "25%"}} onChange={(target => this.setState({ gradYear: target.target.value }))} 
-                value={ this.state.gradYear }/>
+              <Form.Control type="number" required placeholder="Ex: 2024"
+                onChange={(target => this.setState({ gradYear: target.target.value }))} value={ this.state.gradYear }/>
             </Form.Group>
-            <Button className="m-3" variant="secondary" type="submit">Create Student</Button>
-          </Form>
-        </div>
+          </div>
+          <Button id="purple-button" type="submit">
+            Create Student
+          </Button>
+        </Form>
       </div>
     );
   }

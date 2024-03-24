@@ -11,11 +11,10 @@ const errorSlice = createSlice({
   reducers: {
     updateErrorMsg: (state, action) => { state.errorMsg = action.payload; },
     updateSuccessMsg: (state, action) => { state.successMsg = action.payload;},
-    clearErrors: (state) => { state.errorMsg = ""; },
-    clearSuccess: (state) => {state.successMsg = ""; }
+    clearErrors: (state) => { state.errorMsg = ""; state.successMsg = ""; },
   }
 })
 
-export const {updateErrorMsg, updateSuccessMsg, clearErrors, clearSuccess} = errorSlice.actions;
+export const {updateErrorMsg, updateSuccessMsg, clearErrors} = errorSlice.actions;
 
 export default errorSlice.reducer

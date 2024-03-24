@@ -5,7 +5,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 const router = require("express").Router();
 const eventService = require("../services/event.js");
 const passport = require("passport");
-const { minimumAccessLevelCheck, badRequestCheck, useService } = require("../utils/extensions.js");
+const { accessLevelCheck, badRequestCheck, useService } = require("../utils/extensions.js");
 const { check } = require("express-validator");
 const constants = require("../utils/constants.js");
 
@@ -52,6 +52,14 @@ const constants = require("../utils/constants.js");
  */
 router.get("/view", (req, res) => {
     useService(eventService.getAllEvents, req, res);
+});
+
+/*
+* Calls the API and returns the most upcoming event or if there are none, the most recent.
+* Author: Trent Powell
+*/
+router.get("/highlightEvent", (req, res) => {
+    useService(eventService.getHighlightEvent, req, res);
 });
 
 /**
@@ -113,7 +121,7 @@ router.post("/create", [
 
     ],
     passport.authenticate("jwt", { session: false }), //authenticate with JWT
-    minimumAccessLevelCheck(constants.ADMIN), //check if user is admin
+    accessLevelCheck(constants.ADMIN), //check if user is admin
     [check("name").not().isEmpty().withMessage("name is required")], //check if name is provided
     badRequestCheck, //check if there are any bad requests
     (req, res) => {

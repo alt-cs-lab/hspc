@@ -9,20 +9,13 @@ import Button from 'react-bootstrap/Button';
 import BoardSetup from "../../scoring/create-scoreboard";
 import AddScore from "../../_common/services/scoreboard";
 import Scoreboard from "../../scoring/scoreboard";
-import ParticipantService from "../../_common/services/participant";
 import EventService from "../../_common/services/event";
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
-import "../../_common/assets/css/event-signin.css";
+// import "../../_common/assets/css/event-signin.css";
 import TeamService from "../../_common/services/team";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
-const selectStyles = {
-  menu: (base) => ({
-    ...base,
-    zIndex: 100,
-  }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell
@@ -49,24 +42,43 @@ class EventSignIn extends Component {
    * Returns a list of all events when the component is rendered.
    */
   componentDidMount = () => {
-    EventService.getAllEvents(
-      this.props.auth.user.id,
-      this.props.auth.user.accessLevel
-    )
-      .then((response) => {
-        if (response.statusCode === 200) {
-          let body = JSON.parse(response.body);
-          let events = [];
-          for (let i = 0; i < body.length; i++) {
-            events.push({
-              label: body[i].eventdate,
-              value: body[i].eventdate,
-            });
-          }
-          this.setState({ eventList: events });
-        } else console.log("An error has occurred, Please try again.");
-      })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
+    // EventService.getAllEvents(
+    //   this.props.auth.user.id,
+    //   this.props.auth.user.accessLevel
+    // )
+    //   .then((response) => {
+    //     if (response.ok) {
+    //       let body = response.body;
+    //       let events = [];
+    //       for (let i = 0; i < body.length; i++) {
+    //         events.push({
+    //           label: body[i].eventdate,
+    //           value: body[i].eventdate,
+    //         });
+    //       }
+    //       this.setState({ eventList: events });
+    //     } else console.log("An error has occurred, Please try again.");
+    //   })
+    //   .catch((resErr) => console.log("Something went wrong. Please try again"));
+
+    /*
+    * Get Events
+    */
+    EventService.getAllEvents(this.props.auth.user.id, this.props.auth.user.accessLevel)
+    .then((response) => {
+        if (response.ok) {
+            let eventsbody = response.data;
+            let events = [];
+            for (let i = 0; i < eventsbody.length; i++) {
+              events.push({
+                    label: eventsbody[i].name,
+                    value: eventsbody[i].id,
+                });
+            }
+            this.setState({ eventList: events });
+        } else console.log("An error has occurred fetching events, Please try again.");
+    })
+    .catch((resErr) => console.log("Something went wrong fetching events. Please try again"));
   };
 
   /*
@@ -150,7 +162,6 @@ class EventSignIn extends Component {
    * Saves the information and updates the values in the database.
    */
   handleSaveChanges = () => {
-    const { dispatch } = this.props;
 
     for (let i = 0; i < this.selected.length; i++) {
       if (this.selected[i] === true) this.presentTeams.push(this.allTeams[i]);
@@ -189,28 +200,22 @@ class EventSignIn extends Component {
           </p>
           <div id="sub-nav">
             <p id="sub-nav-item">
-              <b>Event Date</b>
+              <b>Event</b>
             </p>
             <Select
               id="dropdown"
-              styles={selectStyles}
-              placeholder="Select an Event Date"
+              style={styles.selectStyles}
+              placeholder="Select an Event"
               options={this.state.eventList}
               onChange={(e) => this.showRegisteredTeams(e.label)}
             />
           </div>
-          <StatusMessages />
           {this.dataView}
           <div>
             <Button
               variant="primary"
               className="register-button"
-              style={{
-                margin: 10,
-                backgroundColor: "#00a655",
-                color: "white",
-                fontSize: 14,
-              }}
+              style={styles.buttonStyles}
               onClick={() => this.handleSaveChanges()}
             >
               Begin Event

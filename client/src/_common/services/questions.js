@@ -21,5 +21,6 @@ class QuestionsService {
     }
 }
 
-
+// TODO TWP: Check if this comment line below is alright
+// eslint-disable-next-line
 export default new QuestionsService();

@@ -5,10 +5,9 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, {Component} from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import StatusMessages from "../../_common/components/status-messages/status-messages.jsx";
-import ReCAPTCHA from "react-recaptcha";
+//import ReCAPTCHA from "react-recaptcha";
 import eventService from "../../_common/services/event";
-import "../../_common/assets/css/create-event.css";
+// import "../../_common/assets/css/create-event.css";
 import { withRouter } from "../../_utilities/routerUtils"
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
@@ -22,7 +21,7 @@ class CreateEvent extends Component {
     constructor(props) {
         super(props);
         this.props.dispatchResetErrors();
-        this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
+        //this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
         this.verifyCallback = this.verifyCallback.bind(this);
         this.state = {
             eventName: "",
@@ -69,22 +68,21 @@ class CreateEvent extends Component {
     /*
      * Indicates successful loading of the captcha for debugging purposes
      */
-    recaptchaLoaded() {
-        console.log("captcha successfully loaded.");
-    }
+    // recaptchaLoaded() {
+    //     console.log("captcha successfully loaded.");
+    // }
 
     /*
      * Changes the verfied state to true following a verified captcha result.
      */
-    verifyCallback(response) {
-        if (response) this.setState({isVerified: true});
-        else this.setState({isVerified: false});
-    }
+    // verifyCallback(response) {
+    //     if (response) this.setState({isVerified: true});
+    //     else this.setState({isVerified: false});
+    // }
 
     render() {
         return (
             <div className="RegisterBox">
-                <StatusMessages/>
                 <h2>Schedule Event</h2>
                 <p>
                     <b>Please fill out the information below.</b>
@@ -183,14 +181,14 @@ class CreateEvent extends Component {
                                 onChange={(e) => this.setState({description: e.target.value})}
                             />
                         </Form.Group>
-                        <div align="center">
+                        {/* <div align="center">
                             <ReCAPTCHA
                                 sitekey="6LdB8YoUAAAAAL5OtI4zXys_QDLidEuqpkwd3sKN"
                                 render="explicit"
                                 onloadCallback={this.recaptchaLoaded}
                                 verifyCallback={this.verifyCallback}
                             />
-                        </div>
+                        </div> */}
                         <Button
                             variant="primary"
                             className="RegisterButton"

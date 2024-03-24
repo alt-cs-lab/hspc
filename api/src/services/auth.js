@@ -33,7 +33,9 @@ function login({ email, password }) {
             // Create JWT Payload
             const payload = {
                 id: user.id,
-                name: user.firstName + " " + user.lastName,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                phone: user.phone,
                 accessLevel: user.accessLevel,
                 email: user.email,
             };

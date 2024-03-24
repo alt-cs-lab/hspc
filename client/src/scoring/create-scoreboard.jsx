@@ -1,18 +1,17 @@
 import React, { Component } from "react";
-import StatusMessages from "../_common/components/status-messages/status-messages";
+import StatusMessages from "../_common/components/status-messages.jsx";
 
-import "../_common/assets/css/create-scoreboard.css";
+// import "../_common/assets/css/create-scoreboard.css";
 import UserService from "../_common/services/scorecard.js";
 import { Table } from "react-bootstrap";
 
-const columns = [
-  { dataField: "index", text: "ID" },
-  { dataField: "team", text: "Team" },
-  { dataField: "school", text: "School" },
-  { dataField: "state", text: "State" },
-  { dataField: "level", text: "Level" },
-];
-var currentView = null;
+// const columns = [
+//   { dataField: "index", text: "ID" },
+//   { dataField: "team", text: "Team" },
+//   { dataField: "school", text: "School" },
+//   { dataField: "state", text: "State" },
+//   { dataField: "level", text: "Level" },
+// ];
 
 var currentView = null;
 

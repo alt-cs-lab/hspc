@@ -1,5 +1,4 @@
 import React, { Component, useState } from "react";
-import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
 import Button from 'react-bootstrap/Button';
 import practiceService from "../_common/services/practice";
 import { FilePond } from "react-filepond";
@@ -54,7 +53,6 @@ class PublishPractice extends Component {
 	render() {
 		return (
 			<div className="publish-scores">
-				<StatusMessages />
 				<h2 id="title">Publish Practice Problems</h2>
 				<p>
 					<b>Please select a file below</b>

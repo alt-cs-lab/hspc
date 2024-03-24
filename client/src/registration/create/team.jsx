@@ -3,27 +3,20 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, {Component} from "react";
-import StatusMessages from "../../_common/components/status-messages/status-messages";
 import {ToggleButtonGroup, ToggleButton} from "react-bootstrap";
-import ReCAPTCHA from "react-recaptcha";
+//import ReCAPTCHA from "react-recaptcha";
 import Button from 'react-bootstrap/Button';
 
 import Form from 'react-bootstrap/Form'
 import teamService from "../../_common/services/team";
 import UserService from "../../_common/services/user";
-import "../../_common/assets/css/register-user.css";
 import EventService from "../../_common/services/event";
 import SchoolService from "../../_common/services/school.js";
 import Select from "react-select";
 import {connect} from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
-const selectStyles = {
-    menu: (base) => ({
-        ...base,
-        zIndex: 100,
-    }),
-};
+const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell, Tyler Trammell
@@ -51,9 +44,7 @@ class RegisterTeam extends Component {
     }
 
     /*
-     * Returns a list of all events when the component is rendered.
-     * Returns a list of all schools when the component is rendered.
-     * Returns a list of all advisors when the component is rendered.
+     * Returns a list of all events, schools, and advisors when the component is rendered.
      */
     componentDidMount = () => {
         EventService.getAllEvents(
@@ -282,17 +273,17 @@ class RegisterTeam extends Component {
     /*
      * Indicates successful loading of the captcha for debugging purposes
      */
-    recaptchaLoaded = () => {
-        console.log("captcha successfully loaded.");
-    };
+    // recaptchaLoaded = () => {
+    //     console.log("captcha successfully loaded.");
+    // };
 
     /*
      * Changes the verfied state to true following a verified captcha result.
      */
-    verifyCallback = (response) => {
-        if (response) this.setState({isVerified: true});
-        else this.setState({isVerified: false});
-    };
+    // verifyCallback = (response) => {
+    //     if (response) this.setState({isVerified: true});
+    //     else this.setState({isVerified: false});
+    // };
 
     /*
      * Auto-Redirect to the Add Users Page. By default, this renders the registration box.
@@ -300,12 +291,6 @@ class RegisterTeam extends Component {
     render() {
         return (
             <div name="status-div" className="RegisterBox">
-                {this.props.errors.errorMsg !== "" ||
-                this.props.errors.successMsg !== "" ? (
-                    <StatusMessages/>
-                ) : (
-                    ""
-                )}
                 <h2>New Team?</h2>
                 <p>
                     <b>Please fill out the information below.</b>
@@ -334,7 +319,7 @@ class RegisterTeam extends Component {
                         </p>
                         <Select
                             id="dropdown"
-                            styles={selectStyles}
+                            styles={styles.selectStyles}
                             placeholder="Select a school"
                             options={this.state.schoolList}
                             onChange={this.handleSchoolChange}
@@ -347,7 +332,7 @@ class RegisterTeam extends Component {
                         <Select
                             id="dropdown"
                             required
-                            styles={selectStyles}
+                            styles={styles.selectStyles}
                             placeholder="Select an event"
                             options={this.state.eventList}
                             onChange={this.handleCompetitionChange}
@@ -360,7 +345,7 @@ class RegisterTeam extends Component {
                         <Select
                             id="dropdown"
                             required
-                            styles={selectStyles}
+                            styles={styles.selectStyles}
                             placeholder="Select an advisor"
                             options={this.state.advisorList}
                             onChange={this.handleAdvisorChange}
@@ -387,7 +372,7 @@ class RegisterTeam extends Component {
                     </ToggleButtonGroup>
                     <br/>
                     <br/>
-                    <div align="center">
+                    {/* <div align="center">
                         <ReCAPTCHA
                             class="Captcha"
                             sitekey="6LdB8YoUAAAAAL5OtI4zXys_QDLidEuqpkwd3sKN"
@@ -395,13 +380,13 @@ class RegisterTeam extends Component {
                             onloadCallback={this.recaptchaLoaded}
                             verifyCallback={this.verifyCallback}
                         />
-                    </div>
+                    </div> */}
                     <Button
                         variant="primary"
                         className="RegisterButton"
                         style={{
                             margin: 15,
-                            backgroundColor: "#00a655",
+                            backgroundColor: "#003434",
                             fontSize: 14,
                             color: "white",
                         }}

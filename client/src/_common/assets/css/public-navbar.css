@@ -10,21 +10,13 @@ nav.navbar, .navbar-light, .navbar-brand{
     border-top-color: var(--primary);
 }
 
-
-
-.navbar-light .navbar-nav .nav-link:hover,
-.navbar-light .navbar-nav .nav-link.active, 
-.navbar-light .navbar-nav .show>.nav-link{
-    text-decoration: underline;
-    color: var(--text-color-default-hover);
-}
-
-
 .navbar-light .navbar-brand,
 .navbar-light .navbar-brand:hover,
 .navbar-light .navbar-nav .nav-link{
-    color: var(--text-color-default);
     text-decoration: none;
+    color: var(--text-color-default);
+    padding-right: .5rem;
+    padding-left: .5rem;
 }
 
 .navbar-light .navbar-toggler{
@@ -50,7 +42,20 @@ nav.navbar, .navbar-light, .navbar-brand{
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23FFFFFF' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-brand .nav-link:hover,
+.navbar-light .navbar-nav .nav-link.active, 
+.navbar-light .navbar-nav .show>.nav-link{
+    text-decoration: underline;
+    color: var(--text-color-default-hover);
+}
+
+.navbar-light .navbar-brand .nav-link{
+    color: white;
+}
 
 .navbar-light .navbar-collapse{
     justify-content: end;
+    padding-right: 1rem;
 }

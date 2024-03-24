@@ -6,7 +6,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React from "react";
 import "./volunteerAssignmentQuestion.css";
 import { Table } from "react-bootstrap";
-import StatusMessages from "../_common/components/status-messages/status-messages.jsx";
+import StatusMessages from "../_common/components/status-messages.jsx";
 import QuestionService from "../_common/services/questions";
 import Result from "./testcaseResult";
 
@@ -49,12 +49,12 @@ export default class Questions extends React.Component {
           // get the new list of users by removing the user that is getting moved to volunteers
 
           this.setState({ questionTable: data }, () => {
-            this.state.questionTable = this.state.questionTable.filter(
+            this.setState({ questionTable: this.state.questionTable.filter(
               (q) =>
                 q.round === 1 &&
                 q.questionlevelid ===
                   this.state.currentTeam.team[0].questionlevelid
-            );
+            )});
             this.generateQuestionsTable(); // helper function
           });
           // console.log(this.state.questionTable)

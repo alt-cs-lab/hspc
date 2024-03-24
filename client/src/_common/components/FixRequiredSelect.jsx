@@ -24,7 +24,7 @@ class FixRequiredSelect extends React.Component {
   };
 
   getValue = () => {
-    if (this.props.value != undefined) return this.props.value;
+    if (this.props.value !== undefined) return this.props.value;
     return this.state.value || "";
   };
 

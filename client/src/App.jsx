@@ -1,6 +1,5 @@
 import React from "react";
-import {HashRouter, Route, Routes} from "react-router-dom";
-
+import {Route, Routes} from "react-router-dom";
 import Home from "./home/homepage";
 import Login from "./login/login";
 import RequireAuth from "./_common/guards/privateRoute";
@@ -13,13 +12,13 @@ import { protectedRouteElements } from "./_store/slices/routeSlice";
 
 const App = () => {
     return (
+        // TODO: Change to 'Container fluid' so the elements have proper space
         <div id="bootstrap-override">
             <Navbar/>
             <Routes>
                 <Route exact path="/" element={<Home/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/register" element={<Register/>}/>
-
                 <Route path="/competitions" element={<Event/>}/>
                 <Route element={<RequireAuth/>}>
                     {protectedRouteElements}
