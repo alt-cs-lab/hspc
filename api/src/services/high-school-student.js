@@ -10,9 +10,10 @@ const { renameKeys } = require("../utils/extensions");
 module.exports = {
     createStudent,
     getEmail,
-    getStudents,
+    getAllStudents,
     getAdvisorSchoolsTeams,
     getStudentsInTeam,
+    getStudentsWithNoTeam
 }
 
 function createStudent( { firstName, lastName, schoolId, email, gradDate } ) {
@@ -40,14 +41,12 @@ function getEmail(email) {
     });
 }
 
-function getStudents(schoolId) {
+function getAllStudents() {
     return db.any(
     `
         SELECT HS.FirstName, HS.LastName, S.SchoolName, HS.Email, HS.GradDate
         FROM HighSchoolStudent HS
-            INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
-            WHERE HS.SchoolID = $(schoolId)
-    `, (schoolId));
+    `);
 }
 
 // Trent Powell function to get all students for an advisor's schools
@@ -82,4 +81,17 @@ function getStudentsInTeam(competitionid, teamName) {
       `,
       { teamName, competitionid }
     );
-  }
+}
+
+function getStudentsWithNoTeam(schoolId){
+    return db.any(
+        `
+            SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email
+            FROM HighSchoolStudents HS
+                INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
+                INNER JOIN TeamMembers TM ON TM.StudentID = HS.StudentID
+            WHERE HS.SchoolID = $(schoolId)
+        `,
+        {schoolId}
+    );
+}

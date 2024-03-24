@@ -78,8 +78,20 @@ router.post('/createStudent',
     useService(studentService.createStudent, req, res, 'created');
 });
 
-router.get('/getStudents', (req, res) => {
+router.get('/getAllStudents', (req, res) => {
     useService(studentService.getStudents, req, res, 'got');
+});
+
+router.get('/getStudentsWithNoTeam', (req, res) => {
+    var schoolId = req.query['schoolId'];
+    console.log(schoolId);
+    studentService.getStudentsWithNoTeam(schoolId)
+    .then((studentData) => {
+        statusResponses.ok(res, studentData);
+    })
+    .catch((err) => {
+        statusResponses.serverError(res);
+    });
 });
 
 router.get('/getFromAdvisorSchools', (req, res) => {

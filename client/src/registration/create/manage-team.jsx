@@ -9,7 +9,7 @@ TODO: The file '/workspaces/hspc/client/src/registration/create/team.jsx' will n
 deleted after this page is completed because it is an older file that serves the same function.
 */
 import React, { Component } from "react";
-import StudentService from "../../_common/services/high-school-student";
+import StudentService from "../../_common/services/high-school-student.js";
 import SchoolService from "../../_common/services/school.js";
 import teamService from "../../_common/services/team.js";
 import EventService from "../../_common/services/event.js";
@@ -43,16 +43,7 @@ class CreateTeam extends Component {
         }
     }
 
-    // TODO: Update UserService to HighSchoolStudentService
     componentDidMount = () => {
-        StudentService.getAdvisorsStudents(this.advisor.idZZ)
-        .then((response) => {
-            if(response.ok){
-                this.setState({ studentList: response.data });
-            } else console.log("An error has occured. Please try again");
-        })
-        .catch((resErr) => console.log("Something went wrong. Please try again."));
-
         teamService.getAllSkillLevels()
         .then((response) => {
             if(response.ok){
@@ -88,7 +79,6 @@ class CreateTeam extends Component {
         SchoolService.getAdvisorApprovedSchools(this.advisor.id)
         .then((response) => {
             if (response.ok) {
-                console.log(response.data)
                 let schoolbody = response.data;
                 let schools = [];
                 for (let i = 0; i < schoolbody.length; i++) {
@@ -97,6 +87,7 @@ class CreateTeam extends Component {
                         value: schoolbody[i].schoolid,
                     });
                 }
+                console.log(schools);
                 this.setState({ schoolList: schools });
             } else console.log("An error has occurred, Please try again.");
         })
@@ -178,9 +169,12 @@ class CreateTeam extends Component {
         this.setState({competitionId: null});
     };
 
-    // TODO: Update the list of students when the school is changed.
+    // TODO: Update the list of students when the school is changed. Min 2 required, max is 4.
     updateStudentList(schoolId) {
-        this.setState({schoolId: schoolId.value});
+        StudentService.getStudentsWithNoTeam(schoolId).then((response) => {
+            this.setState({studentList: response.data});
+        });
+        return;
     }
 
     handleSkillLevelChange = (skillLevelId) => {
@@ -193,6 +187,19 @@ class CreateTeam extends Component {
 
     // TODO: Have a set number of student slots based off the team member limit for the event.
     render(){
+        const table = this.state.studentList.length === 0 || this.state.schoolId === null ?
+        <h3>No students to display.</h3>:
+        <Form.Group className="text-start">
+            {this.state.studentList.map((student, index) => (    
+            <Form.Check
+                key={student.studentid}
+                type="checkbox"
+                value={student.studentid}
+                label={`${student.firstname}, ${student.lastname}, ${student.email}`}
+                id={`disabled-default-checkbox`}
+            />
+            ))}
+        </Form.Group>
         return(
             <div>
                 <h2>Team Creation</h2>
@@ -209,9 +216,7 @@ class CreateTeam extends Component {
                             style={{ margin: "auto", width: "25%"}}
                             inputProps={{style: {fontSize: 14}}}
                             InputLabelProps={{style: {fontSize: 13}}}
-                            onChange={(event) =>
-                                this.setState({teamName: event.target.value})
-                            }
+                            onChange={(event) => this.setState({teamName: event.target.value})}
                             size="small">
                         </Form.Control>
                     </Form.Group>
@@ -232,9 +237,9 @@ class CreateTeam extends Component {
                                 styles={styles.selectStyles}
                                 placeholder="Select a school"
                                 options={this.state.schoolList}
+                                setValue={this.state.schoolId}
                                 onChange={(opt) => this.updateStudentList(opt.id)}
                                 SelectComponent={BaseSelect}
-                                setValue={this.state.schoolId}
                             />
                         </div>
                         <div>
@@ -267,17 +272,8 @@ class CreateTeam extends Component {
                         </div>
                         </section>
                     </Form.Group>
-                    <Form.Group className="text-start">
-                            {this.state.studentList.map((student, index) => (    
-                            <Form.Check
-                                key={student.studentid}
-                                type="checkbox"
-                                value={student.studentid}
-                                label={`${student.firstname}, ${student.lastname}, ${student.email}`}
-                                id={`disabled-default-checkbox`}
-                            />
-                            ))}
-                    </Form.Group>
+                    {table}
+                    <br></br>
                     <Button type="register" variant="secondary" style={styles.buttonStyles} 
                         onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
                 </Form>

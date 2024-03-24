@@ -14,6 +14,16 @@ export const addHighSchoolStudent = (firstName, lastName, schoolId, email, gradD
 
 class StudentService {
 
+    getAllStudents() {
+        return ServiceUtils.getRequest('api/high-school-student/getAllStudents');
+    }
+
+    getStudentsWithNoTeam(schoolId) {
+        return ServiceUtils.getRequest('api/high-school-student/getStudentsWithNoTeam', {
+            schoolId: schoolId
+        });
+    }
+
     /*
     * API Endpoint retrieves all students from an advisor's schools
     */
