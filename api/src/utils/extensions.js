@@ -70,7 +70,7 @@ function accessLevelCheck(level) {
     return (req, res, next) => {
         if (
             req?.user?.accessLevel !== undefined &&
-            (req.user.accessLevel == level || req.user.accessLevel == constants.MASTER) &&
+            ((req.user.accessLevel & level) == req.user.accessLevel || req.user.accessLevel == constants.MASTER) &&
             constants.legalLevels.includes(req.user.accessLevel)
         ) {
             next();
