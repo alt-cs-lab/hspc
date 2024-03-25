@@ -4,18 +4,16 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
 import Button from 'react-bootstrap/Button';
-import { addHighSchoolStudent } from "../../_common/services/high-school-student.js";
+import StudentService from "../../_common/services/high-school-student.js";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
 import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
 import SchoolService from "../../_common/services/school.js";
-import { withRouter } from "../../_utilities/routerUtils.jsx";
 import "../../_common/assets/css/standard.css";
 
 const constants = require('../../_utilities/constants');
-const styles = require('../../_utilities/styleConstants.js');
 
 const months = 
 [
@@ -51,7 +49,6 @@ class AddStudent extends Component {
       schoolId: -1,
       schoolList: []
     };
-    // this.errorText = "Test";
   }
 
   /**
@@ -86,7 +83,18 @@ class AddStudent extends Component {
     // Sets the graduation date to the 28th day of the month
     const gradDate = constants.toDatabaseDate(newStudent.gradYear, newStudent.gradMonth, 28);
 
-    this.props.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate, this.props.router);
+    StudentService.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate)
+    .then((response) => {
+      console.log(response)
+      if(response.status === 201){
+        this.props.dispatchSuccess("Student Created")
+        // TODO TWP: Clear Fields or Renavigate to view students
+      }
+      else{
+        this.props.dispatchError(response.data)
+      }
+    }).catch((resErr) => console.log("Something went wrong connecting to the server. Please try again"));
+    // this.props.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate, this.props.router);
   }
 
   /*
@@ -153,9 +161,9 @@ const mapDispatchToProps = (dispatch) => {
 			dispatch(updateErrorMsg(message)),
 		dispatchSuccess: (message) =>
 			dispatch(updateSuccessMsg(message)),
-    addHighSchoolStudent: (firstName, lastName, schoolId, email, gradDate, router) =>
-      dispatch(addHighSchoolStudent(firstName, lastName, schoolId, email, gradDate, router)),
+    // addHighSchoolStudent: (firstName, lastName, schoolId, email, gradDate, router) =>
+    //   dispatch(addHighSchoolStudent(firstName, lastName, schoolId, email, gradDate, router)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddStudent));
+export default connect(mapStateToProps, mapDispatchToProps)(AddStudent);

@@ -6,32 +6,33 @@ import MasterDash from "../../dashboards/master";
 import { Route } from "react-router-dom";
 import StartJudging from "../../judging/startJudging";
 import { selectAuth } from "./authSlice";
+const constants = require('../../_utilities/constants');
 
 
 const dashboardRoutes = {
     "/volunteer/volunteerdash": {
         element: <VolunteerDash />,
-        accessLevel: 20,
+        accessLevel: (constants.VOLUNTEER),
         requireExact: true
     },
     "/judge/judgedash": {
         element: <JudgeDash />,
-        accessLevel: 40,
+        accessLevel: (constants.JUDGE),
         requireExact: false
     },
     "/advisor/advisordash": {
         element: <AdvisorDash />,
-        accessLevel: 60,
+        accessLevel: (constants.ADVISOR),
         requireExact: true
     },
     "/admin/admindash": {
         element: <AdminDash />,
-        accessLevel: 80,
+        accessLevel: (constants.ADMIN),
         requireExact: true
     },
     "/master/masterdash": {
         element: <MasterDash />,
-        accessLevel: 100,
+        accessLevel: (constants.MASTER),
         requireExact: true
     }
 }
@@ -39,12 +40,12 @@ const dashboardRoutes = {
 const vounteerJudging = {
     "/volunteer/volunteerdash/startjudging": {
         element: <VolunteerDash />,
-        accessLevel: 20,
+        accessLevel: (constants.VOLUNTEER),
         requireExact: true
     },
     "/volunteer/startjudging": {
         element: <StartJudging />,
-        accessLevel: 20,
+        accessLevel: (constants.JUDGE),
         requireExact: false
     }
 }

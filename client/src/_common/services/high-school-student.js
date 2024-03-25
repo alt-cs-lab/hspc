@@ -1,18 +1,16 @@
 import ServiceUtils from "../../_utilities/serviceUtils";
-import { updateErrorMsg } from "../../_store/slices/errorSlice";
-import axios from "axios";
-
-export const addHighSchoolStudent = (firstName, lastName, schoolId, email, gradDate, router) => dispatch => {
-    axios.post('api/high-school-student/createStudent', { firstName: firstName, lastName: lastName, schoolId: schoolId,
-            email: email, gradDate: gradDate})
-        .then(res => { router.navigate("/advisor/advisordash"); }) // re-direct to login on successful register
-        .catch(err => {
-            console.log("register catch", err.response.data);
-            dispatch(updateErrorMsg(err.response.data))
-        });
-};
 
 class StudentService {
+
+    addHighSchoolStudent(firstName, lastName, schoolId, email, gradDate) {
+        return ServiceUtils.postRequest('api/high-school-student/createStudent', { 
+            firstName: firstName, 
+            lastName: lastName, 
+            schoolId: schoolId,
+            email: email, 
+            gradDate: gradDate
+        });
+    }
 
     getAllStudents() {
         return ServiceUtils.getRequest('api/high-school-student/getAllStudents');

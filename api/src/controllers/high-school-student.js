@@ -38,14 +38,9 @@ const statusResponses = require("../utils/status-response.js");
  *   }
  */
 router.post('/createStudent',
-// TWP TODO: Do Role Checking Like Commented Below
-//passport.authenticate("jwt", { session: false }),
-//accessLevelCheck(constants.ADVISOR),
-//[
-//  check("userId").exists().withMessage("User ID is required."),
-//  // check is number
-//  check("userId").isNumeric().withMessage("User ID must be a number."),
-//],
+    // TWP TODO: Ensure school id is one of their approved schools
+    passport.authenticate("jwt", { session: false }),
+    accessLevelCheck(constants.ADVISOR),
     [
     check('firstName')
         .isLength({max: 100}).withMessage('First name must be less than 100 characters.')
@@ -78,11 +73,18 @@ router.post('/createStudent',
     useService(studentService.createStudent, req, res, 'created');
 });
 
-router.get('/getAllStudents', (req, res) => {
+router.get('/getAllStudents',
+    passport.authenticate("jwt", { session: false }),
+    accessLevelCheck(constants.ADMIN),
+    (req, res) => {
     useService(studentService.getStudents, req, res, 'got');
 });
 
-router.get('/getStudentsWithNoTeam', (req, res) => {
+router.get('/getStudentsWithNoTeam',
+    passport.authenticate("jwt", { session: false }),
+    accessLevelCheck(constants.ADVISOR | constants.ADMIN),
+    (req, res) => {
+    // TWP TODO: Do School Checking for advisors
     var schoolId = req.query['schoolId'];
     console.log(schoolId);
     studentService.getStudentsWithNoTeam(schoolId)
@@ -94,8 +96,11 @@ router.get('/getStudentsWithNoTeam', (req, res) => {
     });
 });
 
-router.get('/getFromAdvisorSchools', (req, res) => {
-    // TWP TODO: Do Role Checking
+router.get('/getFromAdvisorSchools', 
+    passport.authenticate("jwt", { session: false }),
+    accessLevelCheck(constants.ADVISOR | constants.ADMIN),
+    (req, res) => {
+    // TWP TODO: Do School Checking for advisors
     var advisorId = req.query['advisorId'];
     studentService.getAdvisorSchoolsTeams(advisorId)
     .then((studentData) => {
@@ -107,8 +112,11 @@ router.get('/getFromAdvisorSchools', (req, res) => {
 });
 
 
-router.get("/teamStudents", (req, res) => {
-    // TWP TODO: Do Role Checking
+router.get("/teamStudents", 
+    passport.authenticate("jwt", { session: false }),
+    accessLevelCheck(constants.ADVISOR | constants.ADMIN),
+    (req, res) => {
+    // TWP TODO: Do School Checking for advisors
     let teamName = req.query["teamName"];
     let competitionid = req.query["competitionid"];
     studentService.getStudentsInTeam(competitionid, teamName)

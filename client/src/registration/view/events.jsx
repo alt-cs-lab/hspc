@@ -107,12 +107,13 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const ExpandedComponent = ({ data }) => {
+  console.log(data)
 
   return <div>
     <h6>Description:</h6>
-    <p>{data.description}</p>
-    <p>Teams allowed per School: {data.teamsPerSchool}</p>
-    <p>Teams allowed For Event: {data.teamsPerEvent}</p>
+    <p style={{color:"black"}}>{data.description}</p>
+    <p style={{color:"black"}}>Teams allowed per School: {data.teamsPerSchool}</p>
+    <p style={{color:"black"}}>Teams allowed For Event: {data.teamsPerEvent}</p>
   </div>;
 };
 

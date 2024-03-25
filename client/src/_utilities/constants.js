@@ -5,11 +5,11 @@ List of Constants to be used throughout the project
 /*
 Role Constants
 */
-const VOLUNTEER = 20;
-const JUDGE = 40;
-const ADVISOR = 60;
-const ADMIN = 80;
-const MASTER = 100;
+const VOLUNTEER = 2;
+const JUDGE = 4;
+const ADVISOR = 8;
+const ADMIN = 16;
+const MASTER = 32;
 const legalLevels = [VOLUNTEER, JUDGE, ADVISOR, ADMIN, MASTER];
 
 /*
