@@ -12,8 +12,6 @@ import Select from "react-select";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 
-const styles = require('../../_utilities/styleConstants.js');
-
 class ViewTeams extends Component {
   constructor(props) {
     super(props);
@@ -137,17 +135,18 @@ class ViewTeams extends Component {
 
   // Renders the component.
   render() {
-    const table = this.state.teamTable.length === 0 ? 
-      <h3>No teams to display.</h3>: 
-      <DataTable
-        data={this.state.teamTable} 
-        columns={this.state.columnsForAllTeams} 
-        pagination 
-        paginationPerPage={20} 
-        paginationRowsPerPageOptions={[20, 30, 40, 50]}
-        expandableRows
-        expandableRowsComponent={ExpandedComponent}
-      />
+    // const table = this.state.teamTable.length === 0 ? 
+    //   <h3>No teams to display.</h3>: 
+    //   <DataTable
+    //     id="student-data-table"
+    //     data={this.state.teamTable} 
+    //     columns={this.state.columnsForAllTeams} 
+    //     pagination 
+    //     paginationPerPage={20} 
+    //     paginationRowsPerPageOptions={[20, 30, 40, 50]}
+    //     expandableRows
+    //     expandableRowsComponent={ExpandedComponent}
+    //   />
     return (
       <div>
         <h2>Teams</h2>
@@ -176,9 +175,8 @@ class ViewTeams extends Component {
               View All Teams:
             </span>
             <Button
+              id="purple-button"
               className="RegisterButton"
-              variant="secondary"
-              style={styles.buttonStyles}
               onClick={() => {
                 this.reloadAllTeams()
               }}
@@ -187,7 +185,19 @@ class ViewTeams extends Component {
             </Button>
           </div>
         </section>
-        {table}
+        {/* {table} */}
+        <div style={{marginTop: "1%"}} id="student-data-table">
+          <DataTable
+          id="student-data-table"
+          data={this.state.teamTable} 
+          columns={this.state.columnsForAllTeams} 
+          pagination 
+          paginationPerPage={20} 
+          paginationRowsPerPageOptions={[20, 30, 40, 50]}
+          expandableRows
+          expandableRowsComponent={ExpandedComponent}
+        />
+        </div>
       </div>
     );
   }
