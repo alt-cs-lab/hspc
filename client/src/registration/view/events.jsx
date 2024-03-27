@@ -63,7 +63,7 @@ class ViewEvents extends Component {
       },
       {
         name: "Time",
-        selector: row => (row.startTime + ' - ' + row.endTime),
+        selector: row => (constants.timeFormat(row.startTime) + ' - ' + constants.timeFormat(row.endTime)),
       }
     ];
   }

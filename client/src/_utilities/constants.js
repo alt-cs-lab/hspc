@@ -39,6 +39,27 @@ const dateFormat = (date) => {
   return date.substring(0,10);
 };
 
+/*
+* Format Time From Database
+*/
+const timeFormat = (preformattedTime) => {
+  preformattedTime = preformattedTime.split(':')
+  var time = {
+    hour: parseInt(preformattedTime[0]),
+    minute: parseInt(preformattedTime[1]),
+    string: ''
+  }
+
+  if(time.minute === 0) time.minute = '00';
+  if(time.hour > 12) time.string = (time.hour%12) + ':' + time.minute + 'pm';
+  else if (time.hour < 0) time.string = (time.hour + 12) + ':' + time.minute + 'pm';
+  else if (time.hour === 0) time.string = (12) + ':' + time.minute + 'am';
+  else if (time.hour === 12) time.string = (12) + ':' + time.minute + 'pm';
+  else time.string = time.hour + ':' + time.minute + 'am';
+  
+  return time.string;
+};
+
 module.exports = {
     VOLUNTEER,
     JUDGE,
@@ -48,5 +69,6 @@ module.exports = {
     legalLevels,
     toDatabaseDate,
     dateSort,
-    dateFormat
+    dateFormat,
+    timeFormat,
 }
