@@ -73,7 +73,7 @@ class ViewEvents extends Component {
   */
   render() {
     return (
-      <div>
+      <div id="student-data-table">
         <h2>Events</h2>
         <DataTable
           data={this.state.eventTable} 
@@ -109,12 +109,14 @@ const mapDispatchToProps = (dispatch) => {
 const ExpandedComponent = ({ data }) => {
   console.log(data)
 
-  return <div>
-    <h6>Description:</h6>
-    <p style={{color:"black"}}>{data.description}</p>
-    <p style={{color:"black"}}>Teams allowed per School: {data.teamsPerSchool}</p>
-    <p style={{color:"black"}}>Teams allowed For Event: {data.teamsPerEvent}</p>
-  </div>;
+  return <div class="data-table-info">
+      <h7>Description:</h7>
+      <br/>
+      <br/>
+      <p style={{fontSize: "small"}}>{data.description}</p>
+      <p style={{fontSize: "small"}}>Teams allowed per School: {data.teamsPerSchool}</p>
+      <p style={{fontSize: "small"}}>Teams allowed For Event: {data.teamsPerEvent}</p>
+    </div>
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewEvents);

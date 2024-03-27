@@ -109,7 +109,7 @@ class ViewUsers extends Component {
   // Renders the component.
   render() {
     return (
-      <div>
+      <div id="student-data-table">
         <h2>Users</h2>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
