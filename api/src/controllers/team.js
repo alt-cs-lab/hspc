@@ -254,10 +254,10 @@ router.post(
         body("studentIds").optional().isArray().withMessage("studentIds must be an array"),
         body("studentIds.*").optional().isInt().withMessage("studentIds must be an array of integers"),
         body("studentIds").optional().custom((studentIds, {req}) => {
-            // check that no student is in any other team in the competition
+            // Check that no student is in any other team in the competition.
             return teamService.isAnyStudentsInCompetition(req.body.competitionId, studentIds).then((alreadyInATeam) => {
                 if (alreadyInATeam) {
-                    throw new Error("One or more of the students is already in a team in this competition");
+                    throw new Error("One or more students are already in a team for this competition.");
                 }
                 return true;
             });
