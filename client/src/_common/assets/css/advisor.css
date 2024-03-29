@@ -1,3 +1,15 @@
+.data-table-info
+{
+    margin: 8px;
+    align-content: left;
+    text-align: left;
+}
+
+#data-table-paragraph
+{
+    font-size: small;
+}
+
 #advisor-data-table
 {
     border-radius: 8px;

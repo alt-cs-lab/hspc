@@ -146,21 +146,23 @@
     }
   
     render() {
-      const table = this.state.filteredTeamsTable.length === 0 ? 
-      <h3>No teams to display.</h3>: 
-      <DataTable
-        data={this.state.filteredTeamsTable} 
-        columns={this.state.columnsForTeams} 
-        pagination 
-        paginationPerPage={20} 
-        paginationRowsPerPageOptions={[20, 30, 40, 50]}
-        expandableRows
-        expandableRowsComponent={ExpandedComponent}
-      />
+      // const table = this.state.filteredTeamsTable.length === 0 ? 
+      // <h3>No teams to display.</h3>:
+      // <div className="mt-3" id="student-data-table">
+      //   <DataTable
+      //     data={this.state.filteredTeamsTable} 
+      //     columns={this.state.columnsForTeams} 
+      //     pagination 
+      //     paginationPerPage={20} 
+      //     paginationRowsPerPageOptions={[20, 30, 40, 50]}
+      //     expandableRows
+      //     expandableRowsComponent={ExpandedComponent}
+      //   />
+      // </div>
       return (
       <div>
         <h2>Teams</h2>
-        <Button style={styles.buttonStyles} variant="secondary"
+        <Button id="purple-button"
           onClick={() => this.props.setCurrentView(<CreateTeam advisor={this.props.advisor} />)}
           >
           Add Team
@@ -199,8 +201,19 @@
             </div>
           </div>
         </section>
-        {table}
+        {/* {table} */}
+        <div className="mt-3" id="student-data-table">
+          <DataTable
+            data={this.state.filteredTeamsTable} 
+            columns={this.state.columnsForTeams} 
+            pagination 
+            paginationPerPage={20} 
+            paginationRowsPerPageOptions={[20, 30, 40, 50]}
+            expandableRows
+            expandableRowsComponent={ExpandedComponent}
+          />
         </div>
+      </div>
       );
     }
   }

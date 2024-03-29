@@ -9,7 +9,7 @@ import Navbar from "./_common/components/top-navbar";
 import Event from "./events/event";
 import AuthVerify from "./_common/guards/authVerify";
 import { protectedRouteElements } from "./_store/slices/routeSlice";
-
+ 
 const App = () => {
     return (
         // TODO: Change to 'Container fluid' so the elements have proper space

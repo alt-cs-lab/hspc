@@ -66,7 +66,7 @@ class ViewSchools extends Component {
   // Renders all the registered schools in table form
   render() {
     return (
-      <div>
+      <div id="student-data-table">
         <h2>Schools</h2>
         <DataTable
           data={this.state.schoolTable} 
