@@ -89,8 +89,12 @@ function getStudentsWithNoTeam(schoolId){
             SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email
             FROM HighSchoolStudents HS
                 INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
-                INNER JOIN TeamMembers TM ON TM.StudentID = HS.StudentID
-            WHERE HS.SchoolID = $(schoolId)
+            WHERE HS.SchoolID = $(schoolId) AND HS.StudentID NOT IN (
+                SELECT TM.StudentID
+                FROM TeamMembers TM
+                    INNER JOIN Teams T ON T.TeamID = TM.TeamID
+                WHERE T.TeamStatusID != 5
+            );
         `,
         {schoolId}
     );

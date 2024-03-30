@@ -35,7 +35,7 @@ class CreateTeam extends Component {
             skillLevelId: null,
             isVerified: false,
             studentList: [],
-            studentIds: [],
+            studentIds: new Set(),
             skillLevels: [],
             schoolList: [],
             eventList: [],
@@ -44,8 +44,6 @@ class CreateTeam extends Component {
     }
 
     componentDidMount = () => {
-        
-    console.log(this.props)
         StudentService.getAdvisorsStudents(this.advisor.id)
         .then((response) => {
             if(response.ok){
@@ -97,7 +95,6 @@ class CreateTeam extends Component {
                         value: schoolbody[i].schoolid,
                     });
                 }
-                console.log(schools);
                 this.setState({ schoolList: schools });
             } else console.log("An error has occurred, Please try again.");
         })
@@ -135,9 +132,6 @@ class CreateTeam extends Component {
         ]
     }
 
-    /*
-    *  TODO: Investigate error that says handleRegisterTeam is undefined.
-    */
     handleRegisterTeam(){
         if (this.state.teamName === "" || this.state.schoolId === ""){
             this.props.dispatchError(
@@ -145,6 +139,11 @@ class CreateTeam extends Component {
             );
             return;
         }
+
+        // TODO: Setup logic for checking if studentIds contains at least 2 students
+
+        const selectedStudents = Array.from(this.state.studentIds);
+
         // TODO: Setup logic for verified state.
         teamService.registerTeam(
             this.state.teamName, 
@@ -152,7 +151,7 @@ class CreateTeam extends Component {
             this.state.competitionId,
             this.state.skillLevelId,
             this.advisor.id,
-            this.state.studentIds,
+            selectedStudents,
             this.state.isVerified
         )
         .then((response) => {
@@ -162,14 +161,28 @@ class CreateTeam extends Component {
                     "Registration was successful."
                 );
                 this.resetFields();
-                window.location.reload();
             }
         })
         .catch((error) => {
             this.props.dispatchError(
-                "There was an error creating the Team."
+                "There was an error creating the team."
             );
         });
+    }
+
+    /*
+    * Updates the list of selected students.
+    */
+    updateStudentSelected(studentid, selected) {
+        let newStudentIds = this.state.studentIds;
+        if(selected) {
+            // add student
+            newStudentIds.add(studentid)
+        } else {
+            // remove student
+            newStudentIds.delete(studentid)
+        }
+        this.setState({studentIds: newStudentIds})
     }
 
     resetFields = () => {
@@ -181,6 +194,8 @@ class CreateTeam extends Component {
 
     // TODO: Update the list of students when the school is changed. Min 2 required, max is 4.
     updateStudentList(schoolId) {
+        this.setState({schoolId: schoolId});
+
         StudentService.getStudentsWithNoTeam(schoolId).then((response) => {
             this.setState({studentList: response.data});
         });
@@ -197,15 +212,21 @@ class CreateTeam extends Component {
 
     // TODO: Have a set number of student slots based off the team member limit for the event.
     render(){
+        console.log(this.state.studentIds)
         const table = this.state.studentList.length === 0 || this.state.schoolId === null ?
         <h3>No students to display.</h3>:
         <Form.Group className="text-start">
+            <p>Select at least two students to create a team.</p>
             {this.state.studentList.map((student, index) => (    
             <Form.Check
                 key={student.studentid}
                 type="checkbox"
                 value={student.studentid}
+                checked={this.state.studentIds.has(student.studentid)}
                 label={`${student.firstname}, ${student.lastname}, ${student.email}`}
+                onChange={(event) => {
+                    this.updateStudentSelected( student.studentid, event.target.checked) }
+                }
                 id={`disabled-default-checkbox`}
             />
             ))}
@@ -247,8 +268,7 @@ class CreateTeam extends Component {
                                 styles={styles.selectStyles}
                                 placeholder="Select a school"
                                 options={this.state.schoolList}
-                                setValue={this.state.schoolId}
-                                onChange={(opt) => this.updateStudentList(opt.id)}
+                                onChange={(opt) => this.updateStudentList(opt.value)}
                                 SelectComponent={BaseSelect}
                             />
                         </div>

@@ -86,7 +86,6 @@ router.get('/getStudentsWithNoTeam',
     (req, res) => {
     // TWP TODO: Do School Checking for advisors
     var schoolId = req.query['schoolId'];
-    console.log(schoolId);
     studentService.getStudentsWithNoTeam(schoolId)
     .then((studentData) => {
         statusResponses.ok(res, studentData);
