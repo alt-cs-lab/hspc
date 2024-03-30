@@ -107,8 +107,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const ExpandedComponent = ({ data }) => {
-  console.log(data)
-
   return <div class="data-table-info">
       <h7>Description:</h7>
       <br/>
