@@ -6,16 +6,30 @@ import React, { Component } from "react";
 import UserService from "../../_common/services/user";
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
+import { FormCheck } from "react-bootstrap";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
+const constants = require('../../_utilities/constants');
 
-// This class inherits functionality of the Component class and extends it.
+const roleTable = {
+  "Volunteer": constants.VOLUNTEER,
+  "Judge": constants.JUDGE,
+  "Advisor": constants.ADVISOR,
+  "Admin": constants.ADMIN,
+  "Master": constants.MASTER
+}
+
+/*
+* Component for Admin accounts to view all User accounts 
+*/
 class ViewUsers extends Component {
   constructor(props) {
     super(props);
     this.props.dispatchResetErrors();
     this.state = {
-      userTable: [],
+      userData: [],
+      filteredUserTable: [],
       columns: this.getColumns(),
+      roleFilter: 0,
     };
   }
 
@@ -24,20 +38,41 @@ class ViewUsers extends Component {
     UserService.getAllUsers()
       .then((response) => {
         if (response.ok) {
-          console.log(response.data)
-          this.setState({ userTable: response.data });
+          this.setState({ userData: response.data });
+          this.setState({ filteredUserTable: response.data })
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
 
-  // TODO: Update this method so that it is usable.
-  filterMethod = (filter, row, column) => {
-    const id = filter.pivotId || filter.id;
+  /*
+  * Function to filter users by roles.
+  */
+  RoleFilter(role) {
+    let roleFilter = this.state.roleFilter
+    let activeRoles = constants.ADMIN + constants.ADVISOR + constants.JUDGE + constants.VOLUNTEER;
 
-    return row[id] !== undefined
-      ? String(row[id].toLowerCase()).startsWith(filter.value.toLowerCase())
-      : true;
+    if( (roleFilter & role) === (activeRoles & role) ){
+      activeRoles = roleFilter & (activeRoles - role)
+      this.setState({ roleFilter: activeRoles })
+    }
+    else{
+      activeRoles = roleFilter | role
+      this.setState({ roleFilter: activeRoles })
+    }
+    
+    let allUsers = this.state.userData;
+    let filteredUsers = []
+    for (let i = 0; i < allUsers.length; i++) {
+      if( activeRoles !== 0 && (activeRoles & roleTable[allUsers[i].Role]) > 0){
+        filteredUsers.push(allUsers[i])
+      }
+      else if( activeRoles === 0) {
+        filteredUsers.push(allUsers[i])
+      }
+    }
+
+    this.setState({ filteredUserTable: filteredUsers })
   };
 
   // Specifies what information to include in the rendered columns.
@@ -74,10 +109,36 @@ class ViewUsers extends Component {
   // Renders the component.
   render() {
     return (
-      <div>
+      <div id="student-data-table">
         <h2>Users</h2>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
+            <span style={{ marginRight: "5px", fontSize: "16px" }}>
+              Filter Volunteers:
+            </span>
+            <FormCheck onChange={() => { this.RoleFilter(constants.VOLUNTEER) }} />
+          </div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
+            <span style={{ marginRight: "5px", fontSize: "16px" }}>
+              Filter Judges:
+            </span>
+            <FormCheck onChange={() => { this.RoleFilter(constants.JUDGE) }} />
+          </div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
+            <span style={{ marginRight: "5px", fontSize: "16px" }}>
+              Filter Advisors:
+            </span>
+            <FormCheck onChange={() => { this.RoleFilter(constants.ADVISOR) }} />
+          </div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
+            <span style={{ marginRight: "5px", fontSize: "16px" }}>
+              Filter Admin:
+            </span>
+            <FormCheck onChange={() => { this.RoleFilter(constants.ADMIN) }} />
+          </div>
+        </div>
         <DataTable
-          data={this.state.userTable} 
+          data={this.state.filteredUserTable} 
           columns={this.state.columns} 
           pagination 
           paginationPerPage={20} 

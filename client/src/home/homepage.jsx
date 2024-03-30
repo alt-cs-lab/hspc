@@ -4,6 +4,8 @@ import EventService from '../_common/services/event';
 import '../_common/assets/css/public-homepage.css';
 //import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
+import HSPC_Logo from '../_common/assets/img/hspc-logo-black.png';
+
 const constants = require('../_utilities/constants');
 
 /**
@@ -35,19 +37,21 @@ export default function Home(){
     return (
         <div className="home">
             <div className="banner">
-            {
-            highlightEvent !== null ? (
-            <div id="back-layout">
-                <h1 id="title">{highlightEvent.eventname}</h1>
-                <h2 id="header">{highlightEvent.eventlocation}</h2>
-                <h2 id="header">{constants.dateFormat(highlightEvent.eventdate)} @ {highlightEvent.eventstarttime}-{highlightEvent.eventendtime}</h2>
-                <p>{highlightEvent.eventdescription}</p>
-            </div>
-            ) : (
-            <h1 id="title">No Contests</h1>
-            )
-            }
-            {/* <img src={powercat} alt="Powercat" id="logo"></img> */}
+                <div>
+                    <img className="m-3" width="25%" src={HSPC_Logo} alt="HSPC"></img>
+                </div>
+                {
+                highlightEvent !== null ? (
+                <div id="back-layout">
+                    <h1 id="title">{highlightEvent.eventname}</h1>
+                    <h2 id="header">{highlightEvent.eventlocation}</h2>
+                    <h2 id="header">{constants.dateFormat(highlightEvent.eventdate)} @ {constants.timeFormat(highlightEvent.eventstarttime)} - {constants.timeFormat(highlightEvent.eventendtime)}</h2>
+                    <p id="description-paragraph">{highlightEvent.eventdescription}</p>
+                </div>
+                ) : (
+                <h1 id="title">No Contests</h1>
+                )
+                }
             </div>
             {/* <div id="article-field">
                 {news}

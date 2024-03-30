@@ -89,47 +89,49 @@ export class RegisterSchool extends Component {
                 </p>
                 <div>
                     <Form onSubmit={(event) => this.handleRegisterSchool(event)}>
-                        <Form.Group>
-                            <Form.Label>Enter School Name</Form.Label>
-                            <Form.Control required style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ schoolName: target.target.value }))} value={ this.state.schoolName }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Address Line 1</Form.Label>
-                            <Form.Control required style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ addressLine1: target.target.value }))} value={ this.state.addressLine1 }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Address Line 2</Form.Label>
-                            <Form.Control style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ addressLine2: target.target.value }))} value={ this.state.addressLine2 }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Enter City Name</Form.Label>
-                            <Form.Control required style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ city: target.target.value }))} value={ this.state.city }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Enter State Code</Form.Label>
-                            <Form.Control required placeholder="EX: KS" style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ state: target.target.value }))} value={ this.state.state }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Enter Postal Code</Form.Label>
-                            <Form.Control required style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ postalCode: target.target.value }))} value={ this.state.postalCode }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Enter USD Code</Form.Label>
-                            <Form.Control type="number" required placeholder="###'s Only" style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ usdCode: target.target.value }))} value={ this.state.usdCode }/>
-                        </Form.Group>
+                        <div class="add-margin">
+                            <Form.Group>
+                                <Form.Label>Enter School Name</Form.Label>
+                                <Form.Control required
+                                onChange={(target => this.setState({ schoolName: target.target.value }))} value={ this.state.schoolName }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Address Line 1</Form.Label>
+                                <Form.Control required
+                                onChange={(target => this.setState({ addressLine1: target.target.value }))} value={ this.state.addressLine1 }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Address Line 2</Form.Label>
+                                <Form.Control
+                                onChange={(target => this.setState({ addressLine2: target.target.value }))} value={ this.state.addressLine2 }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Enter City Name</Form.Label>
+                                <Form.Control required
+                                onChange={(target => this.setState({ city: target.target.value }))} value={ this.state.city }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Enter State Code</Form.Label>
+                                <Form.Control required placeholder="EX: KS"
+                                onChange={(target => this.setState({ state: target.target.value }))} value={ this.state.state }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Enter Postal Code</Form.Label>
+                                <Form.Control required
+                                onChange={(target => this.setState({ postalCode: target.target.value }))} value={ this.state.postalCode }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Enter USD Code</Form.Label>
+                                <Form.Control type="number" required placeholder="###'s Only"
+                                onChange={(target => this.setState({ usdCode: target.target.value }))} value={ this.state.usdCode }/>
+                            </Form.Group>
+                        </div>
                         <br/>
                         {/* <div align="center">
                             <ReCAPTCHA
@@ -141,9 +143,7 @@ export class RegisterSchool extends Component {
                             />
                 </div> */}
                         <Button
-                            variant="secondary"
-                            className="RegisterButton"
-                            style={styles.buttonStyles}
+                            id="purple-button"
                             onClick={(event) => this.handleRegisterSchool(event)}
                         >
                             Register School
