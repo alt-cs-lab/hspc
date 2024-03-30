@@ -192,4 +192,8 @@ router.post('/register', [
     useService(userService.register, req, res, 'created');
 });
 
+router.post("/updateProfile", (req, res) => {
+  useService(userService.updateProfile, req, res);
+});
+
 module.exports = router;
