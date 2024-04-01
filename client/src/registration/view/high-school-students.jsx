@@ -123,7 +123,7 @@ class ViewStudents extends Component {
     return (
       <div>
         <h2> Students </h2>
-        <Button className="mb-3" variant="secondary" style={styles.buttonStyles} 
+        <Button className="mb-3" id="purple-button"
           onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}>
             Add Student 
         </Button>
@@ -150,7 +150,7 @@ class ViewStudents extends Component {
               <span style={{ marginRight: "5px", fontSize: "16px" }}>
                 Graduated Excluded:
               </span>
-              <FormCheck defaultChecked={true} 
+              <FormCheck id="purple-check" defaultChecked={true} 
               onChange={() => { this.UpdateStudents(null, !this.state.gradFilter) }} />
           </div>
         </section>

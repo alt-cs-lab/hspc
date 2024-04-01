@@ -19,7 +19,6 @@
   } from "../../_store/slices/errorSlice.js";
 
   const constants = require('../../_utilities/constants');
-  const styles = require('../../_utilities/styleConstants.js');
   
   /*
   * Page to view an advisor's schools' teams

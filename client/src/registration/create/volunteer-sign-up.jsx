@@ -11,8 +11,6 @@ import { Form } from "react-bootstrap";
 import BaseSelect from "react-select";
 import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
 
-const styles = require('../../_utilities/styleConstants.js');
-
 /*
  * @author: Trent Powell
  * Class that handles the client side addition of a school to an advisor. Associating an advisor with a school
@@ -118,20 +116,18 @@ class VolunteerSignUp extends Component {
 
           <Form.Group name="dropdown-div" id="schoolList">
             <Form.Label>Select an Event to Volunteer for:</Form.Label>
-            <FixRequiredSelect
-              required
-              id="dropdown"
-              style={styles.selectStyles}
-              placeholder="Select an event"
-              options={this.state.eventList}
-              onChange={(target) => this.updateCompetition(target)}
-              SelectComponent={BaseSelect}
-              setValue={this.state.competitionid}
-              />
-          </Form.Group>
-              <Form.Group className="text-start">
+            <div class="add-margin">
+              <FixRequiredSelect
+                required
+                placeholder="Select an event"
+                options={this.state.eventList}
+                onChange={(target) => this.updateCompetition(target)}
+                SelectComponent={BaseSelect}
+                setValue={this.state.competitionid}
+                />
                 {this.state.timeList.map((timeInterval) => (    
                 <Form.Check
+                    id="purple-button"
                     key={timeInterval.time}
                     type="checkbox"
                     value={timeInterval.time}
@@ -139,9 +135,10 @@ class VolunteerSignUp extends Component {
                     onChange={() => timeInterval.selected = !timeInterval.selected }
                 />
                 ))}
+              </div>
               </Form.Group>
               <br/>
-              <Button type="register" onClick={(event) => this.submitSignup(event)}>Request To Volunteer</Button>
+              <Button id="purple-button" type="register" onClick={(event) => this.submitSignup(event)}>Request To Volunteer</Button>
           </Form>
         </div>
       </div>
