@@ -375,8 +375,19 @@ class CreateTeam extends Component {
                         size="small">
                     </Form.Control>
                     <br></br>
-                    <Button type="register" variant="secondary" style={styles.buttonStyles} 
-                        onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
+                    <Form.Label>Team Name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        required
+                        label=""
+                        style={{ margin: "auto", width: "25%"}}
+                        inputProps={{style: {fontSize: 14}}}
+                        InputLabelProps={{style: {fontSize: 13}}}
+                        onChange={(event) => this.setState({teamName: event.target.value})}
+                        size="small">
+                    </Form.Control>
+                    <br></br>
+                    <Button type="register" onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
                 </Form>
             </div>
         )

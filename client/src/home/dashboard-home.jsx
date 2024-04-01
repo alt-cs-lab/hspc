@@ -3,11 +3,17 @@ import { useEffect, useState } from 'react';
 import { Button, Form } from "react-bootstrap";
 import SchoolService from "../_common/services/school"
 import RequestService from "../_common/services/request";
+import UserService from "../_common/services/user"
 import DataTable from "react-data-table-component";
 import BaseSelect from "react-select";
 import FixRequiredSelect from "../_common/components/FixRequiredSelect";
+import { withRouter } from "../_utilities/routerUtils";
 import "../_common/assets/css/standard.css";
 import "../_common/assets/css/advisor.css";
+import { connect } from "react-redux";
+import Auth from "../_common/services/auth.js";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../_store/slices/errorSlice";
+//import { useDispatch } from "react-redux";
 const constants = require('../_utilities/constants');
 const styles = require('../_utilities/styleConstants.js');
 
@@ -15,7 +21,7 @@ const styles = require('../_utilities/styleConstants.js');
  * @returns The Dashboard Home Page which allows account changes
  * @author Trent Powell
  */
-export default function DashboardHome(props){
+function DashboardHome(props){
     const [firstName, setFirstName] = useState(props.user.firstName);
     const [lastName, setLastName] = useState(props.user.lastName);
     const [phoneNumber, setPhoneNumber] = useState(props.user.phone);
@@ -49,7 +55,6 @@ export default function DashboardHome(props){
         })
         .catch((resErr) => console.log("Something went wrong. Please try again"));
     }, [ props.user ]);
-
     
     return (
         <div>
@@ -96,14 +101,14 @@ export default function DashboardHome(props){
             <h4>Account Profile</h4>
             <h6>Update profile settings below if something has changed.</h6>
             <br/>
-            <Form name="form" onSubmit={(event) => handleProfileUpdate(event)}>
+            <Form name="form" onSubmit={(event) => handleProfileUpdate(event, firstName, lastName, phoneNumber, email, props)}>
                 <div class="add-margin">
                     <Form.Group>
                         <Form.Label id="left-label"> First Name </Form.Label>
                         <Form.Control
                         name="first"
                         placeholder = {props.user.firstName}
-                        onChange={(target) => setFirstName(target.target.value)}
+                        onChange={(e) => setFirstName(e.target.value)}
                         value={firstName}
                         />
                     </Form.Group>
@@ -113,7 +118,7 @@ export default function DashboardHome(props){
                         <Form.Control
                         name="last"
                         placeholder = {props.user.lastName}
-                        onChange={(target) => setLastName(target.target.value)}
+                        onChange={(e) => setLastName(e.target.value)}
                         value={lastName}
                         />
                     </Form.Group>
@@ -122,7 +127,7 @@ export default function DashboardHome(props){
                         <Form.Label> Phone Number (No dashes) </Form.Label>
                         <Form.Control name="phone"
                         placeholder = {props.user.phone}
-                        onChange={(target) => setPhoneNumber(target.target.value)}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
                         value={phoneNumber}
                         />
                     </Form.Group>
@@ -131,7 +136,7 @@ export default function DashboardHome(props){
                         <Form.Label> Email Address </Form.Label>
                         <Form.Control name="email" type="email"
                         placeholder = {props.user.email}
-                        onChange={(target) => setEmail(target.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}
                         value={email}
                         />
                     </Form.Group>
@@ -159,6 +164,8 @@ export default function DashboardHome(props){
     );
 }
 
+
+
 function handleRequestNewSchool(event, additionalSchoolid, advisorid) {
     // TODO TWP: Fix Error Dispatching Below
     RequestService.requestAdditionalSchool(additionalSchoolid, advisorid)
@@ -177,9 +184,35 @@ function handleRequestNewSchool(event, additionalSchoolid, advisorid) {
     });
 }
 
-function handleProfileUpdate(event) {
+function handleProfileUpdate(event, firstName, lastName, phone, email, props) {
     // TODO TWP: Need an update profile call to server
     // Reload Page after submission
+    event.preventDefault();
+
+    const updateData = {
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone,
+        email: email
+    };
+
+    UserService.updateProfile(updateData, props.user.id, props.router)
+
+    .then(res => { console.log("Here")
+      Auth.logout()
+      props.dispatchSuccess("Account successfully updated, please login")
+      props.router.navigate("/login"); });
+    /*
+    .then((response) => {
+        if (response.status === 200) {
+            //window.location.reload();
+            console.log("Profile updated successfully");
+        }
+    })
+    .catch((error) => {
+        console.log("Failed to update profile. Please try again.")
+    });
+    */
 }
 
 function getColumns() {
@@ -211,3 +244,25 @@ function getColumns() {
       },
     ];
 };
+
+const mapStateToProps = (state) => {
+    return {
+      auth: state.auth,
+      errors: state.errors,
+    };
+  };
+  
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      dispatchError: (message) =>
+        dispatch(updateErrorMsg(message)),
+      dispatchSuccess: (message) =>
+        dispatch(updateSuccessMsg(message)),
+      dispatchResetErrors: () => dispatch(clearErrors()),
+    };
+  };
+  
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(withRouter(DashboardHome));
