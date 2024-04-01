@@ -13,7 +13,6 @@ import "../_common/assets/css/advisor.css";
 import { connect } from "react-redux";
 import Auth from "../_common/services/auth.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../_store/slices/errorSlice";
-//import { useDispatch } from "react-redux";
 const constants = require('../_utilities/constants');
 const styles = require('../_utilities/styleConstants.js');
 
@@ -185,10 +184,7 @@ function handleRequestNewSchool(event, additionalSchoolid, advisorid) {
 }
 
 function handleProfileUpdate(event, firstName, lastName, phone, email, props) {
-    // TODO TWP: Need an update profile call to server
-    // Reload Page after submission
     event.preventDefault();
-
     const updateData = {
         firstName: firstName,
         lastName: lastName,
@@ -196,23 +192,18 @@ function handleProfileUpdate(event, firstName, lastName, phone, email, props) {
         email: email
     };
 
-    UserService.updateProfile(updateData, props.user.id, props.router)
-
-    .then(res => { console.log("Here")
-      Auth.logout()
-      props.dispatchSuccess("Account successfully updated, please login")
-      props.router.navigate("/login"); });
-    /*
+    UserService.updateProfile(updateData, props.user.id)
     .then((response) => {
         if (response.status === 200) {
-            //window.location.reload();
-            console.log("Profile updated successfully");
+          Auth.logout()
+          props.dispatchSuccess("Account successfully updated, please login")
+          //window.location.reload();
+          props.router.navigate("/login", {state:{profileUpdate:'Account successfully updated, please login'}});
         }
     })
     .catch((error) => {
         console.log("Failed to update profile. Please try again.")
     });
-    */
 }
 
 function getColumns() {

@@ -129,7 +129,7 @@ function getLogin(email) {
       `
         SELECT U.UserID, U.Email, U.EncryptedPassword, U.AccessLevel, U.FirstName, U.LastName, U.Phone
         FROM Users AS U
-        WHERE Email = $(email)
+        WHERE U.Email = $(email)
     `,
       { email }
     )
@@ -285,7 +285,7 @@ function getactivevolunteers() {
 function updateProfile( { updateData, userId } ) {
   var firstName = updateData.firstName;
   var lastName = updateData.lastName;
-  var phone = updateData.phoneNumber;
+  var phone = updateData.phone;
   var email = updateData.email;
   return db.none(`
     UPDATE Users
