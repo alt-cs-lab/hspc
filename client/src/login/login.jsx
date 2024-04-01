@@ -18,8 +18,6 @@ import { login, selectAuth } from "../_store/slices/authSlice";
 import { selectDashboardRoute } from "../_store/slices/routeSlice";
 import { clearErrors, updateErrorMsg } from "../_store/slices/errorSlice";
 
-const styles = require('../_utilities/styleConstants.js');
-
 function Login(props) {
     const dispatch = useDispatch();
 

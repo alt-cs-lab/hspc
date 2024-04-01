@@ -5,6 +5,7 @@ import '../_common/assets/css/public-homepage.css';
 //import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from 'react';
 import HSPC_Logo from '../_common/assets/img/hspc-logo-black.png';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 const constants = require('../_utilities/constants');
 
@@ -40,6 +41,9 @@ export default function Home(){
                 <div>
                     <img className="m-3" width="25%" src={HSPC_Logo} alt="HSPC"></img>
                 </div>
+                <br/>
+                <ProgressBar id="purple-progress" animated style={{ width: "60%", margin: "auto" }} now={100} />
+                <br/>
                 {
                 highlightEvent !== null ? (
                 <div id="back-layout">
@@ -51,7 +55,7 @@ export default function Home(){
                 ) : (
                 <h1 id="title">No Contests</h1>
                 )
-                }
+                }       
             </div>
             {/* <div id="article-field">
                 {news}

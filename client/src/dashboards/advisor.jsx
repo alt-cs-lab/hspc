@@ -4,7 +4,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
 import React, { useState, useEffect } from "react";
-import { Navbar, NavItem, Nav, NavDropdown/*, NavLink*/ } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown/*, NavLink*/ } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
 import TeamsView from "../registration/advisor/teams-view";
@@ -41,7 +41,7 @@ function AdvisorDash (props)
                 View Students
               </NavDropdown.Item>
               <NavDropdown.Item onClick={() => setCurrentView(<AddStudent advisorUser={props.currentUser.id} />)}>
-                Create Student Test
+                Create Student
               </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Teams">
@@ -52,7 +52,7 @@ function AdvisorDash (props)
                 Create Team
               </NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Events">
+            <NavDropdown title="Events" align="end" flip>
               <NavDropdown.Item onClick={() => setCurrentView(<ViewEvents />)}>
                 View Events
               </NavDropdown.Item>

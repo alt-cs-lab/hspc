@@ -10,8 +10,6 @@ import schoolService from "../../_common/services/school.js";
 import {connect} from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
-const styles = require('../../_utilities/styleConstants.js');
-
 /*
  * @author: Tyler Trammell
  * Class that hangdles the client side creation of a school. UI of school creation and passes data service

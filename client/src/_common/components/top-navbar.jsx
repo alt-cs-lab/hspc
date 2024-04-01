@@ -34,7 +34,7 @@ export default function TopNavbar(props) {
 	}
 
 	return (
-		<Navbar expand='lg' collapseOnSelect default>
+		<Navbar expand='lg' collapseOnSelect default >
 			<div class="m-3" style={{width: "3%"}}>
 			    <Image src={hspcLogo} fluid/>				
 			</div>
@@ -47,9 +47,9 @@ export default function TopNavbar(props) {
           	<Navbar.Toggle />
 			<Navbar.Collapse>
 				<Nav>
-					<Nav.Link as={Link} eventKey={1} href="/" to="/">
+					{/* <Nav.Link as={Link} eventKey={1} href="/" to="/">
 						Home
-					</Nav.Link>
+					</Nav.Link> */}
 					<Nav.Link as={Link} eventKey={2} href="/" to="/Competitions" >
 						Event
 					</Nav.Link>

@@ -284,7 +284,7 @@ class CreateTeam extends Component {
                     </Form.Group>
                     {table}
                     <br></br>
-                    <Button type="register" variant="secondary" style={styles.buttonStyles} 
+                    <Button type="register" id="purple-button"
                         onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
                 </Form>
             </div>
