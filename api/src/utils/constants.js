@@ -12,6 +12,16 @@ const ADMIN = 16;
 const MASTER = 32;
 const legalLevels = [VOLUNTEER, JUDGE, ADVISOR, ADMIN, MASTER];
 
+/*
+Team Status Constants
+*/
+const STATUS_WAITLISTED = 1;
+const STATUS_REGISTERED = 2;
+const STATUS_DENIED = 3;
+const STATUS_ARCHIVED = 4;
+const teamStatuses = [STATUS_WAITLISTED, STATUS_REGISTERED, STATUS_DENIED, STATUS_ARCHIVED];
+
+
 /**
  * Creates a date compatable with the database
  * @param {int} year
@@ -37,5 +47,10 @@ module.exports = {
     ADMIN,
     MASTER,
     legalLevels,
+    STATUS_WAITLISTED,
+    STATUS_REGISTERED,
+    STATUS_DENIED,
+    STATUS_ARCHIVED,
+    teamStatuses,
     toDatabaseDate
 }

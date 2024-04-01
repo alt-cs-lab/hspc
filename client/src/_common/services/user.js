@@ -1,26 +1,27 @@
 import ServiceUtils from "../../_utilities/serviceUtils";
+//import logout from "../../_store/slices/authSlice.js"
 
 class UserService {
-    constructor() {
-        this.getAllUsers = this.getAllUsers.bind(this);
-        this.getAllVolunteers = this.getAllVolunteers.bind(this);
-        this.logVolunteerAssignment = this.logVolunteerAssignment.bind(this);
-    }
+  constructor() {
+    this.getAllUsers = this.getAllUsers.bind(this);
+    this.getAllVolunteers = this.getAllVolunteers.bind(this);
+    this.logVolunteerAssignment = this.logVolunteerAssignment.bind(this);
+  }
 
-    /*
-    * Calls the API and returns a JSON list of all registered users.
-    */
-    getAllUsers() {
-      return ServiceUtils.getRequest('/api/user/view', {});
-    }
+  /*
+   * Calls the API and returns a JSON list of all registered users.
+   */
+  getAllUsers() {
+    return ServiceUtils.getRequest("/api/user/view", {});
+  }
 
-    getAllVolunteers() {
-        return ServiceUtils.getRequest('api/user/volunteers', {});
-    };
+  getAllVolunteers() {
+    return ServiceUtils.getRequest("api/user/volunteers", {});
+  }
 
-    getActiveVolunteers() {
-        return ServiceUtils.getRequest('api/user/activevolunteers', {});
-    }
+  getActiveVolunteers() {
+    return ServiceUtils.getRequest("api/user/activevolunteers", {});
+  }
 
   /*
    * API Endpoint that returns all volunteers currently assigned to teams
@@ -37,8 +38,8 @@ class UserService {
   }
 
   /*
-  * API Endpoint that updates Adivsors table with schoolID
-  */
+   * API Endpoint that updates Adivsors table with schoolID
+   */
   updateAdvisorSchool(userId, schoolId) {
     return ServiceUtils.postRequest("api/user/addschool", {
       userId: userId,
@@ -138,6 +139,13 @@ class UserService {
     return ServiceUtils.deleteRequest("api/user/removeassignment", {
       volunteerid: volunteerid,
     });
+  }
+
+  updateProfile(updateData, userId, router) {
+    return ServiceUtils.postRequest("api/user/updateProfile", {
+      updateData: updateData,
+      userId: userId,
+    })
   }
 }
 

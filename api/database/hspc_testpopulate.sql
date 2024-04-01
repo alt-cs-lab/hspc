@@ -37,11 +37,10 @@ Insert Values into Team Status Table
 INSERT INTO TeamStatus
     (StatusID, Status)
 VALUES
-    (1, 'Unregistered'),
-    (2, 'Waitlisted'),
-    (3, 'Registered'),
-    (4, 'Denied'),
-    (5, 'Archived');
+    (1, 'Waitlisted'),
+    (2, 'Registered'),
+    (3, 'Denied'),
+    (4, 'Archived');
 
 /*
 Insert Values into Skill Levels Table

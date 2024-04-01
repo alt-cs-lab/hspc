@@ -23,6 +23,7 @@ module.exports = {
     checkinvolunteer,
     checkoutvolunteer,
     getactivevolunteers,
+    updateProfile
 };
 
 /**
@@ -280,3 +281,27 @@ function getactivevolunteers() {
     FROM Users AS U
     WHERE U.AccessLevel = 20 AND U.Active = 1`)*/
 }
+
+function updateProfile( { updateData, userId } ) {
+  var firstName = updateData.firstName;
+  var lastName = updateData.lastName;
+  var phone = updateData.phoneNumber;
+  var email = updateData.email;
+  return db.none(`
+    UPDATE Users
+    SET FirstName = $(firstName),
+      LastName = $(lastName),
+      Phone = $(phone),
+      Email = $(email)
+    WHERE UserID = $(userId)
+  `, { userId, firstName, lastName, phone, email });
+}
+
+/*
+UPDATE Users
+SET FirstName = 'Casey',
+  LastName = 'Ring',
+  Phone = '913-901-6711',
+  Email = 'caseyring@email.com'
+WHERE UserID = 23
+*/

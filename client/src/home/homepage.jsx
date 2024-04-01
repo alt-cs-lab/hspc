@@ -49,7 +49,7 @@ export default function Home(){
                 <div id="back-layout">
                     <h1 id="title">{highlightEvent.eventname}</h1>
                     <h2 id="header">{highlightEvent.eventlocation}</h2>
-                    <h2 id="header">{constants.dateFormat(highlightEvent.eventdate)} @ {highlightEvent.eventstarttime}-{highlightEvent.eventendtime}</h2>
+                    <h2 id="header">{constants.dateFormat(highlightEvent.eventdate)} @ {constants.timeFormat(highlightEvent.eventstarttime)} - {constants.timeFormat(highlightEvent.eventendtime)}</h2>
                     <p id="description-paragraph">{highlightEvent.eventdescription}</p>
                 </div>
                 ) : (
