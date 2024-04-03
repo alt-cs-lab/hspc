@@ -20,7 +20,7 @@ const pgp = require("pg-promise")();
 // Code Added for curent end points required in the client
 function getAll(){
     return db.any(`
-    SELECT T.TeamID, T.TeamName, SK.SkillLevel, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
+    SELECT T.TeamID, T.TeamName, T.CompetitionId, SK.SkillLevel, S.SchoolId, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
     FROM 
         Teams T
         INNER JOIN Questions Q ON T.SkillLevelID = Q.SkillLevelID

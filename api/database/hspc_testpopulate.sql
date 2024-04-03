@@ -65,7 +65,7 @@ VALUES
     (23, '3285551017', 'Jack', 'Thomas', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 8, 8, 'jack.thomas@email.com', '2024-01-08', '2024-01-24'),
     (24, '4215551018', 'Kathy', 'Lee', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 16, 16, 'kathy.lee@email.com', '2024-01-09', '2024-01-23'),
     (25, '3215551019', 'Leo', 'Garcia', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 16, 16, 'leo.garcia@email.com', '2024-01-10', '2024-01-22'),
-    (26, '4425551020', 'Josh', 'Weese', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 32, 32, 'maggie.perez@email.com', '2024-01-11', '2024-01-29'),
+    (26, '4425551020', 'Josh', 'Weese', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 32, 32, 'josh.@email.com', '2024-01-11', '2024-01-29'),
     (27, '7455551021', 'Nathan', 'Bean', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 32, 32, 'nathan.kim@email.com', '2024-01-12', '2024-01-28');
 
 /*
