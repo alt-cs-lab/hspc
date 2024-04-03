@@ -5,23 +5,21 @@ class EventService {
 
     /*
     * Calls the API and registers a new Event object in the database.
-        @Edited: Natalie Laughlin - added the event name to be passed in
-    * @param {string} text location of the event
-    * @param {string} stringified value of the event date
-    * @param {string} stringified value of the event time
-    * @param {string} number value for teams per school
-    * @param {string} text value of the event's description
     */
-    createEvent(eventName, eventLocation, eventDate, eventTime, teamsPerSchool, teamsPerEvent, eventDes) {
-        return ServiceUtils.postRequest('/api/event/create', {
-            eventName: eventName,
-            eventLocation: eventLocation,
-            eventDate: eventDate,
-            eventTime: eventTime,
+    createEvent(eventName, eventLocation, eventDate, startTime, endTime, teamsPerEvent, beginnerTeamsPerEvent, advancedTeamsPerEvent, teamsPerSchool, beginnerTeamsPerSchool, advancedTeamsPerSchool, description) {  
+        return ServiceUtils.postRequest('/api/event/create',{
+            name: eventName,
+            location: eventLocation,
+            date: eventDate,
+            startTime: startTime,
+            endTime: endTime,
+            beginnerTeamsPerSchool: beginnerTeamsPerSchool,
+            advancedTeamsPerSchool: advancedTeamsPerSchool,
             teamsPerSchool: teamsPerSchool,
+            beginnerTeamsPerEvent: beginnerTeamsPerEvent,
+            advancedTeamsPerEvent: advancedTeamsPerEvent,
             teamsPerEvent: teamsPerEvent,
-            eventDes: eventDes
-        });
+            description: description});
     }
 
     /*

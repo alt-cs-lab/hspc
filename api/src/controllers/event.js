@@ -104,8 +104,10 @@ router.post("/create", [
             .not().isEmpty().withMessage("Location is required"),
         check("date")
             .isDate().withMessage("Date is required"),
-        check("time")
-            .isTime().withMessage("Time is required"),
+        check("startTime")
+            .isTime().withMessage("Start Time is required"),
+        check("endTime")
+            .isTime().withMessage("End Time is required"),
         check("beginnerTeamsPerSchool")
             .isInt({ min: 0 }).withMessage("Beginner Teams per school"),
         check("advancedTeamsPerSchool")
@@ -118,11 +120,12 @@ router.post("/create", [
             .isInt({ min: 0 }).withMessage("Advanced Teams per school required"),
         check("teamsPerEvent")
             .isInt({ min: 2 }).withMessage("Teams per event required"),
+        check("description")
+            .not().isEmpty().withMessage("Description is required"),
 
     ],
     passport.authenticate("jwt", { session: false }), //authenticate with JWT
     accessLevelCheck(constants.ADMIN), //check if user is admin
-    [check("name").not().isEmpty().withMessage("name is required")], //check if name is provided
     badRequestCheck, //check if there are any bad requests
     (req, res) => {
         useService(eventService.createEvent, req, res, 'created');

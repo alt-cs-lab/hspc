@@ -107,11 +107,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const ExpandedComponent = ({ data }) => {
-  console.log(data)
-
   return <div class="data-table-info">
       <h7>Description:</h7>
-      <br/>
       <br/>
       <p style={{fontSize: "small"}}>{data.description}</p>
       <p style={{fontSize: "small"}}>Teams allowed per School: {data.teamsPerSchool}</p>

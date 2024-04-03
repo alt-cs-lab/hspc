@@ -141,7 +141,7 @@ class UserService {
     });
   }
 
-  updateProfile(updateData, userId, router) {
+  updateProfile(updateData, userId) {
     return ServiceUtils.postRequest("api/user/updateProfile", {
       updateData: updateData,
       userId: userId,

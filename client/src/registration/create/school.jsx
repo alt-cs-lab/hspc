@@ -10,8 +10,6 @@ import schoolService from "../../_common/services/school.js";
 import {connect} from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
-const styles = require('../../_utilities/styleConstants.js');
-
 /*
  * @author: Tyler Trammell
  * Class that hangdles the client side creation of a school. UI of school creation and passes data service
@@ -85,7 +83,7 @@ export class RegisterSchool extends Component {
             <div className="RegisterBox">
                 <h2>Register School</h2>
                 <p>
-                <b>Please fill out the information below.</b>
+                    <b>Please fill out the information below.</b>
                 </p>
                 <div>
                     <Form onSubmit={(event) => this.handleRegisterSchool(event)}>
@@ -141,13 +139,8 @@ export class RegisterSchool extends Component {
                                 onloadCallback={this.recaptchaLoaded}
                                 verifyCallback={this.verifyCallback}
                             />
-                </div> */}
-                        <Button
-                            id="purple-button"
-                            onClick={(event) => this.handleRegisterSchool(event)}
-                        >
-                            Register School
-                        </Button>
+                        </div> */}
+                        <Button id="purple-button" onClick={(event) => this.handleRegisterSchool(event)}>Register School</Button>
                     </Form>
                 </div>
             </div>

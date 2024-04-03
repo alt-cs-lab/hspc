@@ -63,7 +63,7 @@ CREATE TABLE Competitions (
 	EventStartTime TIME,
 	EventEndTime TIME,
 	EventName VARCHAR(64),
-	EventDescription VARCHAR(1250),
+	EventDescription TEXT,
 	TeamsPerEvent INT,
 	BeginnerTeamsPerEvent INT,
 	AdvancedTeamsPerEvent INT,

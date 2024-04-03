@@ -3,7 +3,7 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { useState, useEffect} from "react";
-import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { connect } from "react-redux";
 import StatusMessages from "../_common/components/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
@@ -49,49 +49,49 @@ return(
           <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav>
-              <NavDropdown title="Users" id="basic-nav-dropdown">
-                <NavItem onClick={() => setCurrentView(<Register />)}>
+              <NavDropdown title="Users">
+                <NavDropdown.Item onClick={() => setCurrentView(<Register />)}>
                   Create User
-                </NavItem>
-                <NavItem onClick={() => setCurrentView(<ViewUsers />)}>
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setCurrentView(<ViewUsers />)}>
                   View Users
-                </NavItem>
-                <NavItem eventKey={3} onClick={() => setCurrentView(<SchoolRequests />)}>
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setCurrentView(<SchoolRequests />)}>
                   School Requests
-                </NavItem>
+                </NavDropdown.Item>
               </NavDropdown>
 
-              <NavDropdown title="Schools" id="basic-nav-dropdown">
-                <NavItem onClick={() => setCurrentView(<RegisterSchool />)}>
+              <NavDropdown title="Schools">
+                <NavDropdown.Item onClick={() => setCurrentView(<RegisterSchool />)}>
                   Create School
-                </NavItem>
-                <NavItem onClick={() => setCurrentView(<ViewSchools />)}>
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setCurrentView(<ViewSchools />)}>
                   View Schools
-                </NavItem>
+                </NavDropdown.Item>
               </NavDropdown>
 
-              <NavDropdown title="Teams" id="basic-nav-dropdown">
+              <NavDropdown title="Teams">
                 {/* <NavItem onClick={() => setCurrentView(<TeamRequests />)}>
                   Team Request
                 </NavItem> */}
-                <NavItem onClick={() => setCurrentView(<CreateTeam advisor={props.currentUser} />)}>
+                <NavDropdown.Item onClick={() => setCurrentView(<CreateTeam advisor={props.currentUser} />)}>
                   Create Team
-                </NavItem>
-                <NavItem onClick={() => setCurrentView(<ViewTeams />)}>
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setCurrentView(<ViewTeams />)}>
                   View Teams
-                </NavItem>
+                </NavDropdown.Item>
               </NavDropdown>
 
-              <NavDropdown title="Events" id="basic-nav-dropdown">
-                <NavItem onClick={() => setCurrentView(<EventSignIn />)}>
+              <NavDropdown title="Events" align="end" flip>
+                <NavDropdown.Item onClick={() => setCurrentView(<EventSignIn />)}>
                   Begin Event
-                </NavItem>
-                <NavItem onClick={() => setCurrentView(<CreateEvent />)}>
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setCurrentView(<CreateEvent />)}>
                   Create Event
-                </NavItem>
-                <NavItem onClick={() => setCurrentView(<ViewEvents />)}>
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setCurrentView(<ViewEvents />)}>
                   View Events
-                </NavItem>
+                </NavDropdown.Item>
               </NavDropdown>
 
               {/* <NavDropdown title="Scoreboard" id="basic-nav-dropdown">

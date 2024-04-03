@@ -14,7 +14,6 @@ import AddStudent from "../create/add-high-school-student.jsx";
 import "../../_common/assets/css/standard.css";
 
 const constants = require('../../_utilities/constants');
-const styles = require('../../_utilities/styleConstants.js');
 
 // This class inherits functionality of the Component class and extends it.
 class ViewStudents extends Component {
@@ -80,8 +79,8 @@ class ViewStudents extends Component {
         sortable: true,
       },
       {
-        name: "Grad Date (YYYY-MM-DD)",
-        selector: row => constants.dateFormat(row.graddate),
+        name: "Grad Date",
+        selector: row => constants.gradDateFormat(row.graddate),
         sortable: true,
         sortFunction: constants.dateSort,
       }
@@ -123,7 +122,7 @@ class ViewStudents extends Component {
     return (
       <div>
         <h2> Students </h2>
-        <Button className="mb-3" variant="secondary" style={styles.buttonStyles} 
+        <Button className="mb-3" id="purple-button"
           onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}>
             Add Student 
         </Button>
@@ -150,7 +149,7 @@ class ViewStudents extends Component {
               <span style={{ marginRight: "5px", fontSize: "16px" }}>
                 Graduated Excluded:
               </span>
-              <FormCheck defaultChecked={true} 
+              <FormCheck id="purple-check" defaultChecked={true} 
               onChange={() => { this.UpdateStudents(null, !this.state.gradFilter) }} />
           </div>
         </section>

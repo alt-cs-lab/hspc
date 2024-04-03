@@ -3,7 +3,7 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { useState } from "react";
-import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
 import ViewEvents from "../registration/view/events";
@@ -56,13 +56,13 @@ function VolunteerDash(props)
         
         <Navbar.Collapse>
           <Nav>
-            <NavDropdown title="Events" id="basic-nav-dropdown">
-              <NavItem eventKey={1} onClick={() => setCurrentView(<ViewEvents />)}>
+            <NavDropdown title="Events" align="end" flip>
+              <NavDropdown.Item onClick={() => setCurrentView(<ViewEvents />)}>
                 View Events
-              </NavItem>
-              <NavItem eventKey={2} onClick={() => setCurrentView(<VolunteerSignUp />)}>
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => setCurrentView(<VolunteerSignUp />)}>
                 Sign Up To Volunteer
-              </NavItem>
+              </NavDropdown.Item>
             </NavDropdown>
             {/* <NavItem eventKey={4} onClick={() => setCurrentView(<Scoreboard />)}>
               View Board
