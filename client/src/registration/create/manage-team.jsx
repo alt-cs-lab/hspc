@@ -124,8 +124,8 @@ class CreateTeam extends Component {
                 sortable: true,
             },
             {
-                name: "GradDate (YYYY-MM-DD)",
-                selector: row => constants.dateFormat(row.graddate),
+                name: "GradDate",
+                selector: row => constants.gradDateFormat(row.graddate),
                 sortable: true,
                 sortFunction: constants.dateSort,
             }

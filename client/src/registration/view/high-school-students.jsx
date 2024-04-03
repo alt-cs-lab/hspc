@@ -14,7 +14,6 @@ import AddStudent from "../create/add-high-school-student.jsx";
 import "../../_common/assets/css/standard.css";
 
 const constants = require('../../_utilities/constants');
-const styles = require('../../_utilities/styleConstants.js');
 
 // This class inherits functionality of the Component class and extends it.
 class ViewStudents extends Component {
@@ -80,8 +79,8 @@ class ViewStudents extends Component {
         sortable: true,
       },
       {
-        name: "Grad Date (YYYY-MM-DD)",
-        selector: row => constants.dateFormat(row.graddate),
+        name: "Grad Date",
+        selector: row => constants.gradDateFormat(row.graddate),
         sortable: true,
         sortFunction: constants.dateSort,
       }
