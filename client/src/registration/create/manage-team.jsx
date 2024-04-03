@@ -17,8 +17,7 @@ import Button from "react-bootstrap/Button";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 import { Form } from "react-bootstrap";
-import BaseSelect from "react-select";
-import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
+import Select from "react-select";
 
 const constants = require('../../_utilities/constants');
 const styles = require('../../_utilities/styleConstants.js');
@@ -200,8 +199,8 @@ class CreateTeam extends Component {
                     value: studentData[i].studentid,
                 });
             }
-            console.log(studentOptions);
-            this.setState({ studentList: studentOptions });
+
+            this.setState({ studentList: studentOptions,  });
         });
     }
 
@@ -250,24 +249,24 @@ class CreateTeam extends Component {
                 <p id="sub-nav-item">
                 <b>Member #1</b>
                 </p>
-                <FixRequiredSelect
+                <Select
                     id="dropdown"
                     styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
-                    SelectComponent={BaseSelect}
+                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
                 />
-            </div>
-            <div id ="sub-nav">
+                </div>
+                <div id ="sub-nav">
                 <p id="sub-nav-item">
                 <b>Member #2</b>
                 </p>
-                <FixRequiredSelect
+                <Select
                     id="dropdown"
                     styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
-                    SelectComponent={BaseSelect}
+                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
                 />
             </div>
             </section>
@@ -282,24 +281,24 @@ class CreateTeam extends Component {
                 <p id="sub-nav-item">
                 <b>Member #3</b>
                 </p>
-                <FixRequiredSelect
+                <Select
                     id="dropdown"
                     styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
-                    SelectComponent={BaseSelect}
+                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
                 />
             </div>
             <div id ="sub-nav">
                 <p id="sub-nav-item">
                 <b>Member #4</b>
                 </p>
-                <FixRequiredSelect
+                <Select
                     id="dropdown"
                     styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
-                    SelectComponent={BaseSelect}
+                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
                 />
             </div>
             </section>
@@ -315,13 +314,12 @@ class CreateTeam extends Component {
                         <p id="sub-nav-item">
                         <b>School</b>
                         </p>
-                        <FixRequiredSelect
+                        <Select
                             id="dropdown"
                             styles={styles.selectStyles}
                             placeholder="Select a school"
                             options={this.state.schoolList}
                             onChange={(opt) => this.updateStudentList(opt.value)}
-                            SelectComponent={BaseSelect}
                         />
                     </div>
                     <br></br>
@@ -336,13 +334,12 @@ class CreateTeam extends Component {
                         <p id="sub-nav-item">
                             <b>Event</b>
                             </p>
-                            <FixRequiredSelect
+                            <Select
                                 id="dropdown"
                                 styles={styles.selectStyles}
                                 placeholder="Select an event"
                                 options={this.state.eventList}
                                 onChange={this.handleEventChange}
-                                SelectComponent={BaseSelect}
                                 setValue={this.state.competitionId}
                             />
                     </div>
@@ -350,30 +347,17 @@ class CreateTeam extends Component {
                     <p id="sub-nav-item">
                         <b>Skill Level</b>
                         </p>
-                        <FixRequiredSelect
+                        <Select
                             id="dropdown"
                             styles={styles.selectStyles}
                             placeholder="Select a skill level"
                             options={this.state.skillLevels}
                             onChange={this.handleSkillLevelChange}
-                            SelectComponent={BaseSelect}
                             setValue={this.state.skillLevelId}
                         />
                     </div>
                     </section>
                     {table}
-                    <br></br>
-                    <Form.Label>Team Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        required
-                        label=""
-                        style={{ margin: "auto", width: "25%"}}
-                        inputProps={{style: {fontSize: 14}}}
-                        InputLabelProps={{style: {fontSize: 13}}}
-                        onChange={(event) => this.setState({teamName: event.target.value})}
-                        size="small">
-                    </Form.Control>
                     <br></br>
                     <Form.Label>Team Name</Form.Label>
                     <Form.Control
