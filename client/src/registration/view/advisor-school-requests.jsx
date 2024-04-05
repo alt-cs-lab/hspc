@@ -44,16 +44,16 @@ class SchoolRequests extends Component {
             if (response.status === 200) {
                 if(approved){
                     this.props.dispatchSuccess(
-                        "School Approved"
-                    );
+                        "School Approved Successfully."
+                    )
                 }
                 else{
                     this.props.dispatchSuccess(
-                        "School Denied"
-                    );  
+                        "School Denied Successfully."
+                    );
                 }
                 // TODO TWP: Look more into if this works calling component did mount to reload the page. We could instead call a reload function that simply reloads the table.
-                this.componentDidMount();
+                this.componentDidMount()
             }
         })
         .catch((error) => {

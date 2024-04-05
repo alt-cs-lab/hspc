@@ -4,6 +4,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 const db = require("../utils/hspc_db").db;
 const { renameKeys } = require("../utils/extensions.js");
+const constants = require("../utils/constants.js");
 
 module.exports = {
     registerSchool: registerSchool,
@@ -50,16 +51,17 @@ function getAllSchools(){
  * @returns All the schools that an advisor is associated with.
  */
 function getAdvisorApprovedSchools(userId) {
-    return db.any(
-        `
-          SELECT S.SchoolID, S.SchoolName, S.City, S."State", S.USDCode
-          FROM Schools S
-              INNER JOIN SchoolAdvisors SA ON SA.SchoolID = S.SchoolID
-          WHERE SA.UserID = $(userId) AND SA.Approved = true
-        `,
-      {userId}
-      );
-  }
+  let approved = constants.ADVISOR_STATUS_APPROVED
+  return db.any(
+      `
+        SELECT S.SchoolID, S.SchoolName, S.City, S."State", S.USDCode
+        FROM Schools S
+            INNER JOIN SchoolAdvisors SA ON SA.SchoolID = S.SchoolID
+        WHERE SA.UserID = $(userId) AND SA.AdvisorStatusID = $(approved)
+      `,
+    {userId, approved}
+    );
+}
 
 /**
  * Gets all the schools associated with an advisor.
@@ -69,9 +71,10 @@ function getAdvisorApprovedSchools(userId) {
 function getAdvisorSchools(userId) {
   return db.any(
       `
-        SELECT S.SchoolID, S.SchoolName, S.City, S."State", S.USDCode, SA.Approved
+        SELECT S.SchoolID, S.SchoolName, S.City, S."State", S.USDCode, ADS.Status
         FROM Schools S
             INNER JOIN SchoolAdvisors SA ON SA.SchoolID = S.SchoolID
+            INNER JOIN AdvisorStatus ADS ON ADS.StatusID = SA.AdvisorStatusID
         WHERE SA.UserID = $(userId)
       `,
     {userId}

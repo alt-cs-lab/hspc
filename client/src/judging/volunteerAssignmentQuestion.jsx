@@ -6,7 +6,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React from "react";
 import "./volunteerAssignmentQuestion.css";
 import { Table } from "react-bootstrap";
-import StatusMessages from "../_common/components/status-messages.jsx";
+//import StatusMessages from "../_common/components/status-messages.jsx";
 import QuestionService from "../_common/services/questions";
 import Result from "./testcaseResult";
 
@@ -187,7 +187,7 @@ export default class Questions extends React.Component {
           <h2>{this.state.currentTeam.team[0].teamname}</h2>
         </div>
         <div>
-          <StatusMessages />
+          {/* <StatusMessages /> */}
           {currentView}
         </div>
       </div>

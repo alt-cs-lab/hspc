@@ -19,6 +19,7 @@
   } from "../../_store/slices/errorSlice.js";
 
   const constants = require('../../_utilities/constants');
+  //const styles = require('../../_utilities/styleConstants.js');
   
   /*
   * Page to view an advisor's schools' teams
@@ -94,30 +95,25 @@
     * Update Teams when a filter of school or event changes
     */
     UpdateTeams = (id, school) => {
+      let allTeams = this.state.teamList;
+      let filteredTeams = [];
       if(school){
         this.setState({ schoolId: id })
-        
-        let allTeams = this.state.teamList;
-        let filteredTeams = [];
         for (let i = 0; i < allTeams.length; i++) {
           if( allTeams[i].schoolid === id && allTeams[i].competitionid === this.state.competitionId ){
             filteredTeams.push(allTeams[i]);
           }
         }
-        this.setState({ filteredTeamsTable: filteredTeams })
       }
       else{
         this.setState({ competitionId: id })
-
-        let allTeams = this.state.teamList;
-        let filteredTeams = [];
         for (let i = 0; i < allTeams.length; i++) {
           if( allTeams[i].schoolid === this.state.schoolId && allTeams[i].competitionid === id ){
             filteredTeams.push(allTeams[i]);
           }
         }
-        this.setState({ filteredTeamsTable: filteredTeams })
       }
+      this.setState({ filteredTeamsTable: filteredTeams })
 
     };
   

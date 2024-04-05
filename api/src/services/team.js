@@ -20,7 +20,7 @@ const pgp = require("pg-promise")();
 // Code Added for curent end points required in the client
 function getAll(){
     return db.any(`
-    SELECT T.TeamID, T.TeamName, SK.SkillLevel, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
+    SELECT T.TeamID, T.TeamName, T.CompetitionId, SK.SkillLevel, S.SchoolId, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
     FROM 
         Teams T
         INNER JOIN Questions Q ON T.SkillLevelID = Q.SkillLevelID
@@ -52,6 +52,7 @@ function getTeamsInCompetitionName(eventName){
 * Author: Trent Powell
 */
 function getAdvisorSchoolsTeams(advisorId) {
+    let approved = constants.ADVISOR_STATUS_APPROVED
     return db.any(`
     SELECT T.TeamId, T.SchoolID, T.CompetitionID, T.TeamName, SK.SkillLevel, TS.Status
 	FROM Teams T
@@ -62,8 +63,8 @@ function getAdvisorSchoolsTeams(advisorId) {
         SELECT S2.SchoolID
         FROM Schools S2
         INNER JOIN SchoolAdvisors SA on S2.SchoolId = SA.SchoolId
-        WHERE SA.UserID = $(advisorId) AND SA.Approved = true
-    );`, {advisorId})
+        WHERE SA.UserID = $(advisorId) AND SA.AdvisorStatusID = $(approved)
+    );`, {advisorId, approved})
 }
 
 
@@ -254,9 +255,9 @@ function remove({ teamId, studentId }) {
 
 // returns the number of teams in a competition
 function teamsInCompetition(competitionId, waitlisted = false){
-    let statuses = [constants.STATUS_REGISTERED];
+    let statuses = [constants.TEAM_STATUS_REGISTERED];
     if( waitlisted ){
-        statuses.push(constants.STATUS_WAITLISTED);
+        statuses.push(constants.TEAM_STATUS_WAITLISTED);
     }
     return db.oneOrNone(`
             SELECT
@@ -270,9 +271,9 @@ function teamsInCompetition(competitionId, waitlisted = false){
 
 // returns the number of teams a school has in a competition
 function teamsInCompetitionBySchool(competitionId, schoolId, waitlisted = false){
-    let statuses = [constants.STATUS_REGISTERED];
+    let statuses = [constants.TEAM_STATUS_REGISTERED];
     if( waitlisted ){
-        statuses.push(constants.STATUS_WAITLISTED);
+        statuses.push(constants.TEAM_STATUS_WAITLISTED);
     }
     return db.oneOrNone(`
             SELECT
@@ -293,9 +294,9 @@ function teamsInCompetitionBySchool(competitionId, schoolId, waitlisted = false)
 
 // checks if any student ids in the given array are a member of a team in the given competition, returns true if any are
 function isAnyStudentsInCompetition(competitionId, studentIds, waitlisted = false){
-    let statuses = [constants.STATUS_REGISTERED];
+    let statuses = [constants.TEAM_STATUS_REGISTERED];
     if( waitlisted ){
-        statuses.push(constants.STATUS_WAITLISTED);
+        statuses.push(constants.TEAM_STATUS_WAITLISTED);
     }
     console.log(studentIds)
 

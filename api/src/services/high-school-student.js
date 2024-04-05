@@ -6,6 +6,7 @@ Copyright (c) 2024 KSU-CS-Software-Engineering
 require("dotenv").config();
 const db = require("../utils/hspc_db").db;
 const { renameKeys } = require("../utils/extensions");
+const constants = require("../utils/constants.js");
 
 module.exports = {
     createStudent,
@@ -51,6 +52,7 @@ function getAllStudents() {
 
 // Trent Powell function to get all students for an advisor's schools
 function getAdvisorSchoolsTeams(advisorId) {
+    let approved = constants.ADVISOR_STATUS_APPROVED
     return db.any(`
     SELECT HS.FirstName, HS.LastName, HS.SchoolID, HS.Email, HS.GradDate
 	FROM HighSchoolStudents HS
@@ -59,8 +61,8 @@ function getAdvisorSchoolsTeams(advisorId) {
         SELECT S2.SchoolID
         FROM Schools S2
         INNER JOIN SchoolAdvisors SA on S2.SchoolId = SA.SchoolId
-        WHERE SA.UserID = $(advisorId) AND SA.Approved = true
-    );`, {advisorId})
+        WHERE SA.UserID = $(advisorId) AND SA.AdvisorStatusID = $(approved)
+    );`, {advisorId, approved})
 }
 
 /**

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import StatusMessages from "../_common/components/status-messages.jsx";
+//import StatusMessages from "../_common/components/status-messages.jsx";
 
 // import "../_common/assets/css/create-scoreboard.css";
 import UserService from "../_common/services/scorecard.js";
@@ -95,7 +95,7 @@ export default class BoardSetup extends Component {
   render() {
     return (
       <div>
-        <StatusMessages />
+        {/* <StatusMessages /> */}
         {currentView}
       </div>
     );

@@ -34,11 +34,11 @@ function Login(props) {
     // Unmounting clean up fuction.
     useEffect(() => {
         return () => {
-            if( location.state !== null){
-                if( location.state.profileUpdate !== undefined && location.state.profileUpdate !== null){
-                    props.dispatchSuccess(location.state.profileUpdate)
-                }
-            }
+            // if( location.state !== null){
+            //     if( location.state.profileUpdate !== undefined && location.state.profileUpdate !== null){
+            //         props.dispatchSuccess(location.state.profileUpdate)
+            //     }
+            // }
         }
     }, [props, location])
 

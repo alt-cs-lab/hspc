@@ -8,8 +8,7 @@ import StudentService from "../../_common/services/high-school-student.js";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import { Form } from "react-bootstrap";
-import BaseSelect from "react-select";
-import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
+import Select from "react-select";
 import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/standard.css";
 
@@ -118,8 +117,7 @@ class AddStudent extends Component {
             </Form.Group>
             <Form.Group>
               <Form.Label>School</Form.Label>
-              <FixRequiredSelect required options={this.state.schoolList} onChange={(target => this.setState({ schoolId: target.value }))}
-                SelectComponent={BaseSelect} setValue={this.state.schoolId}/>
+              <Select options={this.state.schoolList} onChange={(target => this.setState({ schoolId: target.value }))}/>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
@@ -128,9 +126,8 @@ class AddStudent extends Component {
             </Form.Group>
             <Form.Group>
               <Form.Label>Graduation Month</Form.Label>
-              <FixRequiredSelect required placeholder="Select a Month" options={months} 
-                  onChange={( target => this.setState({ gradMonth: target.value }))} SelectComponent={BaseSelect} setValue={this.state.gradMonth}
-                  defaultValue={months[4]}/>
+              <Select placeholder="Select a Month" options={months} 
+                  onChange={( target => this.setState({ gradMonth: target.value }))} defaultValue={months[4]}/>
             </Form.Group>
             <Form.Group className="mb-4">
               <Form.Label>Graduation Year</Form.Label>

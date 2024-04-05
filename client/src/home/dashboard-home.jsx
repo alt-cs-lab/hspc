@@ -5,8 +5,7 @@ import SchoolService from "../_common/services/school"
 import RequestService from "../_common/services/request";
 import UserService from "../_common/services/user"
 import DataTable from "react-data-table-component";
-import BaseSelect from "react-select";
-import FixRequiredSelect from "../_common/components/FixRequiredSelect";
+import Select from "react-select";
 import { withRouter } from "../_utilities/routerUtils";
 import "../_common/assets/css/standard.css";
 import "../_common/assets/css/advisor.css";
@@ -14,7 +13,6 @@ import { connect } from "react-redux";
 import Auth from "../_common/services/auth.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../_store/slices/errorSlice";
 const constants = require('../_utilities/constants');
-const styles = require('../_utilities/styleConstants.js');
 
 /**
  * @returns The Dashboard Home Page which allows account changes
@@ -30,6 +28,7 @@ function DashboardHome(props){
     const [additionalSchoolid, setAdditionalSchoolid] = useState(null);
 
     useEffect(()=>{
+      if( props.user.accessLevel === constants.ADVISOR ){
         SchoolService.getAllSchools()
         .then((response) => {
           if (response.ok) {
@@ -53,6 +52,7 @@ function DashboardHome(props){
             } else console.log("An error has occurred, Please try again.");
         })
         .catch((resErr) => console.log("Something went wrong. Please try again"));
+      }
     }, [ props.user ]);
     
     return (
@@ -66,22 +66,18 @@ function DashboardHome(props){
                         <DataTable data={schoolList} columns={getColumns()}/>
                     </div>
                     <br/>
-                    <Form name="form" onSubmit={(event) => handleRequestNewSchool(event, additionalSchoolid, props.user.id)}>
+                    <Form name="form" onSubmit={(event) => handleRequestNewSchool(event, additionalSchoolid, props.user.id, props)}>
                         <Form.Group name="dropdown-div" id="schoolList">
                             <div className="add-margin">
                                 <Form.Label>
                                     <b>Request an additional school:</b>
                                 </Form.Label>
-                                <FixRequiredSelect
-                                    required
-                                    style={{ margin: "auto", width: "25%" }}
-                                    styles={styles.selectStyles}
+                                <Select
                                     placeholder="Select a School"
                                     options={allSchoolsList}
                                     onChange={(target) => setAdditionalSchoolid(target.value)}
-                                    SelectComponent={BaseSelect}
-                                    setValue={additionalSchoolid}
                                     />
+                                <br/>
                             </div>
                         </Form.Group>
                         <Button id="purple-button" type="submit">
@@ -165,7 +161,7 @@ function DashboardHome(props){
 
 
 
-function handleRequestNewSchool(event, additionalSchoolid, advisorid) {
+function handleRequestNewSchool(event, additionalSchoolid, advisorid, props) {
     // TODO TWP: Fix Error Dispatching Below
     RequestService.requestAdditionalSchool(additionalSchoolid, advisorid)
     .then((response) => {
@@ -175,11 +171,16 @@ function handleRequestNewSchool(event, additionalSchoolid, advisorid) {
             // );
             window.location.reload();
         }
+        if (response.data.includes("duplicate")){
+          props.dispatchError(
+            "You have already attempted to add this school."
+          );
+        }
     })
     .catch((error) => {
-        // this.props.dispatchError(
-        //     "There was an error requesting an additional school. Please Try Again Later!"
-        // );
+        props.dispatchError(
+          "There was an error requesting an additional school. Please Try Again Later!"
+        );
     });
 }
 
@@ -197,8 +198,8 @@ function handleProfileUpdate(event, firstName, lastName, phone, email, props) {
         if (response.status === 200) {
           Auth.logout()
           props.dispatchSuccess("Account successfully updated, please login")
-          //window.location.reload();
-          props.router.navigate("/login", {state:{profileUpdate:'Account successfully updated, please login'}});
+          //props.router.navigate("/login", {profileUpdate:'Account successfully updated, please login'});
+          props.router.navigate("/login");
         }
     })
     .catch((error) => {
@@ -230,7 +231,7 @@ function getColumns() {
       },
       {
         name: "Approved?",
-        selector: row => (row.approved === true ? "Approved" : "Pending"),
+        selector: row => row.status,
         sortable: true,
       },
     ];
