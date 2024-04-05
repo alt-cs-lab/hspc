@@ -98,12 +98,13 @@ function register({ firstName, lastName, email, phone, requestLevel, schoolId, p
     .then(() => {
       if (requestLevel == constants.ADVISOR) {
         // if they are registering as an advisor, we need to add an AdvisorsAffiliation record
+        let pending = constants.ADVISOR_STATUS_PENDING
         return db.none(
           `
-                INSERT INTO SchoolAdvisors (UserID, SchoolID, Approved)
-                VALUES((SELECT UserID FROM Users WHERE Email = $(email)), $(schoolId), false)
+                INSERT INTO SchoolAdvisors (UserID, SchoolID, AdvisorStatusID)
+                VALUES((SELECT UserID FROM Users WHERE Email = $(email)), $(schoolId), $(pending))
             `,
-          { email, schoolId }
+          { email, schoolId, pending }
         );
       }
     });

@@ -5,8 +5,7 @@ import SchoolService from "../_common/services/school"
 import RequestService from "../_common/services/request";
 import UserService from "../_common/services/user"
 import DataTable from "react-data-table-component";
-import BaseSelect from "react-select";
-import FixRequiredSelect from "../_common/components/FixRequiredSelect";
+import Select from "react-select";
 import { withRouter } from "../_utilities/routerUtils";
 import "../_common/assets/css/standard.css";
 import "../_common/assets/css/advisor.css";
@@ -14,7 +13,6 @@ import { connect } from "react-redux";
 import Auth from "../_common/services/auth.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../_store/slices/errorSlice";
 const constants = require('../_utilities/constants');
-const styles = require('../_utilities/styleConstants.js');
 
 /**
  * @returns The Dashboard Home Page which allows account changes
@@ -74,16 +72,12 @@ function DashboardHome(props){
                                 <Form.Label>
                                     <b>Request an additional school:</b>
                                 </Form.Label>
-                                <FixRequiredSelect
-                                    required
-                                    style={{ margin: "auto", width: "25%" }}
-                                    styles={styles.selectStyles}
+                                <Select
                                     placeholder="Select a School"
                                     options={allSchoolsList}
                                     onChange={(target) => setAdditionalSchoolid(target.value)}
-                                    SelectComponent={BaseSelect}
-                                    setValue={additionalSchoolid}
                                     />
+                                <br/>
                             </div>
                         </Form.Group>
                         <Button id="purple-button" type="submit">

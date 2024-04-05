@@ -8,8 +8,7 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Button from "react-bootstrap/Button";
 import { Form } from "react-bootstrap";
-import BaseSelect from "react-select";
-import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
+import Select from "react-select";
 
 /*
  * @author: Trent Powell
@@ -113,17 +112,13 @@ class VolunteerSignUp extends Component {
         <h2>Sign Up To Volunteer</h2>
         <div>
         <Form>
-
           <Form.Group name="dropdown-div" id="schoolList">
             <Form.Label>Select an Event to Volunteer for:</Form.Label>
             <div class="add-margin">
-              <FixRequiredSelect
-                required
+              <Select
                 placeholder="Select an event"
                 options={this.state.eventList}
                 onChange={(target) => this.updateCompetition(target)}
-                SelectComponent={BaseSelect}
-                setValue={this.state.competitionid}
                 />
                 {this.state.timeList.map((timeInterval) => (    
                 <Form.Check

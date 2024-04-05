@@ -13,8 +13,7 @@ import { registerUser } from "../../_store/actions/authActions";
 import {
   SET_SCHOOL_DROPDOWN_REQUIRED,
 } from "../../_store/actions/types";
-import BaseSelect from "react-select";
-import FixRequiredSelect from "../../_common/components/FixRequiredSelect.jsx";
+import Select from "react-select";
 import SchoolService from "../../_common/services/school.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 import "../../_common/assets/css/standard.css";
@@ -260,15 +259,10 @@ class Register extends Component {
             <br/>
             <Form.Group name="dropdown-div" id="schoolList" hidden={true}>
               <Form.Label> School </Form.Label>
-              <FixRequiredSelect
-                id="dropdown"
-                style={{ margin: "auto", width: "100%" }}
-                styles={styles.selectStyles}
+              <Select
                 placeholder="Select a School"
                 options={this.state.schoolList}
                 onChange={this.handleSchoolChange}
-                SelectComponent={BaseSelect}
-                setValue={this.state.schoolId}
               />
             </Form.Group>
           </div>
