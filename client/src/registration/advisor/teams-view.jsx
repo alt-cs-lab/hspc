@@ -51,7 +51,7 @@
               for (let i = 0; i < eventsbody.length; i++) {
                 events.push({
                       label: eventsbody[i].name,
-                      value: eventsbody[i].name,
+                      value: eventsbody[i].id,
                   });
               }
               this.setState({ eventList: events });

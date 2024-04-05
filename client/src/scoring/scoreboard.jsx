@@ -6,7 +6,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import Select from "react-select";
-import StatusMessages from "../_common/components/status-messages.jsx";
+//import StatusMessages from "../_common/components/status-messages.jsx";
 //import ScoreboardTile from "./scoreboard-tile";
 // import "../_common/assets/css/scoreboard.css";
 import EventService from "../_common/services/event";
@@ -288,7 +288,7 @@ class Scoreboard extends Component {
           </div>
         </div>
         <br />
-        <StatusMessages />
+        {/* <StatusMessages /> */}
         {currentView}
       </div>
     );

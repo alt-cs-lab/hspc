@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import StatusMessages from "../_common/components/status-messages.jsx";
+//import StatusMessages from "../_common/components/status-messages.jsx";
 import Button from 'react-bootstrap/Button';
 import scorecardService from "../_common/services/scorecard";
 import { FilePond } from "react-filepond";
@@ -50,7 +50,7 @@ class PublishScores extends Component {
   render() {
     return (
       <div className="publish-scores">
-        <StatusMessages />
+        {/* <StatusMessages /> */}
         <h2 id="title">Publish Scores</h2>
         <p>
           <b>Please select a file below</b>

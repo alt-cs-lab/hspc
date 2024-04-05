@@ -171,7 +171,6 @@ function handleRequestNewSchool(event, additionalSchoolid, advisorid, props) {
     // TODO TWP: Fix Error Dispatching Below
     RequestService.requestAdditionalSchool(additionalSchoolid, advisorid)
     .then((response) => {
-        console.log(response)
         if (response.status === 200) {
             // this.props.dispatchSuccess(
             //     "Registration was successful."
@@ -205,8 +204,8 @@ function handleProfileUpdate(event, firstName, lastName, phone, email, props) {
         if (response.status === 200) {
           Auth.logout()
           props.dispatchSuccess("Account successfully updated, please login")
-          //window.location.reload();
-          props.router.navigate("/login", {state:{profileUpdate:'Account successfully updated, please login'}});
+          //props.router.navigate("/login", {profileUpdate:'Account successfully updated, please login'});
+          props.router.navigate("/login");
         }
     })
     .catch((error) => {
