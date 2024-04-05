@@ -43,6 +43,16 @@ VALUES
     (4, 'Archived');
 
 /*
+Insert Values into Team Status Table
+*/
+INSERT INTO AdvisorStatus
+    (StatusID, Status)
+VALUES
+    (1, 'Pending'),
+    (2, 'Approved'),
+    (3, 'Denied');
+
+/*
 Insert Values into Skill Levels Table
 */
 INSERT INTO SkillLevels
@@ -72,11 +82,12 @@ VALUES
 Insert Dummy Values into School Advisors Table
 */
 INSERT INTO SchoolAdvisors
-    (UserID, SchoolID, Approved)
+    (UserID, SchoolID, AdvisorStatusID)
 VALUES
-    (22, 181, true),
-    (22, 182, false),
-    (23, 182, true);
+    (22, 181, 2),
+    (22, 182, 1),
+    (22, 183, 3),
+    (23, 182, 2);
 
 /*
 Insert Dummy Values into High School Students Table

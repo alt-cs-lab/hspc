@@ -30,6 +30,7 @@ function DashboardHome(props){
     const [additionalSchoolid, setAdditionalSchoolid] = useState(null);
 
     useEffect(()=>{
+      if( props.user.accessLevel === constants.ADVISOR ){
         SchoolService.getAllSchools()
         .then((response) => {
           if (response.ok) {
@@ -53,6 +54,7 @@ function DashboardHome(props){
             } else console.log("An error has occurred, Please try again.");
         })
         .catch((resErr) => console.log("Something went wrong. Please try again"));
+      }
     }, [ props.user ]);
     
     return (
@@ -66,7 +68,7 @@ function DashboardHome(props){
                         <DataTable data={schoolList} columns={getColumns()}/>
                     </div>
                     <br/>
-                    <Form name="form" onSubmit={(event) => handleRequestNewSchool(event, additionalSchoolid, props.user.id)}>
+                    <Form name="form" onSubmit={(event) => handleRequestNewSchool(event, additionalSchoolid, props.user.id, props)}>
                         <Form.Group name="dropdown-div" id="schoolList">
                             <div className="add-margin">
                                 <Form.Label>
@@ -165,21 +167,27 @@ function DashboardHome(props){
 
 
 
-function handleRequestNewSchool(event, additionalSchoolid, advisorid) {
+function handleRequestNewSchool(event, additionalSchoolid, advisorid, props) {
     // TODO TWP: Fix Error Dispatching Below
     RequestService.requestAdditionalSchool(additionalSchoolid, advisorid)
     .then((response) => {
+        console.log(response)
         if (response.status === 200) {
             // this.props.dispatchSuccess(
             //     "Registration was successful."
             // );
             window.location.reload();
         }
+        if (response.data.includes("duplicate")){
+          props.dispatchError(
+            "You have already attempted to add this school."
+          );
+        }
     })
     .catch((error) => {
-        // this.props.dispatchError(
-        //     "There was an error requesting an additional school. Please Try Again Later!"
-        // );
+        props.dispatchError(
+          "There was an error requesting an additional school. Please Try Again Later!"
+        );
     });
 }
 
@@ -230,7 +238,7 @@ function getColumns() {
       },
       {
         name: "Approved?",
-        selector: row => (row.approved === true ? "Approved" : "Pending"),
+        selector: row => row.status,
         sortable: true,
       },
     ];
