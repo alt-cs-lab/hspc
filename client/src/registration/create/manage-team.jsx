@@ -34,7 +34,7 @@ class CreateTeam extends Component {
             skillLevelId: null,
             isVerified: false,
             studentList: [],
-            studentIds: new Set(),
+            studentIds: [],
             skillLevels: [],
             schoolList: [],
             eventList: [],
@@ -173,22 +173,13 @@ class CreateTeam extends Component {
     /*
     * Updates the list of selected students.
     */
-    updateStudentSelected(studentid, selected) {
+    updateStudentSelected(studentid, index) {
         let newStudentIds = this.state.studentIds;
-        if(selected) {
-            // add student
-            newStudentIds.add(studentid)
-        } else {
-            // remove student
-            newStudentIds.delete(studentid)
-        }
-        this.setState({studentIds: newStudentIds})
+        newStudentIds[index] = studentid;
+        this.setState({studentIds: newStudentIds});
     }
 
-    // TODO: Filter out students that graduated.
     updateStudentList(schoolId) {
-        this.setState({schoolId: schoolId});
-        
         StudentService.getStudentsWithNoTeam(schoolId).then((response) => {
             let studentData = response.data;
             console.log(studentData);
@@ -199,8 +190,7 @@ class CreateTeam extends Component {
                     value: studentData[i].studentid,
                 });
             }
-
-            this.setState({ studentList: studentOptions,  });
+            this.setState({ studentList: studentOptions, studentIds: [], schoolId: schoolId });
         });
     }
 
@@ -221,40 +211,22 @@ class CreateTeam extends Component {
 
     // TODO: Have a set number of student slots based off the team member limit for the event.
     render(){
+        console.log("render", this.state);
         const table = this.state.studentList.length === 0 || this.state.schoolId === null ?
         <h3>No students to display.</h3>:
         <Form.Group className="text-start">
             <p>Select at least two students to create a team.</p>
-            {/* {this.state.studentList.map((student, index) => (    
-            <Form.Check
-                key={student.studentid}
-                type="checkbox"
-                value={student.studentid}
-                checked={this.state.studentIds.has(student.studentid)}
-                label={`${student.firstname}, ${student.lastname}, ${student.email}`}
-                onChange={(event) => {
-                    this.updateStudentSelected( student.studentid, event.target.checked) }
-                }
-                id={`disabled-default-checkbox`}
-            />
-            ))} */}
-            <section
-                style={{
-                    display: "flex",
-                    justifyContent: "space-evenly",
-                    alignItems: "center",
-                }}
-            >
             <div id ="sub-nav">
                 <p id="sub-nav-item">
                 <b>Member #1</b>
                 </p>
                 <Select
                     id="dropdown"
+                    selected={this.state.studentIds[0]}
                     styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
-                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
+                    onChange={(e)=> this.updateStudentSelected(e.value, 0)}
                 />
                 </div>
                 <div id ="sub-nav">
@@ -263,30 +235,24 @@ class CreateTeam extends Component {
                 </p>
                 <Select
                     id="dropdown"
+                    selected={this.state.studentIds[1]}
                     styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
-                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
+                    onChange={(e)=> this.updateStudentSelected(e.value, 1)}
                 />
             </div>
-            </section>
-            <section
-                style={{
-                    display: "flex",
-                    justifyContent: "space-evenly",
-                    alignItems: "center",
-                }}
-            >
             <div id ="sub-nav">
                 <p id="sub-nav-item">
                 <b>Member #3</b>
                 </p>
                 <Select
                     id="dropdown"
+                    selected={this.state.studentIds[2]}
                     styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
-                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
+                    onChange={(e)=> this.updateStudentSelected(e.value, 2)}
                 />
             </div>
             <div id ="sub-nav">
@@ -295,13 +261,13 @@ class CreateTeam extends Component {
                 </p>
                 <Select
                     id="dropdown"
+                    selected={this.state.studentIds[3]}
                     styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
-                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
+                    onChange={(e)=> this.updateStudentSelected(e.value, 3)}
                 />
             </div>
-            </section>
         </Form.Group>
         return(
             <div>
@@ -367,7 +333,7 @@ class CreateTeam extends Component {
                         style={{ margin: "auto", width: "25%"}}
                         inputProps={{style: {fontSize: 14}}}
                         InputLabelProps={{style: {fontSize: 13}}}
-                        onChange={(event) => this.setState({teamName: event.target.value})}
+                        onChange={(event) => this.setState({teamName: event.value})}
                         size="small">
                     </Form.Control>
                     <br></br>
