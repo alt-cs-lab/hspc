@@ -2,6 +2,22 @@
 List of Constants to be used throughout the project
 */
 
+const months = 
+[
+  { value: '1', label: 'January' },
+  { value: '2', label: 'February' },
+  { value: '3', label: 'March' },
+  { value: '4', label: 'April' },
+  { value: '5', label: 'May' },
+  { value: '6', label: 'June' },
+  { value: '7', label: 'July' },
+  { value: '8', label: 'August' },
+  { value: '9', label: 'September' },
+  { value: '10', label: 'October' },
+  { value: '11', label: 'November' },
+  { value: '12', label: 'December' }
+]
+
 /*
 Role Constants
 */
@@ -39,6 +55,34 @@ const dateFormat = (date) => {
   return date.substring(0,10);
 };
 
+const gradDateFormat = (date) => {
+  date = date.substring(0,10)
+  date = date.split('-')
+  let month = months[(parseInt(date[1])-1)].label
+  return month + ' ' + date[0];
+};
+
+/*
+* Format Time From Database
+*/
+const timeFormat = (preformattedTime) => {
+  preformattedTime = preformattedTime.split(':')
+  var time = {
+    hour: parseInt(preformattedTime[0]),
+    minute: parseInt(preformattedTime[1]),
+    string: ''
+  }
+
+  if(time.minute === 0) time.minute = '00';
+  if(time.hour > 12) time.string = (time.hour%12) + ':' + time.minute + 'pm';
+  else if (time.hour < 0) time.string = (time.hour + 12) + ':' + time.minute + 'pm';
+  else if (time.hour === 0) time.string = (12) + ':' + time.minute + 'am';
+  else if (time.hour === 12) time.string = (12) + ':' + time.minute + 'pm';
+  else time.string = time.hour + ':' + time.minute + 'am';
+  
+  return time.string;
+};
+
 module.exports = {
     VOLUNTEER,
     JUDGE,
@@ -48,5 +92,7 @@ module.exports = {
     legalLevels,
     toDatabaseDate,
     dateSort,
-    dateFormat
+    dateFormat,
+    gradDateFormat,
+    timeFormat,
 }

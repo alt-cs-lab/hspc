@@ -1,3 +1,34 @@
+input[type='checkbox']:checked 
+{
+    background-color: #512888;
+    border: 1px solid #512888;
+}
+
+input[type='checkbox']:checked:after 
+{
+    color:white;
+}
+
+.btn
+{
+    background-color: #512888;
+    color: white;
+    border: 1px solid #512888;
+    font-size: 16;
+}
+
+.btn:hover
+{
+    background-color: grey;
+    border: 1px solid grey;
+}
+
+.progress-bar
+{
+    background-color: #512888;
+    color: white;
+}
+
 /* Classes - Can be used by multiple components */
 .add-margin 
 {
@@ -8,10 +39,29 @@
 }
 
 /* IDs - Component Specific */
-#purple-button 
+/* #purple-button
 {
     background-color: #512888;
     color: white;
     border: 1px solid #512888;
     font-size: 16;
+} */
+
+#nav-bar-margin
+{
+    /* position: absolute;
+    top: 90px;
+    border-top: 3px solid cyan;
+    opacity: 0;
+    visibility: hidden;
+    transition: top .1s; */
+    
+    right: 0;
+    left: auto;
+}
+
+#purple-progress
+{
+    background-color: #512888;
+    color: white;
 }

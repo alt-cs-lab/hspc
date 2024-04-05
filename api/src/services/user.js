@@ -23,6 +23,7 @@ module.exports = {
     checkinvolunteer,
     checkoutvolunteer,
     getactivevolunteers,
+    updateProfile
 };
 
 /**
@@ -97,12 +98,13 @@ function register({ firstName, lastName, email, phone, requestLevel, schoolId, p
     .then(() => {
       if (requestLevel == constants.ADVISOR) {
         // if they are registering as an advisor, we need to add an AdvisorsAffiliation record
+        let pending = constants.ADVISOR_STATUS_PENDING
         return db.none(
           `
-                INSERT INTO SchoolAdvisors (UserID, SchoolID, Approved)
-                VALUES((SELECT UserID FROM Users WHERE Email = $(email)), $(schoolId), false)
+                INSERT INTO SchoolAdvisors (UserID, SchoolID, AdvisorStatusID)
+                VALUES((SELECT UserID FROM Users WHERE Email = $(email)), $(schoolId), $(pending))
             `,
-          { email, schoolId }
+          { email, schoolId, pending }
         );
       }
     });
@@ -128,7 +130,7 @@ function getLogin(email) {
       `
         SELECT U.UserID, U.Email, U.EncryptedPassword, U.AccessLevel, U.FirstName, U.LastName, U.Phone
         FROM Users AS U
-        WHERE Email = $(email)
+        WHERE U.Email = $(email)
     `,
       { email }
     )
@@ -280,3 +282,27 @@ function getactivevolunteers() {
     FROM Users AS U
     WHERE U.AccessLevel = 20 AND U.Active = 1`)*/
 }
+
+function updateProfile( { updateData, userId } ) {
+  var firstName = updateData.firstName;
+  var lastName = updateData.lastName;
+  var phone = updateData.phone;
+  var email = updateData.email;
+  return db.none(`
+    UPDATE Users
+    SET FirstName = $(firstName),
+      LastName = $(lastName),
+      Phone = $(phone),
+      Email = $(email)
+    WHERE UserID = $(userId)
+  `, { userId, firstName, lastName, phone, email });
+}
+
+/*
+UPDATE Users
+SET FirstName = 'Casey',
+  LastName = 'Ring',
+  Phone = '913-901-6711',
+  Email = 'caseyring@email.com'
+WHERE UserID = 23
+*/

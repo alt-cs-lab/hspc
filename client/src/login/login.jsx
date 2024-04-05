@@ -5,7 +5,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 
 import React from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import Button from 'react-bootstrap/Button';
@@ -16,12 +16,11 @@ import "../_common/assets/css/standard.css";
 import "../home/homepage";
 import { login, selectAuth } from "../_store/slices/authSlice";
 import { selectDashboardRoute } from "../_store/slices/routeSlice";
-import { clearErrors, updateErrorMsg } from "../_store/slices/errorSlice";
-
-const styles = require('../_utilities/styleConstants.js');
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../_store/slices/errorSlice";
 
 function Login(props) {
     const dispatch = useDispatch();
+    const location = useLocation();
 
     const { isAuthenticated } = useSelector(selectAuth);
     const dashboardRoute = useSelector(selectDashboardRoute);
@@ -35,9 +34,13 @@ function Login(props) {
     // Unmounting clean up fuction.
     useEffect(() => {
         return () => {
-            dispatch(clearErrors());
+            // if( location.state !== null){
+            //     if( location.state.profileUpdate !== undefined && location.state.profileUpdate !== null){
+            //         props.dispatchSuccess(location.state.profileUpdate)
+            //     }
+            // }
         }
-    }, [dispatch])
+    }, [props, location])
 
     const onSubmit = (e) => {
         e.preventDefault(); // prevents the page from refreshing the login page
@@ -131,6 +134,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         dispatchError: (message) =>
             dispatch(updateErrorMsg(message)),
+        dispatchSuccess: (message) =>
+            dispatch(updateSuccessMsg(message)),
         dispatchResetErrors: () => dispatch(clearErrors()),
     };
 };

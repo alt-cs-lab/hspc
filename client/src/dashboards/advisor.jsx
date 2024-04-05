@@ -4,7 +4,7 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
 import React, { useState, useEffect } from "react";
-import { Navbar, NavItem, Nav, NavDropdown/*, NavLink*/ } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown/*, NavLink*/ } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
 import TeamsView from "../registration/advisor/teams-view";
@@ -36,26 +36,26 @@ function AdvisorDash (props)
           <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>
-            <NavDropdown title="Students" id="basic-nav-dropdown">
-              <NavItem eventKey={7} onClick={() => setCurrentView(<ViewStudents advisorUser={props.currentUser.id} setCurrentView={setCurrentView} />)}>
+            <NavDropdown title="Students">
+              <NavDropdown.Item onClick={() => setCurrentView(<ViewStudents advisorUser={props.currentUser.id} setCurrentView={setCurrentView} />)}>
                 View Students
-              </NavItem>
-              <NavItem eventKey={7} onClick={() => setCurrentView(<AddStudent advisorUser={props.currentUser.id} />)}>
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => setCurrentView(<AddStudent advisorUser={props.currentUser.id} />)}>
                 Create Student
-              </NavItem>
+              </NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Teams" id="basic-nav-dropdown">
-              <NavItem eventKey={3} onClick={() => setCurrentView(<TeamsView advisor={props.currentUser} setCurrentView={setCurrentView}/>)}>
+            <NavDropdown title="Teams">
+              <NavDropdown.Item onClick={() => setCurrentView(<TeamsView advisor={props.currentUser} setCurrentView={setCurrentView}/>)}>
                 View Teams
-              </NavItem>
-              <NavItem eventKey={1} onClick={() => setCurrentView(<CreateTeam advisor={props.currentUser} />)}>
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => setCurrentView(<CreateTeam advisor={props.currentUser} />)}>
                 Create Team
-              </NavItem>
+              </NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="Events" id="basic-nav-dropdown">
-              <NavItem eventKey={5} onClick={() => setCurrentView(<ViewEvents />)}>
+            <NavDropdown title="Events" align="end" flip>
+              <NavDropdown.Item onClick={() => setCurrentView(<ViewEvents />)}>
                 View Events
-              </NavItem>
+              </NavDropdown.Item>
             </NavDropdown>
             {/* <NavLink eventKey={6} onClick={() => setCurrentView(<Scoreboard />)}>
               View Board

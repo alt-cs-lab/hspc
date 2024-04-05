@@ -17,8 +17,7 @@ import Button from "react-bootstrap/Button";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 import { Form } from "react-bootstrap";
-import BaseSelect from "react-select";
-import FixRequiredSelect from "../../_common/components/FixRequiredSelect";
+import Select from "react-select";
 
 const constants = require('../../_utilities/constants');
 const styles = require('../../_utilities/styleConstants.js');
@@ -35,7 +34,7 @@ class CreateTeam extends Component {
             skillLevelId: null,
             isVerified: false,
             studentList: [],
-            studentIds: [],
+            studentIds: new Set(),
             skillLevels: [],
             schoolList: [],
             eventList: [],
@@ -44,15 +43,13 @@ class CreateTeam extends Component {
     }
 
     componentDidMount = () => {
-        
-    console.log(this.props)
-        StudentService.getAdvisorsStudents(this.advisor.id)
-        .then((response) => {
-            if(response.ok){
-                this.setState({ studentList: response.data });
-            } else console.log("An error has occured. Please try again");
-        })
-        .catch((resErr) => console.log("Something went wrong. Please try again."));
+        // StudentService.getAdvisorsStudents(this.advisor.id)
+        // .then((response) => {
+        //     if(response.ok){
+        //         this.setState({ studentList: response.data });
+        //     } else console.log("An error has occured. Please try again");
+        // })
+        // .catch((resErr) => console.log("Something went wrong. Please try again."));
 
         teamService.getAllSkillLevels()
         .then((response) => {
@@ -97,7 +94,6 @@ class CreateTeam extends Component {
                         value: schoolbody[i].schoolid,
                     });
                 }
-                console.log(schools);
                 this.setState({ schoolList: schools });
             } else console.log("An error has occurred, Please try again.");
         })
@@ -127,17 +123,14 @@ class CreateTeam extends Component {
                 sortable: true,
             },
             {
-                name: "GradDate (YYYY-MM-DD)",
-                selector: row => constants.dateFormat(row.graddate),
+                name: "GradDate",
+                selector: row => constants.gradDateFormat(row.graddate),
                 sortable: true,
                 sortFunction: constants.dateSort,
             }
         ]
     }
 
-    /*
-    *  TODO: Investigate error that says handleRegisterTeam is undefined.
-    */
     handleRegisterTeam(){
         if (this.state.teamName === "" || this.state.schoolId === ""){
             this.props.dispatchError(
@@ -145,6 +138,11 @@ class CreateTeam extends Component {
             );
             return;
         }
+
+        // TODO: Setup logic for checking if studentIds contains at least 2 students
+
+        const selectedStudents = Array.from(this.state.studentIds);
+
         // TODO: Setup logic for verified state.
         teamService.registerTeam(
             this.state.teamName, 
@@ -152,7 +150,7 @@ class CreateTeam extends Component {
             this.state.competitionId,
             this.state.skillLevelId,
             this.advisor.id,
-            this.state.studentIds,
+            selectedStudents,
             this.state.isVerified
         )
         .then((response) => {
@@ -162,29 +160,48 @@ class CreateTeam extends Component {
                     "Registration was successful."
                 );
                 this.resetFields();
-                window.location.reload();
             }
         })
         .catch((error) => {
             this.props.dispatchError(
-                "There was an error creating the Team."
+                "There was an error creating the team."
             );
         });
     }
 
-    resetFields = () => {
-        console.log("Reset");
-        this.setState({teamName: ""});
-        this.setState({schoolId: null});
-        this.setState({competitionId: null});
-    };
+    // TODO: Remove students from studentList that are already selected.
+    /*
+    * Updates the list of selected students.
+    */
+    updateStudentSelected(studentid, selected) {
+        let newStudentIds = this.state.studentIds;
+        if(selected) {
+            // add student
+            newStudentIds.add(studentid)
+        } else {
+            // remove student
+            newStudentIds.delete(studentid)
+        }
+        this.setState({studentIds: newStudentIds})
+    }
 
-    // TODO: Update the list of students when the school is changed. Min 2 required, max is 4.
+    // TODO: Filter out students that graduated.
     updateStudentList(schoolId) {
+        this.setState({schoolId: schoolId});
+        
         StudentService.getStudentsWithNoTeam(schoolId).then((response) => {
-            this.setState({studentList: response.data});
+            let studentData = response.data;
+            console.log(studentData);
+            let studentOptions = [];
+            for (let i = 0; i < studentData.length; i++) {
+                studentOptions.push({
+                    label: studentData[i].firstname + " " + studentData[i].lastname,
+                    value: studentData[i].studentid,
+                });
+            }
+
+            this.setState({ studentList: studentOptions,  });
         });
-        return;
     }
 
     handleSkillLevelChange = (skillLevelId) => {
@@ -195,20 +212,96 @@ class CreateTeam extends Component {
         this.setState({competitionId: competitionId.value});
     }
 
+    resetFields = () => {
+        console.log("Reset");
+        this.setState({teamName: ""});
+        this.setState({schoolId: null});
+        this.setState({competitionId: null});
+    };
+
     // TODO: Have a set number of student slots based off the team member limit for the event.
     render(){
         const table = this.state.studentList.length === 0 || this.state.schoolId === null ?
         <h3>No students to display.</h3>:
         <Form.Group className="text-start">
-            {this.state.studentList.map((student, index) => (    
+            <p>Select at least two students to create a team.</p>
+            {/* {this.state.studentList.map((student, index) => (    
             <Form.Check
                 key={student.studentid}
                 type="checkbox"
                 value={student.studentid}
+                checked={this.state.studentIds.has(student.studentid)}
                 label={`${student.firstname}, ${student.lastname}, ${student.email}`}
+                onChange={(event) => {
+                    this.updateStudentSelected( student.studentid, event.target.checked) }
+                }
                 id={`disabled-default-checkbox`}
             />
-            ))}
+            ))} */}
+            <section
+                style={{
+                    display: "flex",
+                    justifyContent: "space-evenly",
+                    alignItems: "center",
+                }}
+            >
+            <div id ="sub-nav">
+                <p id="sub-nav-item">
+                <b>Member #1</b>
+                </p>
+                <Select
+                    id="dropdown"
+                    styles={styles.selectStyles}
+                    placeholder="Select a student"
+                    options={this.state.studentList}
+                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
+                />
+                </div>
+                <div id ="sub-nav">
+                <p id="sub-nav-item">
+                <b>Member #2</b>
+                </p>
+                <Select
+                    id="dropdown"
+                    styles={styles.selectStyles}
+                    placeholder="Select a student"
+                    options={this.state.studentList}
+                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
+                />
+            </div>
+            </section>
+            <section
+                style={{
+                    display: "flex",
+                    justifyContent: "space-evenly",
+                    alignItems: "center",
+                }}
+            >
+            <div id ="sub-nav">
+                <p id="sub-nav-item">
+                <b>Member #3</b>
+                </p>
+                <Select
+                    id="dropdown"
+                    styles={styles.selectStyles}
+                    placeholder="Select a student"
+                    options={this.state.studentList}
+                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
+                />
+            </div>
+            <div id ="sub-nav">
+                <p id="sub-nav-item">
+                <b>Member #4</b>
+                </p>
+                <Select
+                    id="dropdown"
+                    styles={styles.selectStyles}
+                    placeholder="Select a student"
+                    options={this.state.studentList}
+                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
+                />
+            </div>
+            </section>
         </Form.Group>
         return(
             <div>
@@ -216,76 +309,69 @@ class CreateTeam extends Component {
                 <p>
                     <b>Please fill out the information below.</b>
                 </p>
-                <Form>
-                    <Form.Group>
-                    <Form.Label>Team Name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            required
-                            label=""
-                            style={{ margin: "auto", width: "25%"}}
-                            inputProps={{style: {fontSize: 14}}}
-                            InputLabelProps={{style: {fontSize: 13}}}
-                            onChange={(event) => this.setState({teamName: event.target.value})}
-                            size="small">
-                        </Form.Control>
-                    </Form.Group>
-                    <Form.Group>
-                        <section
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-evenly",
-                                alignItems: "center",
-                            }}
-                        >
-                        <div id ="sub-nav">
-                            <p id="sub-nav-item">
-                            <b>School</b>
-                            </p>
-                            <FixRequiredSelect
-                                id="dropdown"
-                                styles={styles.selectStyles}
-                                placeholder="Select a school"
-                                options={this.state.schoolList}
-                                setValue={this.state.schoolId}
-                                onChange={(opt) => this.updateStudentList(opt.id)}
-                                SelectComponent={BaseSelect}
-                            />
-                        </div>
-                        <div>
-                            <p id="sub-nav-item">
-                                <b>Event</b>
-                                </p>
-                                <FixRequiredSelect
-                                    id="dropdown"
-                                    styles={styles.selectStyles}
-                                    placeholder="Select an event"
-                                    options={this.state.eventList}
-                                    onChange={this.handleEventChange}
-                                    SelectComponent={BaseSelect}
-                                    setValue={this.state.competitionId}
-                                />
-                        </div>
-                        <div>
+                <Form>  
+                    <div id ="sub-nav">
                         <p id="sub-nav-item">
-                            <b>Skill Level</b>
+                        <b>School</b>
+                        </p>
+                        <Select
+                            id="dropdown"
+                            styles={styles.selectStyles}
+                            placeholder="Select a school"
+                            options={this.state.schoolList}
+                            onChange={(opt) => this.updateStudentList(opt.value)}
+                        />
+                    </div>
+                    <br></br>
+                    <section
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-evenly",
+                            alignItems: "center",
+                        }}
+                    >
+                    <div>
+                        <p id="sub-nav-item">
+                            <b>Event</b>
                             </p>
-                            <FixRequiredSelect
+                            <Select
                                 id="dropdown"
                                 styles={styles.selectStyles}
-                                placeholder="Select a skill level"
-                                options={this.state.skillLevels}
-                                onChange={this.handleSkillLevelChange}
-                                SelectComponent={BaseSelect}
-                                setValue={this.state.skillLevelId}
+                                placeholder="Select an event"
+                                options={this.state.eventList}
+                                onChange={this.handleEventChange}
+                                setValue={this.state.competitionId}
                             />
-                        </div>
-                        </section>
-                    </Form.Group>
+                    </div>
+                    <div>
+                    <p id="sub-nav-item">
+                        <b>Skill Level</b>
+                        </p>
+                        <Select
+                            id="dropdown"
+                            styles={styles.selectStyles}
+                            placeholder="Select a skill level"
+                            options={this.state.skillLevels}
+                            onChange={this.handleSkillLevelChange}
+                            setValue={this.state.skillLevelId}
+                        />
+                    </div>
+                    </section>
                     {table}
                     <br></br>
-                    <Button type="register" variant="secondary" style={styles.buttonStyles} 
-                        onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
+                    <Form.Label>Team Name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        required
+                        label=""
+                        style={{ margin: "auto", width: "25%"}}
+                        inputProps={{style: {fontSize: 14}}}
+                        InputLabelProps={{style: {fontSize: 13}}}
+                        onChange={(event) => this.setState({teamName: event.target.value})}
+                        size="small">
+                    </Form.Control>
+                    <br></br>
+                    <Button type="register" onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
                 </Form>
             </div>
         )

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../assets/css/public-navbar.css";
-import ksuLogo from '../assets/img/ksu_logo.png';
+import hspcLogo from '../assets/img/hspc-logo.png';
 import Image from 'react-bootstrap/Image';
 
 import { selectDashboardRoute } from "../../_store/slices/routeSlice";
@@ -34,9 +34,9 @@ export default function TopNavbar(props) {
 	}
 
 	return (
-		<Navbar expand='lg' collapseOnSelect default>
-			<div class="m-3" style={{width: "8%"}}>
-			    <Image src={ksuLogo} fluid/>				
+		<Navbar expand='lg' collapseOnSelect default >
+			<div class="m-3" style={{width: "3%"}}>
+			    <Image src={hspcLogo} fluid/>				
 			</div>
 			<div style={{"font-size": "200%", "margin-bottom": "6px"}}>
 				|
@@ -47,9 +47,9 @@ export default function TopNavbar(props) {
           	<Navbar.Toggle />
 			<Navbar.Collapse>
 				<Nav>
-					<Nav.Link as={Link} eventKey={1} href="/" to="/">
+					{/* <Nav.Link as={Link} eventKey={1} href="/" to="/">
 						Home
-					</Nav.Link>
+					</Nav.Link> */}
 					<Nav.Link as={Link} eventKey={2} href="/" to="/Competitions" >
 						Event
 					</Nav.Link>

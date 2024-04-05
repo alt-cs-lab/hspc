@@ -3,15 +3,12 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, {Component} from "react";
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 //import ReCAPTCHA from "react-recaptcha";
-import eventService from "../../_common/services/event";
-// import "../../_common/assets/css/create-event.css";
-import { withRouter } from "../../_utilities/routerUtils"
-import PropTypes from "prop-types";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form'
+import EventService from "../../_common/services/event.js";
 import {connect} from "react-redux";
-import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
 /*
  * @author: Daniel Bell, Trent Kempker
@@ -22,47 +19,55 @@ class CreateEvent extends Component {
         super(props);
         this.props.dispatchResetErrors();
         //this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
-        this.verifyCallback = this.verifyCallback.bind(this);
+        //this.verifyCallback = this.verifyCallback.bind(this);
         this.state = {
             eventName: "",
             eventLocation: "",
             eventDate: "",
-            eventTime: "",
-            teamsPerSchool: "",
+            eventStartTime: "",
+            eventEndTime: "",
             teamsPerEvent: "",
+            beginnerTeamsPerEvent: "",
+            advancedTeamsPerEvent: "",
+            teamsPerSchool: "",
+            beginnerTeamsPerSchool: "",
+            advancedTeamsPerSchool: "",
             description: "",
-            isVerified: false,
+            //isVerified: false,
         };
     }
 
     /*
      * Creates a new event and adds the corresponding information to the database.
      */
-    handleRegister(event) {
-        if (this.state.isVerified) {
-            eventService
-                .createEvent(
+    handleRegisterEvent(event) {
+        //if (this.state.isVerified) {
+            EventService.createEvent(
                     this.state.eventName,
                     this.state.eventLocation,
                     this.state.eventDate,
-                    this.state.eventTime,
-                    this.state.teamsPerSchool,
+                    this.state.eventStartTime,
+                    this.state.eventEndTime,
                     this.state.teamsPerEvent,
-                    this.state.description
-                )
-                .then((response) => {
-                    if (response.statusCode === 201) {
-                        this.props.dispatchError("Event scheduled successfully.");
-                        window.location.reload(); //sends the page back dashboard adding an event Natalie Laughlin
-                    } else
-                        this.props.dispatchError("There was an issue scheduling an event.");
-                })
-                .catch((error) => {
-                    this.props.dispatchError("There was an issue scheduling an event.");
-                });
-        } else {
-            this.props.dispatchError("Please verify you are a human.");
-        }
+                    this.state.beginnerTeamsPerEvent,
+                    this.state.advancedTeamsPerEvent,
+                    this.state.teamsPerSchool,
+                    this.state.beginnerTeamsPerSchool,
+                    this.state.advancedTeamsPerSchool,
+                    this.state.description)
+            .then((response) => {
+                if (response.status === 201) {
+                    this.props.dispatchSuccess("Event Created!");
+                } else {
+                    this.props.dispatchError("Error Creating Event.");
+                }
+            })
+            .catch((error) => {
+                this.props.dispatchError("Error Querying Server");
+            });
+        // } else {
+        //     this.props.dispatchError("Please verify you are a human.");
+        // }
     }
 
     /*
@@ -83,104 +88,82 @@ class CreateEvent extends Component {
     render() {
         return (
             <div className="RegisterBox">
-                <h2>Schedule Event</h2>
+                <h2>Create Event</h2>
                 <p>
                     <b>Please fill out the information below.</b>
                 </p>
                 <div>
-                    {/* TODO: check if onChange is needed, remove custom style and replace with CSS */}
                     <Form>
-                        <Form.Group>
-                            <Form.Label>Enter Event Name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                style={{margin: "10px", marginBottom: "20px"}}
-                                inputProps={{style: {fontSize: 14}}}
-                                InputLabelProps={{style: {fontSize: 14}}}
-                                onChange={(event) =>
-                                    this.setState({eventName: event.target.value})
-                                }
-                                size="small"
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Enter Location</Form.Label>
-                            <Form.Control
-                                type="text"
-                                style={{margin: "10px", marginBottom: "20px"}}
-                                inputProps={{style: {fontSize: 14}}}
-                                InputLabelProps={{style: {fontSize: 14}}}
-                                onChange={(event) =>
-                                    this.setState({eventLocation: event.target.value})
-                                }
-                                size="small"
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Event Date</Form.Label>
-                            <Form.Control
-                                type="date"
-                                size="small"
-                                style={{margin: 10}}
-                                inputProps={{style: {fontSize: 14}}}
-                                InputLabelProps={{style: {fontSize: 14}}}
-                                onChange={(event) =>
-                                    this.setState({eventDate: event.target.value})
-                                }
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.FloatingLabel label={"Time"}>
-                                <Form.Control
-                                    type="time"
-                                    size="small"
-                                    style={{margin: 10, width: "12%"}}
-                                    inputProps={{style: {fontSize: 14}}}
-                                    InputLabelProps={{style: {fontSize: 14}}}
-                                    onChange={(event) =>
-                                        this.setState({eventTime: event.target.value})
-                                    }
-                                />
-                            </Form.FloatingLabel>
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Number of Teams per School</Form.Label>
-                            <Form.Control
-                                type="number"
-                                size="small"
-                                style={{margin: 10}}
-                                inputProps={{style: {fontSize: 14}}}
-                                InputLabelProps={{style: {fontSize: 11}}}
-                                onChange={(event) =>
-                                    this.setState({teamsPerSchool: event.target.value})
-                                }
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Max Number of Teams for event</Form.Label>
-                            <Form.Control
-                                type="number"
-                                size="small"
-                                style={{margin: 10}}
-                                inputProps={{style: {fontSize: 14}}}
-                                InputLabelProps={{style: {fontSize: 11}}}
-                                onChange={(event) =>
-                                    this.setState({teamsPerEvent: event.target.value})
-                                }
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label></Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                placeholder="Description"
-                                id="message"
-                                className="form-control"
-                                rows="5"
-                                value={this.state.message}
-                                onChange={(e) => this.setState({description: e.target.value})}
-                            />
-                        </Form.Group>
+                        <div class="add-margin">
+                            <Form.Group className="mb-3">
+                                <Form.Label>Enter Event Name</Form.Label>
+                                <Form.Control required
+                                onChange={(target => this.setState({ eventName: target.target.value }))} value={ this.state.eventName }/>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Enter Location</Form.Label>
+                                <Form.Control required 
+                                onChange={(target => this.setState({ eventLocation: target.target.value }))} value={ this.state.eventLocation }/>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Enter Date</Form.Label>
+                                <Form.Control type="date" required
+                                onChange={(target => this.setState({ eventDate: target.target.value }))} value={ this.state.eventDate }/>
+                            </Form.Group>
+                            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+                                <Form.Group>
+                                    <Form.Label>Enter Start Time</Form.Label>
+                                    <Form.Control type="time" required
+                                    onChange={(target => this.setState({ eventStartTime: target.target.value }))} value={ this.state.eventStartTime }/>
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Enter End Time</Form.Label>
+                                    <Form.Control type="time" required
+                                    onChange={(target => this.setState({ eventEndTime: target.target.value }))} value={ this.state.eventEndTime }/>
+                                </Form.Group>
+                            </div>
+                            <br/>
+                            <Form.Label >Enter Event Team Capacities:</Form.Label>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
+                                <Form.Group className="mb-3" style={{ margin: "4px" }}>
+                                    <Form.Label style={{ fontSize: "12px" }}>Total</Form.Label>
+                                    <Form.Control type="number" required
+                                    onChange={(target => this.setState({ teamsPerEvent: target.target.value }))} value={ this.state.teamsPerEvent }/>
+                                </Form.Group>
+                                <Form.Group className="mb-3" style={{ margin: "4px" }}>
+                                    <Form.Label style={{ fontSize: "12px" }}>Beginner</Form.Label>
+                                    <Form.Control type="number" required
+                                    onChange={(target => this.setState({ beginnerTeamsPerEvent: target.target.value }))} value={ this.state.beginnerTeamsPerEvent }/>
+                                </Form.Group>
+                                <Form.Group className="mb-3" style={{ margin: "4px" }}>
+                                    <Form.Label style={{ fontSize: "12px" }}>Advanced</Form.Label>
+                                    <Form.Control type="number" required
+                                    onChange={(target => this.setState({ advancedTeamsPerEvent: target.target.value }))} value={ this.state.advancedTeamsPerEvent }/>
+                                </Form.Group>
+                            </div>
+                            <Form.Label >Enter School Team Capacities:</Form.Label>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
+                                <Form.Group className="mb-3" style={{ margin: "4px" }}>
+                                    <Form.Label style={{ fontSize: "12px" }}>Total</Form.Label>
+                                    <Form.Control type="number" required
+                                    onChange={(target => this.setState({ teamsPerSchool: target.target.value }))} value={ this.state.teamsPerSchool }/>
+                                </Form.Group>
+                                <Form.Group className="mb-3" style={{ margin: "4px" }}>
+                                    <Form.Label style={{ fontSize: "12px" }}>Beginner</Form.Label>
+                                    <Form.Control type="number" required
+                                    onChange={(target => this.setState({ beginnerTeamsPerSchool: target.target.value }))} value={ this.state.beginnerTeamsPerSchool }/>
+                                </Form.Group>
+                                <Form.Group className="mb-3" style={{ margin: "4px" }}>
+                                    <Form.Label style={{ fontSize: "12px" }}>Advanced</Form.Label>
+                                    <Form.Control type="number" required
+                                    onChange={(target => this.setState({ advancedTeamsPerSchool: target.target.value }))} value={ this.state.advancedTeamsPerSchool }/>
+                                </Form.Group>
+                            </div>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Enter Description</Form.Label>
+                                <Form.Control required as="textarea" rows="8"
+                                onChange={(target => this.setState({ description: target.target.value }))} value={ this.state.description }/>
+                            </Form.Group>
                         {/* <div align="center">
                             <ReCAPTCHA
                                 sitekey="6LdB8YoUAAAAAL5OtI4zXys_QDLidEuqpkwd3sKN"
@@ -189,20 +172,8 @@ class CreateEvent extends Component {
                                 verifyCallback={this.verifyCallback}
                             />
                         </div> */}
-                        <Button
-                            variant="primary"
-                            className="RegisterButton"
-                            label="Register Event"
-                            style={{
-                                margin: 15,
-                                backgroundColor: "#00a655",
-                                color: "white",
-                                fontSize: 14,
-                            }}
-                            onClick={(event) => this.handleRegister(event)}
-                        >
-                            Register Event
-                        </Button>
+                        </div>
+                        <Button id="purple-button" onClick={(event) => this.handleRegisterEvent(event)}>Register Event</Button>
                     </Form>
                 </div>
             </div>
@@ -210,11 +181,9 @@ class CreateEvent extends Component {
     }
 }
 
-CreateEvent.propTypes = {
-    errors: PropTypes.object.isRequired,
-};
 const mapStateToProps = (state) => {
     return {
+        auth: state.auth,
         errors: state.errors,
     };
 };
@@ -222,15 +191,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         dispatchResetErrors: () => dispatch(clearErrors()),
-		dispatchError: (message) =>
-			dispatch(updateErrorMsg(message)),
-		dispatchSuccess: (message) =>
-			dispatch(updateSuccessMsg(message))
+        dispatchError: (message) =>
+            dispatch(updateErrorMsg(message)),
+        dispatchSuccess: (message) =>
+            dispatch(updateSuccessMsg(message)),
     };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withRouter(CreateEvent)); //TODO: Replace, this is deprecated
+export default connect( mapStateToProps, mapDispatchToProps )(CreateEvent);
 

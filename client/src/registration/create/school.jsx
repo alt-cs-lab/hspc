@@ -10,8 +10,6 @@ import schoolService from "../../_common/services/school.js";
 import {connect} from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
-const styles = require('../../_utilities/styleConstants.js');
-
 /*
  * @author: Tyler Trammell
  * Class that hangdles the client side creation of a school. UI of school creation and passes data service
@@ -85,51 +83,53 @@ export class RegisterSchool extends Component {
             <div className="RegisterBox">
                 <h2>Register School</h2>
                 <p>
-                <b>Please fill out the information below.</b>
+                    <b>Please fill out the information below.</b>
                 </p>
                 <div>
                     <Form onSubmit={(event) => this.handleRegisterSchool(event)}>
-                        <Form.Group>
-                            <Form.Label>Enter School Name</Form.Label>
-                            <Form.Control required style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ schoolName: target.target.value }))} value={ this.state.schoolName }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Address Line 1</Form.Label>
-                            <Form.Control required style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ addressLine1: target.target.value }))} value={ this.state.addressLine1 }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Address Line 2</Form.Label>
-                            <Form.Control style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ addressLine2: target.target.value }))} value={ this.state.addressLine2 }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Enter City Name</Form.Label>
-                            <Form.Control required style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ city: target.target.value }))} value={ this.state.city }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Enter State Code</Form.Label>
-                            <Form.Control required placeholder="EX: KS" style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ state: target.target.value }))} value={ this.state.state }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Enter Postal Code</Form.Label>
-                            <Form.Control required style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ postalCode: target.target.value }))} value={ this.state.postalCode }/>
-                        </Form.Group>
-                        <br/>
-                        <Form.Group>
-                            <Form.Label>Enter USD Code</Form.Label>
-                            <Form.Control type="number" required placeholder="###'s Only" style={{ margin: "auto", width: "25%"}}
-                            onChange={(target => this.setState({ usdCode: target.target.value }))} value={ this.state.usdCode }/>
-                        </Form.Group>
+                        <div class="add-margin">
+                            <Form.Group>
+                                <Form.Label>Enter School Name</Form.Label>
+                                <Form.Control required
+                                onChange={(target => this.setState({ schoolName: target.target.value }))} value={ this.state.schoolName }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Address Line 1</Form.Label>
+                                <Form.Control required
+                                onChange={(target => this.setState({ addressLine1: target.target.value }))} value={ this.state.addressLine1 }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Address Line 2</Form.Label>
+                                <Form.Control
+                                onChange={(target => this.setState({ addressLine2: target.target.value }))} value={ this.state.addressLine2 }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Enter City Name</Form.Label>
+                                <Form.Control required
+                                onChange={(target => this.setState({ city: target.target.value }))} value={ this.state.city }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Enter State Code</Form.Label>
+                                <Form.Control required placeholder="EX: KS"
+                                onChange={(target => this.setState({ state: target.target.value }))} value={ this.state.state }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Enter Postal Code</Form.Label>
+                                <Form.Control required
+                                onChange={(target => this.setState({ postalCode: target.target.value }))} value={ this.state.postalCode }/>
+                            </Form.Group>
+                            <br/>
+                            <Form.Group>
+                                <Form.Label>Enter USD Code</Form.Label>
+                                <Form.Control type="number" required placeholder="###'s Only"
+                                onChange={(target => this.setState({ usdCode: target.target.value }))} value={ this.state.usdCode }/>
+                            </Form.Group>
+                        </div>
                         <br/>
                         {/* <div align="center">
                             <ReCAPTCHA
@@ -139,15 +139,8 @@ export class RegisterSchool extends Component {
                                 onloadCallback={this.recaptchaLoaded}
                                 verifyCallback={this.verifyCallback}
                             />
-                </div> */}
-                        <Button
-                            variant="secondary"
-                            className="RegisterButton"
-                            style={styles.buttonStyles}
-                            onClick={(event) => this.handleRegisterSchool(event)}
-                        >
-                            Register School
-                        </Button>
+                        </div> */}
+                        <Button id="purple-button" onClick={(event) => this.handleRegisterSchool(event)}>Register School</Button>
                     </Form>
                 </div>
             </div>

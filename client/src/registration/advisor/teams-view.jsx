@@ -19,7 +19,7 @@
   } from "../../_store/slices/errorSlice.js";
 
   const constants = require('../../_utilities/constants');
-  const styles = require('../../_utilities/styleConstants.js');
+  //const styles = require('../../_utilities/styleConstants.js');
   
   /*
   * Page to view an advisor's schools' teams
@@ -95,30 +95,25 @@
     * Update Teams when a filter of school or event changes
     */
     UpdateTeams = (id, school) => {
+      let allTeams = this.state.teamList;
+      let filteredTeams = [];
       if(school){
         this.setState({ schoolId: id })
-        
-        let allTeams = this.state.teamList;
-        let filteredTeams = [];
         for (let i = 0; i < allTeams.length; i++) {
           if( allTeams[i].schoolid === id && allTeams[i].competitionid === this.state.competitionId ){
             filteredTeams.push(allTeams[i]);
           }
         }
-        this.setState({ filteredTeamsTable: filteredTeams })
       }
       else{
         this.setState({ competitionId: id })
-
-        let allTeams = this.state.teamList;
-        let filteredTeams = [];
         for (let i = 0; i < allTeams.length; i++) {
           if( allTeams[i].schoolid === this.state.schoolId && allTeams[i].competitionid === id ){
             filteredTeams.push(allTeams[i]);
           }
         }
-        this.setState({ filteredTeamsTable: filteredTeams })
       }
+      this.setState({ filteredTeamsTable: filteredTeams })
 
     };
   
@@ -146,21 +141,23 @@
     }
   
     render() {
-      const table = this.state.filteredTeamsTable.length === 0 ? 
-      <h3>No teams to display.</h3>: 
-      <DataTable
-        data={this.state.filteredTeamsTable} 
-        columns={this.state.columnsForTeams} 
-        pagination 
-        paginationPerPage={20} 
-        paginationRowsPerPageOptions={[20, 30, 40, 50]}
-        expandableRows
-        expandableRowsComponent={ExpandedComponent}
-      />
+      // const table = this.state.filteredTeamsTable.length === 0 ? 
+      // <h3>No teams to display.</h3>:
+      // <div className="mt-3" id="student-data-table">
+      //   <DataTable
+      //     data={this.state.filteredTeamsTable} 
+      //     columns={this.state.columnsForTeams} 
+      //     pagination 
+      //     paginationPerPage={20} 
+      //     paginationRowsPerPageOptions={[20, 30, 40, 50]}
+      //     expandableRows
+      //     expandableRowsComponent={ExpandedComponent}
+      //   />
+      // </div>
       return (
       <div>
         <h2>Teams</h2>
-        <Button style={styles.buttonStyles} variant="secondary"
+        <Button id="purple-button"
           onClick={() => this.props.setCurrentView(<CreateTeam advisor={this.props.advisor} />)}
           >
           Add Team
@@ -199,8 +196,19 @@
             </div>
           </div>
         </section>
-        {table}
+        {/* {table} */}
+        <div className="mt-3" id="student-data-table">
+          <DataTable
+            data={this.state.filteredTeamsTable} 
+            columns={this.state.columnsForTeams} 
+            pagination 
+            paginationPerPage={20} 
+            paginationRowsPerPageOptions={[20, 30, 40, 50]}
+            expandableRows
+            expandableRowsComponent={ExpandedComponent}
+          />
         </div>
+      </div>
       );
     }
   }
@@ -237,7 +245,7 @@
       { name: "First Name", selector: (row) => row.firstname, sortable: true },
       { name: "Last Name", selector: (row) => row.lastname, sortable: true },
       { name: "Email", selector: (row) => row.email, sortable: true },
-      { name: "GradDate (YYYY-MM-DD)", selector: (row) => constants.dateFormat(row.graddate), sortable: true, sortFunction: constants.dateSort,},
+      { name: "GradDate", selector: (row) => constants.gradDateFormat(row.graddate), sortable: true, sortFunction: constants.dateSort,},
     ];
   }
   

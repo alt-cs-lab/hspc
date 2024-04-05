@@ -44,16 +44,16 @@ class SchoolRequests extends Component {
             if (response.status === 200) {
                 if(approved){
                     this.props.dispatchSuccess(
-                        "School Approved"
-                    );
+                        "School Approved Successfully."
+                    )
                 }
                 else{
                     this.props.dispatchSuccess(
-                        "School Denied"
-                    );  
+                        "School Denied Successfully."
+                    );
                 }
                 // TODO TWP: Look more into if this works calling component did mount to reload the page. We could instead call a reload function that simply reloads the table.
-                this.componentDidMount();
+                this.componentDidMount()
             }
         })
         .catch((error) => {
@@ -97,7 +97,7 @@ class SchoolRequests extends Component {
                 name: "Approve Request",
                 cell: row => {
                 return(
-                    <Button variant="secondary" style={styles.buttonStyles} onClick={() => {this.handleCompleteRequest(true, row.userid, row.schoolid);}}>
+                    <Button id="purple-button" style={styles.buttonStyles} onClick={() => {this.handleCompleteRequest(true, row.userid, row.schoolid);}}>
                         Approve
                     </Button>
                     );
@@ -121,7 +121,7 @@ class SchoolRequests extends Component {
      */
     render() {
         return (
-            <div>
+            <div id="student-data-table">
                 <h2>Advisor School Requests</h2>
                 <DataTable data={this.state.requestTable} columns={this.state.columns}/>
             </div>
