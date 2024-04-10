@@ -20,7 +20,6 @@ import { Form } from "react-bootstrap";
 import Select from "react-select";
 
 const constants = require('../../_utilities/constants');
-const styles = require('../../_utilities/styleConstants.js');
 
 class CreateTeam extends Component {
     constructor(props) {
@@ -204,65 +203,57 @@ class CreateTeam extends Component {
 
     resetFields = () => {
         console.log("Reset");
-        this.setState({teamName: ""});
-        this.setState({schoolId: null});
-        this.setState({competitionId: null});
+        this.setState({ teamName: "", schoolId: null, competitionId: null });
     };
 
     // TODO: Have a set number of student slots based off the team member limit for the event.
     render(){
         console.log("render", this.state);
         const table = this.state.studentList.length === 0 || this.state.schoolId === null ?
-        <h3>No students to display.</h3>:
-        <Form.Group className="text-start">
-            <p>Select at least two students to create a team.</p>
-            <div id ="sub-nav">
-                <p id="sub-nav-item">
-                <b>Member #1</b>
-                </p>
+        <p>
+            <b>Select A School To Display Students</b>
+        </p>:
+        <Form.Group class="add-margin">
+            <b>Select at least two students to create a team.</b>
+            <div className="mb-3">
+                <Form.Label>
+                    Member #1
+                </Form.Label>
                 <Select
-                    id="dropdown"
                     selected={this.state.studentIds[0]}
-                    styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
                     onChange={(e)=> this.updateStudentSelected(e.value, 0)}
                 />
-                </div>
-                <div id ="sub-nav">
-                <p id="sub-nav-item">
-                <b>Member #2</b>
-                </p>
+            </div>
+            <div className="mb-3">
+                <Form.Label>
+                    Member #2
+                </Form.Label>
                 <Select
-                    id="dropdown"
                     selected={this.state.studentIds[1]}
-                    styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
                     onChange={(e)=> this.updateStudentSelected(e.value, 1)}
                 />
             </div>
-            <div id ="sub-nav">
-                <p id="sub-nav-item">
-                <b>Member #3</b>
-                </p>
+            <div className="mb-3">
+                <Form.Label>
+                    Member #3
+                </Form.Label>
                 <Select
-                    id="dropdown"
                     selected={this.state.studentIds[2]}
-                    styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
                     onChange={(e)=> this.updateStudentSelected(e.value, 2)}
                 />
             </div>
-            <div id ="sub-nav">
-                <p id="sub-nav-item">
-                <b>Member #4</b>
-                </p>
+            <div className="mb-3">
+                <Form.Label>
+                    Member #4
+                </Form.Label>
                 <Select
-                    id="dropdown"
                     selected={this.state.studentIds[3]}
-                    styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
                     onChange={(e)=> this.updateStudentSelected(e.value, 3)}
@@ -275,69 +266,56 @@ class CreateTeam extends Component {
                 <p>
                     <b>Please fill out the information below.</b>
                 </p>
-                <Form>  
-                    <div id ="sub-nav">
-                        <p id="sub-nav-item">
-                        <b>School</b>
-                        </p>
-                        <Select
-                            id="dropdown"
-                            styles={styles.selectStyles}
-                            placeholder="Select a school"
-                            options={this.state.schoolList}
-                            onChange={(opt) => this.updateStudentList(opt.value)}
-                        />
-                    </div>
-                    <br></br>
-                    <section
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-evenly",
-                            alignItems: "center",
-                        }}
-                    >
-                    <div>
-                        <p id="sub-nav-item">
-                            <b>Event</b>
-                            </p>
+                <Form> 
+                    <div class="add-margin">
+                        <Form.Group className="mb-3">
+                            <Form.Label>
+                                School
+                            </Form.Label>
                             <Select
-                                id="dropdown"
-                                styles={styles.selectStyles}
+                                placeholder="Select a school"
+                                options={this.state.schoolList}
+                                onChange={(opt) => this.updateStudentList(opt.value)}
+                                />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>
+                                Event
+                            </Form.Label>
+                            <Select
                                 placeholder="Select an event"
                                 options={this.state.eventList}
                                 onChange={this.handleEventChange}
                                 setValue={this.state.competitionId}
                             />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>
+                                Skill Level
+                            </Form.Label>
+                            <Select
+                                placeholder="Select a skill level"
+                                options={this.state.skillLevels}
+                                onChange={this.handleSkillLevelChange}
+                                setValue={this.state.skillLevelId}
+                            />
+                        </Form.Group>
+                        {table}
+                        <Form.Group className="mb-3">
+                            <Form.Label>
+                                Team Name
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                required
+                                label=""
+                                inputProps={{style: {fontSize: 14}}}
+                                InputLabelProps={{style: {fontSize: 13}}}
+                                onChange={(event) => this.setState({teamName: event.value})}>
+                            </Form.Control>
+                        </Form.Group>
                     </div>
-                    <div>
-                    <p id="sub-nav-item">
-                        <b>Skill Level</b>
-                        </p>
-                        <Select
-                            id="dropdown"
-                            styles={styles.selectStyles}
-                            placeholder="Select a skill level"
-                            options={this.state.skillLevels}
-                            onChange={this.handleSkillLevelChange}
-                            setValue={this.state.skillLevelId}
-                        />
-                    </div>
-                    </section>
-                    {table}
-                    <br></br>
-                    <Form.Label>Team Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        required
-                        label=""
-                        style={{ margin: "auto", width: "25%"}}
-                        inputProps={{style: {fontSize: 14}}}
-                        InputLabelProps={{style: {fontSize: 13}}}
-                        onChange={(event) => this.setState({teamName: event.value})}
-                        size="small">
-                    </Form.Control>
-                    <br></br>
-                    <Button type="register" onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
+                    <Button onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
                 </Form>
             </div>
         )

@@ -8,7 +8,6 @@ import DataTable from "react-data-table-component";
 import Select from "react-select";
 import { withRouter } from "../_utilities/routerUtils";
 import "../_common/assets/css/standard.css";
-import "../_common/assets/css/advisor.css";
 import { connect } from "react-redux";
 import Auth from "../_common/services/auth.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../_store/slices/errorSlice";
