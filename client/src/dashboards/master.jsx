@@ -23,6 +23,7 @@ import CreateTeam from "../registration/create/manage-team";
 import "../_common/assets/css/public-dashboard.css";
 import RegisterSchool from "../registration/create/school";
 import ViewSchools from "../registration/view/school";
+import ViewAllStudents from "../registration/view/all-high-school-students.jsx";
 // import TeamRequests from "../registration/view/team-requests.jsx";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
@@ -67,6 +68,12 @@ return(
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={() => setCurrentView(<ViewSchools />)}>
                   View Schools
+                </NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown title="Students">
+                <NavDropdown.Item onClick={() => setCurrentView(<ViewAllStudents/>)}>
+                  View Students
                 </NavDropdown.Item>
               </NavDropdown>
 

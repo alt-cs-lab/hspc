@@ -45,8 +45,9 @@ function getEmail(email) {
 function getAllStudents() {
     return db.any(
     `
-        SELECT HS.FirstName, HS.LastName, S.SchoolName, HS.Email, HS.GradDate
-        FROM HighSchoolStudent HS
+        SELECT HS.FirstName, HS.LastName, S.SchoolID, S.SchoolName, HS.Email, HS.GradDate
+        FROM HighSchoolStudents HS
+            INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
     `);
 }
 

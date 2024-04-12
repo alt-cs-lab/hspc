@@ -77,7 +77,14 @@ router.get('/getAllStudents',
     passport.authenticate("jwt", { session: false }),
     accessLevelCheck(constants.ADMIN),
     (req, res) => {
-    useService(studentService.getStudents, req, res, 'got');
+    studentService.getAllStudents()
+    .then((studentData) => {
+        statusResponses.ok(res, studentData);
+    })
+    .catch((err) => {
+        statusResponses.serverError(res);
+    });
+    // useService(studentService.getAllStudents, req, res, 'got');
 });
 
 router.get('/getStudentsWithNoTeam',

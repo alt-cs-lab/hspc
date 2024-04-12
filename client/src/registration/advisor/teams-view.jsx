@@ -245,7 +245,7 @@
       { name: "First Name", selector: (row) => row.firstname, sortable: true },
       { name: "Last Name", selector: (row) => row.lastname, sortable: true },
       { name: "Email", selector: (row) => row.email, sortable: true },
-      { name: "GradDate", selector: (row) => constants.gradDateFormat(row.graddate), sortable: true, sortFunction: constants.dateSort,},
+      { name: "Graduation Date", selector: (row) => constants.gradDateFormat(row.graddate), sortable: true, sortFunction: constants.dateSort,},
     ];
   }
   
