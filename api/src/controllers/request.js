@@ -34,4 +34,14 @@ router.post("/requestSchool", (req, res) => {
     useService(requestService.requestSchool, req, res);
 });
 
+router.post("/completeTeamRegistration", (req, res) => {
+    // TWP TODO: Do Role Checking
+    useService(requestService.completeTeamRegistration, req, res);
+});
+
+router.get("/waitlistedTeamsForEvent", (req, res) => {
+    // TWP TODO: Do Role Checking
+    useService(requestService.requestWaitlistedTeamsForEvent, req, res);
+});
+
 module.exports = router;

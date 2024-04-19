@@ -28,6 +28,23 @@ class RequestService {
       advisorid: advisorid,
     });
   }
+
+  /*
+  * Calls the API and returns a JSON list of all teams
+  */
+  getWaitlistedTeamsForEvent( eventid ) {
+    return ServiceUtils.getRequest("/api/request/waitlistedTeamsForEvent", { eventid: eventid });
+  }
+
+  /*
+  * Calls the API and approves or denies a specific team's waitlisted condition.
+  */
+  completeWaitlistedTeamRequest(approved, teamid) {
+    return ServiceUtils.postRequest("/api/request/completeTeamRegistration", {
+      approved: approved,
+      teamid: teamid,
+    });
+  }
 }
 
 // TODO TWP: Check if this comment line below is alright
