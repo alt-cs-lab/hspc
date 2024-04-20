@@ -180,9 +180,8 @@ router.get("/teamStudents",
     accessLevelCheck(constants.ADVISOR | constants.ADMIN),
     (req, res) => {
     // TWP TODO: Do School Checking for advisors
-    let teamName = req.query["teamName"];
-    let competitionid = req.query["competitionid"];
-    studentService.getStudentsInTeam(competitionid, teamName)
+    let teamid = req.query["teamid"];
+    studentService.getStudentsInTeam(teamid)
       .then((studentData) => {
         statusResponses.ok(res, studentData);
       })

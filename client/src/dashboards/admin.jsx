@@ -12,7 +12,8 @@ import CreateEvent from "../registration/create/event";
 //import CreateNews from "../home/news";
 import ViewEvents from "../registration/view/events";
 import ViewUsers from "../registration/view/users";
-import SchoolRequests from "../registration/view/advisor-school-requests"
+import TeamRequests from "../registration/view/team-requests";
+import SchoolRequests from "../registration/view/advisor-school-requests";
 import ViewTeams from "../registration/view/teams";
 import Register from "../registration/create/user";
 import CreateTeam from "../registration/create/manage-team";
@@ -44,17 +45,23 @@ function AdminDash(props)
           <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>
-            <NavDropdown title="Users">
-              <NavDropdown.Item onClick={() => setCurrentView(<Register />)}>
-                Create User
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => setCurrentView(<ViewUsers />)}>
-                View Users
-              </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => setCurrentView(<SchoolRequests />)}>
-                School Requests
-              </NavDropdown.Item>
-            </NavDropdown>
+              <NavDropdown title="Requests">
+                <NavDropdown.Item onClick={() => setCurrentView(<TeamRequests />)}>
+                  Team Requests
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setCurrentView(<SchoolRequests />)}>
+                  School Requests
+                </NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown title="Users">
+                <NavDropdown.Item onClick={() => setCurrentView(<Register />)}>
+                  Create User
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setCurrentView(<ViewUsers />)}>
+                  View Users
+                </NavDropdown.Item>
+              </NavDropdown>
 
             <NavDropdown title="Schools">
               <NavDropdown.Item onClick={() => setCurrentView(<RegisterSchool />)}>

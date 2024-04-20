@@ -99,7 +99,8 @@ class SchoolRequests extends Component {
                         Approve
                     </Button>
                     );
-                }
+                },
+                button: true,
             },
             {
                 name: "Deny Request",
@@ -109,7 +110,8 @@ class SchoolRequests extends Component {
                         Deny
                     </Button>
                     );
-                }
+                },
+                button: true,
             }
         ];
     }

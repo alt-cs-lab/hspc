@@ -96,17 +96,16 @@ function getAdvisorSchoolsTeams(advisorId) {
  * @param {string} competitionid The id of the competition
  * @returns All students of a certain team
  */
-function getStudentsInTeam(competitionid, teamName) {
+function getStudentsInTeam(teamid) {
     return db.any(
       `
           SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email, HS.GradDate
           FROM HighSchoolStudents HS
               INNER JOIN TeamMembers TM ON TM.StudentID = HS.StudentID
               INNER JOIN Teams T ON T.TeamID = TM.TeamID
-              INNER JOIN Competitions C ON T.CompetitionID = C.CompetitionID
-          WHERE T.TeamName = $(teamName) AND C.CompetitionID = $(competitionid)
+          WHERE T.TeamID = $(teamid)
       `,
-      { teamName, competitionid }
+      { teamid }
     );
 }
 

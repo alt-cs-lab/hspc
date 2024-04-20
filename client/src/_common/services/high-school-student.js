@@ -56,8 +56,8 @@ class StudentService {
     * API Endpoint that returns all users with Student based on team name
     * TODO TWP: MOVE TO STUDENT SERVICE
     */
-    getStudentsInTeam(competitionid, teamName) {
-        return ServiceUtils.getRequest("api/high-school-student/teamStudents", { competitionid: competitionid, teamName: teamName });
+    getStudentsInTeam(teamid) {
+        return ServiceUtils.getRequest("api/high-school-student/teamStudents", { teamid: teamid });
     }
 }
 
