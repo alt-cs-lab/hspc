@@ -11,6 +11,7 @@ import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slic
 import Select from "react-select";
 import { Button, FormCheck } from "react-bootstrap";
 import "../../_common/assets/css/standard.css";
+import EditStudent from "../edit/high-school-students.jsx";
 
 const constants = require('../../_utilities/constants');
 
@@ -28,7 +29,7 @@ class ViewAllStudents extends Component {
       schoolid: -1,
       selectedSchool: null,
       gradFilter: true,
-      requestLevel: constants.MASTER
+      requestLevel: constants.MASTER,
     };
   }
 
@@ -54,10 +55,20 @@ class ViewAllStudents extends Component {
     // Get Students For Advisor's Schools
     StudentService.getAllStudents()
     .then((response) => {
-        console.log("Student Data:" );
-        console.log(response.data);
+        // console.log("Student Data:" );
+        // console.log(response.data);
         if (response.ok) {
-          this.setState({ studentList: response.data, filteredStudentTable: response.data });
+          let allStudents = response.data;
+          let filteredStudents = [];         
+          let today = new Date();
+
+          for (let i = 0; i < allStudents.length; i++) {
+            if (constants.dateFormat(allStudents[i].graddate).substring(0,7).localeCompare(constants.toDatabaseDate(today.getFullYear(), today.getMonth(), 28).substring(0,7)) === 1){
+              filteredStudents.push(allStudents[i]);
+            }
+          }
+
+          this.setState({ studentList: allStudents, filteredStudentTable: filteredStudents });
         } else console.log("An error has occurred fetching students, Please try again.");
     })
     .catch((resErr) => console.log("Something went wrong fetching students. Please try again"))
@@ -92,48 +103,58 @@ class ViewAllStudents extends Component {
         selector: row => constants.gradDateFormat(row.graddate),
         sortable: true,
         sortFunction: constants.dateSort,
+      },
+      {
+        name: "Edit Student",
+        cell: row => <Button onClick={() => this.props.setCurrentView(<EditStudent admin={true} student={row}/>)}>Edit</Button>,
+        button: true
       }
     ];
   }
 
   ResetTable = () => {
-    console.log("studentList");
-    console.log(this.state.studentList);
-    this.setState({ filteredStudentTable: this.state.studentList, selectedSchool: null });
+    // console.log("studentList");
+    // console.log(this.state.studentList);
+    this.setState({ selectedSchool: null, schoolid: -1 });
+    this.HandleGradCheck(-1, this.state.gradFilter);
   }
 
-  UpdateStudents = (target, gradFilter) => {
-    let id = target.value;
-    if (id != null) {
+  UpdateStudents = (target, filter) => {
+    let id;
+    // let gradFilter;
+
+    if (target != null) {
+      id = target.value;
+      // gradFilter = this.state.gradFilter;
       this.setState({ schoolid: id, selectedSchool: target });
     }
-    else {
-      id = this.state.schoolid
+    else if (filter != null) {
+      id = this.state.schoolid;
+      this.setState({ gradFilter: filter });
     }
-    if (gradFilter != null) {
-      this.setState({ gradFilter: gradFilter })
-    }
-    else {
-      gradFilter = this.state.gradFilter
-    }
+
+    this.HandleGradCheck(id, filter);
+  };
+
+  HandleGradCheck = (id, filter) => {
     let today = new Date();
-    
     let allStudents = this.state.studentList;
-    console.log("allStudents");
-    console.log(allStudents);
     let filteredStudents = [];
+
     for (let i = 0; i < allStudents.length; i++) {
-      if (allStudents[i].schoolid === id) {
-        if( gradFilter && constants.dateFormat(allStudents[i].graddate).substring(0,7).localeCompare(constants.toDatabaseDate(today.getFullYear(), today.getMonth(), 28).substring(0,7)) === 1){
+      if (allStudents[i].schoolid === id || id === -1) {
+        if (filter && constants.dateFormat(allStudents[i].graddate).substring(0,7).localeCompare(constants.toDatabaseDate(today.getFullYear(), today.getMonth(), 28).substring(0,7)) === 1){
           filteredStudents.push(allStudents[i]);
+          console.log(allStudents[i]);
         }
-        else if( !gradFilter ) {
+        else if (!filter) {
           filteredStudents.push(allStudents[i]);
         }
       }
     }
+
     this.setState({ filteredStudentTable: filteredStudents })
-  };
+  }
   
   // Renders the component.
   render() {
@@ -164,9 +185,9 @@ class ViewAllStudents extends Component {
                   />
                 </div>
                 <span style={{ marginRight: "5px", fontSize: "16px" }}>
-                    Graduated Excluded:
+                    Graduates Excluded:
                 </span>
-                <FormCheck defaultChecked={true} 
+                <FormCheck defaultChecked={true} checked={this.state.gradFilter} 
                     onChange={() => { this.UpdateStudents(null, !this.state.gradFilter) }} />
                 <Button className="m-3" onClick={() => { this.ResetTable() }}>
                     View All Students

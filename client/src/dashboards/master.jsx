@@ -72,7 +72,7 @@ return(
               </NavDropdown>
 
               <NavDropdown title="Students">
-                <NavDropdown.Item onClick={() => setCurrentView(<ViewAllStudents/>)}>
+                <NavDropdown.Item onClick={() => setCurrentView(<ViewAllStudents setCurrentView={setCurrentView}/>)}>
                   View Students
                 </NavDropdown.Item>
               </NavDropdown>
