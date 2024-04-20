@@ -12,6 +12,27 @@ class StudentService {
         });
     }
 
+    editHighSchoolStudent(studentId, firstName, lastName, schoolId, gradDate) {
+        return ServiceUtils.postRequest('api/high-school-student/editStudent', { 
+            studentId: studentId,
+            firstName: firstName, 
+            lastName: lastName, 
+            schoolId: schoolId,
+            gradDate: gradDate
+        });
+    }
+
+    editStudentEmail(studentId, email, firstName, lastName, schoolId, gradDate) {
+        return ServiceUtils.postRequest('api/high-school-student/editStudentEmail', { 
+            studentId: studentId,
+            email: email,
+            firstName: firstName, 
+            lastName: lastName, 
+            schoolId: schoolId,
+            gradDate: gradDate
+        });
+    }
+
     getAllStudents() {
         return ServiceUtils.getRequest('api/high-school-student/getAllStudents');
     }
@@ -35,8 +56,8 @@ class StudentService {
     * API Endpoint that returns all users with Student based on team name
     * TODO TWP: MOVE TO STUDENT SERVICE
     */
-    getStudentsInTeam(competitionid, teamName) {
-        return ServiceUtils.getRequest("api/high-school-student/teamStudents", { competitionid: competitionid, teamName: teamName });
+    getStudentsInTeam(teamid) {
+        return ServiceUtils.getRequest("api/high-school-student/teamStudents", { teamid: teamid });
     }
 }
 

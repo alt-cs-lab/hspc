@@ -1,9 +1,9 @@
 /*
 Name: Devin Richards
 Created On: 02/07/2024
-Last Modified: 02/29/2024
+Last Modified: 04/17/2024
 */
-// PURPOSE: This page is used by an advisor to register a team.
+// PURPOSE: This page is used by an advisor to register a team for an event.
 /* 
 TODO: The file '/workspaces/hspc/client/src/registration/create/team.jsx' will need to be 
 deleted after this page is completed because it is an older file that serves the same function.
@@ -19,8 +19,7 @@ import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slic
 import { Form } from "react-bootstrap";
 import Select from "react-select";
 
-const constants = require('../../_utilities/constants');
-const styles = require('../../_utilities/styleConstants.js');
+// const constants = require('../../_utilities/constants');
 
 class CreateTeam extends Component {
     constructor(props) {
@@ -34,23 +33,18 @@ class CreateTeam extends Component {
             skillLevelId: null,
             isVerified: false,
             studentList: [],
-            studentIds: new Set(),
+            member1: null,
+            member2: null,
+            member3: null,
+            member4: null,
             skillLevels: [],
             schoolList: [],
             eventList: [],
-            columns: this.getColumns()
         }
     }
 
     componentDidMount = () => {
-        // StudentService.getAdvisorsStudents(this.advisor.id)
-        // .then((response) => {
-        //     if(response.ok){
-        //         this.setState({ studentList: response.data });
-        //     } else console.log("An error has occured. Please try again");
-        // })
-        // .catch((resErr) => console.log("Something went wrong. Please try again."));
-
+        // Gets all the skill levels
         teamService.getAllSkillLevels()
         .then((response) => {
             if(response.ok){
@@ -67,6 +61,7 @@ class CreateTeam extends Component {
         })
         .catch((resErr) => console.log("Something went wrong. Please try again."));
 
+        // Gets all the events
         EventService.getAllEvents()
         .then((response) => {
             if (response.ok){
@@ -82,7 +77,8 @@ class CreateTeam extends Component {
             } else console.log("An error has occured. Please try again");
         })
         .catch((resErr) => console.log("Something went wrong. Please try again."));
-
+        
+        // Gets all the advisor's approved schools.
         SchoolService.getAdvisorApprovedSchools(this.advisor.id)
         .then((response) => {
             if (response.ok) {
@@ -95,213 +91,161 @@ class CreateTeam extends Component {
                     });
                 }
                 this.setState({ schoolList: schools });
+                console.log("Manage");
+                console.log(response.data);
             } else console.log("An error has occurred, Please try again.");
         })
         .catch((resErr) => console.log("Something went wrong. Please try again"));
     }
 
-    getColumns(){
-        return [
-            {
-                name: "First Name",
-                selector: row => row.firstname,
-                sortable: true,
-            },
-            {
-                name: "Last Name",
-                selector: row => row.lastname,
-                sortable: true,
-            },
-            {
-                name: "School",
-                selector: row => row.schoolid,
-                sortable: true,
-            },
-            {
-                name: "Email",
-                selector: row => row.email,
-                sortable: true,
-            },
-            {
-                name: "GradDate",
-                selector: row => constants.gradDateFormat(row.graddate),
-                sortable: true,
-                sortFunction: constants.dateSort,
+    /**
+     * Provides a list of students based on what school is selected.
+     * @param {*} schoolId The ID of the selected school.
+     */
+    createStudentList(schoolId) {
+        StudentService.getStudentsWithNoTeam(schoolId).then((response) => {
+            let studentData = response.data;
+            let studentOptions = [];
+            for (let i = 0; i < studentData.length; i++) {
+                studentOptions.push({
+                    label: studentData[i].firstname + " " + studentData[i].lastname + ", " + studentData[i].email,
+                    value: studentData[i].studentid,
+                });
             }
-        ]
+            this.setState({ studentList: studentOptions, schoolId: schoolId, member1: null, member2: null, member3: null, member4: null});
+        });
     }
 
+    /**
+     * Handles the registration of a team.
+     * @returns
+     */
     handleRegisterTeam(){
-        if (this.state.teamName === "" || this.state.schoolId === ""){
-            this.props.dispatchError(
-                "Please check that all fields are complete."
-            );
+        if (this.state.teamName === "" || this.state.schoolId === null || this.state.competitionId === null || this.state.skillLevelId === null){
+            this.props.dispatchError("Please check that all fields are complete.");
             return;
         }
 
-        // TODO: Setup logic for checking if studentIds contains at least 2 students
+        let mem1 = this.state.member1
+        let mem2 = this.state.member2
+        let mem3 = this.state.member3
+        let mem4 = this.state.member4
 
-        const selectedStudents = Array.from(this.state.studentIds);
+        // Creates an array of the selected students.
+        let selectedStudents = new Set([mem1, mem2, mem3, mem4]);
+        const uniqueValues = new Set();
+        const duplicates = [];
 
-        // TODO: Setup logic for verified state.
+        // Removes members whose values are null.
+        selectedStudents.forEach(item => {
+            if (item === null){
+                selectedStudents.delete(item)
+            }
+        })
+
+        // Checks if at least two students students are selected.
+        if (selectedStudents.length < 2){
+            this.props.dispatchError("Select at least two students to form a team.");
+            return;
+        }
+
+        // Checks if the user selected the same student more than once.
+        selectedStudents.forEach(item =>{
+            if (uniqueValues.has(item)){
+                duplicates.push(item);
+            }
+            else {
+                uniqueValues.add(item);
+            }
+        })
+
+        if (duplicates.length >= 1){
+            this.props.dispatchError("A student can only be selected once.")
+            this.createStudentList(this.state.studentid)
+            return;
+        }
+
+        const finalMembers = Array.from(selectedStudents);
+
+        // TODO: Attach a teamstatusid and timecreated to the team
+        // Calls on the registerTeam function to create the team.
         teamService.registerTeam(
             this.state.teamName, 
             this.state.schoolId, 
             this.state.competitionId,
             this.state.skillLevelId,
             this.advisor.id,
-            selectedStudents,
+            finalMembers,
             this.state.isVerified
         )
         .then((response) => {
             if (response.ok) {
                 console.log(response.data);
-                this.props.dispatchSuccess(
-                    "Registration was successful."
-                );
+                this.props.dispatchSuccess("Registration was successful.");
                 this.resetFields();
             }
         })
         .catch((error) => {
-            this.props.dispatchError(
-                "There was an error creating the team."
-            );
+            this.props.dispatchError("There was an error creating the team.");
         });
     }
 
-    // TODO: Remove students from studentList that are already selected.
-    /*
-    * Updates the list of selected students.
-    */
-    updateStudentSelected(studentid, selected) {
-        let newStudentIds = this.state.studentIds;
-        if(selected) {
-            // add student
-            newStudentIds.add(studentid)
-        } else {
-            // remove student
-            newStudentIds.delete(studentid)
-        }
-        this.setState({studentIds: newStudentIds})
-    }
-
-    // TODO: Filter out students that graduated.
-    updateStudentList(schoolId) {
-        this.setState({schoolId: schoolId});
-        
-        StudentService.getStudentsWithNoTeam(schoolId).then((response) => {
-            let studentData = response.data;
-            console.log(studentData);
-            let studentOptions = [];
-            for (let i = 0; i < studentData.length; i++) {
-                studentOptions.push({
-                    label: studentData[i].firstname + " " + studentData[i].lastname,
-                    value: studentData[i].studentid,
-                });
-            }
-
-            this.setState({ studentList: studentOptions,  });
-        });
-    }
-
-    handleSkillLevelChange = (skillLevelId) => {
-        this.setState({skillLevelId: skillLevelId.value});
-    }
-
-    handleEventChange = (competitionId) => {
-        this.setState({competitionId: competitionId.value});
-    }
-
+    /**
+     * Clears out the information in some fields so that the page can be used again.
+     */
     resetFields = () => {
         console.log("Reset");
-        this.setState({teamName: ""});
-        this.setState({schoolId: null});
-        this.setState({competitionId: null});
+        this.setState({ teamName: "", schoolId: null, competitionId: null, 
+        member1: null, member2: null, member3: null, member4: null });
     };
 
-    // TODO: Have a set number of student slots based off the team member limit for the event.
     render(){
         const table = this.state.studentList.length === 0 || this.state.schoolId === null ?
-        <h3>No students to display.</h3>:
-        <Form.Group className="text-start">
-            <p>Select at least two students to create a team.</p>
-            {/* {this.state.studentList.map((student, index) => (    
-            <Form.Check
-                key={student.studentid}
-                type="checkbox"
-                value={student.studentid}
-                checked={this.state.studentIds.has(student.studentid)}
-                label={`${student.firstname}, ${student.lastname}, ${student.email}`}
-                onChange={(event) => {
-                    this.updateStudentSelected( student.studentid, event.target.checked) }
-                }
-                id={`disabled-default-checkbox`}
-            />
-            ))} */}
-            <section
-                style={{
-                    display: "flex",
-                    justifyContent: "space-evenly",
-                    alignItems: "center",
-                }}
-            >
-            <div id ="sub-nav">
-                <p id="sub-nav-item">
-                <b>Member #1</b>
-                </p>
+        <p>
+            <b>Select A School To Display Students</b>
+        </p>:
+        <Form.Group class="add-margin">
+            <b>Select at least two students to create a team.</b>
+            <div className="mb-3">
+                <Form.Label>
+                    Member #1
+                </Form.Label>
                 <Select
-                    id="dropdown"
-                    styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
-                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
-                />
-                </div>
-                <div id ="sub-nav">
-                <p id="sub-nav-item">
-                <b>Member #2</b>
-                </p>
-                <Select
-                    id="dropdown"
-                    styles={styles.selectStyles}
-                    placeholder="Select a student"
-                    options={this.state.studentList}
-                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
+                    onChange={(opt)=> this.setState({member1: opt.value})}
                 />
             </div>
-            </section>
-            <section
-                style={{
-                    display: "flex",
-                    justifyContent: "space-evenly",
-                    alignItems: "center",
-                }}
-            >
-            <div id ="sub-nav">
-                <p id="sub-nav-item">
-                <b>Member #3</b>
-                </p>
+            <div className="mb-3">
+                <Form.Label>
+                    Member #2
+                </Form.Label>
                 <Select
-                    id="dropdown"
-                    styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
-                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
+                    onChange={(opt)=> this.setState({member2: opt.value})}
                 />
             </div>
-            <div id ="sub-nav">
-                <p id="sub-nav-item">
-                <b>Member #4</b>
-                </p>
+            <div className="mb-3">
+                <Form.Label>
+                    Member #3
+                </Form.Label>
                 <Select
-                    id="dropdown"
-                    styles={styles.selectStyles}
                     placeholder="Select a student"
                     options={this.state.studentList}
-                    onChange={(e)=> this.updateStudentSelected(e.target.value)}
+                    onChange={(opt)=> this.setState({member3: opt.value})}
                 />
             </div>
-            </section>
+            <div className="mb-3">
+                <Form.Label>
+                    Member #4
+                </Form.Label>
+                <Select
+                    placeholder="Select a student"
+                    options={this.state.studentList}
+                    onChange={(opt)=> this.setState({member4: opt.value})}
+                />
+            </div>
         </Form.Group>
         return(
             <div>
@@ -309,69 +253,51 @@ class CreateTeam extends Component {
                 <p>
                     <b>Please fill out the information below.</b>
                 </p>
-                <Form>  
-                    <div id ="sub-nav">
-                        <p id="sub-nav-item">
-                        <b>School</b>
-                        </p>
-                        <Select
-                            id="dropdown"
-                            styles={styles.selectStyles}
-                            placeholder="Select a school"
-                            options={this.state.schoolList}
-                            onChange={(opt) => this.updateStudentList(opt.value)}
-                        />
-                    </div>
-                    <br></br>
-                    <section
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-evenly",
-                            alignItems: "center",
-                        }}
-                    >
-                    <div>
-                        <p id="sub-nav-item">
-                            <b>Event</b>
-                            </p>
+                <Form> 
+                    <div class="add-margin">
+                        <Form.Group className="mb-3">
+                            <Form.Label>
+                                School
+                            </Form.Label>
                             <Select
-                                id="dropdown"
-                                styles={styles.selectStyles}
+                                placeholder="Select a school"
+                                options={this.state.schoolList}
+                                onChange={(opt) => this.createStudentList(opt.value)}
+                                />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>
+                                Event
+                            </Form.Label>
+                            <Select
                                 placeholder="Select an event"
                                 options={this.state.eventList}
-                                onChange={this.handleEventChange}
-                                setValue={this.state.competitionId}
+                                onChange={(opt) => this.setState({competitionId: opt.value})}
                             />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>
+                                Skill Level
+                            </Form.Label>
+                            <Select
+                                placeholder="Select a skill level"
+                                options={this.state.skillLevels}
+                                onChange={(opt) => this.setState({skillLevelId: opt.value })}
+                            />
+                        </Form.Group>
+                        {table}
+                        <Form.Group className="mb-3">
+                            <Form.Label>
+                                Team Name
+                            </Form.Label>
+                            <Form.Control
+                                required placeholder="Ex: Wildcats"
+                                onChange={(event) => this.setState({teamName: event.target.value})}
+                                value={ this.state.teamName }>
+                            </Form.Control>
+                        </Form.Group>
                     </div>
-                    <div>
-                    <p id="sub-nav-item">
-                        <b>Skill Level</b>
-                        </p>
-                        <Select
-                            id="dropdown"
-                            styles={styles.selectStyles}
-                            placeholder="Select a skill level"
-                            options={this.state.skillLevels}
-                            onChange={this.handleSkillLevelChange}
-                            setValue={this.state.skillLevelId}
-                        />
-                    </div>
-                    </section>
-                    {table}
-                    <br></br>
-                    <Form.Label>Team Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        required
-                        label=""
-                        style={{ margin: "auto", width: "25%"}}
-                        inputProps={{style: {fontSize: 14}}}
-                        InputLabelProps={{style: {fontSize: 13}}}
-                        onChange={(event) => this.setState({teamName: event.target.value})}
-                        size="small">
-                    </Form.Control>
-                    <br></br>
-                    <Button type="register" onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
+                    <Button onClick={(event) => this.handleRegisterTeam()}>Register Team</Button>
                 </Form>
             </div>
         )

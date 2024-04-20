@@ -42,7 +42,7 @@ function registerSchool({ name, addressLine1, addressLine2, city, state, postalC
  */
 function getAllSchools(){
     return db.any(`SELECT * FROM Schools`)
-        .then((schools) => renameKeys(schools, ["id", "name", "addressLine1", "addressLine2", "city", "state", "postalCode", "usdCode"]));
+        .then((schools) => renameKeys(schools, ["schoolid", "schoolname", "addressLine1", "addressLine2", "city", "state", "postalcode", "usdcode"]));
 }
 
 /**

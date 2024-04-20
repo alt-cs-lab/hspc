@@ -13,7 +13,8 @@ import CreateEvent from "../registration/create/event";
 //import CreateNews from "../home/news";
 import ViewEvents from "../registration/view/events";
 import ViewUsers from "../registration/view/users";
-import SchoolRequests from "../registration/view/advisor-school-requests"
+import TeamRequests from "../registration/view/team-requests";
+import SchoolRequests from "../registration/view/advisor-school-requests";
 import ViewTeams from "../registration/view/teams";
 import Register from "../registration/create/user";
 import CreateTeam from "../registration/create/manage-team";
@@ -23,6 +24,7 @@ import CreateTeam from "../registration/create/manage-team";
 import "../_common/assets/css/public-dashboard.css";
 import RegisterSchool from "../registration/create/school";
 import ViewSchools from "../registration/view/school";
+import ViewAllStudents from "../registration/view/all-high-school-students.jsx";
 // import TeamRequests from "../registration/view/team-requests.jsx";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
@@ -49,15 +51,21 @@ return(
           <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav>
+              <NavDropdown title="Requests">
+                <NavDropdown.Item onClick={() => setCurrentView(<TeamRequests />)}>
+                  Team Requests
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setCurrentView(<SchoolRequests />)}>
+                  School Requests
+                </NavDropdown.Item>
+              </NavDropdown>
+
               <NavDropdown title="Users">
                 <NavDropdown.Item onClick={() => setCurrentView(<Register />)}>
                   Create User
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={() => setCurrentView(<ViewUsers />)}>
                   View Users
-                </NavDropdown.Item>
-                <NavDropdown.Item onClick={() => setCurrentView(<SchoolRequests />)}>
-                  School Requests
                 </NavDropdown.Item>
               </NavDropdown>
 
@@ -67,6 +75,12 @@ return(
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={() => setCurrentView(<ViewSchools />)}>
                   View Schools
+                </NavDropdown.Item>
+              </NavDropdown>
+
+              <NavDropdown title="Students">
+                <NavDropdown.Item onClick={() => setCurrentView(<ViewAllStudents setCurrentView={setCurrentView}/>)}>
+                  View Students
                 </NavDropdown.Item>
               </NavDropdown>
 
@@ -129,7 +143,6 @@ return(
 const mapStateToProps = (state) => {
 	return {
 		currentUser: state.auth.user,
-		errors: state.errors,
 	};
 };
 const mapDispatchToProps = (dispatch) => {

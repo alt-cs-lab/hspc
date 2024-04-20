@@ -33,20 +33,20 @@ input[type='checkbox']:checked:after
 .add-margin 
 {
     width: 25%;
+    min-width: 350px;
     margin: auto;
     align-content: left;
     text-align: left;
 }
 
-/* IDs - Component Specific */
-/* #purple-button
+.data-table-info
 {
-    background-color: #512888;
-    color: white;
-    border: 1px solid #512888;
-    font-size: 16;
-} */
+    margin: 8px;
+    align-content: left;
+    text-align: left;
+}
 
+/* IDs - Component Specific */
 #nav-bar-margin
 {
     /* position: absolute;
@@ -64,4 +64,29 @@ input[type='checkbox']:checked:after
 {
     background-color: #512888;
     color: white;
+}
+
+#data-table-paragraph
+{
+    font-size: small;
+}
+
+#advisor-data-table
+{
+    border-radius: 8px;
+    width: 50%;
+    min-width: 350px;
+    margin: auto;
+    border: 1px solid grey;
+    padding: 2px;
+}
+
+#student-data-table
+{
+    border-radius: 8px;
+    width: 75%;
+    min-width: 350px;
+    margin: auto;
+    border: 1px solid grey;
+    padding: 2px;
 }
