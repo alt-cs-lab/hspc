@@ -88,13 +88,7 @@ class Register extends Component {
   }
 
   resetFields = () => {
-    this.setState({ firstName: "" });
-    this.setState({ lastName: "" });
-    this.setState({ email: "" });
-    this.setState({ password: "" });
-    this.setState({ advisoremail: "" });
-    this.setState({ phone: "" });
-    this.setState({ schoolId: 0 });
+    this.setState({ firstName: "", lastName: "", email: "", password: "", advisoremail: "", phone: "", schoolId: 0});
   };
 
   /*

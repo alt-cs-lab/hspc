@@ -155,7 +155,7 @@ function get({ schoolId, competitionId, questionLevelId, advisorId, teamId, wait
                 // userIds is an array of the user IDs
                 const userIds = rawUserIds.map((obj) => obj.userid);
                 // retrieve the user data for each team member
-                const users = await t.any(`SELECT UserID, FirstName, LastName, Email FROM Users WHERE UserID IN ($1:csv)`, [
+                const users = await t.any(`SELECT UserID, FirstName, LastName, Email FROM Users WHERE UserID = ANY($1)`, [
                     userIds,
                 ]);
                 // rename the keys of each user object and add the users to the team
@@ -177,7 +177,7 @@ function create({ teamName, schoolId, competitionId, skillLevelId, advisorId, st
     return db.tx(async (t) => {
         // insert the team into the Teams table
         const result = await t.one(
-            `INSERT INTO Teams (SchoolID, CompetitionID, TeamName, SkillLevelID, AdvisorID) VALUES ($(schoolId), $(competitionId), $(teamName), $(skillLevelId), $(advisorId)) RETURNING TeamID`,
+            `INSERT INTO Teams (SchoolID, CompetitionID, TeamName, SkillLevelID, AdvisorID, TeamStatusID, TimeCreated) VALUES ($(schoolId), $(competitionId), $(teamName), $(skillLevelId), $(advisorId), 1, NOW()) RETURNING TeamID`,
             { schoolId, competitionId, teamName, skillLevelId, advisorId}
         );
         const teamId = result.teamid;
@@ -265,7 +265,7 @@ function teamsInCompetition(competitionId, waitlisted = false){
                 SUM(CASE T.SkillLevelID when 1 then 1 else 0 end) as beginnerTeamCount,
                 SUM(CASE T.SkillLevelID when 2 then 1 else 0 end) as advancedTeamCount
             FROM Teams T
-            WHERE T.CompetitionID = $(competitionId) AND T.TeamStatusID IN $(statuses:csv) `,
+            WHERE T.CompetitionID = $(competitionId) AND T.TeamStatusID = ANY($(statuses)) `,
             {competitionId, statuses})
 }
 
@@ -275,6 +275,10 @@ function teamsInCompetitionBySchool(competitionId, schoolId, waitlisted = false)
     if( waitlisted ){
         statuses.push(constants.TEAM_STATUS_WAITLISTED);
     }
+    console.log(competitionId)
+    console.log(schoolId)
+    console.log(waitlisted)
+    console.log(statuses)
     return db.oneOrNone(`
             SELECT
                 COUNT(*) as teamCount,
@@ -283,7 +287,7 @@ function teamsInCompetitionBySchool(competitionId, schoolId, waitlisted = false)
             FROM Teams T
             WHERE T.CompetitionID = $(competitionId)
                 AND T.SchoolID = $(schoolId)
-                AND T.TeamStatusID IN $(statuses:csv)`,
+                AND T.TeamStatusID = ANY($(statuses))`,
             {competitionId, schoolId, statuses})
         .then(countInfo => ({
             beginnerTeamCount: parseInt(countInfo.beginnerteamcount),
@@ -298,10 +302,9 @@ function isAnyStudentsInCompetition(competitionId, studentIds, waitlisted = fals
     if( waitlisted ){
         statuses.push(constants.TEAM_STATUS_WAITLISTED);
     }
-    console.log(studentIds)
 
-    return db.oneOrNone(`SELECT COUNT(*) FROM TeamMembers TM WHERE TeamID IN (SELECT TeamID FROM Teams WHERE CompetitionID = $(competitionId) AND T.TeamStatusID IN $(statuses:csv)) 
-    AND StudentID IN ($studentIds:csv)`, [competitionId, studentIds, statuses]).then((result) => parseInt(result.count) > 0);
+    return db.oneOrNone(`SELECT COUNT(*) FROM TeamMembers TM WHERE TeamID IN (SELECT TeamID FROM Teams WHERE CompetitionID = $(competitionId) AND T.TeamStatusID = ANY($(statuses))) 
+    AND StudentID = ANY($(studentIds))`, [competitionId, studentIds, statuses]).then((result) => parseInt(result.count) > 0);
 }
 
 function getCompetitionId(teamId){
