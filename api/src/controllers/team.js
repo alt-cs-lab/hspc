@@ -94,6 +94,33 @@ router.get('/getFromAdvisorSchools', (req, res) => {
         statusResponses.serverError(res);
     });
 });
+
+/*
+* Calls the API and returns team counts for a competition.
+* Author: Trent Powell
+*/
+router.get('/getTeamsInCompetition', (req, res) => {
+    // TWP TODO: Do Role Checking
+    useService(teamService.teamsInCompetition, req, res);
+});
+
+/*
+* Calls the API and returns team counts for all schools for a competition.
+* Author: Trent Powell
+*/
+router.get('/getTeamsInCompetitionForAllSchools', (req, res) => {
+    // TWP TODO: Do Role Checking
+    useService(teamService.teamsInCompetitionForAllSchools, req, res);
+});
+
+/*
+* Calls the API and returns team counts for all schools for a competition.
+* Author: Trent Powell
+*/
+router.get('/getTeamDetails', (req, res) => {
+    // TWP TODO: Do Role Checking
+    useService(teamService.getTeamDetails, req, res);
+});
 //******************************************************************************************************************************
 
 /**

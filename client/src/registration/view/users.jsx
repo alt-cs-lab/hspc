@@ -8,6 +8,7 @@ import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import { FormCheck } from "react-bootstrap";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
+
 const constants = require('../../_utilities/constants');
 
 const roleTable = {
@@ -95,7 +96,7 @@ class ViewUsers extends Component {
       },
       {
         name: "Phone",
-        selector: row => row.phone,
+        selector: row => constants.phoneNumberFormat(row.phone),
         sortable: true,
       },
       {

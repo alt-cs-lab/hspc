@@ -10,32 +10,33 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Select from "react-select";
 import { Button, FormCheck } from "react-bootstrap";
-import AddStudent from "../create/add-high-school-student.jsx";
-import EditStudent from "../edit/high-school-students.jsx";
 import "../../_common/assets/css/standard.css";
+import EditStudent from "../edit/high-school-students.jsx";
 
 const constants = require('../../_utilities/constants');
 
 // This class inherits functionality of the Component class and extends it.
-class ViewStudents extends Component {
+class ViewAllStudents extends Component {
   constructor(props) {
     super(props);
     this.props.dispatchResetErrors();
-    this.advisor = this.props.auth.user;
+    this.user = this.props.auth.user;
     this.state = {
       studentList: [],
       filteredStudentTable: [],
       columnsForStudents: this.getColumns(),
       schoolList: [],
       schoolid: -1,
-      gradFilter: true
+      selectedSchool: null,
+      gradFilter: true,
+      requestLevel: constants.MASTER,
     };
   }
 
   // Updates advisor's schools and the schools' students when the component is rendered.
   componentDidMount = () => {
-    // Get Advisor's Schools
-    SchoolService.getAdvisorApprovedSchools(this.advisor.id)
+    // Get All Schools
+    SchoolService.getAllSchools()
     .then((response) => {
         if (response.ok) {
             let schoolbody = response.data;
@@ -52,13 +53,26 @@ class ViewStudents extends Component {
     .catch((resErr) => console.log("Something went wrong fetching schools. Please try again"));
 
     // Get Students For Advisor's Schools
-    StudentService.getAdvisorsStudents( this.advisor.id )
+    StudentService.getAllStudents()
     .then((response) => {
+        // console.log("Student Data:" );
+        // console.log(response.data);
         if (response.ok) {
-          this.setState({ studentList: response.data });
+          let allStudents = response.data;
+          let filteredStudents = [];         
+          let today = new Date();
+
+          for (let i = 0; i < allStudents.length; i++) {
+            if (constants.dateFormat(allStudents[i].graddate).substring(0,7).localeCompare(constants.toDatabaseDate(today.getFullYear(), today.getMonth(), 28).substring(0,7)) === 1){
+              filteredStudents.push(allStudents[i]);
+            }
+          }
+
+          this.setState({ studentList: allStudents, filteredStudentTable: filteredStudents });
         } else console.log("An error has occurred fetching students, Please try again.");
     })
     .catch((resErr) => console.log("Something went wrong fetching students. Please try again"))
+
   };
 
   // Specifies what information to include in the rendered columns.
@@ -75,6 +89,11 @@ class ViewStudents extends Component {
         sortable: true,
       },
       {
+        name: "School",
+        selector: row => row.schoolname,
+        sortable: true
+      },
+      {
         name: "Email",
         selector: row => row.email,
         sortable: true,
@@ -87,84 +106,93 @@ class ViewStudents extends Component {
       },
       {
         name: "Edit Student",
-        cell: row => <Button onClick={() => this.props.setCurrentView(<EditStudent advisor={this.advisor.id} student={row}/>)}>Edit</Button>,
-        // ignoreRowClick: true,
-        // allowOverflow: true,
-        button: true,
+        cell: row => <Button onClick={() => this.props.setCurrentView(<EditStudent admin={true} student={row}/>)}>Edit</Button>,
+        button: true
       }
     ];
   }
 
-  EditButtonHandler = (rowID) => {
-    console.log("EditButtonHandler");
-    console.log(rowID);
+  ResetTable = () => {
+    // console.log("studentList");
+    // console.log(this.state.studentList);
+    this.setState({ selectedSchool: null, schoolid: -1 });
+    this.HandleGradCheck(-1, this.state.gradFilter);
   }
 
-  UpdateStudents = (id, gradFilter) => {
-    if( id != null){
-      this.setState({ schoolid: id })
+  UpdateStudents = (target, filter) => {
+    let id;
+    // let gradFilter;
+
+    if (target != null) {
+      id = target.value;
+      // gradFilter = this.state.gradFilter;
+      this.setState({ schoolid: id, selectedSchool: target });
     }
-    else{
-      id = this.state.schoolid
+    else if (filter != null) {
+      id = this.state.schoolid;
+      this.setState({ gradFilter: filter });
     }
-    if( gradFilter != null ){
-      this.setState({ gradFilter: gradFilter })
-    }
-    else{
-      gradFilter = this.state.gradFilter
-    }
+
+    this.HandleGradCheck(id, filter);
+  };
+
+  HandleGradCheck = (id, filter) => {
     let today = new Date();
-    
     let allStudents = this.state.studentList;
     let filteredStudents = [];
+
     for (let i = 0; i < allStudents.length; i++) {
-      if( allStudents[i].schoolid === id ){
-        if( gradFilter && constants.dateFormat(allStudents[i].graddate).substring(0,7).localeCompare(constants.toDatabaseDate(today.getFullYear(), today.getMonth(), 28).substring(0,7)) === 1){
+      if (allStudents[i].schoolid === id || id === -1) {
+        if (filter && constants.dateFormat(allStudents[i].graddate).substring(0,7).localeCompare(constants.toDatabaseDate(today.getFullYear(), today.getMonth(), 28).substring(0,7)) === 1){
           filteredStudents.push(allStudents[i]);
+          console.log(allStudents[i]);
         }
-        else if( !gradFilter ) {
+        else if (!filter) {
           filteredStudents.push(allStudents[i]);
         }
       }
     }
+
     this.setState({ filteredStudentTable: filteredStudents })
-  };
+  }
   
   // Renders the component.
   render() {
     return (
       <div>
         <h2> Students </h2>
-        <Button className="mb-3"
+        {/* <Button className="mb-3" id="purple-button"
           onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}>
             Add Student 
-        </Button>
+        </Button> */}
         <section
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-evenly",
-          }}
-        >
-          <div style={{display:"flex", alignItems:"center"}}>
-              <span style={{ marginRight: "5px", fontSize: "16px" }}>
-                Select School:
-              </span>
-              <div id="sub-nav" className="schoolDropdown">
+          }}>
+            <div style={{display:"flex", alignItems:"center"}}>
+                <span style={{ marginRight: "5px", fontSize: "16px" }}>
+                    Select School:
+                </span>
+                <div id="sub-nav">
                 <Select
                     className="m-3"
-                    id="school-dropdown"
                     placeholder="Select School"
                     options={this.state.schoolList}
-                    onChange={target => this.UpdateStudents(target.value, null)}
+                    onChange={target => this.UpdateStudents(target, null)}
+                    value={this.state.selectedSchool}
                   />
-              </div>
-              <span style={{ marginRight: "5px", fontSize: "16px" }}>
-                Graduates Excluded:
-              </span>
-              <FormCheck defaultChecked={true} 
-              onChange={() => { this.UpdateStudents(null, !this.state.gradFilter) }} />
-          </div>
+                </div>
+                <span style={{ marginRight: "5px", fontSize: "16px" }}>
+                    Graduates Excluded:
+                </span>
+                <FormCheck defaultChecked={true} checked={this.state.gradFilter} 
+                    onChange={() => { this.UpdateStudents(null, !this.state.gradFilter) }} />
+                <Button className="m-3" onClick={() => { this.ResetTable() }}>
+                    View All Students
+                </Button>
+            </div>
         </section>
         <br/>
         <div id="student-data-table">
@@ -193,4 +221,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewStudents);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewAllStudents);

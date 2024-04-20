@@ -104,7 +104,28 @@ class TeamService {
         return ServiceUtils.getRequest('/api/team/getvolunteerteam', {teamid: teamid});
     };
 
+    /* TODO TWP Review Above to see if they should stay or if they can go ************************************************************** */
+    
+    /*
+    * Calls the API and returns a JSON of the teams registered for a competition.
+    */
+    getTeamsInCompetition(competitionid) {
+        return ServiceUtils.getRequest('/api/team/getTeamsInCompetition', {competitionid: competitionid});
+    };
 
+    /*
+    * Calls the API and returns a JSON of the teams registered for a competition for all schools.
+    */
+    getTeamsInCompetitionForAllSchools(competitionid) {
+        return ServiceUtils.getRequest('/api/team/getTeamsInCompetitionForAllSchools', {competitionid: competitionid});
+    };
+
+    /*
+    * Calls the API and returns a JSON of the details of a team.
+    */
+    getTeamDetails(teamid) {
+        return ServiceUtils.getRequest('/api/team/getTeamDetails', {teamid: teamid});
+    };
 }
 
 // TODO TWP: Check if this comment line below is alright

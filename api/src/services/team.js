@@ -20,11 +20,11 @@ const pgp = require("pg-promise")();
 // Code Added for curent end points required in the client
 function getAll(){
     return db.any(`
-    SELECT T.TeamID, T.TeamName, T.CompetitionId, SK.SkillLevel, S.SchoolId, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
+    SELECT T.TeamID, T.TeamName, T.CompetitionId, SK.SkillLevel, TS.Status, S.SchoolId, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
     FROM 
         Teams T
-        INNER JOIN Questions Q ON T.SkillLevelID = Q.SkillLevelID
-        INNER JOIN SkillLevels SK ON Q.SkillLevelID = SK.SkillLevelID
+        INNER JOIN SkillLevels SK ON T.SkillLevelID = SK.SkillLevelID
+        INNER JOIN TeamStatus TS ON TS.StatusID = T.TeamStatusID
         INNER JOIN Schools S ON T.SchoolID = S.SchoolID  
         INNER JOIN Users U ON T.AdvisorID = U.UserID;`
 )
@@ -254,7 +254,7 @@ function remove({ teamId, studentId }) {
 }
 
 // returns the number of teams in a competition
-function teamsInCompetition(competitionId, waitlisted = false){
+function teamsInCompetition( {competitionid, waitlisted = false} ){
     let statuses = [constants.TEAM_STATUS_REGISTERED];
     if( waitlisted ){
         statuses.push(constants.TEAM_STATUS_WAITLISTED);
@@ -294,6 +294,51 @@ function teamsInCompetitionBySchool(competitionId, schoolId, waitlisted = false)
             advancedTeamCount: parseInt(countInfo.advancedteamcount),
             teamCount: parseInt(countInfo.teamcount),
         }));
+}
+
+// returns the number of teams a school has in a competition
+function teamsInCompetitionForAllSchools( {competitionid, waitlisted = false} ){
+    let statuses = [constants.TEAM_STATUS_REGISTERED];
+    if( waitlisted ){
+        statuses.push(constants.TEAM_STATUS_WAITLISTED);
+    }
+    return db.any(`
+            SELECT
+                S.SchoolID,
+                S.SchoolName,
+                COUNT(*) as teamCount,
+                SUM(CASE T.SkillLevelID when 1 then 1 else 0 end) as beginnerTeamCount,
+                SUM(CASE T.SkillLevelID when 2 then 1 else 0 end) as advancedTeamCount
+            FROM Teams T
+                INNER JOIN Schools S ON S.SchoolID = T.SchoolID
+            WHERE T.CompetitionID = $(competitionid)
+                AND T.TeamStatusID = ANY($(statuses))
+            GROUP BY S.SchoolID, S.SchoolName`,
+            {competitionid, statuses});
+}
+
+// returns the details of a specific team
+function getTeamDetails( {teamid} ){
+    return db.oneOrNone(`
+            SELECT
+                T.TeamID,
+                T.TeamName,
+                T.CompetitionID,
+                SL.SkillLevel,
+                S.SchoolName,
+                T.TimeCreated,
+                TS.Status,
+                U.FirstName AS AdvisorFirstName,
+                U.LastName AS AdvisorLastName,
+                U.Email AS AdvisorEmail,
+                U.Phone AS AdvisorPhone
+            FROM Teams T
+                INNER JOIN SkillLevels SL ON SL.SkillLevelID = T.SkillLevelID
+                INNER JOIN Schools S ON S.SchoolID = T.SchoolID
+                INNER JOIN TeamStatus TS ON TS.StatusID = T.TeamStatusID
+                INNER JOIN Users U ON U.UserID = T.AdvisorID
+            WHERE T.TeamID = $(teamid)`,
+            {teamid});
 }
 
 // checks if any student ids in the given array are a member of a team in the given competition, returns true if any are
@@ -338,6 +383,7 @@ module.exports = {
     remove,
     teamsInCompetition,
     teamsInCompetitionBySchool,
+    teamsInCompetitionForAllSchools,
     isAnyStudentsInCompetition,
     getCompetitionId,
     getTeamInfo,
@@ -346,4 +392,5 @@ module.exports = {
     getAllSkillLevels,
     getWaitlistInfo,
     getAdvisorSchoolsTeams,
+    getTeamDetails,
 };

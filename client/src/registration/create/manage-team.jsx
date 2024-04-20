@@ -91,6 +91,8 @@ class CreateTeam extends Component {
                     });
                 }
                 this.setState({ schoolList: schools });
+                console.log("Manage");
+                console.log(response.data);
             } else console.log("An error has occurred, Please try again.");
         })
         .catch((resErr) => console.log("Something went wrong. Please try again"));

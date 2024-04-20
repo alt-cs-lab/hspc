@@ -37,12 +37,12 @@ class ViewSchools extends Component {
     return [
       {
         name: "USD Code",
-        selector: row => row.usdCode,
+        selector: row => row.usdcode,
         sortable: true,
       },
       {
         name: "School Name",
-        selector: row => row.name,
+        selector: row => row.schoolname,
         sortable: true,
       },
       {
@@ -57,7 +57,7 @@ class ViewSchools extends Component {
       },
       {
         name: "Postal Code",
-        selector: row => row.postalCode,
+        selector: row => row.postalcode,
         sortable: true,
       },
     ];

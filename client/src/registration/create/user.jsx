@@ -253,6 +253,7 @@ class Register extends Component {
             <br/>
             <Form.Group name="dropdown-div" id="schoolList" hidden={true}>
               <Form.Label> School </Form.Label>
+              <p style={{fontSize:"12px"}}>If your school is not listed please email an admin for addition.</p>
               <Select
                 placeholder="Select a School"
                 options={this.state.schoolList}
