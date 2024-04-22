@@ -10,6 +10,8 @@ const constants = require("../utils/constants.js");
 
 module.exports = {
     createStudent,
+    editStudent,
+    editStudentEmail,
     getEmail,
     getAllStudents,
     getAdvisorSchoolsTeams,
@@ -17,7 +19,7 @@ module.exports = {
     getStudentsWithNoTeam
 }
 
-function createStudent( { firstName, lastName, schoolId, email, gradDate } ) {
+function createStudent({ firstName, lastName, schoolId, email, gradDate }) {
     return db.none(
     `
         INSERT INTO HighSchoolStudents (FirstName, LastName, SchoolID, Email, GradDate)
@@ -27,6 +29,28 @@ function createStudent( { firstName, lastName, schoolId, email, gradDate } ) {
         firstName, lastName, schoolId, email, gradDate
     }
     );
+}
+
+function editStudent({ studentId, firstName, lastName, schoolId, gradDate }) {
+    return db.none(
+    `
+        UPDATE HighSchoolStudents 
+        SET FirstName = $(firstName), LastName = $(lastName), SchoolID = $(schoolId), GradDate = $(gradDate)
+        WHERE StudentID = $(studentId);
+    `,
+        { studentId, firstName, lastName, schoolId, gradDate}
+    );
+}
+
+function editStudentEmail({ studentId, email, firstName, lastName, schoolId, gradDate }) {
+    return db.none(
+        `
+            UPDATE HighSchoolStudents 
+            SET Email = $(email), FirstName = $(firstName), LastName = $(lastName), SchoolID = $(schoolId), GradDate = $(gradDate)
+            WHERE StudentID = $(studentId);
+        `,
+            { studentId, email, firstName, lastName, schoolId, gradDate }
+        );
 }
 
 function getEmail(email) {
@@ -55,7 +79,7 @@ function getAllStudents() {
 function getAdvisorSchoolsTeams(advisorId) {
     let approved = constants.ADVISOR_STATUS_APPROVED
     return db.any(`
-    SELECT HS.FirstName, HS.LastName, HS.SchoolID, HS.Email, HS.GradDate
+    SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.SchoolID, HS.Email, HS.GradDate
 	FROM HighSchoolStudents HS
     INNER JOIN Schools S on S.SchoolID = HS.SchoolID
 	WHERE HS.SchoolID IN (

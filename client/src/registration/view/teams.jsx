@@ -88,8 +88,7 @@ class ViewTeams extends Component {
     TeamService.getAllTeams()
       .then((response) => {
         if (response.ok) {
-          this.setState({ teamTable: response.data });
-          this.setState({ filteredTeamsTable: response.data })
+          this.setState({ teamTable: response.data, filteredTeamsTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -173,11 +172,7 @@ class ViewTeams extends Component {
     TeamService.getAllTeams()
       .then((response) => {
         if (response.ok) {
-          this.setState({
-            filteredTeamsTable: response.data,
-            selectedEvent: null,
-            selectedSchool: null,
-          });
+          this.setState({filteredTeamsTable: response.data, selectedEvent: null, selectedSchool: null,});
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));

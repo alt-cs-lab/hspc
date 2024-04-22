@@ -11,6 +11,7 @@ import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slic
 import Select from "react-select";
 import { Button, FormCheck } from "react-bootstrap";
 import AddStudent from "../create/add-high-school-student.jsx";
+import EditStudent from "../edit/high-school-students.jsx";
 import "../../_common/assets/css/standard.css";
 
 const constants = require('../../_utilities/constants');
@@ -27,7 +28,7 @@ class ViewStudents extends Component {
       columnsForStudents: this.getColumns(),
       schoolList: [],
       schoolid: -1,
-      gradFilter: true,
+      gradFilter: true
     };
   }
 
@@ -83,8 +84,20 @@ class ViewStudents extends Component {
         selector: row => constants.gradDateFormat(row.graddate),
         sortable: true,
         sortFunction: constants.dateSort,
+      },
+      {
+        name: "Edit Student",
+        cell: row => <Button onClick={() => this.props.setCurrentView(<EditStudent advisor={this.advisor.id} student={row}/>)}>Edit</Button>,
+        // ignoreRowClick: true,
+        // allowOverflow: true,
+        button: true,
       }
     ];
+  }
+
+  EditButtonHandler = (rowID) => {
+    console.log("EditButtonHandler");
+    console.log(rowID);
   }
 
   UpdateStudents = (id, gradFilter) => {
@@ -122,7 +135,7 @@ class ViewStudents extends Component {
     return (
       <div>
         <h2> Students </h2>
-        <Button className="mb-3" id="purple-button"
+        <Button className="mb-3"
           onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}>
             Add Student 
         </Button>

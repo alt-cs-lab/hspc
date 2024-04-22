@@ -106,7 +106,7 @@ class SchoolRequests extends Component {
                 name: "Deny Request",
                 cell: row => {
                     return(
-                    <Button variant="secondary" onClick={() => this.handleCompleteRequest(false, row.userid, row.schoolid)} >
+                    <Button onClick={() => this.handleCompleteRequest(false, row.userid, row.schoolid)} >
                         Deny
                     </Button>
                     );

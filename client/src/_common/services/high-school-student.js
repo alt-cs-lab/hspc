@@ -12,6 +12,27 @@ class StudentService {
         });
     }
 
+    editHighSchoolStudent(studentId, firstName, lastName, schoolId, gradDate) {
+        return ServiceUtils.postRequest('api/high-school-student/editStudent', { 
+            studentId: studentId,
+            firstName: firstName, 
+            lastName: lastName, 
+            schoolId: schoolId,
+            gradDate: gradDate
+        });
+    }
+
+    editStudentEmail(studentId, email, firstName, lastName, schoolId, gradDate) {
+        return ServiceUtils.postRequest('api/high-school-student/editStudentEmail', { 
+            studentId: studentId,
+            email: email,
+            firstName: firstName, 
+            lastName: lastName, 
+            schoolId: schoolId,
+            gradDate: gradDate
+        });
+    }
+
     getAllStudents() {
         return ServiceUtils.getRequest('api/high-school-student/getAllStudents');
     }

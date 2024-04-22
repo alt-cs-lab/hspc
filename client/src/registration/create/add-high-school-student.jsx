@@ -14,22 +14,6 @@ import "../../_common/assets/css/standard.css";
 
 const constants = require('../../_utilities/constants');
 
-const months = 
-[
-  { value: '1', label: 'January' },
-  { value: '2', label: 'February' },
-  { value: '3', label: 'March' },
-  { value: '4', label: 'April' },
-  { value: '5', label: 'May' },
-  { value: '6', label: 'June' },
-  { value: '7', label: 'July' },
-  { value: '8', label: 'August' },
-  { value: '9', label: 'September' },
-  { value: '10', label: 'October' },
-  { value: '11', label: 'November' },
-  { value: '12', label: 'December' }
-]
-
 /*
  * @author: Devan Griffin
  * Class that handles the client side of creating a student
@@ -43,7 +27,7 @@ class AddStudent extends Component {
       firstName: "",
       lastName: "",
       email: "",
-      gradMonth: months[4].value,
+      gradMonth: constants.months[4].value,
       gradYear: "",
       schoolId: -1,
       schoolList: []
@@ -84,7 +68,6 @@ class AddStudent extends Component {
 
     StudentService.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate)
     .then((response) => {
-      console.log(response)
       if(response.status === 201){
         this.props.dispatchSuccess("Student Created")
       }
@@ -125,8 +108,8 @@ class AddStudent extends Component {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Graduation Month</Form.Label>
-              <Select placeholder="Select a Month" options={months} 
-                  onChange={( target => this.setState({ gradMonth: target.value }))} defaultValue={months[4]}/>
+              <Select placeholder="Select a Month" options={constants.months} 
+                  onChange={( target => this.setState({ gradMonth: target.value }))} defaultValue={constants.months[4]}/>
             </Form.Group>
             <Form.Group className="mb-4">
               <Form.Label>Graduation Year</Form.Label>
@@ -134,7 +117,7 @@ class AddStudent extends Component {
                 onChange={(target => this.setState({ gradYear: target.target.value }))} value={ this.state.gradYear }/>
             </Form.Group>
           </div>
-          <Button id="purple-button" type="submit">
+          <Button type="submit">
             Create Student
           </Button>
         </Form>
