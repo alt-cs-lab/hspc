@@ -54,8 +54,6 @@ class ViewAllStudents extends Component {
     // Get Students For Advisor's Schools
     StudentService.getAllStudents()
     .then((response) => {
-        console.log("Student Data:" );
-        console.log(response.data);
         if (response.ok) {
           this.setState({ studentList: response.data, filteredStudentTable: response.data });
         } else console.log("An error has occurred fetching students, Please try again.");
@@ -97,14 +95,13 @@ class ViewAllStudents extends Component {
   }
 
   ResetTable = () => {
-    console.log("studentList");
-    console.log(this.state.studentList);
     this.setState({ filteredStudentTable: this.state.studentList, selectedSchool: null });
   }
 
   UpdateStudents = (target, gradFilter) => {
-    let id = target.value;
-    if (id != null) {
+    let id = null
+    if ( target !== null && target.value !== null) {
+      id = target.value
       this.setState({ schoolid: id, selectedSchool: target });
     }
     else {
@@ -119,8 +116,6 @@ class ViewAllStudents extends Component {
     let today = new Date();
     
     let allStudents = this.state.studentList;
-    console.log("allStudents");
-    console.log(allStudents);
     let filteredStudents = [];
     for (let i = 0; i < allStudents.length; i++) {
       if (allStudents[i].schoolid === id) {
