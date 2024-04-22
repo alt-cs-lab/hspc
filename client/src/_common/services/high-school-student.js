@@ -37,6 +37,11 @@ class StudentService {
         return ServiceUtils.getRequest('api/high-school-student/getAllStudents');
     }
 
+    /**
+     * Gets all the students at a specific school who aren't in a team.
+     * @param {*} schoolId The ID of the school to be searched.
+     * @returns The students without a team.
+     */
     getStudentsWithNoTeam(schoolId) {
         return ServiceUtils.getRequest('api/high-school-student/getStudentsWithNoTeam', {
             schoolId: schoolId
