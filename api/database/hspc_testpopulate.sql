@@ -11,12 +11,27 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
     run \i hspc_testpopulate.sql
 */
 
-INSERT INTO Competitions
-    (CompetitionID, EventLocation, EventDate, EventStartTime, EventEndTime, EventName, EventDescription, TeamsperEvent, BeginnerTeamsperEvent, AdvancedTeamsperEvent, TeamsPerSchool, BeginnerTeamsPerSchool, AdvancedTeamsPerSchool )
+
+/*
+Insert values into Competition Status Table
+*/
+INSERT INTO CompetitionStatus
+    (StatusID, Status)
 VALUES
-    (7, 'Central High School', '2023-03-15', '09:00:00 CST', '15:00:00 CST', 'Spring Coding Challenge', 'An engaging competition for high school students to showcase their programming skills.', 100, 50, 50, 5, 3, 3 ),
-    (8, 'Eastside Community College', '2026-04-20', '10:00:00 CST', '17:00:00 CST', 'ECC Tech Fest', 'A technology festival and competition for local high school and college students.', 120, 80, 80, 3, 2, 2 ),
-    (9, 'Kansas State Alumni Center', '2024-09-20', '11:00:00 CST', '16:00:00 CST', 'High School Programming Contest', 'The contest is open to all high school students. Each team will consist of up to four students with only one laptop per team. In order that beginners as well as more experienced programmers may compete, there will be two divisions: a beginning division consisting of students who have completed at most one semester of programming and have no more than one year programming experience, and an advanced division open to all high school students. Because different schools use different types of machines and different programming languages in their instruction, teams must provide their own computers and software. Any programming language may be used for the contest. Solutions to the contest problems will require numerical calculations, simple string manipulation and logical decisions. The main difference between the two divisions will be in the complexity of the programming logic required to solve the problems. For example, more use of nested loops will be required to solve some advanced division problems. Also, double-dimensioned arrays may be needed to solve advanced problems, whereas single-dimensioned arrays should be sufficient to solve the beginning problems.', 120, 80, 80, 3, 2, 2 );
+    (1, 'Unpublished'),
+    (2, 'Registerable'),
+    (3, 'Active'),
+    (4, 'Archived');
+
+/*
+Insert values into Competitions Table
+*/
+INSERT INTO Competitions
+    (CompetitionID, EventLocation, EventDate, EventStartTime, EventEndTime, EventName, EventDescription, TeamsperEvent, BeginnerTeamsperEvent, AdvancedTeamsperEvent, TeamsPerSchool, BeginnerTeamsPerSchool, AdvancedTeamsPerSchool, CompetitionStatusID )
+VALUES
+    (7, 'Central High School', '2023-03-15', '09:00:00 CST', '15:00:00 CST', 'Spring Coding Challenge', 'An engaging competition for high school students to showcase their programming skills.', 100, 50, 50, 5, 3, 3, 4 ),
+    (8, 'Eastside Community College', '2026-04-20', '10:00:00 CST', '17:00:00 CST', 'ECC Tech Fest', 'A technology festival and competition for local high school and college students.', 120, 80, 80, 3, 2, 2, 1 ),
+    (9, 'Kansas State Alumni Center', '2024-09-20', '11:00:00 CST', '16:00:00 CST', 'High School Programming Contest', 'The contest is open to all high school students. Each team will consist of up to four students with only one laptop per team. In order that beginners as well as more experienced programmers may compete, there will be two divisions: a beginning division consisting of students who have completed at most one semester of programming and have no more than one year programming experience, and an advanced division open to all high school students. Because different schools use different types of machines and different programming languages in their instruction, teams must provide their own computers and software. Any programming language may be used for the contest. Solutions to the contest problems will require numerical calculations, simple string manipulation and logical decisions. The main difference between the two divisions will be in the complexity of the programming logic required to solve the problems. For example, more use of nested loops will be required to solve some advanced division problems. Also, double-dimensioned arrays may be needed to solve advanced problems, whereas single-dimensioned arrays should be sufficient to solve the beginning problems.', 120, 80, 80, 3, 2, 2, 2 );
 
 /*
 Insert Values into Roles Table

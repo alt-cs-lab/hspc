@@ -54,7 +54,7 @@ function AdvisorDash (props)
             </NavDropdown>
             <NavDropdown title="Events" align="end" flip>
               <NavDropdown.Item onClick={() => setCurrentView(<ViewEvents />)}>
-                View Events
+                View Published Events
               </NavDropdown.Item>
             </NavDropdown>
             {/* <NavLink eventKey={6} onClick={() => setCurrentView(<Scoreboard />)}>

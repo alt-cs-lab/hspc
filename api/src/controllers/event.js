@@ -9,49 +9,24 @@ const { accessLevelCheck, badRequestCheck, useService } = require("../utils/exte
 const { check } = require("express-validator");
 const constants = require("../utils/constants.js");
 
-/**
- * @api {get} /api/event/view View Events
- * @apiName ViewEvents
- * @apiGroup Event
- * @apiDescription Retrieves all events.
- *
- * @apiSuccess (Success 200) {List} events List of events.
- * @apiSuccessExample {json} Success-Response:
- *    HTTP/1.1 200 OK
- *   [
- *      {
- *          "name": "HSPC",
- *          "id": 1,
- *          "location": "Kansas State University",
- *          "date": "2022-10-6",
- *          "time": "08:30",
- *          "teamsPerSchool": 3,
- *          "teamsPerEvent": 50,
- *          "description": "High School Programming Competition"
- *      },
- *      {
- *          "name": "MLH Competition",
- *          "id": 2,
- *          "location": "Hutchinson Community College",
- *          "date": "2022-6-5",
- *          "time": "10:30",
- *          "teamsPerSchool": 2,
- *          "teamsPerEvent": 50,
- *          "description": "Major League Hacking Competition"
- *      },
- *      ...
- *  ]
- *
- * @apiError {Number} 500 Internal Server Error
- * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 500 Internal Server Error
- *     {
- *       "message": "Internal Server Error"
- *     }
- * 
- */
-router.get("/view", (req, res) => {
-    useService(eventService.getAllEvents, req, res);
+/*
+* Calls the API and returns all published events
+* Author: Casey Ring
+*/
+router.get("/getPublished", (req, res) => {
+    useService(eventService.getPublished, req, res);
+});
+
+/*
+* Calls the API and returns all unpublished events
+* Author: Casey Ring
+*/
+router.get("/getUnpublished", (req, res) => {
+    useService(eventService.getUnpublished, req, res);
+});
+
+router.get("/get", (req, res) => {
+    useService(eventService.getEvent, req, res);
 });
 
 /*
@@ -130,6 +105,46 @@ router.post("/create", [
     (req, res) => {
         useService(eventService.createEvent, req, res, 'created');
     }
+);
+
+/*
+* Updates an existing event using the values in the body.
+* Author: Casey Ring
+*/
+
+router.post("/update", [
+    check("name")
+        .not().isEmpty().withMessage("Name is required"),
+    check("location")
+        .not().isEmpty().withMessage("Location is required"),
+    check("date")
+        .isDate().withMessage("Date is required"),
+    check("startTime")
+        .isTime().withMessage("Start Time is required"),
+    check("endTime")
+        .isTime().withMessage("End Time is required"),
+    check("beginnerTeamsPerSchool")
+        .isInt({ min: 0 }).withMessage("Beginner Teams per school"),
+    check("advancedTeamsPerSchool")
+        .isInt({ min: 0 }).withMessage("Advanced Teams per school required"),
+    check("teamsPerSchool")
+        .isInt({ min: 1 }).withMessage("Teams per school required"),
+    check("beginnerTeamsPerEvent")
+        .isInt({ min: 0 }).withMessage("Beginner Teams per school required"),
+    check("advancedTeamsPerEvent")
+        .isInt({ min: 0 }).withMessage("Advanced Teams per school required"),
+    check("teamsPerEvent")
+        .isInt({ min: 2 }).withMessage("Teams per event required"),
+    check("description")
+        .not().isEmpty().withMessage("Description is required"),
+
+],
+passport.authenticate("jwt", { session: false }), //authenticate with JWT
+accessLevelCheck(constants.ADMIN), //check if user is admin
+badRequestCheck, //check if there are any bad requests
+(req, res) => {
+    useService(eventService.updateEvent, req, res, 'created');
+}
 );
 
 module.exports = router;

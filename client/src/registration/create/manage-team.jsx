@@ -67,16 +67,18 @@ class CreateTeam extends Component {
         })
         .catch((resErr) => console.log("Something went wrong. Please try again."));
 
-        EventService.getAllEvents()
+        EventService.getPublishedEvents()
         .then((response) => {
             if (response.ok){
                 let eventData = response.data;
                 let events = [];
                 for (let i=0; i < eventData.length; i++){
-                    events.push({
-                        label: eventData[i].name,
-                        value: eventData[i].id
-                    })
+                    if (eventData[i].status === 'Registerable') {
+                        events.push({
+                            label: eventData[i].name,
+                            value: eventData[i].id
+                        })
+                    }
                 }
                 this.setState({eventList: events});
             } else console.log("An error has occured. Please try again");
