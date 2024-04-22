@@ -11,6 +11,8 @@ module.exports = {
     getAllSchoolRequests,
     completeSchoolRequest,
     requestSchool,
+    requestWaitlistedTeamsForEvent,
+    completeTeamRegistration,
 }
 
 function getAllSchoolRequests() {
@@ -35,7 +37,6 @@ function completeSchoolRequest( { approved, schoolid, advisorid }){
             `, { statusApproved, schoolid, advisorid } );
     }
     else{
-        // TODO TWP: Verify deletion below is alright
         let statusDenied = constants.ADVISOR_STATUS_DENIED
         return db.none(`
                 UPDATE SchoolAdvisors SA
@@ -51,4 +52,35 @@ function requestSchool( { schoolid, advisorid } ) {
         INSERT INTO SchoolAdvisors (UserID, SchoolID, AdvisorStatusID)
         VALUES($(advisorid), $(schoolid), $(pending))
     `,{ schoolid, advisorid, pending });
+}
+
+function requestWaitlistedTeamsForEvent( { eventid } ) {
+    let pending = constants.TEAM_STATUS_WAITLISTED
+    return db.any(
+        `
+            SELECT T.TeamID, T.TeamName, T.SchoolID, S.SchoolName, SL.SkillLevel, T.TimeCreated 
+            FROM Teams T 
+                INNER JOIN Schools S ON S.SchoolID = T.SchoolID 
+                INNER JOIN SkillLevels SL ON SL.SkillLevelID = T.SkillLevelID 
+            WHERE T.CompetitionID = $(eventid) AND T.TeamStatusID = $(pending)
+        `, { eventid, pending });
+}
+
+function completeTeamRegistration( { approved, teamid }){
+    if(approved){
+        let statusApproved = constants.TEAM_STATUS_REGISTERED
+        return db.none(`
+                UPDATE Teams T
+                SET TeamStatusID = $(statusApproved)
+                WHERE T.TeamID = $(teamid);
+            `, { statusApproved, teamid } );
+    }
+    else{
+        let statusDenied = constants.TEAM_STATUS_DENIED
+        return db.none(`
+                UPDATE Teams T
+                SET TeamStatusID = $(statusDenied)
+                WHERE T.TeamID = $(teamid);
+            `, { statusDenied, teamid } );
+    }
 }

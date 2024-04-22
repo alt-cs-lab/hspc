@@ -45,13 +45,13 @@ router.post("/create",
     passport.authenticate("jwt", { session: false }), //authenticate with JWT
     accessLevelCheck(constants.ADMIN), //check if user is admin
     [
-        check('name').not().isEmpty().withMessage('School name is required'),
+        check('schoolname').not().isEmpty().withMessage('School name is required'),
         check('addressLine1').not().isEmpty().isString().withMessage('Address line 1 is required'),
         check('addressLine2').optional().isString().withMessage('Address line 2 must be a string'),
         check('city').not().isEmpty().isString().withMessage('City is required'),
         check('state').not().isEmpty().isString().withMessage('State is required'),
-        check('postalCode').not().isEmpty().isInt().withMessage('Postal code is required as a number'),
-        check('usdCode').not().isEmpty().isString().withMessage('USD code is required')
+        check('postalcode').not().isEmpty().isInt().withMessage('Postal code is required as a number'),
+        check('usdcode').not().isEmpty().isString().withMessage('USD code is required')
     ], 
     badRequestCheck, //check if there are any bad requests
     (req, res) => {
@@ -69,8 +69,8 @@ router.post("/create",
  *   HTTP/1.1 200 OK
  *   [
  *      {
- *          "id": 1,
- *          "name": "500 Reach",
+ *          "schoolid": 1,
+ *          "schoolname": "500 Reach",
  *          "addressLine1": "7704 Parallel Pkwy",
  *          "addressLine2": null,
  *          "city": "Kansas City ",

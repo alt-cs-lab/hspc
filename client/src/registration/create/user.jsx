@@ -88,13 +88,7 @@ class Register extends Component {
   }
 
   resetFields = () => {
-    this.setState({ firstName: "" });
-    this.setState({ lastName: "" });
-    this.setState({ email: "" });
-    this.setState({ password: "" });
-    this.setState({ advisoremail: "" });
-    this.setState({ phone: "" });
-    this.setState({ schoolId: 0 });
+    this.setState({ firstName: "", lastName: "", email: "", password: "", advisoremail: "", phone: "", schoolId: 0});
   };
 
   /*
@@ -259,6 +253,7 @@ class Register extends Component {
             <br/>
             <Form.Group name="dropdown-div" id="schoolList" hidden={true}>
               <Form.Label> School </Form.Label>
+              <p style={{fontSize:"12px"}}>If your school is not listed please email an admin for addition.</p>
               <Select
                 placeholder="Select a School"
                 options={this.state.schoolList}

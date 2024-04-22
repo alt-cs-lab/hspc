@@ -7,7 +7,6 @@ import Button from "react-bootstrap/Button";
 import TeamService from "../../_common/services/team";
 import EventService from "../../_common/services/event";
 import SchoolService from "../../_common/services/school";
-//import UserService from "../../_common/services/user";
 import StudentService from "../../_common/services/high-school-student";
 import DataTable from "react-data-table-component";
 import Select from "react-select";
@@ -89,8 +88,7 @@ class ViewTeams extends Component {
     TeamService.getAllTeams()
       .then((response) => {
         if (response.ok) {
-          this.setState({ teamTable: response.data });
-          this.setState({ filteredTeamsTable: response.data })
+          this.setState({ teamTable: response.data, filteredTeamsTable: response.data });
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -152,12 +150,17 @@ class ViewTeams extends Component {
         sortable: true,
       },
       {
+        name: "Team Status",
+        selector: (row) => row.status,
+        sortable: true,
+      },
+      {
         name: "Skill Level",
         selector: (row) => row.skilllevel,
         sortable: true,
       },
       {
-        name: "Email",
+        name: "Advisor Email",
         selector: (row) => row.email,
         sortable: true,
       },
@@ -169,11 +172,7 @@ class ViewTeams extends Component {
     TeamService.getAllTeams()
       .then((response) => {
         if (response.ok) {
-          this.setState({
-            filteredTeamsTable: response.data,
-            selectedEvent: null,
-            selectedSchool: null,
-          });
+          this.setState({filteredTeamsTable: response.data, selectedEvent: null, selectedSchool: null,});
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -204,18 +203,6 @@ class ViewTeams extends Component {
 
   // Renders the component.
   render() {
-    // const table = this.state.teamTable.length === 0 ?
-    //   <h3>No teams to display.</h3>:
-    //   <DataTable
-    //     id="student-data-table"
-    //     data={this.state.teamTable}
-    //     columns={this.state.columnsForTeams}
-    //     pagination
-    //     paginationPerPage={20}
-    //     paginationRowsPerPageOptions={[20, 30, 40, 50]}
-    //     expandableRows
-    //     expandableRowsComponent={ExpandedComponent}
-    //   />
     return (
       <div>
         <h2>Teams</h2>
@@ -293,7 +280,7 @@ const ExpandedComponent = ({ data }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    StudentService.getStudentsInTeam(data.competitionid, data.teamname)
+    StudentService.getStudentsInTeam(data.teamid)
       .then((response) => {
         if (response.ok) {
           setTeamUsersTable(response.data);
@@ -306,7 +293,7 @@ const ExpandedComponent = ({ data }) => {
         console.error("Error in ExpandedComponent", error);
         setError("An unexpected error occurred.");
       });
-  }, [data.competitionid, data.teamname]);
+  }, [data.teamid]);
 
   if (error) {
     return <div className="error-message">{error}</div>;
@@ -314,25 +301,6 @@ const ExpandedComponent = ({ data }) => {
 
   return <DataTable data={teamUsersTable} columns={getSpecificTeamUsersColumns()} />;
 };
-
-/*
-const ExpandedComponent = ({ data }) => {
-  var columnsForSpecficTeams = getSpecificTeamUsersColumns();
-  const [teamUsersTable, setTeamUsersTable] = useState([]);
-  useEffect(() => {
-    UserService.getstudentsteam(data.teamname)
-      .then((response) => {
-        if (response.ok) {
-          console.log(response.data);
-          setTeamUsersTable(response.data);
-        } else console.log("An error has occurred, Please try again.");
-      })
-      .catch((resErr) => console.log("Something went wrong. Please try again"));
-  });
-
-  return <DataTable data={teamUsersTable} columns={columnsForSpecficTeams} />;
-};
-*/
 
 // Once a specific team is chosen the columns are updated by this function.
 function getSpecificTeamUsersColumns() {

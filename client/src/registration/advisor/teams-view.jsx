@@ -83,6 +83,7 @@
       */
       TeamService.getAdvisorsTeams( this.props.auth.user.id )
       .then((response) => {
+        console.log(response)
           if (response.ok) {
             this.setState({ teamList: response.data });
           } else console.log("An error has occurred fetching teams, Please try again.");
@@ -141,19 +142,6 @@
     }
   
     render() {
-      // const table = this.state.filteredTeamsTable.length === 0 ? 
-      // <h3>No teams to display.</h3>:
-      // <div className="mt-3" id="student-data-table">
-      //   <DataTable
-      //     data={this.state.filteredTeamsTable} 
-      //     columns={this.state.columnsForTeams} 
-      //     pagination 
-      //     paginationPerPage={20} 
-      //     paginationRowsPerPageOptions={[20, 30, 40, 50]}
-      //     expandableRows
-      //     expandableRowsComponent={ExpandedComponent}
-      //   />
-      // </div>
       return (
       <div>
         <h2>Teams</h2>
@@ -218,7 +206,7 @@
     const [error, setError] = useState(null);
   
     useEffect(() => {
-      StudentService.getStudentsInTeam(data.competitionid, data.teamname)
+      StudentService.getStudentsInTeam(data.teamid)
         .then((response) => {
           if (response.ok) {
             setTeamUsersTable(response.data);
@@ -231,7 +219,7 @@
           console.error("Error in ExpandedComponent", error);
           setError("An unexpected error occurred.");
         });
-    }, [data.competitionid, data.teamname]);
+    }, [data.teamid]);
   
     if (error) {
       return <div className="error-message">{error}</div>;
@@ -245,7 +233,7 @@
       { name: "First Name", selector: (row) => row.firstname, sortable: true },
       { name: "Last Name", selector: (row) => row.lastname, sortable: true },
       { name: "Email", selector: (row) => row.email, sortable: true },
-      { name: "GradDate", selector: (row) => constants.gradDateFormat(row.graddate), sortable: true, sortFunction: constants.dateSort,},
+      { name: "Graduation Date", selector: (row) => constants.gradDateFormat(row.graddate), sortable: true, sortFunction: constants.dateSort,},
     ];
   }
   

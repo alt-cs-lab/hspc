@@ -73,7 +73,10 @@ function AdvisorDash (props)
 
 //Maps the states to props to be used in connect wrapper in export
 const mapStateToProps = (state) => {
-  return { currentUser: state.auth.user };
+  return { 
+    currentUser: state.auth.user,
+    errors: state.errors
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

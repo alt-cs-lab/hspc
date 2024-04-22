@@ -110,6 +110,8 @@ Insert Dummy Values into High School Students Table
 INSERT INTO HighSchoolStudents
     (StudentID, FirstName, LastName, SchoolID, Email, GradDate)
 VALUES
+    (14, 'Tim', 'Smith', 181, 't.smitty@school.com', '2025-05-30'),
+    (15, 'Jordan', 'Clarkson', 181, 'j.c@school.com', '2025-05-30'),
     (16, 'Chris', 'Martin', 181, 'chris.martin@school.com', '2025-05-30'),
     (100, 'Ashleigh', 'Toddleson', 181, 'ashleigh.toddleson@school.com', '2025-05-30'),
     (120, 'Andrew', 'Clyde', 181, 'andrew.clyde@school.com', '2025-05-30'),
@@ -137,7 +139,9 @@ Insert Dummy Values into Teams Table
 INSERT INTO Teams
     (TeamID, SchoolID, CompetitionID, TeamName, SkillLevelID, AdvisorID, TeamStatusID, TimeCreated)
 VALUES
-    (7, 181, 7, 'Maple Coders', 1, 22, 1, '2024-01-15T08:00:00.000'),
+    (5, 181, 7, 'Acacia Coders', 1, 22, 1, '2024-01-15T08:00:00.000'),
+    (6, 181, 7, 'Oak Coders', 1, 22, 2, '2024-01-15T08:00:00.000'),
+    (7, 181, 7, 'Maple Coders', 2, 22, 1, '2024-01-15T08:00:00.000'),
     (8, 182, 8, 'Riverdale Hackers', 2, 23, 2, '2024-01-20T09:00:00.000');
 
 /*
@@ -146,6 +150,10 @@ Insert Dummy Values Into Team Members
 INSERT INTO TeamMembers
     (StudentID, TeamID)
 VALUES
+    (14, 5),
+    (15, 5),
+    (130, 6),
+    (140, 6),
     (16, 7),
     (100, 7),
     (17, 8),
