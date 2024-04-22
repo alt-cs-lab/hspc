@@ -114,7 +114,7 @@ class ViewAllStudents extends Component {
     this.setState({ filteredStudentTable: this.state.studentList, selectedSchool: null });
   }
 
-  UpdateStudents = (target, gradFilter) => {
+  UpdateStudents = (target, filter) => {
     let id = null
     if ( target !== null && target.value !== null) {
       id = target.value
@@ -132,7 +132,7 @@ class ViewAllStudents extends Component {
     let today = new Date();
     let allStudents = this.state.studentList;
     let filteredStudents = [];
-
+    console.log(id);
     for (let i = 0; i < allStudents.length; i++) {
       if (allStudents[i].schoolid === id || id === -1) {
         if (filter && constants.dateFormat(allStudents[i].graddate).substring(0,7).localeCompare(constants.toDatabaseDate(today.getFullYear(), today.getMonth(), 28).substring(0,7)) === 1){
