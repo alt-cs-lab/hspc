@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS TeamStatus CASCADE;
 DROP TABLE IF EXISTS Schools CASCADE;
 DROP TABLE IF EXISTS Volunteers CASCADE;
 DROP TABLE IF EXISTS Competitions CASCADE;
+DROP TABLE IF EXISTS CompetitionStatus CASCADE;
 DROP TABLE IF EXISTS Users CASCADE;
 DROP TABLE IF EXISTS Roles CASCADE;
 
@@ -57,6 +58,12 @@ CREATE TABLE Users (
 	FOREIGN KEY (RequestLevel) REFERENCES Roles("Level") -- "Level"
 );
 
+CREATE TABLE CompetitionStatus (
+	StatusID SMALLINT,
+	Status VARCHAR(15),
+	UNIQUE (StatusID)
+);
+
 CREATE TABLE Competitions (
 	CompetitionID SERIAL NOT NULL,
 	EventLocation VARCHAR(64),
@@ -71,7 +78,9 @@ CREATE TABLE Competitions (
 	TeamsPerSchool INT,
 	BeginnerTeamsPerSchool INT,
 	AdvancedTeamsPerSchool INT,
-	PRIMARY KEY (CompetitionID)
+	CompetitionStatusID SMALLINT,
+	PRIMARY KEY (CompetitionID),
+	FOREIGN KEY (CompetitionStatusID) REFERENCES CompetitionStatus(StatusID)
 );
 
 CREATE TABLE Volunteers (

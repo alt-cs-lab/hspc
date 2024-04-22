@@ -7,10 +7,11 @@ import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
 //import Email from "../email/create-email";
-import EventSignIn from "../registration/create/event-signin";
+//import EventSignIn from "../registration/create/event-signin";
 import CreateEvent from "../registration/create/event";
 //import CreateNews from "../home/news";
 import ViewEvents from "../registration/view/events";
+import ViewEventsUnpublished from "../registration/view/events-unpublished.jsx"
 import ViewUsers from "../registration/view/users";
 import TeamRequests from "../registration/view/team-requests";
 import SchoolRequests from "../registration/view/advisor-school-requests";
@@ -82,14 +83,19 @@ function AdminDash(props)
             </NavDropdown>
 
             <NavDropdown title="Events" align="end" flip>
+              {/*
               <NavDropdown.Item onClick={() => setCurrentView(<EventSignIn />)}>
                 Begin Event
               </NavDropdown.Item>
+              */}
               <NavDropdown.Item onClick={() => setCurrentView(<CreateEvent />)}>
                 Create Event
               </NavDropdown.Item>
               <NavDropdown.Item onClick={() => setCurrentView(<ViewEvents />)}>
-                View Events
+                View Published Events
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => setCurrentView(<ViewEventsUnpublished />)}>
+                View Unpublished Events
               </NavDropdown.Item>
             </NavDropdown>
 

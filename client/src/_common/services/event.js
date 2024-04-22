@@ -23,10 +23,40 @@ class EventService {
     }
 
     /*
-    * Calls the API and returns a JSON list of all registered events.
+    * Calls the API and updates an existing Event object in the database.
     */
-    getAllEvents(userID, accessLevel) {
-        return ServiceUtils.getRequest('/api/event/view', {
+    updateEvent(eventId, eventName, eventLocation, eventDate, startTime, endTime, teamsPerEvent, beginnerTeamsPerEvent, advancedTeamsPerEvent, teamsPerSchool, beginnerTeamsPerSchool, advancedTeamsPerSchool, description) {  
+        return ServiceUtils.postRequest('/api/event/update',{
+            id: eventId,
+            name: eventName,
+            location: eventLocation,
+            date: eventDate,
+            startTime: startTime,
+            endTime: endTime,
+            beginnerTeamsPerSchool: beginnerTeamsPerSchool,
+            advancedTeamsPerSchool: advancedTeamsPerSchool,
+            teamsPerSchool: teamsPerSchool,
+            beginnerTeamsPerEvent: beginnerTeamsPerEvent,
+            advancedTeamsPerEvent: advancedTeamsPerEvent,
+            teamsPerEvent: teamsPerEvent,
+            description: description});
+    }
+
+    /*
+    * Calls the API and returns a JSON list of all published events.
+    */
+    getPublishedEvents(userID, accessLevel) {
+        return ServiceUtils.getRequest('/api/event/getPublished', {
+            userID: userID,
+            accessLevel: accessLevel
+        });
+    }
+
+    /*
+    * Calls the API and returns a JSON list of all unpublished events.
+    */
+    getUnpublishedEvents(userID, accessLevel) {
+        return ServiceUtils.getRequest('/api/event/getUnpublished', {
             userID: userID,
             accessLevel: accessLevel
         });
@@ -37,6 +67,12 @@ class EventService {
     */
     getHighlightEvent() {
         return ServiceUtils.getRequest('/api/event/highlightEvent');
+    }
+
+    getEvent(eventID) {
+        return ServiceUtils.getRequest('/api/event/get', {
+            eventID: eventID,
+        })
     }
 }
 

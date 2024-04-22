@@ -58,7 +58,7 @@ function VolunteerDash(props)
           <Nav>
             <NavDropdown title="Events" align="end" flip>
               <NavDropdown.Item onClick={() => setCurrentView(<ViewEvents />)}>
-                View Events
+                View Published Events
               </NavDropdown.Item>
               <NavDropdown.Item onClick={() => setCurrentView(<VolunteerSignUp />)}>
                 Sign Up To Volunteer

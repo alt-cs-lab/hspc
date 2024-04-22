@@ -265,8 +265,8 @@ function teamsInCompetition( {competitionid, waitlisted = false} ){
                 SUM(CASE T.SkillLevelID when 1 then 1 else 0 end) as beginnerTeamCount,
                 SUM(CASE T.SkillLevelID when 2 then 1 else 0 end) as advancedTeamCount
             FROM Teams T
-            WHERE T.CompetitionID = $(competitionId) AND T.TeamStatusID = ANY($(statuses)) `,
-            {competitionId, statuses})
+            WHERE T.CompetitionID = $(competitionid) AND T.TeamStatusID = ANY($(statuses)) `,
+            {competitionid, statuses})
 }
 
 // returns the number of teams a school has in a competition

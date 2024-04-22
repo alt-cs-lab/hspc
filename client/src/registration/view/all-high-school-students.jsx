@@ -120,26 +120,26 @@ class ViewAllStudents extends Component {
       id = target.value
       this.setState({ schoolid: id, selectedSchool: target });
     }
-    else if (filter != null) {
+    else if (gradFilter != null) {
       id = this.state.schoolid;
-      this.setState({ gradFilter: filter });
+      this.setState({ gradFilter: gradFilter });
     }
 
-    this.HandleGradCheck(id, filter);
+    this.HandleGradCheck(id, gradFilter);
   };
 
-  HandleGradCheck = (id, filter) => {
+  HandleGradCheck = (id, gradFilter) => {
     let today = new Date();
     let allStudents = this.state.studentList;
     let filteredStudents = [];
     console.log(id);
     for (let i = 0; i < allStudents.length; i++) {
       if (allStudents[i].schoolid === id || id === -1) {
-        if (filter && constants.dateFormat(allStudents[i].graddate).substring(0,7).localeCompare(constants.toDatabaseDate(today.getFullYear(), today.getMonth(), 28).substring(0,7)) === 1){
+        if (gradFilter && constants.dateFormat(allStudents[i].graddate).substring(0,7).localeCompare(constants.toDatabaseDate(today.getFullYear(), today.getMonth(), 28).substring(0,7)) === 1){
           filteredStudents.push(allStudents[i]);
           console.log(allStudents[i]);
         }
-        else if (!filter) {
+        else if (!gradFilter) {
           filteredStudents.push(allStudents[i]);
         }
       }
@@ -179,7 +179,7 @@ class ViewAllStudents extends Component {
                 <span style={{ marginRight: "5px", fontSize: "16px" }}>
                     Graduates Excluded:
                 </span>
-                <FormCheck defaultChecked={true} checked={this.state.gradFilter} 
+                <FormCheck defaultChecked={true}
                     onChange={() => { this.UpdateStudents(null, !this.state.gradFilter) }} />
                 <Button className="m-3" onClick={() => { this.ResetTable() }}>
                     View All Students

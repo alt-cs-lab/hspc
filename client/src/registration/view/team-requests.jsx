@@ -185,6 +185,7 @@ class SchoolRequests extends Component {
 
         TeamService.getTeamsInCompetition( eventid )
         .then((response) => {
+            console.log(response)
             if (response.ok) {
                 if(parseInt(response.data.teamcount) === 0) {
                     totalTeamCount = 0;

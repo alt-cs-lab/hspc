@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react";
 import { Navbar, NavItem, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
-import EventSignIn from "../registration/create/event-signin";
+//import EventSignIn from "../registration/create/event-signin";
 import ViewEvents from "../registration/view/events";
 import ViewUsers from "../registration/view/users";
 import ViewTeams from "../registration/view/teams";
@@ -56,9 +56,11 @@ function JudgeDash(props)
                 Assign Volunteers
               </NavItem>
             </NavDropdown>
+            {/*
             <NavItem eventKey={4} onClick={() => setCurrentView(<EventSignIn />)}>
               Begin Event
             </NavItem>
+            */}
             <NavItem eventKey={8} onClick={() => setCurrentView(<EditScores />)}>
               Judging
             </NavItem>
