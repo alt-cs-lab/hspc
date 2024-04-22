@@ -41,7 +41,7 @@ class SchoolRequests extends Component {
     * Returns a list of all upgrade requests when the component is rendered.
     */
     componentDidMount = () => {
-        EventService.getAllEvents(this.props.auth.user.id, this.props.auth.user.accessLevel)
+        EventService.getPublishedEvents(this.props.auth.user.id, this.props.auth.user.accessLevel)
         .then((response) => {
             if (response.ok) {
                 let eventsbody = response.data;
