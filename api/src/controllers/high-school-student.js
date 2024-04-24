@@ -4,8 +4,6 @@ Copyright (c) 2024 KSU-CS-Software-Engineering
 */
 const router = require("express").Router();
 const { check } = require("express-validator");
-const validator = require("validator");
-const isEmpty = require("is-empty");
 const passport = require("passport");
 const {
   badRequestCheck,
@@ -75,7 +73,7 @@ router.post('/createStudent',
 
 router.post('/editStudent',
     passport.authenticate("jwt", { session: false }),
-    accessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR | constants.ADMIN),
     [
     check('firstName')
         .isLength({max: 100}).withMessage('First name must be less than 100 characters.')
@@ -91,41 +89,6 @@ router.post('/editStudent',
         .not().isEmpty().withMessage("School is required."),
     check('gradDate')
         .not().isEmpty().withMessage("Graduation Date is empty.")
-], badRequestCheck, (req, res) => {
-    useService(studentService.editStudent, req, res, 'edited');
-});
-
-router.post('/editStudentAdmin',
-    passport.authenticate("jwt", { session: false }),
-    accessLevelCheck(constants.ADVISOR),
-    [
-        check('email')
-        .not().isEmpty().withMessage("Email is required.")
-        .normalizeEmail()
-        .custom(async value => {
-            try{
-                return await studentService.getEmail(value) === null
-                    ? Promise.resolve()
-                    : Promise.reject()
-            }
-            catch {
-                return Promise.reject()
-            }
-        }).withMessage("That email is already in use."),
-        check('firstName')
-        .isLength({max: 100}).withMessage('First name must be less than 100 characters.')
-        .not().isEmpty().withMessage("First name is required.")
-        .trim()
-        .escape(),
-        check('lastName')
-            .isLength({max: 100}).withMessage('Last name must be less than 100 characters.')
-            .not().isEmpty().withMessage("Last name is required.")
-            .trim()
-            .escape(),
-        check('schoolId')
-            .not().isEmpty().withMessage("School is required."),
-        check('gradDate')
-            .not().isEmpty().withMessage("Graduation Date is empty.")
 ], badRequestCheck, (req, res) => {
     useService(studentService.editStudent, req, res, 'edited');
 });

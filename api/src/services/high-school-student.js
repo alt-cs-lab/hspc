@@ -11,7 +11,6 @@ const constants = require("../utils/constants.js");
 module.exports = {
     createStudent,
     editStudent,
-    editStudentEmail,
     getEmail,
     getAllStudents,
     getAdvisorSchoolsTeams,
@@ -40,17 +39,6 @@ function editStudent({ studentId, firstName, lastName, schoolId, gradDate }) {
     `,
         { studentId, firstName, lastName, schoolId, gradDate}
     );
-}
-
-function editStudentEmail({ studentId, email, firstName, lastName, schoolId, gradDate }) {
-    return db.none(
-        `
-            UPDATE HighSchoolStudents 
-            SET Email = $(email), FirstName = $(firstName), LastName = $(lastName), SchoolID = $(schoolId), GradDate = $(gradDate)
-            WHERE StudentID = $(studentId);
-        `,
-            { studentId, email, firstName, lastName, schoolId, gradDate }
-        );
 }
 
 function getEmail(email) {

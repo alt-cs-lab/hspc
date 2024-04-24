@@ -74,7 +74,7 @@ class ViewTeams extends Component {
         if (response.ok) {
           for (let i = 0; i < body.length; i++) {
             schools.push({
-              label: body[i].name,
+              label: body[i].schoolname,
               value: body[i].id,
             });
           }
@@ -122,14 +122,6 @@ class ViewTeams extends Component {
     }
     this.setState({ filteredTeamsTable: filteredTeams });
   };
-  /*
-  UpdateTeams(nameofevent) {
-    TeamService.getAllTeamsInCompName(nameofevent).then((response) => {
-      this.setState({ teamTable: response.data, columns: this.getAllTeamColumns() });
-    });
-    return;
-  }
-  */
 
   // Specifies what information to include in the rendered columns.
   getAllTeamColumns() {
@@ -233,7 +225,6 @@ class ViewTeams extends Component {
             </span>
             <div id="sub-nav" className="schoolDropdowm">
               <Select
-                id="event-dropdown"
                 placeholder="Select School"
                 options={this.state.schoolList}
                 onChange={(target) => this.handleSchoolSelection(target)}

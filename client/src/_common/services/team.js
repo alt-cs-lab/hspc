@@ -44,13 +44,6 @@ class TeamService {
     }
 
     /*
-    * Calls the API and returns a JSON list of all teams for the passed in competition by event name.
-    */
-    getAllTeamsInCompName(eventName) {
-        return ServiceUtils.getRequest('/api/team/teamsEventName', {eventName: eventName});
-    }
-
-    /*
     * Gets Teams from an advisor's schools
     */
     getAdvisorsTeams(advisorId) {

@@ -3,12 +3,10 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 const bcrypt = require("bcrypt");
-const { XMLParser } = require("fast-xml-parser");
+//const { XMLParser } = require("fast-xml-parser");
 const jwt = require("jsonwebtoken");
 const userService = require("./user");
-const { default: axios } = require("axios");
-const statusResponse = require("../utils/status-response");
-const { lock } = require("../server");
+//const { default: axios } = require("axios");
 
 function checkPassword(password, hashedPassword) {
     return new Promise((resolve, reject) => {
@@ -52,6 +50,7 @@ function login({ email, password }) {
     
 }
 
+/* THIS HAS BEEN POSTPONED UNTIL CAS SYSTEM IS SET UP AGAIN FOR STUDENT LOGIN AS VOLUNTEERS
 const loginOrRegister = async (url, firstName, lastName) => {
     const casResponse = await axios.get(url)
     const parser = new XMLParser()
@@ -112,10 +111,10 @@ const loginOrRegister = async (url, firstName, lastName) => {
     else {
         throw Error()
     }
-}
+}*/
 
 module.exports = {
     checkPassword,
     login,
-    loginOrRegister,
+    //loginOrRegister,
 };

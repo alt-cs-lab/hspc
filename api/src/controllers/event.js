@@ -25,10 +25,6 @@ router.get("/getUnpublished", (req, res) => {
     useService(eventService.getUnpublished, req, res);
 });
 
-router.get("/get", (req, res) => {
-    useService(eventService.getEvent, req, res);
-});
-
 /*
 * Calls the API and returns the most upcoming event or if there are none, the most recent.
 * Author: Trent Powell
@@ -105,46 +101,6 @@ router.post("/create", [
     (req, res) => {
         useService(eventService.createEvent, req, res, 'created');
     }
-);
-
-/*
-* Updates an existing event using the values in the body.
-* Author: Casey Ring
-*/
-
-router.post("/update", [
-    check("name")
-        .not().isEmpty().withMessage("Name is required"),
-    check("location")
-        .not().isEmpty().withMessage("Location is required"),
-    check("date")
-        .isDate().withMessage("Date is required"),
-    check("startTime")
-        .isTime().withMessage("Start Time is required"),
-    check("endTime")
-        .isTime().withMessage("End Time is required"),
-    check("beginnerTeamsPerSchool")
-        .isInt({ min: 0 }).withMessage("Beginner Teams per school"),
-    check("advancedTeamsPerSchool")
-        .isInt({ min: 0 }).withMessage("Advanced Teams per school required"),
-    check("teamsPerSchool")
-        .isInt({ min: 1 }).withMessage("Teams per school required"),
-    check("beginnerTeamsPerEvent")
-        .isInt({ min: 0 }).withMessage("Beginner Teams per school required"),
-    check("advancedTeamsPerEvent")
-        .isInt({ min: 0 }).withMessage("Advanced Teams per school required"),
-    check("teamsPerEvent")
-        .isInt({ min: 2 }).withMessage("Teams per event required"),
-    check("description")
-        .not().isEmpty().withMessage("Description is required"),
-
-],
-passport.authenticate("jwt", { session: false }), //authenticate with JWT
-accessLevelCheck(constants.ADMIN), //check if user is admin
-badRequestCheck, //check if there are any bad requests
-(req, res) => {
-    useService(eventService.updateEvent, req, res, 'created');
-}
 );
 
 module.exports = router;
