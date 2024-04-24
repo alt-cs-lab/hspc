@@ -4,7 +4,6 @@ import AdvisorDash from "../../dashboards/advisor";
 import AdminDash from "../../dashboards/admin";
 import MasterDash from "../../dashboards/master";
 import { Route } from "react-router-dom";
-import StartJudging from "../../judging/startJudging";
 import { selectAuth } from "./authSlice";
 const constants = require('../../_utilities/constants');
 
@@ -37,24 +36,10 @@ const dashboardRoutes = {
     }
 }
 
-const vounteerJudging = {
-    "/volunteer/volunteerdash/startjudging": {
-        element: <VolunteerDash />,
-        accessLevel: (constants.VOLUNTEER),
-        requireExact: true
-    },
-    "/volunteer/startjudging": {
-        element: <StartJudging />,
-        accessLevel: (constants.JUDGE),
-        requireExact: false
-    }
-}
-
 const routes = {
     dashboardRoutes: dashboardRoutes,
     protectedRoutes: {
-        ...dashboardRoutes,
-        ...vounteerJudging
+        ...dashboardRoutes
     }
 }
 

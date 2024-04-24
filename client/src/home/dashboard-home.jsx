@@ -153,7 +153,6 @@ function DashboardHome(props){
                     Update Account
                 </Button>
             </Form>
-            {/* Add "Update Profile Options" Here */}
         </div>
     );
 }
@@ -165,9 +164,6 @@ function handleRequestNewSchool(event, additionalSchoolid, advisorid, props) {
     RequestService.requestAdditionalSchool(additionalSchoolid, advisorid)
     .then((response) => {
         if (response.status === 200) {
-            // this.props.dispatchSuccess(
-            //     "Registration was successful."
-            // );
             window.location.reload();
         }
         if (response.data.includes("duplicate")){
@@ -197,7 +193,6 @@ function handleProfileUpdate(event, firstName, lastName, phone, email, props) {
         if (response.status === 200) {
           Auth.logout()
           props.dispatchSuccess("Account successfully updated, please login")
-          //props.router.navigate("/login", {profileUpdate:'Account successfully updated, please login'});
           props.router.navigate("/login");
         }
     })

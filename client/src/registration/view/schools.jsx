@@ -3,7 +3,7 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component } from "react";
-import SchoolService from "../../_common/services/school";
+import SchoolService from "../../_common/services/school.js";
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";

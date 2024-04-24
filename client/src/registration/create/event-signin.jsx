@@ -15,8 +15,6 @@ import TeamService from "../../_common/services/team";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
-const styles = require('../../_utilities/styleConstants.js');
-
 /*
  * @author: Daniel Bell
  * @MUdated: Natalie Laughlin

@@ -4,10 +4,10 @@
   */
   import React, { Component, useState, useEffect } from "react";
   import Button from "react-bootstrap/Button";
-  import TeamService from "../../_common/services/team";
-  import EventService from "../../_common/services/event";
-  import StudentService from "../../_common/services/high-school-student";
-  import SchoolService from "../../_common/services/school"
+  import TeamService from "../../_common/services/team.js";
+  import EventService from "../../_common/services/event.js";
+  import StudentService from "../../_common/services/high-school-student.js";
+  import SchoolService from "../../_common/services/school.js"
   import DataTable from "react-data-table-component";
   import Select from "react-select";
   import { connect } from "react-redux";
@@ -18,13 +18,12 @@
     updateSuccessMsg,
   } from "../../_store/slices/errorSlice.js";
 
-  const constants = require('../../_utilities/constants');
-  //const styles = require('../../_utilities/styleConstants.js');
+  const constants = require('../../_utilities/constants.js');
   
   /*
   * Page to view an advisor's schools' teams
   */
-  class TeamsView extends Component {
+  class AdvisorTeamsView extends Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -248,5 +247,5 @@
     dispatchSuccess: (message) => dispatch(updateSuccessMsg(message)),
   });
   
-  export default connect(mapStateToProps, mapDispatchToProps)(TeamsView);
+  export default connect(mapStateToProps, mapDispatchToProps)(AdvisorTeamsView);
   

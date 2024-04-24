@@ -37,36 +37,6 @@ class TeamService {
     }
 
     /*
-    * Calls the API and returns a JSON list of all registered teams.
-    */
-    getTeamsNeedingAssignment() {
-        return ServiceUtils.getRequest('/api/team/teamsNeedingAssignment', {});
-    }
-
-
-    /*
-   * Calls the API and returns a JSON list of all teams for the passed in competition by event date and Team Difficulty .
-   */
-    getTeamsByDifficulty(eventDate, teamDifficulty) {
-        //TODO: put in URL
-        return ServiceUtils.getRequest('zzz', {
-            eventDate: eventDate,
-            teamDifficulty: teamDifficulty
-        });
-    }
-
-
-    /*
-    * Posts the corresponding student and team in the TeamUsers table, adding a student to a team
-    */
-    addStudentToTeam(email, teamName) {
-        return ServiceUtils.postRequest('/api/team/add', {
-            email: email,
-            teamName: teamName
-        });
-    }
-
-    /*
     * Calls the API and returns a JSON list of all teams for the passed in competition by event date.
     */
     getAllTeamsInComp(eventDate) {
@@ -88,24 +58,7 @@ class TeamService {
             advisorId: advisorId,
         });
     }
-
-
-    /*
-     * Gets Teams from an event
-     */
-    getTeamsEventID(competitionid) {
-        return ServiceUtils.getRequest('/api/team/teamseventid', {competitionId: competitionid});
-    }
-
-    /*
-    * Calls the API and returns a JSON of the team associated with the passed in id.
-    */
-    getVolunteerTeam(teamid) {
-        return ServiceUtils.getRequest('/api/team/getvolunteerteam', {teamid: teamid});
-    };
-
-    /* TODO TWP Review Above to see if they should stay or if they can go ************************************************************** */
-    
+        
     /*
     * Calls the API and returns a JSON of the teams registered for a competition.
     */

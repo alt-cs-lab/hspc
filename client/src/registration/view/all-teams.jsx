@@ -4,10 +4,10 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component, useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import TeamService from "../../_common/services/team";
-import EventService from "../../_common/services/event";
-import SchoolService from "../../_common/services/school";
-import StudentService from "../../_common/services/high-school-student";
+import TeamService from "../../_common/services/team.js";
+import EventService from "../../_common/services/event.js";
+import SchoolService from "../../_common/services/school.js";
+import StudentService from "../../_common/services/high-school-student.js";
 import DataTable from "react-data-table-component";
 import Select from "react-select";
 import { connect } from "react-redux";
