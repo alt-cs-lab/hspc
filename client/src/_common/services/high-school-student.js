@@ -43,9 +43,11 @@ class StudentService {
         });
     }
 
-    /*
-    * API Endpoint retrieves all students from an advisor's schools
-    */
+    /**
+     * Gets all the students for an advisor from the API
+     * @param {int} advisorId The advisor's id
+     * @returns {json} A json of all the students 
+     */
     getAdvisorsStudents(advisorId) {
         return ServiceUtils.getRequest('api/high-school-student/getFromAdvisorSchools', {
             advisorId: advisorId

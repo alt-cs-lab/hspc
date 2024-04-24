@@ -75,7 +75,6 @@ class AddStudent extends Component {
         this.props.dispatchError(response.data)
       }
     }).catch((resErr) => console.log("Something went wrong connecting to the server. Please try again"));
-    // this.props.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate, this.props.router);
   }
 
   /*
@@ -139,9 +138,7 @@ const mapDispatchToProps = (dispatch) => {
 		dispatchError: (message) =>
 			dispatch(updateErrorMsg(message)),
 		dispatchSuccess: (message) =>
-			dispatch(updateSuccessMsg(message)),
-    // addHighSchoolStudent: (firstName, lastName, schoolId, email, gradDate, router) =>
-    //   dispatch(addHighSchoolStudent(firstName, lastName, schoolId, email, gradDate, router)),
+			dispatch(updateSuccessMsg(message))
   };
 };
 

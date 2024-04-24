@@ -1,7 +1,7 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * Author: Devan Griffin
+ * Modified: 4/22/2024
+ */
 import React, { Component } from "react";
 import SchoolService from "../../_common/services/school";
 import StudentService from "../../_common/services/high-school-student";
@@ -15,7 +15,9 @@ import EditStudent from "../edit/high-school-students.jsx";
 
 const constants = require('../../_utilities/constants');
 
-// This class inherits functionality of the Component class and extends it.
+/**
+ * A component for viewing all of the students
+ */
 class ViewAllStudents extends Component {
   constructor(props) {
     super(props);
@@ -33,9 +35,11 @@ class ViewAllStudents extends Component {
     };
   }
 
-  // Updates advisor's schools and the schools' students when the component is rendered.
+  /**
+   * Runs when the component is opened
+   * Gets all the schools and students from the database
+   */
   componentDidMount = () => {
-    // Get All Schools
     SchoolService.getAllSchools()
     .then((response) => {
         if (response.ok) {
@@ -52,7 +56,6 @@ class ViewAllStudents extends Component {
     })
     .catch((resErr) => console.log("Something went wrong fetching schools. Please try again"));
 
-    // Get Students For Advisor's Schools
     StudentService.getAllStudents()
     .then((response) => {
         if (response.ok) {
@@ -73,7 +76,9 @@ class ViewAllStudents extends Component {
 
   };
 
-  // Specifies what information to include in the rendered columns.
+  /**
+   * Gets the columns for the data table
+   */
   getColumns() {
     return [
       {
@@ -104,20 +109,31 @@ class ViewAllStudents extends Component {
       },
       {
         name: "Edit Student",
-        cell: row => <Button onClick={() => this.props.setCurrentView(<EditStudent admin={true} student={row}/>)}>Edit</Button>,
+        cell: row => <Button onClick={() => this.props.setCurrentView(<EditStudent admin={true} student={row} setCurrentView={this.props.setCurrentView}/>)}>Edit</Button>,
         button: true
       }
     ];
   }
 
+  /**
+   * Resets the table to show all the students
+   */
   ResetTable = () => {
-    this.setState({ filteredStudentTable: this.state.studentList, selectedSchool: null });
+    this.setState({ selectedSchool: null });
+    this.HandleGradCheck(-1, this.state.gradFilter);
   }
 
-  UpdateStudents = (target, filter) => {
-    let id = null
-    if ( target !== null && target.value !== null) {
-      id = target.value
+  /**
+   * Updates the students in the table
+   * @param {*?} target The selected school
+   * @param {boolean?} gradFilter Filter checkbox boolean
+   */
+  UpdateStudents = (target, gradFilter) => {
+    let id = null;
+
+    if (target !== null && target.value !== null) {
+      id = target.value;
+      gradFilter = this.state.gradFilter;
       this.setState({ schoolid: id, selectedSchool: target });
     }
     else if (gradFilter != null) {
@@ -128,16 +144,20 @@ class ViewAllStudents extends Component {
     this.HandleGradCheck(id, gradFilter);
   };
 
+  /**
+   * Updates the filtered table based off of the selected school and graduated check box
+   * @param {*} id The selected school's id
+   * @param {boolean} gradFilter A boolean on whether we want to filter out graduated students 
+   */
   HandleGradCheck = (id, gradFilter) => {
     let today = new Date();
     let allStudents = this.state.studentList;
     let filteredStudents = [];
-    console.log(id);
+
     for (let i = 0; i < allStudents.length; i++) {
       if (allStudents[i].schoolid === id || id === -1) {
         if (gradFilter && constants.dateFormat(allStudents[i].graddate).substring(0,7).localeCompare(constants.toDatabaseDate(today.getFullYear(), today.getMonth(), 28).substring(0,7)) === 1){
           filteredStudents.push(allStudents[i]);
-          console.log(allStudents[i]);
         }
         else if (!gradFilter) {
           filteredStudents.push(allStudents[i]);
@@ -148,15 +168,13 @@ class ViewAllStudents extends Component {
     this.setState({ filteredStudentTable: filteredStudents })
   }
   
-  // Renders the component.
+  /**
+   * Draws the component
+   */
   render() {
     return (
       <div>
         <h2> Students </h2>
-        {/* <Button className="mb-3" id="purple-button"
-          onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}>
-            Add Student 
-        </Button> */}
         <section
           style={{
             display: "flex",

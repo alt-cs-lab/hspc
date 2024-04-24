@@ -31,8 +31,8 @@ class SchoolService {
         });
     }
 
-    /*
-    * Calls the API and returns a JSON list of all registered schools.
+    /**
+    * Gets all the schools from the API
     */
     getAllSchools() {
         return ServiceUtils.getRequest('/api/school/view', {});

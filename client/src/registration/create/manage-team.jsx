@@ -61,12 +61,8 @@ class CreateTeam extends Component {
         })
         .catch((resErr) => console.log("Something went wrong. Please try again."));
 
-<<<<<<< HEAD
-        EventService.getPublishedEvents()
-=======
         // Gets all the events
         EventService.getAllEvents()
->>>>>>> cf7cae3fa09cd58852cd11976ccd21cb2e932cd4
         .then((response) => {
             if (response.ok){
                 let eventData = response.data;

@@ -1,7 +1,7 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * Author: Devan Griffin
+ * Modified: 4/22/24
+ */
 import React, { Component } from "react";
 import SchoolService from "../../_common/services/school";
 import StudentService from "../../_common/services/high-school-student";
@@ -16,7 +16,9 @@ import "../../_common/assets/css/standard.css";
 
 const constants = require('../../_utilities/constants');
 
-// This class inherits functionality of the Component class and extends it.
+/**
+ * A component for viewing an advisor's students
+ */
 class ViewStudents extends Component {
   constructor(props) {
     super(props);
@@ -32,9 +34,11 @@ class ViewStudents extends Component {
     };
   }
 
-  // Updates advisor's schools and the schools' students when the component is rendered.
+  /**
+   * Runs when the component is opened
+   * Gets all the schools and students from the database that are attatched to the advisor
+   */
   componentDidMount = () => {
-    // Get Advisor's Schools
     SchoolService.getAdvisorApprovedSchools(this.advisor.id)
     .then((response) => {
         if (response.ok) {
@@ -50,8 +54,7 @@ class ViewStudents extends Component {
         } else console.log("An error has occurred fetching schools, Please try again.");
     })
     .catch((resErr) => console.log("Something went wrong fetching schools. Please try again"));
-
-    // Get Students For Advisor's Schools
+    
     StudentService.getAdvisorsStudents( this.advisor.id )
     .then((response) => {
         if (response.ok) {
@@ -87,7 +90,8 @@ class ViewStudents extends Component {
       },
       {
         name: "Edit Student",
-        cell: row => <Button onClick={() => this.props.setCurrentView(<EditStudent advisor={this.advisor.id} student={row}/>)}>Edit</Button>,
+        cell: row => <Button onClick={() => this.props.setCurrentView(<EditStudent advisor={this.advisor.id} student={row} 
+              setCurrentView={this.props.setCurrentView}/>)}>Edit</Button>,
         // ignoreRowClick: true,
         // allowOverflow: true,
         button: true,

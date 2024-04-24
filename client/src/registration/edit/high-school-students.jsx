@@ -1,7 +1,7 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * Author: Devan Griffin
+ * Modified: 4/22/2024
+ */
 import React, { Component } from "react";
 import Button from 'react-bootstrap/Button';
 import StudentService from "../../_common/services/high-school-student.js";
@@ -11,12 +11,13 @@ import { Form } from "react-bootstrap";
 import Select from "react-select";
 import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/standard.css";
+import ViewAllStudents from "../view/all-high-school-students.jsx";
+import ViewStudents from "../view/high-school-students.jsx";
 
 const constants = require('../../_utilities/constants');
 
-/*
- * @author: Devan Griffin
- * Class that handles the client side of creating a student
+/**
+ * A component for editing a student
  */
 class EditStudent extends Component {
   constructor(props) {
@@ -44,6 +45,11 @@ class EditStudent extends Component {
    * Returns a list of all schools when the component is rendered to be used in the dropdown.
    */
   componentDidMount = () => {
+
+    /**
+     * Gets the schools that the advisor is connected to from the api
+     * Gets all schools if the user is an admin
+     */
     if (this.isAdmin)
     {
       SchoolService.getAllSchools()
@@ -108,35 +114,33 @@ class EditStudent extends Component {
    * Sends a message to the api to update the student in the database
    * @param {*} event 
    */
-  editStudent(event) {
+  editStudent = (event) => {
     const newStudent = this.state;
-    // Sets the graduation date to the 28th day of the month
+
+    /* Sets the graduation date to the 28th day of the month */
     const gradDate = constants.toDatabaseDate(newStudent.gradYear, newStudent.gradMonth.value, 28);
 
     StudentService.editHighSchoolStudent(newStudent.studentId, newStudent.firstName, newStudent.lastName, newStudent.schoolId, gradDate)
     .then((response) => {
+      console.log(response);
       if(response.status === 201){
-        this.props.dispatchSuccess("Student Edited")
+        console.log("201");
+        console.log(response);
+        this.props.dispatchSuccess("Student Edited");
+        console.log("Student Edited");
+        console.log(this.props.setCurrentView);
+        this.props.setCurrentView(<ViewStudents /*advisorUser={this.props.advisor}*/ setCurrentView={this.props.setCurrentView}/>);
       }
       else{
+        console.log("Error");
+        console.log(response);
         this.props.dispatchError(response.data)
       }
     }).catch((resErr) => console.log("Something went wrong updating the student. Please try again"));
-
-      // StudentService.editStudentEmail(newStudent.studentId, newStudent.email, newStudent.firstName, newStudent.lastName, newStudent.schoolId, gradDate)
-      // .then((response) => {
-      //   if(response.status === 201){
-      //     this.props.dispatchSuccess("Student Email Edited")
-      //   }
-      //   else{
-      //     this.props.dispatchError(response.data)
-      //   }
-      // }).catch((resErr) => console.log("Something went wrong updating the email. Please try again"));
-  
   }
 
-  /*
-   * Renders the form to be filled out for creating/registering a student
+  /**
+   * Renders the form to be filled out for editing a student
    */
   render() {
     return (
@@ -178,6 +182,9 @@ class EditStudent extends Component {
           <Button type="submit">
             Edit Student
           </Button>
+          {/* <Button onClick={() => this.props.setCurrentView(<ViewAllStudents setCurrentView={this.props.setCurrentView}/>)}>
+            View Students
+          </Button> */}
         </Form>
       </div>
     );
@@ -197,9 +204,7 @@ const mapDispatchToProps = (dispatch) => {
 		dispatchError: (message) =>
 			dispatch(updateErrorMsg(message)),
 		dispatchSuccess: (message) =>
-			dispatch(updateSuccessMsg(message)),
-    // addHighSchoolStudent: (firstName, lastName, schoolId, email, gradDate, router) =>
-    //   dispatch(addHighSchoolStudent(firstName, lastName, schoolId, email, gradDate, router)),
+			dispatch(updateSuccessMsg(message))
   };
 };
 

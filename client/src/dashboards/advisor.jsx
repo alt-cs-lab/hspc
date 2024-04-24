@@ -4,13 +4,12 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, NavDropdown/*, NavLink*/ } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
 import TeamsView from "../registration/advisor/teams-view";
 import ViewEvents from "../registration/view/events";
 import CreateTeam from "../registration/create/manage-team";
-//import Scoreboard from "../scoring/scoreboard.jsx";
 import "../_common/assets/css/public-dashboard.css";
 import AddStudent from "../registration/create/add-high-school-student.jsx";
 import ViewStudents from "../registration/view/high-school-students.jsx";
