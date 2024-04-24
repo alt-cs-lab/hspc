@@ -184,7 +184,7 @@ function create({ teamName, schoolId, competitionId, skillLevelId, advisorId, st
 
         // if teamId is undefined, throw an error
         if (!teamId) {
-            throw new Error("Team was not created");
+            throw new Error("Error: Team was not created.");
         }
 
         // add the students to the team if there are any (studentIds might be null or an empty array)
