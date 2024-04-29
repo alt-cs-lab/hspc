@@ -11,8 +11,6 @@ import { Form } from "react-bootstrap";
 import Select from "react-select";
 import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/standard.css";
-import ViewAllStudents from "../view/all-high-school-students.jsx";
-import ViewStudents from "../view/high-school-students.jsx";
 
 const constants = require('../../_utilities/constants');
 
@@ -123,17 +121,10 @@ class EditStudent extends Component {
     StudentService.editHighSchoolStudent(newStudent.studentId, newStudent.firstName, newStudent.lastName, newStudent.schoolId, gradDate)
     .then((response) => {
       console.log(response);
-      if(response.status === 201){
-        console.log("201");
-        console.log(response);
+      if(response.status === 201) {
         this.props.dispatchSuccess("Student Edited");
-        console.log("Student Edited");
-        console.log(this.props.setCurrentView);
-        this.props.setCurrentView(<ViewStudents /*advisorUser={this.props.advisor}*/ setCurrentView={this.props.setCurrentView}/>);
       }
-      else{
-        console.log("Error");
-        console.log(response);
+      else {
         this.props.dispatchError(response.data)
       }
     }).catch((resErr) => console.log("Something went wrong updating the student. Please try again"));
@@ -182,15 +173,15 @@ class EditStudent extends Component {
           <Button type="submit">
             Edit Student
           </Button>
-          {/* <Button onClick={() => this.props.setCurrentView(<ViewAllStudents setCurrentView={this.props.setCurrentView}/>)}>
-            View Students
-          </Button> */}
         </Form>
       </div>
     );
   }
 }
 
+/**
+ * Maps the states to props to be used in connect wrapper in export
+ */
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,

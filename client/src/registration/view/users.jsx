@@ -1,7 +1,7 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * Author: Devan Griffin
+ * Modified: 4/24/2024
+ */
 import React, { Component } from "react";
 import UserService from "../../_common/services/user";
 import DataTable from "react-data-table-component";
@@ -19,9 +19,9 @@ const roleTable = {
   "Master": constants.MASTER
 }
 
-/*
-* Component for Admin accounts to view all User accounts 
-*/
+/**
+ * Component for Admin accounts to view all User accounts 
+ */
 class ViewUsers extends Component {
   constructor(props) {
     super(props);
@@ -34,7 +34,9 @@ class ViewUsers extends Component {
     };
   }
 
-  // Returns a list of all registered users when the component is rendered.
+  /**
+   * Returns a list of all registered users when the component is rendered
+   */
   componentDidMount = () => {
     UserService.getAllUsers()
       .then((response) => {
@@ -46,9 +48,9 @@ class ViewUsers extends Component {
       .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
 
-  /*
-  * Function to filter users by roles.
-  */
+  /** 
+    * Function to filter users by roles.
+    */
   RoleFilter(role) {
     let roleFilter = this.state.roleFilter
     let activeRoles = constants.ADMIN + constants.ADVISOR + constants.JUDGE + constants.VOLUNTEER;
@@ -76,7 +78,9 @@ class ViewUsers extends Component {
     this.setState({ filteredUserTable: filteredUsers })
   };
 
-  // Specifies what information to include in the rendered columns.
+  /**
+   * Specifies what information to include in the rendered columns
+   */
   getColumns() {
     return [
       {
@@ -107,7 +111,9 @@ class ViewUsers extends Component {
     ];
   }
   
-  // Renders the component.
+  /**
+   * Draws the component
+   */
   render() {
     return (
       <div id="student-data-table">
@@ -150,6 +156,9 @@ class ViewUsers extends Component {
   }
 }
 
+/**
+ * Maps the states to props to be used in connect wrapper in export
+ */
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,

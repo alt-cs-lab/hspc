@@ -214,6 +214,9 @@ class ViewAllStudents extends Component {
   }
 }
 
+/**
+ * Maps the states to props to be used in connect wrapper in export
+ */
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,

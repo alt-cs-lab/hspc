@@ -1,10 +1,11 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * Author: Devan Griffin
+ * Modified: 4/24/2024
+ */
+
 import React, { Component } from "react";
 import Button from 'react-bootstrap/Button';
-import StudentService from "../../_common/services/high-school-student.js";
+import StudentService from "../../_common/services/high-school-students.js";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import { Form } from "react-bootstrap";
@@ -15,8 +16,7 @@ import "../../_common/assets/css/standard.css";
 const constants = require('../../_utilities/constants');
 
 /*
- * @author: Devan Griffin
- * Class that handles the client side of creating a student
+ * A component for adding a student
  */
 class AddStudent extends Component {
   constructor(props) {
@@ -57,13 +57,13 @@ class AddStudent extends Component {
   };
 
   /**
-   * Sends the new student to that database
+   * Sends the new student to the database
    * @param {*} event 
    */
   createStudent(event) {
     const newStudent = this.state;
 
-    // Sets the graduation date to the 28th day of the month
+    /* Sets the graduation date to the 28th day of the month */
     const gradDate = constants.toDatabaseDate(newStudent.gradYear, newStudent.gradMonth, 28);
 
     StudentService.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate)

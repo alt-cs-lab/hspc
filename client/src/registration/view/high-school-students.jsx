@@ -64,7 +64,9 @@ class ViewStudents extends Component {
     .catch((resErr) => console.log("Something went wrong fetching students. Please try again"))
   };
 
-  // Specifies what information to include in the rendered columns.
+  /**
+   * Columns for the data table
+   */
   getColumns() {
     return [
       {
@@ -99,11 +101,11 @@ class ViewStudents extends Component {
     ];
   }
 
-  EditButtonHandler = (rowID) => {
-    console.log("EditButtonHandler");
-    console.log(rowID);
-  }
-
+  /**
+   * Updates the students based off of the selected school and graduated check mark
+   * @param {int?} id The school id
+   * @param {boolean?} gradFilter If the graduated box is checked
+   */
   UpdateStudents = (id, gradFilter) => {
     if( id != null){
       this.setState({ schoolid: id })
@@ -134,7 +136,9 @@ class ViewStudents extends Component {
     this.setState({ filteredStudentTable: filteredStudents })
   };
   
-  // Renders the component.
+  /**
+   * Draws the component
+   */
   render() {
     return (
       <div>
@@ -180,6 +184,9 @@ class ViewStudents extends Component {
   }
 }
 
+/**
+ * Maps the states to props to be used in connect wrapper in export
+ */
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
