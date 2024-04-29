@@ -7,7 +7,7 @@ const { check } = require('express-validator');
 const authService = require('../services/auth');
 
 const {badRequestCheck, useService} = require('../utils/extensions');
-const statusResponse = require('../utils/status-response');
+//const statusResponse = require('../utils/status-response');
 
 
 /**
@@ -38,6 +38,8 @@ router.post('/login', [
 });
 
 /**
+ * THIS HAS BEEN POSTPONED UNTIL CAS SYSTEM IS SET UP AGAIN FOR STUDENT LOGIN AS VOLUNTEERS
+ * 
  * @api {post} /api/auth/verify Verify
  * @apiName Verify
  * @apiGroup Auth
@@ -51,7 +53,7 @@ router.post('/login', [
  * 
  * @apiError (Error 400) {String} text List of errors
  */
-router.post("/verify", [
+/*router.post("/verify", [
     check("ticket")
         .not()
         .isEmpty().withMessage("CAS ticket required."),
@@ -70,8 +72,6 @@ router.post("/verify", [
     authService.loginOrRegister(url, firstName, lastName)
         .then(data => statusResponse.ok(res, data))
         .catch( _ => statusResponse.badRequest(res))
-
-
-})
+})*/
 
 module.exports = router;

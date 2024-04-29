@@ -77,7 +77,7 @@ class EditStudent extends Component {
     }
     else
     {
-      SchoolService.getAdvisorApprovedSchools(this.advisor.id)
+      SchoolService.getAdvisorApprovedSchools(this.advisor.id, this.advisor.accessLevel)
       .then((response) => {
           if (response.ok) {
               let schoolbody = response.data;

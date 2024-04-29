@@ -7,12 +7,7 @@ import { withRouter } from "../../_utilities/routerUtils";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Button, Form, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
-
-//import ReCAPTCHA from "react-recaptcha";
 import { registerUser } from "../../_store/actions/authActions";
-import {
-  SET_SCHOOL_DROPDOWN_REQUIRED,
-} from "../../_store/actions/types";
 import Select from "react-select";
 import SchoolService from "../../_common/services/school.js";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
@@ -20,7 +15,6 @@ import "../../_common/assets/css/standard.css";
 import "../../_common/assets/css/public-login.css";
 
 const constants = require('../../_utilities/constants')
-const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell
@@ -30,8 +24,6 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.props.dispatchResetErrors();
-    //this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
-    //this.verifyCallback = this.verifyCallback.bind(this);
     this.state = {
       firstName: "",
       lastName: "",
@@ -53,12 +45,13 @@ class Register extends Component {
     this.changeFields(constants.VOLUNTEER);
     SchoolService.getAllSchools()
       .then((response) => {
+        console.log(response)
         if (response.ok) {
           let schoolbody = response.data;
           let schools = [];
           for (let i = 0; i < schoolbody.length; i++) {
             schools.push({
-              label: schoolbody[i].name,
+              label: schoolbody[i].schoolname,
               value: schoolbody[i].id,
             });
           }
@@ -75,36 +68,12 @@ class Register extends Component {
     event.preventDefault();
     const newUser = this.state;
     // TODO TWP: Do additional Error Checking
-
-    //if (this.state.isVerified) {
-        this.props.registerUser(newUser, this.props.router);
-    //} else {
-    //  this.props.dispatchError("Please verify you are a human.");
-    //  window.scrollTo({
-    //    top: 0,
-    //    behavior: "smooth",
-    //  });
-    //}
+    this.props.registerUser(newUser, this.props.router);
   }
 
   resetFields = () => {
     this.setState({ firstName: "", lastName: "", email: "", password: "", advisoremail: "", phone: "", schoolId: 0});
   };
-
-  /*
-   * Indicates successful loading of the captcha for debugging purposes
-   */
-  // recaptchaLoaded() {
-  //   console.log("captcha successfully loaded.");
-  // }
-
-  /*
-   * Changes the verfied state to true following a verified captcha result.
-   */
-  // verifyCallback(response) {
-  //   if (response) this.setState({ isVerified: true });
-  //   else this.setState({ isVerified: false });
-  // }
 
   onChange(event) {
     this.setState({
@@ -121,11 +90,9 @@ class Register extends Component {
     if (value === constants.VOLUNTEER) {
       this.setState({ requestLevel: constants.VOLUNTEER });
       document.getElementById("schoolList").hidden = true;
-      this.props.dispatchDropdownRequiredUpdate(false);
     } else {
       this.setState({ requestLevel: constants.ADVISOR });
       document.getElementById("schoolList").hidden = false;
-      this.props.dispatchDropdownRequiredUpdate(true);
     }
   }
   /*
@@ -141,25 +108,15 @@ class Register extends Component {
    */
   render() {
     return (
-      <div name="status-div" 
-      // className="RegisterBox"
-      class="page-body"
-      >
+      <div name="status-div" class="page-body">
         <h2>Register Account</h2>
-        {/* <p>
-          <b>Please fill out the information below.</b>
-        </p> */}
         <Form name="form" onSubmit={(event) => this.handleRegister(event)}>
-          {/* <p>Please select an account type.</p> */}
           <ToggleButtonGroup
-            // style={styles.buttonStyles}
-            // className="RoleSelect"
             type="radio"
             name="options"
             defaultValue={constants.VOLUNTEER}
             >
-            <ToggleButton 
-              style={styles.buttonStyles}
+            <ToggleButton
               variant="secondary"
               id="tbg-radio-2"
               value={constants.VOLUNTEER} 
@@ -262,15 +219,6 @@ class Register extends Component {
             </Form.Group>
           </div>
           <br/>
-          {/* <div name="captcha" align="center">
-            <ReCAPTCHA
-              sitekey="6LdB8YoUAAAAAL5OtI4zXys_QDLidEuqpkwd3sKN"
-              render="explicit"
-              onloadCallback={this.recaptchaLoaded}
-              verifyCallback={this.verifyCallback}
-              size="small"
-            />
-          </div> */}
           <Button id="purple-button" label="Create Account" type="submit">
             Create Account
           </Button>
@@ -294,8 +242,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchDropdownRequiredUpdate: (required) =>
-      dispatch({ type: SET_SCHOOL_DROPDOWN_REQUIRED, payload: required }),
     dispatchError: (message) =>
       dispatch(updateErrorMsg(message)),
     dispatchSuccess: (message) =>

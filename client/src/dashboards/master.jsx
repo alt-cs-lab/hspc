@@ -13,12 +13,12 @@ import ViewEventsUnpublished from "../registration/view/events-unpublished.jsx"
 import ViewUsers from "../registration/view/users";
 import TeamRequests from "../registration/view/team-requests";
 import SchoolRequests from "../registration/view/advisor-school-requests";
-import ViewTeams from "../registration/view/teams";
+import ViewTeams from "../registration/view/all-teams";
 import Register from "../registration/create/user";
-import CreateTeam from "../registration/create/manage-team";
+import CreateTeam from "../registration/create/team";
 import "../_common/assets/css/public-dashboard.css";
 import RegisterSchool from "../registration/create/school";
-import ViewSchools from "../registration/view/school";
+import ViewSchools from "../registration/view/schools.jsx";
 import ViewAllStudents from "../registration/view/all-high-school-students.jsx";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
@@ -31,7 +31,7 @@ function MasterDash(props)
 
   useEffect(() =>{
     props.dispatchResetErrors();
-    }, [props]);
+  }, [props]);
 
 return(
   <div>

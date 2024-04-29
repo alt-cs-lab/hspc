@@ -3,7 +3,6 @@ MIT License
 Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, {Component} from "react";
-//import ReCAPTCHA from "react-recaptcha";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form'
 import schoolService from "../../_common/services/school.js";
@@ -40,11 +39,11 @@ export class RegisterSchool extends Component {
                 this.state.addressLine2,
                 this.state.city,
                 this.state.state,
-                this.state.postalCode,
-                this.state.usdCode
+                parseInt(this.state.postalCode),
+                parseInt(this.state.usdCode)
             )
             .then((response) => {
-                if (response.ok) {
+                if (response.status === 200 || response.status === 201) {
                     this.props.dispatchSuccess("School Registration Successful!");
                 } else {
                     this.props.dispatchError("Error Creating School");
@@ -53,25 +52,7 @@ export class RegisterSchool extends Component {
             .catch((error) => {
                 this.props.dispatchError("Error Querying Server");
             });
-        // } else {
-        //     this.props.dispatchError("Please verify you are a human.");
-        // }
     };
-
-    /*
-     * Indicates successful loading of the captcha for debugging purposes
-     */
-    // recaptchaLoaded = () => {
-    //     console.log("captcha successfully loaded.");
-    // };
-
-    /*
-     * Changes the verfied state to true following a verified captcha result.
-     */
-    // verifyCallback = (response) => {
-    //     if (response) this.setState({isVerified: true});
-    //     else this.setState({isVerified: false});
-    // };
 
     /*
      * Renders the form to be filled out for creating/registering a school

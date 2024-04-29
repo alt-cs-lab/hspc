@@ -39,7 +39,8 @@ class ViewStudents extends Component {
    * Gets all the schools and students from the database that are attatched to the advisor
    */
   componentDidMount = () => {
-    SchoolService.getAdvisorApprovedSchools(this.advisor.id)
+    // Get Advisor's Schools
+    SchoolService.getAdvisorApprovedSchools(this.advisor.id, this.advisor.accessLevel)
     .then((response) => {
         if (response.ok) {
             let schoolbody = response.data;

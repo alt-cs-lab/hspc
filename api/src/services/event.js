@@ -5,8 +5,6 @@ const constants = require('../utils/constants')
 
 module.exports = {
     createEvent,
-    updateEvent,
-    //getEventHistory,
     getPublished,
     getUnpublished,
     getEvent,
@@ -39,6 +37,7 @@ function createEvent({
     advancedTeamsPerEvent,
     teamsPerEvent,
     description}) {
+    let eventStatus = constants.EVENT_STATUS_UNPUBLISHED;
     return db.none(
         `INSERT INTO Competitions(
             EventName,
@@ -52,7 +51,8 @@ function createEvent({
             BeginnerTeamsPerEvent,
             AdvancedTeamsPerEvent,
             TeamsPerEvent,
-            EventDescription) 
+            EventDescription,
+            CompetitionStatusID) 
         VALUES(
             $(name),
             $(location),
@@ -65,7 +65,8 @@ function createEvent({
             $(beginnerTeamsPerEvent),
             $(advancedTeamsPerEvent),
             $(teamsPerEvent),
-            $(description))`,
+            $(description),
+            $(eventStatus))`,
     {
         name,
         location,
@@ -78,53 +79,8 @@ function createEvent({
         beginnerTeamsPerEvent,
         advancedTeamsPerEvent,
         teamsPerEvent,
-        description}
-    );
-}
-
-function updateEvent({
-    id,
-    name,
-    location,
-    date,
-    startTime,
-    endTime,
-    beginnerTeamsPerSchool,
-    advancedTeamsPerSchool,
-    teamsPerSchool,
-    beginnerTeamsPerEvent,
-    advancedTeamsPerEvent,
-    teamsPerEvent,
-    description}) {
-    return db.none(
-        `UPDATE Competitions SET
-            EventName = $(name),
-            EventLocation = $(location),
-            EventDate = $(date),
-            EventStartTime = $(startTime),
-            EventEndTime = $(endTime),
-            BeginnerTeamsPerSchool = $(beginnerTeamsPerSchool),
-            AdvancedTeamsPerSchool = $(advancedTeamsPerSchool),
-            TeamsPerSchool = $(teamsPerSchool),
-            BeginnerTeamsPerEvent = $(beginnerTeamsPerEvent),
-            AdvancedTeamsPerEvent = $(advancedTeamsPerEvent),
-            TeamsPerEvent = $(teamsPerEvent),
-            EventDescription = $(description)
-        WHERE EventId = $(id)`,
-    {
-        id,
-        name,
-        location,
-        date,
-        startTime,
-        endTime,
-        beginnerTeamsPerSchool,
-        advancedTeamsPerSchool,
-        teamsPerSchool,
-        beginnerTeamsPerEvent,
-        advancedTeamsPerEvent,
-        teamsPerEvent,
-        description}
+        description,
+        eventStatus}
     );
 }
 
