@@ -61,6 +61,7 @@ class CreateTeam extends Component {
         })
         .catch((resErr) => console.log("Something went wrong. Please try again."));
 
+        // TWP TODO: Change to getRegisterableEvents
         EventService.getPublishedEvents()
         .then((response) => {
             if (response.ok){
@@ -80,7 +81,7 @@ class CreateTeam extends Component {
         .catch((resErr) => console.log("Something went wrong. Please try again."));
         
         // Gets all the advisor's approved schools.
-        SchoolService.getAdvisorApprovedSchools(this.advisor.id)
+        SchoolService.getAdvisorApprovedSchools(this.advisor.id, this.advisor.accessLevel)
         .then((response) => {
             if (response.ok) {
                 let schoolbody = response.data;
@@ -92,8 +93,6 @@ class CreateTeam extends Component {
                     });
                 }
                 this.setState({ schoolList: schools });
-                console.log("Manage");
-                console.log(response.data);
             } else console.log("An error has occurred, Please try again.");
         })
         .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -181,7 +180,6 @@ class CreateTeam extends Component {
         )
         .then((response) => {
             if (response.ok) {
-                console.log(response.data);
                 this.props.dispatchSuccess("Registration was successful.");
                 this.resetFields();
             }
@@ -195,7 +193,6 @@ class CreateTeam extends Component {
      * Clears out the information in some fields so that the page can be used again.
      */
     resetFields = () => {
-        console.log("Reset");
         this.setState({ teamName: "", schoolId: null, competitionId: null, 
         member1: null, member2: null, member3: null, member4: null });
     };

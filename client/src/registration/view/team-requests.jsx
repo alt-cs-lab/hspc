@@ -41,22 +41,26 @@ class SchoolRequests extends Component {
     * Returns a list of all upgrade requests when the component is rendered.
     */
     componentDidMount = () => {
+        // TWP TODO: Change to getRegisterableEvents
         EventService.getPublishedEvents(this.props.auth.user.id, this.props.auth.user.accessLevel)
         .then((response) => {
             if (response.ok) {
                 let eventsbody = response.data;
                 let events = [];
                 for (let i = 0; i < eventsbody.length; i++) {
-                  events.push({
-                        label: eventsbody[i].name,
-                        value: eventsbody[i].id,
-                        teamsPerEvent: eventsbody[i].teamsPerEvent,
-                        beginnerTeamsPerEvent: eventsbody[i].beginnerTeamsPerEvent,
-                        advancedTeamsPerEvent: eventsbody[i].advancedTeamsPerEvent,
-                        teamsPerSchool: eventsbody[i].teamsPerSchool,
-                        beginnerTeamsPerSchool: eventsbody[i].beginnerTeamsPerSchool,
-                        advancedTeamsPerSchool: eventsbody[i].advancedTeamsPerSchool,
-                    });
+                    if (eventsbody[i].status === "Registerable")
+                    {
+                        events.push({
+                            label: eventsbody[i].name,
+                            value: eventsbody[i].id,
+                            teamsPerEvent: eventsbody[i].teamsPerEvent,
+                            beginnerTeamsPerEvent: eventsbody[i].beginnerTeamsPerEvent,
+                            advancedTeamsPerEvent: eventsbody[i].advancedTeamsPerEvent,
+                            teamsPerSchool: eventsbody[i].teamsPerSchool,
+                            beginnerTeamsPerSchool: eventsbody[i].beginnerTeamsPerSchool,
+                            advancedTeamsPerSchool: eventsbody[i].advancedTeamsPerSchool,
+                        });
+                    }
                 }
                 this.setState({ eventList: events });
             } else console.log("An error has occurred fetching events, Please try again.");

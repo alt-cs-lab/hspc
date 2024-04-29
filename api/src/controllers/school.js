@@ -45,13 +45,13 @@ router.post("/create",
     passport.authenticate("jwt", { session: false }), //authenticate with JWT
     accessLevelCheck(constants.ADMIN), //check if user is admin
     [
-        check('schoolname').not().isEmpty().withMessage('School name is required'),
+        check('name').not().isEmpty().withMessage('School name is required'),
         check('addressLine1').not().isEmpty().isString().withMessage('Address line 1 is required'),
         check('addressLine2').optional().isString().withMessage('Address line 2 must be a string'),
         check('city').not().isEmpty().isString().withMessage('City is required'),
         check('state').not().isEmpty().isString().withMessage('State is required'),
         check('postalcode').not().isEmpty().isInt().withMessage('Postal code is required as a number'),
-        check('usdcode').not().isEmpty().isString().withMessage('USD code is required')
+        check('usdcode').not().isEmpty().isInt().withMessage('USD code is required')
     ], 
     badRequestCheck, //check if there are any bad requests
     (req, res) => {
@@ -117,14 +117,7 @@ router.get("/advisorApprovedSchools",
     // accessLevelCheck(constants.ADVISOR),
     // badRequestCheck,
     (req, res) => {
-      const userId = req.query["userId"];
-      schoolService.getAdvisorApprovedSchools(userId)
-        .then((school) => {
-          statusResponses.ok(res, school);
-        })
-        .catch((err) => {
-          statusResponses.serverError(res);
-        });
+      useService(schoolService.getAdvisorApprovedSchools, req, res);
     }
   );
 module.exports = router;

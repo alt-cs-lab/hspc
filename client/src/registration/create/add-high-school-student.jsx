@@ -39,7 +39,7 @@ class AddStudent extends Component {
    * Returns a list of all schools when the component is rendered to be used in the dropdown.
    */
   componentDidMount = () => {
-    SchoolService.getAdvisorApprovedSchools(this.advisor.id)
+    SchoolService.getAdvisorApprovedSchools(this.advisor.id, this.advisor.accessLevel)
     .then((response) => {
         if (response.ok) {
             let schoolbody = response.data;

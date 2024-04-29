@@ -37,6 +37,7 @@ function createEvent({
     advancedTeamsPerEvent,
     teamsPerEvent,
     description}) {
+    let eventStatus = constants.EVENT_STATUS_UNPUBLISHED;
     return db.none(
         `INSERT INTO Competitions(
             EventName,
@@ -50,7 +51,8 @@ function createEvent({
             BeginnerTeamsPerEvent,
             AdvancedTeamsPerEvent,
             TeamsPerEvent,
-            EventDescription) 
+            EventDescription,
+            CompetitionStatusID) 
         VALUES(
             $(name),
             $(location),
@@ -63,7 +65,8 @@ function createEvent({
             $(beginnerTeamsPerEvent),
             $(advancedTeamsPerEvent),
             $(teamsPerEvent),
-            $(description))`,
+            $(description),
+            $(eventStatus))`,
     {
         name,
         location,
@@ -76,7 +79,8 @@ function createEvent({
         beginnerTeamsPerEvent,
         advancedTeamsPerEvent,
         teamsPerEvent,
-        description}
+        description,
+        eventStatus}
     );
 }
 

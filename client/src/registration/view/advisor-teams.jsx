@@ -61,7 +61,7 @@
       /*
       * Get Advisor's Approved Schools
       */
-      SchoolService.getAdvisorApprovedSchools(this.props.auth.user.id)
+      SchoolService.getAdvisorApprovedSchools(this.props.auth.user.id, this.props.auth.user.accessLevel)
       .then((response) => {
           if (response.ok) {
               let schoolbody = response.data;
@@ -82,7 +82,6 @@
       */
       TeamService.getAdvisorsTeams( this.props.auth.user.id )
       .then((response) => {
-        console.log(response)
           if (response.ok) {
             this.setState({ teamList: response.data });
           } else console.log("An error has occurred fetching teams, Please try again.");

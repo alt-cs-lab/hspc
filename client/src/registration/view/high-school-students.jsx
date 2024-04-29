@@ -35,7 +35,7 @@ class ViewStudents extends Component {
   // Updates advisor's schools and the schools' students when the component is rendered.
   componentDidMount = () => {
     // Get Advisor's Schools
-    SchoolService.getAdvisorApprovedSchools(this.advisor.id)
+    SchoolService.getAdvisorApprovedSchools(this.advisor.id, this.advisor.accessLevel)
     .then((response) => {
         if (response.ok) {
             let schoolbody = response.data;

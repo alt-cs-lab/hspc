@@ -72,10 +72,11 @@ class ViewTeams extends Component {
         let body = response.data;
         let schools = [];
         if (response.ok) {
+          console.log(response)
           for (let i = 0; i < body.length; i++) {
             schools.push({
               label: body[i].schoolname,
-              value: body[i].id,
+              value: body[i].schoolid,
             });
           }
           this.setState({ schoolList: schools });
@@ -92,35 +93,6 @@ class ViewTeams extends Component {
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
-  };
-  /*
-   * Updates the list of teams based on selected event
-   */
-  UpdateTeams = (id, school) => {
-    let allTeams = this.state.teamTable;
-    let filteredTeams = [];
-    if (school) {
-      this.setState({ schoolId: id });
-      for (let i = 0; i < allTeams.length; i++) {
-        if (
-          allTeams[i].schoolid === id &&
-          allTeams[i].competitionid === this.state.competitionId
-        ) {
-          filteredTeams.push(allTeams[i]);
-        }
-      }
-    } else {
-      this.setState({ competitionId: id });
-      for (let i = 0; i < allTeams.length; i++) {
-        if (
-          allTeams[i].schoolid === this.state.schoolId &&
-          allTeams[i].competitionid === id
-        ) {
-          filteredTeams.push(allTeams[i]);
-        }
-      }
-    }
-    this.setState({ filteredTeamsTable: filteredTeams });
   };
 
   // Specifies what information to include in the rendered columns.
@@ -223,7 +195,7 @@ class ViewTeams extends Component {
             <span style={{ marginRight: "5px", fontSize: "16px" }}>
               Select School:
             </span>
-            <div id="sub-nav" className="schoolDropdowm">
+            <div id="sub-nav" className="eventDropDown">
               <Select
                 placeholder="Select School"
                 options={this.state.schoolList}

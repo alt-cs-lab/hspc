@@ -26,12 +26,12 @@ module.exports = {
  * @param {Object} reqBody Request body.
  * @returns {Promise} Promise that resolves to an error if there is one.
  */
-function registerSchool({ name, addressLine1, addressLine2, city, state, postalCode, usdCode,})
+function registerSchool({ name, addressLine1, addressLine2, city, state, postalcode, usdcode,})
 {
   return db.none(
     `INSERT INTO Schools (SchoolName, AddressLine1, AddressLine2, City, "State", PostalCode, USDCode)
-                VALUES ( $(name), $(addressLine1), $(addressLine2), $(city), $(state), $(postalCode), $(usdCode))`,
-    { name, addressLine1, addressLine2, city, state, postalCode, usdCode }
+                VALUES ( $(name), $(addressLine1), $(addressLine2), $(city), $(state), $(postalcode), $(usdcode))`,
+    { name, addressLine1, addressLine2, city, state, postalcode, usdcode }
   );
 }
 
@@ -50,9 +50,19 @@ function getAllSchools(){
  * @param {int} userId The advisor's ID
  * @returns All the schools that an advisor is associated with.
  */
-function getAdvisorApprovedSchools(userId) {
+function getAdvisorApprovedSchools( {userId, accessLevel}) {
   let approved = constants.ADVISOR_STATUS_APPROVED
-  return db.any(
+
+  if( accessLevel == constants.MASTER || accessLevel == constants.ADMIN){
+    return db.any(
+      `
+        SELECT S.SchoolID, S.SchoolName, S.City, S."State", S.USDCode FROM Schools S
+      `,
+    {userId, approved}
+    );
+  }
+  else{
+    return db.any(
       `
         SELECT S.SchoolID, S.SchoolName, S.City, S."State", S.USDCode
         FROM Schools S
@@ -61,6 +71,7 @@ function getAdvisorApprovedSchools(userId) {
       `,
     {userId, approved}
     );
+  }
 }
 
 /**
