@@ -124,13 +124,12 @@ class EditStudent extends Component {
       console.log(response);
       if(response.status === 201) {
         this.props.dispatchSuccess("Student Edited");
+        this.props.setCurrentView(<ViewStudents advisorUser={this.props.advisor} setCurrentView={this.props.setCurrentView}/>);
       }
       else {
         this.props.dispatchError(response.data)
       }
     }).catch((resErr) => console.log("Something went wrong updating the student. Please try again"));
-
-    this.props.setCurrentView(<ViewStudents advisorUser={this.props.advisor} setCurrentView={this.props.setCurrentView}/>);
   }
 
   /**
@@ -139,7 +138,10 @@ class EditStudent extends Component {
   render() {
     return (
       <div className="RegisterBox">
-        <h2>Edit Student - {this.state.firstName} {this.state.lastName}</h2>  
+        <h2>Edit Student - {this.state.firstName} {this.state.lastName}</h2>
+        <Button onClick={() => this.props.setCurrentView(<ViewStudents advisorUser={this.props.advisor} setCurrentView={this.props.setCurrentView}/>)}>
+          View Students
+        </Button>
         <Form onSubmit={(event) => this.editStudent(event)}>
           <div class="add-margin">
             <Form.Group className="mb-3">
@@ -169,7 +171,7 @@ class EditStudent extends Component {
             </Form.Group>
             <Form.Group className="mb-4">
               <Form.Label>Graduation Year</Form.Label>
-              <Form.Control type="number" required placeholder="Ex: 2024"
+              <Form.Control type="number" min="2000" max="9999" required placeholder="Ex: 2024"
                 onChange={(target => this.setState({ gradYear: target.target.value }))} defaultValue={ this.state.gradYear }/>
             </Form.Group>
           </div>

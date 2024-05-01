@@ -16,7 +16,7 @@ import ViewStudents from "../view/high-school-students.jsx";
 
 const constants = require('../../_utilities/constants.js');
 
-/*
+/**
  * A component for adding a student
  */
 class AddStudent extends Component {
@@ -115,7 +115,7 @@ class AddStudent extends Component {
             </Form.Group>
             <Form.Group className="mb-4">
               <Form.Label>Graduation Year</Form.Label>
-              <Form.Control type="number" required placeholder="Ex: 2024"
+              <Form.Control type="number" min="2000" max="9999" required placeholder="Ex: 2024"
                 onChange={(target => this.setState({ gradYear: target.target.value }))} value={ this.state.gradYear }/>
             </Form.Group>
           </div>
