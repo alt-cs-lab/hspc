@@ -36,7 +36,7 @@ class VolunteerSignUp extends Component {
           let eventData = response.data;
           let events = [];
           for (let i=0; i < eventData.length; i++){
-            if (eventData[i].status == "Registerable")
+            if (eventData[i].status === "Registerable")
               events.push({
                   label: eventData[i].name,
                   value: eventData[i].id,

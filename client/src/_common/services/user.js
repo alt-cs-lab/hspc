@@ -1,54 +1,44 @@
-import ServiceUtils from "../../_utilities/serviceUtils";
-//import logout from "../../_store/slices/authSlice.js"
+/**
+ * Author: Devan Griffin
+ * Modified: 4/24/2024
+ */
 
+import ServiceUtils from "../../_utilities/serviceUtils";
+
+/**
+ * Class for sending requests to the API for users
+ */
 class UserService {
+
   constructor() {
     this.getAllUsers = this.getAllUsers.bind(this);
     this.getAllVolunteers = this.getAllVolunteers.bind(this);
     this.logVolunteerAssignment = this.logVolunteerAssignment.bind(this);
   }
 
-  /*
-   * Calls the API and returns a JSON list of all registered users.
+  /**
+   * Requests to get all users
+   * @returns {json} All users
    */
   getAllUsers() {
     return ServiceUtils.getRequest("/api/user/view", {});
   }
 
+  /**
+   * Requests to get all volunteers
+   * @returns {json} All volunteers
+   */
   getAllVolunteers() {
     return ServiceUtils.getRequest("api/user/volunteers", {});
   }
 
-  getActiveVolunteers() {
-    return ServiceUtils.getRequest("api/user/activevolunteers", {});
-  }
-
-  /*
-   * API Endpoint that returns all volunteers currently assigned to teams
-   */
-  getAllVolunteerAssignments() {
-    return ServiceUtils.getRequest("api/user/getallvolunteerassignments", {});
-  }
-
-  /*
-   * API Endpoint that returns all teams that have been assigned a volunteer
-   */
-  getAllTeamAssignments() {
-    return ServiceUtils.getRequest("api/user/getallteamassignments", {});
-  }
-
-  /*
-   * API Endpoint that updates Adivsors table with schoolID
-   */
-  updateAdvisorSchool(userId, schoolId) {
-    return ServiceUtils.postRequest("api/user/addschool", {
-      userId: userId,
-      schoolId: schoolId,
-    });
-  }
-
   /*
    *API Endpoint that sets a volunteer as active in the database
+   */
+  /**
+   * Request to set a volunteer
+   * @param {int} userId 
+   * @returns 
    */
   checkInVolunteer(userId) {
     return ServiceUtils.postRequest("api/user/checkinvolunteer", {
@@ -57,7 +47,7 @@ class UserService {
   }
 
   /*
-   *API Endpoint that checks out a volunteer
+   * API Endpoint that checks out a volunteer
    */
   checkOutVolunteer(userId) {
     return ServiceUtils.postRequest("api/user/checkoutvolunteer", {

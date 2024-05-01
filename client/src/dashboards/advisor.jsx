@@ -1,22 +1,24 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * Author: Devan Griffin
+ * Modified: 4/24/2024
+ */
 
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, NavDropdown/*, NavLink*/ } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
 import TeamsView from "../registration/advisor/teams-view";
 import ViewEvents from "../registration/view/events";
 import CreateTeam from "../registration/create/manage-team";
-//import Scoreboard from "../scoring/scoreboard.jsx";
 import "../_common/assets/css/public-dashboard.css";
 import AddStudent from "../registration/create/add-high-school-student.jsx";
 import ViewStudents from "../registration/view/high-school-students.jsx";
 import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
+/**
+ * A component for the advisor dashboard
+ */
 function AdvisorDash (props)
 { 
   const [currentView, setCurrentView] = useState(<DashboardHome user={props.currentUser} />);
@@ -57,9 +59,6 @@ function AdvisorDash (props)
                 View Published Events
               </NavDropdown.Item>
             </NavDropdown>
-            {/* <NavLink eventKey={6} onClick={() => setCurrentView(<Scoreboard />)}>
-              View Board
-            </NavLink> */}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -71,7 +70,9 @@ function AdvisorDash (props)
   );  
 }
 
-//Maps the states to props to be used in connect wrapper in export
+/**
+ * Maps the states to props to be used in connect wrapper in export
+ */
 const mapStateToProps = (state) => {
   return { 
     currentUser: state.auth.user,

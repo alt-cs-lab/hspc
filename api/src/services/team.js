@@ -215,9 +215,10 @@ function create({
     );
     const teamId = result.teamid;
 
-    if (!teamId) {
-      throw new Error("Team was not created");
-    }
+        // if teamId is undefined, throw an error
+        if (!teamId) {
+            throw new Error("Error: Team was not created.");
+        }
 
     if (studentIds?.length > 0) {
       const values = studentIds.map((studentId) => ({

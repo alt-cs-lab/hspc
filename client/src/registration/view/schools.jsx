@@ -1,15 +1,15 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * Author: Devan Griffin
+ * Modified: 4/24/2024
+ */
 import React, { Component } from "react";
-import SchoolService from "../../_common/services/school";
+import SchoolService from "../../_common/services/school.js";
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
-/*
- * @author: Tyler Trammell
- * Class that handles the client side viewing of all schools. UI of View Schools
+
+/**
+ * Component for viewing all the schools
  */
 class ViewSchools extends Component {
   constructor(props) {
@@ -21,7 +21,11 @@ class ViewSchools extends Component {
     };
   }
 
-  // Returns a list of all registered schools when the component is rendered.
+  
+  /**
+   * Runs when the component is opened
+   * Gets all the schools from the database
+   */
   componentDidMount = () => {
     SchoolService.getAllSchools()
       .then((response) => {
@@ -32,7 +36,9 @@ class ViewSchools extends Component {
       .catch((resErr) => console.log("Something went wrong retrieving schools. Please try again"));
   };
 
-  // This method maps the database call and the columns to the correct positioning
+  /**
+   * Gets all the columns for the data table
+   */
   getColumns() {
     return [
       {
@@ -63,7 +69,10 @@ class ViewSchools extends Component {
     ];
   }
   
-  // Renders all the registered schools in table form
+  
+  /**
+   * Draws the component
+   */
   render() {
     return (
       <div id="student-data-table">
@@ -82,6 +91,9 @@ class ViewSchools extends Component {
   }
 }
 
+/**
+ * Maps the states to props to be used in connect wrapper in export
+ */
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
@@ -99,8 +111,11 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
+/**
+ * The expanded component when the dropdown is click on the data table
+ * Displays the address
+ */
 const ExpandedComponent = ({ data }) => {
-
   return <div>
     <h6>Address:</h6>
     <p>{data.addressLine1}</p>
