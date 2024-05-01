@@ -1,41 +1,36 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
-const router = require('express').Router();
-const { check } = require('express-validator');
-const authService = require('../services/auth');
+/**
+ * Controllers for authentication and registration functionality
+ * Author: 
+ * Modified: 
+ */
+const router = require("express").Router();
+const { check } = require("express-validator");
+const authService = require("../services/auth");
 
-const {badRequestCheck, useService} = require('../utils/extensions');
+const { badRequestCheck, useService } = require("../utils/extensions");
 //const statusResponse = require('../utils/status-response');
 
 
 /**
- * @api {post} /api/auth/login Login
- * @apiName Login
- * @apiGroup Auth
- * @apiDescription Logs a user in and returns a JWT token.
- * 
- * @apiBody {String} email The email of the User to login
- * @apiBody {String} password The password of the User to login
- * 
- * @apiSuccess (Success 200) {Number} success HTTP status code indicating success
- * @apiSuccess (Success 200) {String} token The JWT token
- * 
- * @apiError (Error 400) {String} text List of errors
+ * Logs a user in and returns a JWT token.
  */
-router.post('/login', [
-    check('email')
-        .not()
-        .isEmpty().withMessage("Email is required.")
-        .isEmail().withMessage("Invalid email format.")
-        .normalizeEmail(),
-    check('password')
-        .not()
-        .isEmpty().withMessage("Password is required")
-], badRequestCheck, (req,res) => {
-    useService(authService.login,req, res);
-});
+router.post(
+  "/login",
+  [
+    check("email")
+      .not()
+      .isEmpty()
+      .withMessage("Email is required.")
+      .isEmail()
+      .withMessage("Invalid email format.")
+      .normalizeEmail(),
+    check("password").not().isEmpty().withMessage("Password is required"),
+  ],
+  badRequestCheck,
+  (req, res) => {
+    useService(authService.login, req, res);
+  }
+);
 
 /**
  * THIS HAS BEEN POSTPONED UNTIL CAS SYSTEM IS SET UP AGAIN FOR STUDENT LOGIN AS VOLUNTEERS

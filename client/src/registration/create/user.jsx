@@ -52,7 +52,7 @@ class Register extends Component {
           for (let i = 0; i < schoolbody.length; i++) {
             schools.push({
               label: schoolbody[i].schoolname,
-              value: schoolbody[i].id,
+              value: schoolbody[i].schoolid,
             });
           }
           this.setState({ schoolList: schools });

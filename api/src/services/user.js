@@ -1,8 +1,6 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
-
+/**
+ * Services for user functionality
+ */
 require("dotenv").config();
 
 const db = require("../utils/hspc_db").db;
@@ -19,9 +17,7 @@ module.exports = {
 };
 
 /**
- * Generates a hash for a password
- * @param {string} password The given password
- * @returns A new hash
+ * Returns a hash for a given password
  */
 function generateHash(password) {
   return new Promise((resolve, reject) => {
@@ -38,8 +34,7 @@ function generateHash(password) {
 }
 
 /**
- * Gets the current Date and Time
- * @returns A string consisting of the date and time
+ * Returns the current Date and Time
  */
 function getDateTime() {
   var currentDate = new Date();
@@ -60,8 +55,6 @@ function getDateTime() {
 
 /**
  * Registers a new user
- * @param {List?} list A list of all the items needed to make a new user
- * @returns Nothing
  */
 function register({ firstName, lastName, email, phone, requestLevel, schoolId, password }) {
     // newly registered users are either volunteer or advisor accounts
@@ -88,7 +81,6 @@ function register({ firstName, lastName, email, phone, requestLevel, schoolId, p
     })
     .then(() => {
       if (requestLevel == constants.ADVISOR) {
-        // if they are registering as an advisor, we need to add an AdvisorsAffiliation record
         let pending = constants.ADVISOR_STATUS_PENDING
         return db.none(
           `
@@ -111,8 +103,6 @@ function casRegister(firstName, lastName, email, accessLevel) {
 
 /**
  * Returns the login information for the user with the given email
- * @param {String} email
- * @returns
  */
 function getLogin(email) {
   return db
@@ -139,8 +129,7 @@ function getLogin(email) {
 }
 
 /**
- * Gets all the users from the database
- * @returns All the users from the database
+ * Returns all users
  */
 function getAllUsers() {
   return db.any(`
@@ -150,6 +139,9 @@ function getAllUsers() {
     `);
 }
 
+/**
+ * Updates a user based on their id and the given data
+ */
 function updateProfile( { updateData, userId } ) {
   var firstName = updateData.firstName;
   var lastName = updateData.lastName;

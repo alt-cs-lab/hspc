@@ -1,13 +1,14 @@
 /*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+ * Controllers for school functionality
+ * Author: 
+ * Modified: 
+ */
 const router = require("express").Router();
 const schoolService = require("../services/school.js");
 const { useService } = require("../utils/extensions.js");
 const passport = require("passport");
 const { accessLevelCheck, badRequestCheck } = require("../utils/extensions.js");
-const {check} = require("express-validator");
+const { check } = require("express-validator");
 const constants = require("../utils/constants.js");
 const statusResponses = require("../utils/status-response.js");
 
@@ -92,9 +93,8 @@ router.post("/create",
  *  ]
  */
 router.get("/view", (req, res) => {
-    useService(schoolService.getAllSchools, req, res);
+  useService(schoolService.getAllSchools, req, res);
 });
-
 
 /**
  * @api {post} /api/user/advisorApprovedSchools Get approved schools associated with an advisor
@@ -123,21 +123,23 @@ router.get("/advisorApprovedSchools",
 module.exports = router;
 
 /*
-* Same as advisorApprovedSchools, except all schools including unapproved ones.
-*/
-router.get("/advisorSchools",
-    // passport.authenticate("jwt", { session: false }),
-    // accessLevelCheck(constants.ADVISOR),
-    // badRequestCheck,
-    (req, res) => {
-      const userId = req.query["userId"];
-      schoolService.getAdvisorSchools(userId)
-        .then((school) => {
-          statusResponses.ok(res, school);
-        })
-        .catch((err) => {
-          statusResponses.serverError(res);
-        });
-    }
-  );
+ * Get all schools associated with an advisor
+ */
+router.get(
+  "/advisorSchools",
+  // passport.authenticate("jwt", { session: false }),
+  // accessLevelCheck(constants.ADVISOR),
+  // badRequestCheck,
+  (req, res) => {
+    const userId = req.query["userId"];
+    schoolService
+      .getAdvisorSchools(userId)
+      .then((school) => {
+        statusResponses.ok(res, school);
+      })
+      .catch((err) => {
+        statusResponses.serverError(res);
+      });
+  }
+);
 module.exports = router;

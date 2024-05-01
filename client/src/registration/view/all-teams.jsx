@@ -46,6 +46,9 @@ class ViewTeams extends Component {
    * If an advisor is logged in, the list of teams registered with that advisor is returned.
    */
   componentDidMount = () => {
+    /*
+    * Get Published Events
+    */
     EventService.getPublishedEvents(
       this.props.auth.user.id,
       this.props.auth.user.accessLevel

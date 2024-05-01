@@ -35,8 +35,8 @@ function DashboardHome(props){
             let schools = [];
             for (let i = 0; i < schoolbody.length; i++) {
               schools.push({
-                label: schoolbody[i].name,
-                value: schoolbody[i].id,
+                label: schoolbody[i].schoolname,
+                value: schoolbody[i].schoolid,
               });
             }
             setAllSchoolsList(schools);

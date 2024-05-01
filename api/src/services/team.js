@@ -1,11 +1,7 @@
 /**
- * @fileoverview Team service
- * @author Riley Mueller
- *
- * Has functions for get, create, update, and remove
+ * Services for team functionality
  */
 
-// import the database
 const db = require("../utils/hspc_db").db;
 // used for formating the data from the database to be more readable
 const constants = require("../utils/constants");
@@ -23,21 +19,23 @@ function getAllTeams(){
         INNER JOIN SkillLevels SK ON T.SkillLevelID = SK.SkillLevelID
         INNER JOIN TeamStatus TS ON TS.StatusID = T.TeamStatusID
         INNER JOIN Schools S ON T.SchoolID = S.SchoolID  
-        INNER JOIN Users U ON T.AdvisorID = U.UserID;`
-)
+        INNER JOIN Users U ON T.AdvisorID = U.UserID;`);
 }
 
-function getAllSkillLevels(){
-    return db.any('SELECT * FROM SkillLevels')
+/**
+ * Returns all skill levels
+ */
+function getAllSkillLevels() {
+  return db.any("SELECT * FROM SkillLevels");
 }
 
-/*
-* Returns the teams from all schools associated with an advisor.
-* Author: Trent Powell
-*/
+/**
+ * Returns all schools for a given advisor
+ */
 function getAdvisorSchoolsTeams(advisorId) {
-    let approved = constants.ADVISOR_STATUS_APPROVED
-    return db.any(`
+  let approved = constants.ADVISOR_STATUS_APPROVED;
+  return db.any(
+    `
     SELECT T.TeamId, T.SchoolID, T.CompetitionID, T.TeamName, SK.SkillLevel, TS.Status
 	FROM Teams T
     INNER JOIN Schools S on S.SchoolID = T.SchoolID
@@ -48,7 +46,9 @@ function getAdvisorSchoolsTeams(advisorId) {
         FROM Schools S2
         INNER JOIN SchoolAdvisors SA on S2.SchoolId = SA.SchoolId
         WHERE SA.UserID = $(advisorId) AND SA.AdvisorStatusID = $(approved)
-    );`, {advisorId, approved})
+    );`,
+    { advisorId, approved }
+  );
 }
 
 
@@ -72,49 +72,64 @@ function createTeam({ teamName, schoolId, competitionId, skillLevelId, advisorId
             throw new Error("Error: Team was not created.");
         }
 
-        // add the students to the team if there are any (studentIds might be null or an empty array)
-        if (studentIds?.length > 0) {
-            // create an array of objects to pass to pgp.helpers.insert
-            const values = studentIds.map((studentId) => ({ StudentID: studentId, TeamID: teamId }));
+    if (studentIds?.length > 0) {
+      const values = studentIds.map((studentId) => ({
+        StudentID: studentId,
+        TeamID: teamId,
+      }));
 
-            // generate the insert query using pgp.helpers.insert
-            const insertQuery = pgp.helpers.insert(values, ["StudentID", "TeamID"], "TeamMembers");
+      const insertQuery = pgp.helpers.insert(
+        values,
+        ["StudentID", "TeamID"],
+        "TeamMembers"
+      );
 
-            // execute the insert query as part of the transaction
-            await t.none(insertQuery.toLowerCase());
-        }
+      await t.none(insertQuery.toLowerCase());
+    }
 
-        return { teamId: teamId };
-    });
+    return { teamId: teamId };
+  });
 }
 
-// returns the number of teams in a competition
-function teamsInCompetition( {competitionid, waitlisted = false} ){
-    let statuses = [constants.TEAM_STATUS_REGISTERED];
-    if( waitlisted ){
-        statuses.push(constants.TEAM_STATUS_WAITLISTED);
-    }
-    return db.oneOrNone(`
+/**
+ * Returns the number of teams in a competition
+ */
+function teamsInCompetition({ competitionid, waitlisted = false }) {
+  let statuses = [constants.TEAM_STATUS_REGISTERED];
+  if (waitlisted) {
+    statuses.push(constants.TEAM_STATUS_WAITLISTED);
+  }
+  return db.oneOrNone(
+    `
             SELECT
                 COUNT(*) as teamCount,
                 SUM(CASE T.SkillLevelID when 1 then 1 else 0 end) as beginnerTeamCount,
                 SUM(CASE T.SkillLevelID when 2 then 1 else 0 end) as advancedTeamCount
             FROM Teams T
             WHERE T.CompetitionID = $(competitionid) AND T.TeamStatusID = ANY($(statuses)) `,
-            {competitionid, statuses})
+    { competitionid, statuses }
+  );
 }
 
-// returns the number of teams a school has in a competition
-function teamsInCompetitionBySchool(competitionId, schoolId, waitlisted = false){
-    let statuses = [constants.TEAM_STATUS_REGISTERED];
-    if( waitlisted ){
-        statuses.push(constants.TEAM_STATUS_WAITLISTED);
-    }
-    console.log(competitionId)
-    console.log(schoolId)
-    console.log(waitlisted)
-    console.log(statuses)
-    return db.oneOrNone(`
+/**
+ * Returns the number of teams a school has in a competition
+ */
+function teamsInCompetitionBySchool(
+  competitionId,
+  schoolId,
+  waitlisted = false
+) {
+  let statuses = [constants.TEAM_STATUS_REGISTERED];
+  if (waitlisted) {
+    statuses.push(constants.TEAM_STATUS_WAITLISTED);
+  }
+  console.log(competitionId);
+  console.log(schoolId);
+  console.log(waitlisted);
+  console.log(statuses);
+  return db
+    .oneOrNone(
+      `
             SELECT
                 COUNT(*) as teamCount,
                 SUM(CASE T.SkillLevelID when 1 then 1 else 0 end) as beginnerTeamCount,
@@ -123,21 +138,28 @@ function teamsInCompetitionBySchool(competitionId, schoolId, waitlisted = false)
             WHERE T.CompetitionID = $(competitionId)
                 AND T.SchoolID = $(schoolId)
                 AND T.TeamStatusID = ANY($(statuses))`,
-            {competitionId, schoolId, statuses})
-        .then(countInfo => ({
-            beginnerTeamCount: parseInt(countInfo.beginnerteamcount),
-            advancedTeamCount: parseInt(countInfo.advancedteamcount),
-            teamCount: parseInt(countInfo.teamcount),
-        }));
+      { competitionId, schoolId, statuses }
+    )
+    .then((countInfo) => ({
+      beginnerTeamCount: parseInt(countInfo.beginnerteamcount),
+      advancedTeamCount: parseInt(countInfo.advancedteamcount),
+      teamCount: parseInt(countInfo.teamcount),
+    }));
 }
 
-// returns the number of teams a school has in a competition
-function teamsInCompetitionForAllSchools( {competitionid, waitlisted = false} ){
-    let statuses = [constants.TEAM_STATUS_REGISTERED];
-    if( waitlisted ){
-        statuses.push(constants.TEAM_STATUS_WAITLISTED);
-    }
-    return db.any(`
+/**
+ * Returns the number of teams a school has in a competition
+ */
+function teamsInCompetitionForAllSchools({
+  competitionid,
+  waitlisted = false,
+}) {
+  let statuses = [constants.TEAM_STATUS_REGISTERED];
+  if (waitlisted) {
+    statuses.push(constants.TEAM_STATUS_WAITLISTED);
+  }
+  return db.any(
+    `
             SELECT
                 S.SchoolID,
                 S.SchoolName,
@@ -149,12 +171,16 @@ function teamsInCompetitionForAllSchools( {competitionid, waitlisted = false} ){
             WHERE T.CompetitionID = $(competitionid)
                 AND T.TeamStatusID = ANY($(statuses))
             GROUP BY S.SchoolID, S.SchoolName`,
-            {competitionid, statuses});
+    { competitionid, statuses }
+  );
 }
 
-// returns the details of a specific team
-function getTeamDetails( {teamid} ){
-    return db.oneOrNone(`
+/**
+ * Returns the details of a specific team
+ */
+function getTeamDetails({ teamid }) {
+  return db.oneOrNone(
+    `
             SELECT
                 T.TeamID,
                 T.TeamName,
@@ -173,18 +199,30 @@ function getTeamDetails( {teamid} ){
                 INNER JOIN TeamStatus TS ON TS.StatusID = T.TeamStatusID
                 INNER JOIN Users U ON U.UserID = T.AdvisorID
             WHERE T.TeamID = $(teamid)`,
-            {teamid});
+    { teamid }
+  );
 }
 
-// checks if any student ids in the given array are a member of a team in the given competition, returns true if any are
-function isAnyStudentsInCompetition(competitionId, studentIds, waitlisted = false){
-    let statuses = [constants.TEAM_STATUS_REGISTERED];
-    if( waitlisted ){
-        statuses.push(constants.TEAM_STATUS_WAITLISTED);
-    }
+/**
+ * Checks if any student ids in the given array are a member of a team in the given competition, returns true if any are
+ */
+function isAnyStudentsInCompetition(
+  competitionId,
+  studentIds,
+  waitlisted = false
+) {
+  let statuses = [constants.TEAM_STATUS_REGISTERED];
+  if (waitlisted) {
+    statuses.push(constants.TEAM_STATUS_WAITLISTED);
+  }
 
-    return db.oneOrNone(`SELECT COUNT(*) FROM TeamMembers TM WHERE TeamID IN (SELECT TeamID FROM Teams WHERE CompetitionID = $(competitionId) AND T.TeamStatusID = ANY($(statuses))) 
-    AND StudentID = ANY($(studentIds))`, [competitionId, studentIds, statuses]).then((result) => parseInt(result.count) > 0);
+  return db
+    .oneOrNone(
+      `SELECT COUNT(*) FROM TeamMembers TM WHERE TeamID IN (SELECT TeamID FROM Teams WHERE CompetitionID = $(competitionId) AND T.TeamStatusID = ANY($(statuses))) 
+    AND StudentID = ANY($(studentIds))`,
+      [competitionId, studentIds, statuses]
+    )
+    .then((result) => parseInt(result.count) > 0);
 }
 
 module.exports = {

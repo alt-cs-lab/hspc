@@ -1,8 +1,6 @@
-/*
-MIT License
-Copyright (c) 2024 KSU-CS-Software-Engineering
-*/
-
+/**
+ * Services for high school student functionality
+ */
 require("dotenv").config();
 const db = require("../utils/hspc_db").db;
 const { renameKeys } = require("../utils/extensions");
@@ -18,20 +16,30 @@ module.exports = {
     getStudentsWithNoTeam
 }
 
+/**
+ * Creates a given student
+ */
 function createStudent({ firstName, lastName, schoolId, email, gradDate }) {
-    return db.none(
+  return db.none(
     `
         INSERT INTO HighSchoolStudents (FirstName, LastName, SchoolID, Email, GradDate)
         VALUES($(firstName), $(lastName), $(schoolId), $(email), $(gradDate))    
     `,
     {
-        firstName, lastName, schoolId, email, gradDate
+      firstName,
+      lastName,
+      schoolId,
+      email,
+      gradDate,
     }
-    );
+  );
 }
 
+/**
+ * Edits a given student's details
+ */
 function editStudent({ studentId, firstName, lastName, schoolId, gradDate }) {
-    return db.none(
+  return db.none(
     `
         UPDATE HighSchoolStudents 
         SET FirstName = $(firstName), LastName = $(lastName), SchoolID = $(schoolId), GradDate = $(gradDate)
@@ -41,32 +49,45 @@ function editStudent({ studentId, firstName, lastName, schoolId, gradDate }) {
     );
 }
 
+/**
+ * Returns an email if it exists
+ */
 function getEmail(email) {
-    return db.any(
-    `
+  return db
+    .any(
+      `
         SELECT HS.Email
         FROM HighSchoolStudents HS
         WHERE HS.Email = $(email)
-    `, { email })
+    `,
+      { email }
+    )
     .then((data) => {
       data = renameKeys(data, ["email"]);
       return data.length > 0 ? data[0] : null;
     });
 }
 
+/**
+ * Returns all students
+ */
 function getAllStudents() {
-    return db.any(
+  return db.any(
     `
         SELECT HS.FirstName, HS.LastName, S.SchoolID, S.SchoolName, HS.Email, HS.GradDate
         FROM HighSchoolStudents HS
             INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
-    `);
+    `
+  );
 }
 
-// Trent Powell function to get all students for an advisor's schools
+/**
+ * Returns all students associated with an advisor
+ */
 function getAdvisorSchoolsTeams(advisorId) {
-    let approved = constants.ADVISOR_STATUS_APPROVED
-    return db.any(`
+  let approved = constants.ADVISOR_STATUS_APPROVED;
+  return db.any(
+    `
     SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.SchoolID, HS.Email, HS.GradDate
 	FROM HighSchoolStudents HS
     INNER JOIN Schools S on S.SchoolID = HS.SchoolID
@@ -75,43 +96,45 @@ function getAdvisorSchoolsTeams(advisorId) {
         FROM Schools S2
         INNER JOIN SchoolAdvisors SA on S2.SchoolId = SA.SchoolId
         WHERE SA.UserID = $(advisorId) AND SA.AdvisorStatusID = $(approved)
-    );`, {advisorId, approved})
+    );`,
+    { advisorId, approved }
+  );
 }
 
 /**
- * Gets all the students based off their team name
- * @param {string} teamName The name of the team
- * @param {string} competitionid The id of the competition
- * @returns All students of a certain team
+ * Returns students in a team
  */
 function getStudentsInTeam(teamid) {
-    return db.any(
-      `
+  return db.any(
+    `
           SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email, HS.GradDate
           FROM HighSchoolStudents HS
               INNER JOIN TeamMembers TM ON TM.StudentID = HS.StudentID
               INNER JOIN Teams T ON T.TeamID = TM.TeamID
           WHERE T.TeamID = $(teamid)
       `,
-      { teamid }
-    );
+    { teamid }
+  );
 }
 
-function getStudentsWithNoTeam(schoolId){
-    return db.any(
-        `
-            SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email
-            FROM HighSchoolStudents HS
-                INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
-            WHERE HS.SchoolID = $(schoolId) 
-                AND HS.GradDate > NOW()::DATE
-                AND HS.StudentID NOT IN (
-                    SELECT TM.StudentID
-                    FROM TeamMembers TM
-                        INNER JOIN Teams T ON T.TeamID = TM.TeamID
-                    WHERE T.TeamStatusID != 5
-                );
+/**
+ * Returns all students not in a team
+ */
+function getStudentsWithNoTeam(schoolId) {
+  return db.any(
+    `
+        SELECT HS.StudentID, HS.FirstName, HS.LastName, HS.Email
+        FROM HighSchoolStudents HS
+            INNER JOIN Schools S ON S.SchoolID = HS.SchoolID
+        WHERE HS.SchoolID = $(schoolId) 
+            AND HS.GradDate > NOW()::DATE
+            AND HS.StudentID NOT IN (
+                SELECT TM.StudentID
+                FROM TeamMembers TM
+                    INNER JOIN Teams T ON T.TeamID = TM.TeamID
+                WHERE T.TeamStatusID != 5
+            );
         `,
-        {schoolId}
-    );
+    { schoolId }
+  );
 }

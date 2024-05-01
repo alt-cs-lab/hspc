@@ -28,6 +28,9 @@ class ViewEvents extends Component {
    * Returns a list of all events when the component is rendered.
    */
   componentDidMount = () => {
+    /*
+    * Get Published Events
+    */
     EventService.getPublishedEvents(
       this.props.auth.user.id,
       this.props.auth.user.accessLevel

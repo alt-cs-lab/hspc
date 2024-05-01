@@ -11,7 +11,7 @@ import AdvisorTeamsView from "../registration/view/advisor-teams";
 import ViewEvents from "../registration/view/events";
 import CreateTeam from "../registration/create/team";
 import "../_common/assets/css/public-dashboard.css";
-import AddStudent from "../registration/create/add-high-school-student.jsx";
+import AddStudent from "../registration/create/high-school-student.jsx";
 import ViewStudents from "../registration/view/high-school-students.jsx";
 import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice.js";

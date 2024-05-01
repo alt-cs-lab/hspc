@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import Select from "react-select";
 import { Button, FormCheck } from "react-bootstrap";
-import AddStudent from "../create/add-high-school-student.jsx";
+import AddStudent from "../create/high-school-student.jsx";
 import EditStudent from "../edit/high-school-students.jsx";
 import "../../_common/assets/css/standard.css";
 
