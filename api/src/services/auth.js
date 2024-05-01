@@ -1,7 +1,7 @@
 /**
  * Services for authentication and registration functionality
  * Author: 
- * Modified: 
+ * Modified: 5/1/2024
  */
 const bcrypt = require("bcrypt");
 //const { XMLParser } = require("fast-xml-parser");

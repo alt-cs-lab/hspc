@@ -1,7 +1,7 @@
 /**
  * Services for event functionality
  * Author:
- * Modified:
+ * Modified: 5/1/2024
  */
 const { renameKeys } = require("../utils/extensions");
 const db = require("../utils/hspc_db").db;

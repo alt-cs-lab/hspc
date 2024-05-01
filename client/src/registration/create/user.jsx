@@ -1,7 +1,8 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * Create user page
+ * Author:
+ * Modified: 5/1/2024
+ */
 import React, { Component } from "react";
 import { withRouter } from "../../_utilities/routerUtils";
 import PropTypes from "prop-types";
@@ -10,11 +11,15 @@ import { Button, Form, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 import { registerUser } from "../../_store/actions/authActions";
 import Select from "react-select";
 import SchoolService from "../../_common/services/school.js";
-import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
+import {
+  clearErrors,
+  updateErrorMsg,
+  updateSuccessMsg,
+} from "../../_store/slices/errorSlice";
 import "../../_common/assets/css/standard.css";
 import "../../_common/assets/css/public-login.css";
 
-const constants = require('../../_utilities/constants')
+const constants = require("../../_utilities/constants");
 
 /*
  * @author: Daniel Bell
@@ -45,7 +50,7 @@ class Register extends Component {
     this.changeFields(constants.VOLUNTEER);
     SchoolService.getAllSchools()
       .then((response) => {
-        console.log(response)
+        console.log(response);
         if (response.ok) {
           let schoolbody = response.data;
           let schools = [];
@@ -56,9 +61,16 @@ class Register extends Component {
             });
           }
           this.setState({ schoolList: schools });
-        } else console.log("An error has occurred retrieving schools, Please try again.");
+        } else
+          console.log(
+            "An error has occurred retrieving schools, Please try again."
+          );
       })
-      .catch((resErr) => console.log("Something went wrong attempting to connect to the server. Please try again"));
+      .catch((resErr) =>
+        console.log(
+          "Something went wrong attempting to connect to the server. Please try again"
+        )
+      );
   };
 
   /*
@@ -72,7 +84,15 @@ class Register extends Component {
   }
 
   resetFields = () => {
-    this.setState({ firstName: "", lastName: "", email: "", password: "", advisoremail: "", phone: "", schoolId: 0});
+    this.setState({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      advisoremail: "",
+      phone: "",
+      schoolId: 0,
+    });
   };
 
   onChange(event) {
@@ -100,7 +120,7 @@ class Register extends Component {
    * @Param schoolId: the value to be set for the schoolId
    */
   handleSchoolChange = (schoolId) => {
-    this.setState({ schoolId: (schoolId.value) });
+    this.setState({ schoolId: schoolId.value });
   };
 
   /*
@@ -115,32 +135,32 @@ class Register extends Component {
             type="radio"
             name="options"
             defaultValue={constants.VOLUNTEER}
-            >
+          >
             <ToggleButton
               variant="secondary"
               id="tbg-radio-2"
-              value={constants.VOLUNTEER} 
+              value={constants.VOLUNTEER}
               onClick={(event) => this.changeFields(constants.VOLUNTEER)}
-              >
+            >
               Volunteer
             </ToggleButton>
-            <ToggleButton 
+            <ToggleButton
               variant="secondary"
               id="tbg-radio-1"
-              value={constants.ADVISOR} 
+              value={constants.ADVISOR}
               onClick={(event) => this.changeFields(constants.ADVISOR)}
-              >
+            >
               Advisor
             </ToggleButton>
           </ToggleButtonGroup>
-          <br/>
+          <br />
           <div class="add-margin">
             <Form.Group>
               <Form.Label> First Name </Form.Label>
               <Form.Control
                 name="first"
                 required
-                placeholder = "Input First Name"
+                placeholder="Input First Name"
                 inputProps={{ style: { fontSize: 14 } }}
                 InputLabelProps={{ style: { fontSize: 14 } }}
                 onChange={(target) =>
@@ -149,13 +169,13 @@ class Register extends Component {
                 value={this.state.firstName}
               />
             </Form.Group>
-            <br/>
+            <br />
             <Form.Group>
               <Form.Label> Last Name </Form.Label>
               <Form.Control
                 name="last"
                 required
-                placeholder = "Input Last Name"
+                placeholder="Input Last Name"
                 inputProps={{ style: { fontSize: 14 } }}
                 InputLabelProps={{ style: { fontSize: 14 } }}
                 onChange={(target) =>
@@ -164,41 +184,45 @@ class Register extends Component {
                 value={this.state.lastName}
               />
             </Form.Group>
-            <br/>
+            <br />
             <Form.Group>
               <Form.Label> Phone Number (No dashes) </Form.Label>
               <Form.Control
                 name="phone"
                 required
-                placeholder = "Input Phone Number"
+                placeholder="Input Phone Number"
                 inputProps={{ style: { fontSize: 14 } }}
                 InputLabelProps={{ style: { fontSize: 14 } }}
-                onChange={(target) => this.setState({ phone: target.target.value })}
+                onChange={(target) =>
+                  this.setState({ phone: target.target.value })
+                }
                 value={this.state.phone}
               />
             </Form.Group>
-            <br/>
+            <br />
             <Form.Group>
               <Form.Label> Email Address </Form.Label>
               <Form.Control
                 name="email"
                 type="email"
                 required
-                placeholder = "email@example.com"
+                placeholder="email@example.com"
                 inputProps={{ style: { fontSize: 14 } }}
                 InputLabelProps={{ style: { fontSize: 14 } }}
-                onChange={(target) => this.setState({ email: target.target.value })}
+                onChange={(target) =>
+                  this.setState({ email: target.target.value })
+                }
                 value={this.state.email}
               />
             </Form.Group>
-            <br/>
+            <br />
             <Form.Group>
               <Form.Label> Password </Form.Label>
               <Form.Control
                 name="password"
                 type="password"
                 required
-                placeholder = "Input Password"
+                placeholder="Input Password"
                 inputProps={{ style: { fontSize: 14 } }}
                 InputLabelProps={{ style: { fontSize: 14 } }}
                 onChange={(target) =>
@@ -207,10 +231,12 @@ class Register extends Component {
                 value={this.state.password}
               />
             </Form.Group>
-            <br/>
+            <br />
             <Form.Group name="dropdown-div" id="schoolList" hidden={true}>
               <Form.Label> School </Form.Label>
-              <p style={{fontSize:"12px"}}>If your school is not listed please email an admin for addition.</p>
+              <p style={{ fontSize: "12px" }}>
+                If your school is not listed please email an admin for addition.
+              </p>
               <Select
                 placeholder="Select a School"
                 options={this.state.schoolList}
@@ -218,7 +244,7 @@ class Register extends Component {
               />
             </Form.Group>
           </div>
-          <br/>
+          <br />
           <Button id="purple-button" label="Create Account" type="submit">
             Create Account
           </Button>
@@ -233,6 +259,10 @@ Register.propTypes = {
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
 };
+
+/**
+ * Redux initializes props.
+ */
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
@@ -240,15 +270,15 @@ const mapStateToProps = (state) => {
   };
 };
 
+/**
+ * Redux updates props.
+ */
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatchError: (message) =>
-      dispatch(updateErrorMsg(message)),
-    dispatchSuccess: (message) =>
-      dispatch(updateSuccessMsg(message)),
+    dispatchError: (message) => dispatch(updateErrorMsg(message)),
+    dispatchSuccess: (message) => dispatch(updateSuccessMsg(message)),
     dispatchResetErrors: () => dispatch(clearErrors()),
-    registerUser: (newUser, router) =>
-      dispatch(registerUser(newUser, router)),
+    registerUser: (newUser, router) => dispatch(registerUser(newUser, router)),
   };
 };
 

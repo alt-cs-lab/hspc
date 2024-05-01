@@ -1,7 +1,8 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * View all teams page
+ * Author:
+ * Modified: 5/1/2024
+ */
 import React, { Component, useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import TeamService from "../../_common/services/team.js";
@@ -47,8 +48,8 @@ class ViewTeams extends Component {
    */
   componentDidMount = () => {
     /*
-    * Get Published Events
-    */
+     * Get Published Events
+     */
     EventService.getPublishedEvents(
       this.props.auth.user.id,
       this.props.auth.user.accessLevel
@@ -75,7 +76,7 @@ class ViewTeams extends Component {
         let body = response.data;
         let schools = [];
         if (response.ok) {
-          console.log(response)
+          console.log(response);
           for (let i = 0; i < body.length; i++) {
             schools.push({
               label: body[i].schoolname,
@@ -92,7 +93,10 @@ class ViewTeams extends Component {
     TeamService.getAllTeams()
       .then((response) => {
         if (response.ok) {
-          this.setState({ teamTable: response.data, filteredTeamsTable: response.data });
+          this.setState({
+            teamTable: response.data,
+            filteredTeamsTable: response.data,
+          });
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -139,7 +143,11 @@ class ViewTeams extends Component {
     TeamService.getAllTeams()
       .then((response) => {
         if (response.ok) {
-          this.setState({filteredTeamsTable: response.data, selectedEvent: null, selectedSchool: null,});
+          this.setState({
+            filteredTeamsTable: response.data,
+            selectedEvent: null,
+            selectedSchool: null,
+          });
         } else console.log("An error has occurred, Please try again.");
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
@@ -159,9 +167,13 @@ class ViewTeams extends Component {
 
   filterTeams = () => {
     const { teamTable, selectedEvent, selectedSchool } = this.state;
-    const filteredTeams = teamTable.filter(team => {
-      const eventMatch = selectedEvent ? team.competitionid === selectedEvent.value : true;
-      const schoolMatch = selectedSchool ? team.schoolid === selectedSchool.value : true;
+    const filteredTeams = teamTable.filter((team) => {
+      const eventMatch = selectedEvent
+        ? team.competitionid === selectedEvent.value
+        : true;
+      const schoolMatch = selectedSchool
+        ? team.schoolid === selectedSchool.value
+        : true;
       return eventMatch && schoolMatch;
     });
 
@@ -265,7 +277,9 @@ const ExpandedComponent = ({ data }) => {
     return <div className="error-message">{error}</div>;
   }
 
-  return <DataTable data={teamUsersTable} columns={getSpecificTeamUsersColumns()} />;
+  return (
+    <DataTable data={teamUsersTable} columns={getSpecificTeamUsersColumns()} />
+  );
 };
 
 // Once a specific team is chosen the columns are updated by this function.
@@ -289,6 +303,9 @@ function getSpecificTeamUsersColumns() {
   ];
 }
 
+/**
+ * Redux initializes props.
+ */
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
@@ -296,6 +313,9 @@ const mapStateToProps = (state) => {
   };
 };
 
+/**
+ * Redux updates props.
+ */
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchResetErrors: () => dispatch(clearErrors()),

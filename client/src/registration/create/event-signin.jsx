@@ -1,11 +1,12 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * Event sign-in page
+ * Author:
+ * Modified: 5/1/2024
+ */
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import Select from "react-select";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import BoardSetup from "../../scoring/create-scoreboard";
 import AddScore from "../../_common/services/scoreboard";
 import Scoreboard from "../../scoring/scoreboard";
@@ -13,7 +14,11 @@ import EventService from "../../_common/services/event";
 // import "../../_common/assets/css/event-signin.css";
 import TeamService from "../../_common/services/team";
 import { connect } from "react-redux";
-import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
+import {
+  clearErrors,
+  updateErrorMsg,
+  updateSuccessMsg,
+} from "../../_store/slices/errorSlice";
 
 /*
  * @author: Daniel Bell
@@ -60,23 +65,31 @@ class EventSignIn extends Component {
     //   .catch((resErr) => console.log("Something went wrong. Please try again"));
 
     /*
-    * Get Events
-    */
-    EventService.getAllEvents(this.props.auth.user.id, this.props.auth.user.accessLevel)
-    .then((response) => {
+     * Get Events
+     */
+    EventService.getAllEvents(
+      this.props.auth.user.id,
+      this.props.auth.user.accessLevel
+    )
+      .then((response) => {
         if (response.ok) {
-            let eventsbody = response.data;
-            let events = [];
-            for (let i = 0; i < eventsbody.length; i++) {
-              events.push({
-                    label: eventsbody[i].name,
-                    value: eventsbody[i].id,
-                });
-            }
-            this.setState({ eventList: events });
-        } else console.log("An error has occurred fetching events, Please try again.");
-    })
-    .catch((resErr) => console.log("Something went wrong fetching events. Please try again"));
+          let eventsbody = response.data;
+          let events = [];
+          for (let i = 0; i < eventsbody.length; i++) {
+            events.push({
+              label: eventsbody[i].name,
+              value: eventsbody[i].id,
+            });
+          }
+          this.setState({ eventList: events });
+        } else
+          console.log(
+            "An error has occurred fetching events, Please try again."
+          );
+      })
+      .catch((resErr) =>
+        console.log("Something went wrong fetching events. Please try again")
+      );
   };
 
   /*
@@ -160,7 +173,6 @@ class EventSignIn extends Component {
    * Saves the information and updates the values in the database.
    */
   handleSaveChanges = () => {
-
     for (let i = 0; i < this.selected.length; i++) {
       if (this.selected[i] === true) this.presentTeams.push(this.allTeams[i]);
     }
@@ -243,6 +255,9 @@ class EventSignIn extends Component {
   }
 }
 
+/**
+ * Redux initializes props.
+ */
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
@@ -250,13 +265,14 @@ const mapStateToProps = (state) => {
   };
 };
 
+/**
+ * Redux updates props.
+ */
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchResetErrors: () => dispatch(clearErrors()),
-		dispatchError: (message) =>
-			dispatch(updateErrorMsg(message)),
-		dispatchSuccess: (message) =>
-			dispatch(updateSuccessMsg(message))
+    dispatchError: (message) => dispatch(updateErrorMsg(message)),
+    dispatchSuccess: (message) => dispatch(updateSuccessMsg(message)),
   };
 };
 

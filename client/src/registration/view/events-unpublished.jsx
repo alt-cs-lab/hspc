@@ -1,13 +1,18 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * View unpublished events page
+ * Author:
+ * Modified: 5/1/2024
+ */
 import React, { Component } from "react";
 import EventService from "../../_common/services/event";
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
-import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
-const constants = require('../../_utilities/constants');
+import {
+  clearErrors,
+  updateErrorMsg,
+  updateSuccessMsg,
+} from "../../_store/slices/errorSlice.js";
+const constants = require("../../_utilities/constants");
 
 /*
  * @author: Daniel Bell
@@ -35,51 +40,61 @@ class ViewEventsUnpublished extends Component {
       .then((response) => {
         if (response.ok) {
           this.setState({ eventTable: response.data });
-        } else console.log("An error has occurred fetching the events, Please try again.");
+        } else
+          console.log(
+            "An error has occurred fetching the events, Please try again."
+          );
       })
-      .catch((resErr) => console.log("Something went wrong fetching the events. Please try again"));
+      .catch((resErr) =>
+        console.log(
+          "Something went wrong fetching the events. Please try again"
+        )
+      );
   };
 
   /*
-  * Specifies what information to include in the columns
-  */
+   * Specifies what information to include in the columns
+   */
   getColumns() {
     return [
       {
         name: "Name",
-        selector: row => row.name,
+        selector: (row) => row.name,
         sortable: true,
       },
       {
         name: "Location",
-        selector: row => row.location,
+        selector: (row) => row.location,
         sortable: true,
       },
       {
         name: "Date (YYYY-MM-DD)",
-        selector: row => constants.dateFormat(row.date),
+        selector: (row) => constants.dateFormat(row.date),
         sortable: true,
         sortFunction: constants.dateSort,
       },
       {
         name: "Time",
-        selector: row => (constants.timeFormat(row.startTime) + ' - ' + constants.timeFormat(row.endTime)),
-      }
+        selector: (row) =>
+          constants.timeFormat(row.startTime) +
+          " - " +
+          constants.timeFormat(row.endTime),
+      },
     ];
   }
-  
+
   /*
-  * Renders the component UI.
-  */
+   * Renders the component UI.
+   */
   render() {
     return (
       <div id="student-data-table">
         <h2>Unpublished Events</h2>
         <DataTable
-          data={this.state.eventTable} 
-          columns={this.state.columns} 
-          pagination 
-          paginationPerPage={20} 
+          data={this.state.eventTable}
+          columns={this.state.columns}
+          pagination
+          paginationPerPage={20}
           paginationRowsPerPageOptions={[20, 30, 40, 50]}
           expandableRows
           expandableRowsComponent={ExpandedComponent}
@@ -89,6 +104,9 @@ class ViewEventsUnpublished extends Component {
   }
 }
 
+/**
+ * Redux initializes props.
+ */
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
@@ -96,24 +114,34 @@ const mapStateToProps = (state) => {
   };
 };
 
+/**
+ * Redux updates props.
+ */
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchResetErrors: () => dispatch(clearErrors()),
-		dispatchError: (message) =>
-			dispatch(updateErrorMsg(message)),
-		dispatchSuccess: (message) =>
-			dispatch(updateSuccessMsg(message))
+    dispatchError: (message) => dispatch(updateErrorMsg(message)),
+    dispatchSuccess: (message) => dispatch(updateSuccessMsg(message)),
   };
 };
 
 const ExpandedComponent = ({ data }) => {
-  return <div class="data-table-info">
+  return (
+    <div class="data-table-info">
       <h7>Description:</h7>
-      <br/>
-      <p style={{fontSize: "small"}}>{data.description}</p>
-      <p style={{fontSize: "small"}}>Teams allowed per School: {data.teamsPerSchool}</p>
-      <p style={{fontSize: "small"}}>Teams allowed For Event: {data.teamsPerEvent}</p>
+      <br />
+      <p style={{ fontSize: "small" }}>{data.description}</p>
+      <p style={{ fontSize: "small" }}>
+        Teams allowed per School: {data.teamsPerSchool}
+      </p>
+      <p style={{ fontSize: "small" }}>
+        Teams allowed For Event: {data.teamsPerEvent}
+      </p>
     </div>
+  );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewEventsUnpublished);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ViewEventsUnpublished);

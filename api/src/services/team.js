@@ -1,7 +1,7 @@
 /**
  * Services for team functionality
  * Author:
- * Modified:
+ * Modified: 5/1/2024
  */
 const db = require("../utils/hspc_db").db;
 const constants = require("../utils/constants");

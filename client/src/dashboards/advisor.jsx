@@ -1,8 +1,8 @@
 /**
- * Author: Devan Griffin
- * Modified: 4/24/2024
+ * Dashboard for Advisors
+ * Author:
+ * Modified: 5/1/2024
  */
-
 import React, { useState, useEffect } from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages.jsx";
@@ -17,7 +17,7 @@ import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
 /**
- * A component for the advisor dashboard
+ * Returns a react component that renders the Advisor dashboard
  */
 function AdvisorDash (props)
 { 
@@ -71,7 +71,7 @@ function AdvisorDash (props)
 }
 
 /**
- * Maps the states to props to be used in connect wrapper in export
+ * Redux initializes props.
  */
 const mapStateToProps = (state) => {
   return { 
@@ -80,6 +80,9 @@ const mapStateToProps = (state) => {
   };
 };
 
+/**
+ * Redux updates props.
+ */
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchResetErrors: () => dispatch(clearErrors()),

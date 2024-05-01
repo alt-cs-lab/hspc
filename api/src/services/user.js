@@ -1,7 +1,7 @@
 /**
  * Services for user functionality
  * Author:
- * Modified:
+ * Modified: 5/1/2024
  */
 require("dotenv").config();
 
@@ -12,7 +12,6 @@ const bcrypt = require("bcrypt");
 
 module.exports = {
   register,
-  //casRegister: casRegister,
   getLogin,
   getAllUsers,
   updateProfile,

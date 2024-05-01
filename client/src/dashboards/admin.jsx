@@ -1,14 +1,15 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
+/**
+ * Dashboard for Admins
+ * Author:
+ * Modified: 5/1/2024
+ */
 import React, { useState, useEffect } from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages.jsx";
-import DashboardHome from "../home/dashboard-home"
+import DashboardHome from "../home/dashboard-home";
 import CreateEvent from "../registration/create/event";
 import ViewEvents from "../registration/view/events";
-import ViewEventsUnpublished from "../registration/view/events-unpublished.jsx"
+import ViewEventsUnpublished from "../registration/view/events-unpublished.jsx";
 import ViewUsers from "../registration/view/users";
 import TeamRequests from "../registration/view/team-requests";
 import SchoolRequests from "../registration/view/advisor-school-requests";
@@ -21,45 +22,59 @@ import ViewSchools from "../registration/view/schools.jsx";
 import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
-function AdminDash(props)
-{
-  const [currentView, setCurrentView] = useState(<DashboardHome user={props.currentUser} />);
-  
-  useEffect(() =>{
+/**
+ * Returns a react component that renders the Admin dashboard
+ */
+function AdminDash(props) {
+  const [currentView, setCurrentView] = useState(
+    <DashboardHome user={props.currentUser} />
+  );
+
+  useEffect(() => {
     props.dispatchResetErrors();
   }, [props]);
 
   return (
     <div>
       <Navbar inverse collapseOnSelect>
-          <Nav>
-            <Nav.Link onClick={() => setCurrentView(<DashboardHome user={props.currentUser} />)}>
-              Admin Portal
-            </Nav.Link>
-          </Nav>
-          <Navbar.Toggle />
+        <Nav>
+          <Nav.Link
+            onClick={() =>
+              setCurrentView(<DashboardHome user={props.currentUser} />)
+            }
+          >
+            Admin Portal
+          </Nav.Link>
+        </Nav>
+        <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav>
-              <NavDropdown title="Requests">
-                <NavDropdown.Item onClick={() => setCurrentView(<TeamRequests />)}>
-                  Team Requests
-                </NavDropdown.Item>
-                <NavDropdown.Item onClick={() => setCurrentView(<SchoolRequests />)}>
-                  School Requests
-                </NavDropdown.Item>
-              </NavDropdown>
+            <NavDropdown title="Requests">
+              <NavDropdown.Item
+                onClick={() => setCurrentView(<TeamRequests />)}
+              >
+                Team Requests
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                onClick={() => setCurrentView(<SchoolRequests />)}
+              >
+                School Requests
+              </NavDropdown.Item>
+            </NavDropdown>
 
-              <NavDropdown title="Users">
-                <NavDropdown.Item onClick={() => setCurrentView(<Register />)}>
-                  Create User
-                </NavDropdown.Item>
-                <NavDropdown.Item onClick={() => setCurrentView(<ViewUsers />)}>
-                  View Users
-                </NavDropdown.Item>
-              </NavDropdown>
+            <NavDropdown title="Users">
+              <NavDropdown.Item onClick={() => setCurrentView(<Register />)}>
+                Create User
+              </NavDropdown.Item>
+              <NavDropdown.Item onClick={() => setCurrentView(<ViewUsers />)}>
+                View Users
+              </NavDropdown.Item>
+            </NavDropdown>
 
             <NavDropdown title="Schools">
-              <NavDropdown.Item onClick={() => setCurrentView(<RegisterSchool />)}>
+              <NavDropdown.Item
+                onClick={() => setCurrentView(<RegisterSchool />)}
+              >
                 Create School
               </NavDropdown.Item>
               <NavDropdown.Item onClick={() => setCurrentView(<ViewSchools />)}>
@@ -68,7 +83,11 @@ function AdminDash(props)
             </NavDropdown>
 
             <NavDropdown title="Teams">
-              <NavDropdown.Item onClick={() => setCurrentView(<CreateTeam advisor={props.currentUser} />)}>
+              <NavDropdown.Item
+                onClick={() =>
+                  setCurrentView(<CreateTeam advisor={props.currentUser} />)
+                }
+              >
                 Create Team
               </NavDropdown.Item>
               <NavDropdown.Item onClick={() => setCurrentView(<ViewTeams />)}>
@@ -83,7 +102,9 @@ function AdminDash(props)
               <NavDropdown.Item onClick={() => setCurrentView(<ViewEvents />)}>
                 View Published Events
               </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => setCurrentView(<ViewEventsUnpublished />)}>
+              <NavDropdown.Item
+                onClick={() => setCurrentView(<ViewEventsUnpublished />)}
+              >
                 View Unpublished Events
               </NavDropdown.Item>
             </NavDropdown>
@@ -97,10 +118,17 @@ function AdminDash(props)
     </div>
   );
 }
-//Maps the states to props to be used in connect wrapper in export
+
+/**
+ * Redux initializes props.
+ */
 const mapStateToProps = (state) => {
   return { currentUser: state.auth.user };
 };
+
+/**
+ * Redux updates props.
+ */
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchResetErrors: () => dispatch(clearErrors()),

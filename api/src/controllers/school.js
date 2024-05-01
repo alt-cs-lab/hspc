@@ -1,7 +1,7 @@
 /*
  * Controllers for school functionality
  * Author:
- * Modified:
+ * Modified: 5/1/2024
  */
 const router = require("express").Router();
 const schoolService = require("../services/school.js");

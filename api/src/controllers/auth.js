@@ -1,7 +1,7 @@
 /**
  * Controllers for authentication and registration functionality
  * Author:
- * Modified:
+ * Modified: 5/1/2024
  */
 const router = require("express").Router();
 const { check } = require("express-validator");

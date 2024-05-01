@@ -1,7 +1,7 @@
 /**
  * Services for school functionality
  * Author:
- * Modified:
+ * Modified: 5/1/2024
  */
 const db = require("../utils/hspc_db").db;
 const { renameKeys } = require("../utils/extensions.js");
