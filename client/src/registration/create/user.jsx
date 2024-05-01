@@ -20,7 +20,6 @@ import "../../_common/assets/css/standard.css";
 import "../../_common/assets/css/public-login.css";
 
 const constants = require('../../_utilities/constants')
-const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell
@@ -159,7 +158,6 @@ class Register extends Component {
             defaultValue={constants.VOLUNTEER}
             >
             <ToggleButton 
-              style={styles.buttonStyles}
               variant="secondary"
               id="tbg-radio-2"
               value={constants.VOLUNTEER} 

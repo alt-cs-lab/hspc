@@ -11,7 +11,6 @@ import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slic
 import Select from "react-select";
 import { Button, FormCheck } from "react-bootstrap";
 import "../../_common/assets/css/standard.css";
-import EditStudent from "../edit/high-school-students.jsx";
 
 const constants = require('../../_utilities/constants');
 
@@ -106,11 +105,6 @@ class ViewAllStudents extends Component {
         selector: row => constants.gradDateFormat(row.graddate),
         sortable: true,
         sortFunction: constants.dateSort,
-      },
-      {
-        name: "Edit Student",
-        cell: row => <Button onClick={() => this.props.setCurrentView(<EditStudent admin={true} student={row} setCurrentView={this.props.setCurrentView}/>)}>Edit</Button>,
-        button: true
       }
     ];
   }
@@ -119,7 +113,7 @@ class ViewAllStudents extends Component {
    * Resets the table to show all the students
    */
   ResetTable = () => {
-    this.setState({ selectedSchool: null });
+    this.setState({ selectedSchool: null, schoolid: -1 });
     this.HandleGradCheck(-1, this.state.gradFilter);
   }
 

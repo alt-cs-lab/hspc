@@ -75,7 +75,7 @@ router.post('/createStudent',
 
 router.post('/editStudent',
     passport.authenticate("jwt", { session: false }),
-    accessLevelCheck(constants.ADVISOR),
+    accessLevelCheck(constants.ADVISOR | constants.ADMIN),
     [
     check('firstName')
         .isLength({max: 100}).withMessage('First name must be less than 100 characters.')

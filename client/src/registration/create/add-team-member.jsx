@@ -18,7 +18,6 @@ import { Table } from "react-bootstrap";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 // // import "react-table/react-table.css";
 
-const styles = require('../../_utilities/styleConstants.js');
 
 /*
  * @author: Daniel Bell, Trent Kempker
@@ -373,8 +372,6 @@ class AddUser extends Component {
             <span style={{ fontSize: "16px" }}>Select Team Name:</span>
             <div id="sub-nav">
               <Select
-                id="dropdown"
-                styles={styles.selectStyles}
                 placeholder="Select a Team Name"
                 options={this.state.teamList}
                 onChange={(opt) => this.setState({ teamName: opt.label })}

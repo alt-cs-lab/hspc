@@ -94,8 +94,6 @@ class ViewStudents extends Component {
         name: "Edit Student",
         cell: row => <Button onClick={() => this.props.setCurrentView(<EditStudent advisor={this.advisor.id} student={row} 
               setCurrentView={this.props.setCurrentView}/>)}>Edit</Button>,
-        // ignoreRowClick: true,
-        // allowOverflow: true,
         button: true,
       }
     ];
@@ -144,7 +142,7 @@ class ViewStudents extends Component {
       <div>
         <h2> Students </h2>
         <Button className="mb-3"
-          onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id}/>)}>
+          onClick={() => this.props.setCurrentView(<AddStudent advisorUser={this.advisor.id} setCurrentView={this.props.setCurrentView}/>)}>
             Add Student 
         </Button>
         <section

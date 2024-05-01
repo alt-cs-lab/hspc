@@ -6,12 +6,12 @@
   import Button from "react-bootstrap/Button";
   import TeamService from "../../_common/services/team";
   import EventService from "../../_common/services/event";
-  import StudentService from "../../_common/services/high-school-student";
+  import StudentService from "../../_common/services/high-school-student.js";
   import SchoolService from "../../_common/services/school"
   import DataTable from "react-data-table-component";
   import Select from "react-select";
   import { connect } from "react-redux";
-  import CreateTeam from "../create/manage-team.jsx";
+  import CreateTeam from "../create/team.jsx";
   import {
     clearErrors,
     updateErrorMsg,
@@ -19,7 +19,6 @@
   } from "../../_store/slices/errorSlice.js";
 
   const constants = require('../../_utilities/constants');
-  //const styles = require('../../_utilities/styleConstants.js');
   
   /*
   * Page to view an advisor's schools' teams

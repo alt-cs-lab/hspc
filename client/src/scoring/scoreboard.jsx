@@ -17,8 +17,6 @@ import ViewScore from "../_common/services/scoreboard";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../_store/slices/errorSlice.js";
 
-const styles = require('../_utilities/styleConstants.js');
-
 //const URL = "ws://localhost:3001"; //for mine Natalie Laughlin
 var currentView = null;
 //var socket = io("http://localhost:8000");
@@ -278,8 +276,6 @@ class Scoreboard extends Component {
               <b>Select Event Date</b>
             </p>
             <Select
-              id="dropdown"
-              style={styles.selectStyles}
               placeholder="Select an Event Date"
               options={this.state.eventList}
               onChange={(e) => this.updateScoreBoard(e.label)}

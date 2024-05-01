@@ -11,6 +11,7 @@ import { Form } from "react-bootstrap";
 import Select from "react-select";
 import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/standard.css";
+import ViewStudents from "../view/high-school-students.jsx";
 
 const constants = require('../../_utilities/constants');
 
@@ -128,6 +129,8 @@ class EditStudent extends Component {
         this.props.dispatchError(response.data)
       }
     }).catch((resErr) => console.log("Something went wrong updating the student. Please try again"));
+
+    this.props.setCurrentView(<ViewStudents advisorUser={this.props.advisor} setCurrentView={this.props.setCurrentView}/>);
   }
 
   /**

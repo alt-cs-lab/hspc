@@ -5,13 +5,14 @@
 
 import React, { Component } from "react";
 import Button from 'react-bootstrap/Button';
-import StudentService from "../../_common/services/high-school-students.js";
+import StudentService from "../../_common/services/high-school-student.js";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import { Form } from "react-bootstrap";
 import Select from "react-select";
 import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/standard.css";
+import ViewStudents from "../view/high-school-students.jsx";
 
 const constants = require('../../_utilities/constants');
 
@@ -68,11 +69,13 @@ class AddStudent extends Component {
 
     StudentService.addHighSchoolStudent(newStudent.firstName, newStudent.lastName, newStudent.schoolId, newStudent.email, gradDate)
     .then((response) => {
+      console.log(response);
       if(response.status === 201){
-        this.props.dispatchSuccess("Student Created")
+        this.props.dispatchSuccess("Student Created");
+        this.props.setCurrentView(<ViewStudents advisorUser={this.props.advisor} setCurrentView={this.props.setCurrentView}/>);
       }
       else{
-        this.props.dispatchError(response.data)
+        this.props.dispatchError(response.data);
       }
     }).catch((resErr) => console.log("Something went wrong connecting to the server. Please try again"));
   }

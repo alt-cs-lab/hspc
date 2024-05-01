@@ -17,13 +17,13 @@ import TeamRequests from "../registration/view/team-requests";
 import SchoolRequests from "../registration/view/advisor-school-requests";
 import ViewTeams from "../registration/view/teams";
 import Register from "../registration/create/user";
-import CreateTeam from "../registration/create/manage-team";
+import CreateTeam from "../registration/create/team";
 //import Scoreboard from "../scoring/scoreboard.jsx";
 //import PublishPractice from "../problems/practice";
 //import PublishScores from "../scoring/scores";
 import "../_common/assets/css/public-dashboard.css";
 import RegisterSchool from "../registration/create/school";
-import ViewSchools from "../registration/view/school";
+import ViewSchools from "../registration/view/schools";
 import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 

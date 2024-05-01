@@ -15,8 +15,6 @@ import TeamService from "../../_common/services/team";
 import { connect } from "react-redux";
 import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
 
-const styles = require('../../_utilities/styleConstants.js');
-
 /*
  * @author: Daniel Bell
  * @MUdated: Natalie Laughlin
@@ -203,8 +201,6 @@ class EventSignIn extends Component {
               <b>Event</b>
             </p>
             <Select
-              id="dropdown"
-              style={styles.selectStyles}
               placeholder="Select an Event"
               options={this.state.eventList}
               onChange={(e) => this.showRegisteredTeams(e.label)}
@@ -213,9 +209,6 @@ class EventSignIn extends Component {
           {this.dataView}
           <div>
             <Button
-              variant="primary"
-              className="register-button"
-              style={styles.buttonStyles}
               onClick={() => this.handleSaveChanges()}
             >
               Begin Event
