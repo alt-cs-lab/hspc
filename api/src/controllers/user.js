@@ -20,20 +20,26 @@ const userService = require("../services/user");
 const schoolService = require("../services/school.js");
 
 /*
- * API Endpoint that returns all users stored within the database.
+ * Calls the API and returns all users stored within the database.
  */
-router.get("/view", passport.authenticate("jwt", { session: false }), accessLevelCheck(constants.ADMIN), (req, res) => {
-  userService.getAllUsers()
-    .then((userdata) => {
-      statusResponses.ok(res, userdata);
-    })
-    .catch((err) => {
-      statusResponses.serverError(res);
-    });
-});
+router.get(
+  "/view",
+  passport.authenticate("jwt", { session: false }),
+  accessLevelCheck(constants.ADMIN),
+  (req, res) => {
+    userService
+      .getAllUsers()
+      .then((userdata) => {
+        statusResponses.ok(res, userdata);
+      })
+      .catch((err) => {
+        statusResponses.serverError(res);
+      });
+  }
+);
 
 /**
- * Register a new user
+ * Calls the API to register a new user
  */
 router.post(
   "/register",
@@ -59,7 +65,6 @@ router.post(
       .isEmpty()
       .withMessage("Email is required.")
       // TODO TWP: Add Back if CAS registration comes back
-      //.isEmail({ host_blacklist: ['ksu.edu']}).withMessage("Invalid email format.")
       .normalizeEmail()
       .custom(async (value) => {
         try {
@@ -126,7 +131,7 @@ router.post(
 );
 
 /**
- * Updates a user's profile based on their id
+ * Calls the API and updates a user's profile based on their id
  */
 router.post("/updateProfile", (req, res) => {
   useService(userService.updateProfile, req, res);

@@ -1,5 +1,7 @@
 /**
  * Services for user functionality
+ * Author:
+ * Modified:
  */
 require("dotenv").config();
 
@@ -9,11 +11,11 @@ const { renameKeys } = require("../utils/extensions");
 const bcrypt = require("bcrypt");
 
 module.exports = {
-    register,
-    //casRegister: casRegister,
-    getLogin,
-    getAllUsers,
-    updateProfile
+  register,
+  //casRegister: casRegister,
+  getLogin,
+  getAllUsers,
+  updateProfile,
 };
 
 /**
@@ -56,14 +58,23 @@ function getDateTime() {
 /**
  * Registers a new user
  */
-function register({ firstName, lastName, email, phone, requestLevel, schoolId, password }) {
-    // newly registered users are either volunteer or advisor accounts
-    // otherwise they must be upgraded by an admin
-    accessLevel = requestLevel;
-    return generateHash(password).then((encryptedPassword) => 
-    {
-        var dateTime = getDateTime();
-        return db.none(`
+function register({
+  firstName,
+  lastName,
+  email,
+  phone,
+  requestLevel,
+  schoolId,
+  password,
+}) {
+  // newly registered users are either volunteer or advisor accounts
+  // otherwise they must be upgraded by an admin
+  accessLevel = requestLevel;
+  return generateHash(password)
+    .then((encryptedPassword) => {
+      var dateTime = getDateTime();
+      return db.none(
+        `
             INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword, CreatedOn, AccessedOn)
             VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword), $(dateTime), $(dateTime))
         `,
@@ -81,7 +92,7 @@ function register({ firstName, lastName, email, phone, requestLevel, schoolId, p
     })
     .then(() => {
       if (requestLevel == constants.ADVISOR) {
-        let pending = constants.ADVISOR_STATUS_PENDING
+        let pending = constants.ADVISOR_STATUS_PENDING;
         return db.none(
           `
                 INSERT INTO SchoolAdvisors (UserID, SchoolID, AdvisorStatusID)
@@ -142,17 +153,20 @@ function getAllUsers() {
 /**
  * Updates a user based on their id and the given data
  */
-function updateProfile( { updateData, userId } ) {
+function updateProfile({ updateData, userId }) {
   var firstName = updateData.firstName;
   var lastName = updateData.lastName;
   var phone = updateData.phone;
   var email = updateData.email;
-  return db.none(`
+  return db.none(
+    `
     UPDATE Users
     SET FirstName = $(firstName),
       LastName = $(lastName),
       Phone = $(phone),
       Email = $(email)
     WHERE UserID = $(userId)
-  `, { userId, firstName, lastName, phone, email });
+  `,
+    { userId, firstName, lastName, phone, email }
+  );
 }

@@ -1,7 +1,7 @@
 /*
  * Controllers for high school student functionality
- * Author: 
- * Modified: 
+ * Author:
+ * Modified:
  */
 const router = require("express").Router();
 const { check } = require("express-validator");
@@ -16,7 +16,7 @@ const studentService = require("../services/high-school-student");
 const statusResponses = require("../utils/status-response.js");
 
 /**
- * Register a new student
+ * Calls the API and registers a new student
  */
 router.post(
   "/createStudent",
@@ -64,30 +64,41 @@ router.post(
   }
 );
 
-router.post('/editStudent',
-    passport.authenticate("jwt", { session: false }),
-    accessLevelCheck(constants.ADVISOR | constants.ADMIN),
-    [
-    check('firstName')
-        .isLength({max: 100}).withMessage('First name must be less than 100 characters.')
-        .not().isEmpty().withMessage("First name is required.")
-        .trim()
-        .escape(),
-    check('lastName')
-        .isLength({max: 100}).withMessage('Last name must be less than 100 characters.')
-        .not().isEmpty().withMessage("Last name is required.")
-        .trim()
-        .escape(),
-    check('schoolId')
-        .not().isEmpty().withMessage("School is required."),
-    check('gradDate')
-        .not().isEmpty().withMessage("Graduation Date is empty.")
-], badRequestCheck, (req, res) => {
-    useService(studentService.editStudent, req, res, 'edited');
-});
+/**
+ * Calls the API and edits a students details
+ */
+router.post(
+  "/editStudent",
+  passport.authenticate("jwt", { session: false }),
+  accessLevelCheck(constants.ADVISOR | constants.ADMIN),
+  [
+    check("firstName")
+      .isLength({ max: 100 })
+      .withMessage("First name must be less than 100 characters.")
+      .not()
+      .isEmpty()
+      .withMessage("First name is required.")
+      .trim()
+      .escape(),
+    check("lastName")
+      .isLength({ max: 100 })
+      .withMessage("Last name must be less than 100 characters.")
+      .not()
+      .isEmpty()
+      .withMessage("Last name is required.")
+      .trim()
+      .escape(),
+    check("schoolId").not().isEmpty().withMessage("School is required."),
+    check("gradDate").not().isEmpty().withMessage("Graduation Date is empty."),
+  ],
+  badRequestCheck,
+  (req, res) => {
+    useService(studentService.editStudent, req, res, "edited");
+  }
+);
 
 /*
- * Returns all students
+ * Calls the API and returns all students
  */
 router.get(
   "/getAllStudents",
@@ -102,12 +113,11 @@ router.get(
       .catch((err) => {
         statusResponses.serverError(res);
       });
-    // useService(studentService.getAllStudents, req, res, 'got');
   }
 );
 
 /*
- * Returns all students not assigned to a team
+ * Calls the API and returns all students not assigned to a team
  */
 router.get(
   "/getStudentsWithNoTeam",

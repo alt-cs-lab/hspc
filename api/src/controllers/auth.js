@@ -1,18 +1,16 @@
 /**
  * Controllers for authentication and registration functionality
- * Author: 
- * Modified: 
+ * Author:
+ * Modified:
  */
 const router = require("express").Router();
 const { check } = require("express-validator");
 const authService = require("../services/auth");
 
 const { badRequestCheck, useService } = require("../utils/extensions");
-//const statusResponse = require('../utils/status-response');
-
 
 /**
- * Logs a user in and returns a JWT token.
+ * Calls the API and logs a user in and returns a JWT token
  */
 router.post(
   "/login",
@@ -34,18 +32,18 @@ router.post(
 
 /**
  * THIS HAS BEEN POSTPONED UNTIL CAS SYSTEM IS SET UP AGAIN FOR STUDENT LOGIN AS VOLUNTEERS
- * 
+ *
  * @api {post} /api/auth/verify Verify
  * @apiName Verify
  * @apiGroup Auth
  * @apiDescription Verifies a user against the CAS service and returns a JWT token on success.
- * 
+ *
  * @apiBody {String} ticket The cas ticket to verify
  * @apiBody {String} password The password of the User to login
- * 
+ *
  * @apiSuccess (Success 200) {Number} success HTTP status code indicating success
  * @apiSuccess (Success 200) {String} token The JWT token
- * 
+ *
  * @apiError (Error 400) {String} text List of errors
  */
 /*router.post("/verify", [

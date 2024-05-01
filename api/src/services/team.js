@@ -1,18 +1,17 @@
 /**
  * Services for team functionality
+ * Author:
+ * Modified:
  */
-
 const db = require("../utils/hspc_db").db;
-// used for formating the data from the database to be more readable
 const constants = require("../utils/constants");
 const pgp = require("pg-promise")();
 
-// every function is given an object as a parameter
-
-//*************************************************************************************************************************************************************
-// Code Added for curent end points required in the client
-function getAllTeams(){
-    return db.any(`
+/**
+ * Returns all teams
+ */
+function getAllTeams() {
+  return db.any(`
     SELECT T.TeamID, T.TeamName, T.CompetitionId, SK.SkillLevel, TS.Status, S.SchoolId, S.SchoolName, S.AddressLine1, S.AddressLine2, S.City, S."State", S.USDCode, U.Email 
     FROM 
         Teams T
@@ -51,26 +50,35 @@ function getAdvisorSchoolsTeams(advisorId) {
   );
 }
 
+/**
+ * Creates a new team and assigns given students
+ */
+function createTeam({
+  teamName,
+  schoolId,
+  competitionId,
+  skillLevelId,
+  advisorId,
+  studentIds,
+  waitlisted,
+}) {
+  // if waitlisted is not given, set it to false
+  if (!waitlisted) {
+    waitlisted = false;
+  }
+  // start a transaction
+  return db.tx(async (t) => {
+    // insert the team into the Teams table
+    const result = await t.one(
+      `INSERT INTO Teams (SchoolID, CompetitionID, TeamName, SkillLevelID, AdvisorID, TeamStatusID, TimeCreated) VALUES ($(schoolId), $(competitionId), $(teamName), $(skillLevelId), $(advisorId), 1, NOW()) RETURNING TeamID`,
+      { schoolId, competitionId, teamName, skillLevelId, advisorId }
+    );
+    const teamId = result.teamid;
 
-// create creates a new team and adds any students in studentIds
-function createTeam({ teamName, schoolId, competitionId, skillLevelId, advisorId, studentIds, waitlisted }) {
-    // if waitlisted is not given, set it to false
-    if (!waitlisted) {
-        waitlisted = false;
+    // if teamId is undefined, throw an error
+    if (!teamId) {
+      throw new Error("Error: Team was not created.");
     }
-    // start a transaction
-    return db.tx(async (t) => {
-        // insert the team into the Teams table
-        const result = await t.one(
-            `INSERT INTO Teams (SchoolID, CompetitionID, TeamName, SkillLevelID, AdvisorID, TeamStatusID, TimeCreated) VALUES ($(schoolId), $(competitionId), $(teamName), $(skillLevelId), $(advisorId), 1, NOW()) RETURNING TeamID`,
-            { schoolId, competitionId, teamName, skillLevelId, advisorId}
-        );
-        const teamId = result.teamid;
-
-        // if teamId is undefined, throw an error
-        if (!teamId) {
-            throw new Error("Error: Team was not created.");
-        }
 
     if (studentIds?.length > 0) {
       const values = studentIds.map((studentId) => ({
@@ -226,13 +234,13 @@ function isAnyStudentsInCompetition(
 }
 
 module.exports = {
-    createTeam,
-    teamsInCompetition,
-    teamsInCompetitionBySchool,
-    teamsInCompetitionForAllSchools,
-    isAnyStudentsInCompetition,
-    getAllTeams,
-    getAllSkillLevels,
-    getAdvisorSchoolsTeams,
-    getTeamDetails,
+  createTeam,
+  teamsInCompetition,
+  teamsInCompetitionBySchool,
+  teamsInCompetitionForAllSchools,
+  isAnyStudentsInCompetition,
+  getAllTeams,
+  getAllSkillLevels,
+  getAdvisorSchoolsTeams,
+  getTeamDetails,
 };

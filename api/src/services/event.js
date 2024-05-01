@@ -1,38 +1,41 @@
 /**
  * Services for event functionality
+ * Author:
+ * Modified:
  */
 const { renameKeys } = require("../utils/extensions");
 const db = require("../utils/hspc_db").db;
 const constants = require("../utils/constants");
 
 module.exports = {
-    createEvent,
-    getPublished,
-    getUnpublished,
-    getEvent,
-    getCompetitionTeamsInfo,
-    getHighlightEvent,
+  createEvent,
+  getPublished,
+  getUnpublished,
+  getEvent,
+  getCompetitionTeamsInfo,
+  getHighlightEvent,
 };
 
 /**
- * Function to create a new event in the Competition table
+ * Creates a given event
  */
 function createEvent({
-    name,
-    location,
-    date,
-    startTime,
-    endTime,
-    beginnerTeamsPerSchool,
-    advancedTeamsPerSchool,
-    teamsPerSchool,
-    beginnerTeamsPerEvent,
-    advancedTeamsPerEvent,
-    teamsPerEvent,
-    description}) {
-    let eventStatus = constants.EVENT_STATUS_UNPUBLISHED;
-    return db.none(
-        `INSERT INTO Competitions(
+  name,
+  location,
+  date,
+  startTime,
+  endTime,
+  beginnerTeamsPerSchool,
+  advancedTeamsPerSchool,
+  teamsPerSchool,
+  beginnerTeamsPerEvent,
+  advancedTeamsPerEvent,
+  teamsPerEvent,
+  description,
+}) {
+  let eventStatus = constants.EVENT_STATUS_UNPUBLISHED;
+  return db.none(
+    `INSERT INTO Competitions(
             EventName,
             EventLocation,
             EventDate,
@@ -61,24 +64,25 @@ function createEvent({
             $(description),
             $(eventStatus))`,
     {
-        name,
-        location,
-        date,
-        startTime,
-        endTime,
-        beginnerTeamsPerSchool,
-        advancedTeamsPerSchool,
-        teamsPerSchool,
-        beginnerTeamsPerEvent,
-        advancedTeamsPerEvent,
-        teamsPerEvent,
-        description,
-        eventStatus}
-    );
+      name,
+      location,
+      date,
+      startTime,
+      endTime,
+      beginnerTeamsPerSchool,
+      advancedTeamsPerSchool,
+      teamsPerSchool,
+      beginnerTeamsPerEvent,
+      advancedTeamsPerEvent,
+      teamsPerEvent,
+      description,
+      eventStatus,
+    }
+  );
 }
 
-/*
- * Get all published events
+/**
+ * Returns all published events
  */
 function getPublished() {
   return db
@@ -123,8 +127,8 @@ function getPublished() {
     );
 }
 
-/*
- * Get all unpublished events
+/**
+ * Returns all unpublished events
  */
 function getUnpublished() {
   return db
@@ -169,8 +173,8 @@ function getUnpublished() {
     );
 }
 
-/*
- * Get an event based on its id
+/**
+ * Returns an event based on its id
  */
 function getEvent({ eventID }) {
   return db
@@ -214,8 +218,8 @@ function getEvent({ eventID }) {
     }));
 }
 
-/*
- * Function to get "Highlight" Compeitition which means next upcoming or if there is none then the most recent.
+/**
+ * Returns the next competition (If none, most recent competition)
  */
 function getHighlightEvent() {
   const date = new Date();
@@ -252,7 +256,9 @@ function getHighlightEvent() {
     });
 }
 
-// returns the TeamsPerSchool and TeamsPerEvent for a given competition based on its id
+/**
+ * Returns team capacity information for a given competition
+ */
 function getCompetitionTeamsInfo(competitionID) {
   return db
     .oneOrNone(
