@@ -69,6 +69,9 @@ class EventService {
         return ServiceUtils.getRequest('/api/event/highlightEvent');
     }
 
+    /*
+    * Calls the API and returns an event based on a given id
+    */
     getEvent(eventID) {
         return ServiceUtils.getRequest('/api/event/get', {
             eventID: eventID,

@@ -27,6 +27,9 @@ class VolunteerSignUp extends Component {
 
   // On Component Load, Populate the event dropdown with all upcoming events and default to the most upcoming event.
   componentDidMount = () => {
+    /*
+    * Get Published Events
+    */
     EventService.getPublishedEvents()
     .then((response) => {
         if (response.ok){

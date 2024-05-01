@@ -1,8 +1,6 @@
-/*
-MIT License
-Copyright (c) 2024 KSU-CS-Software-Engineering
-*/
-
+/**
+ * Services for request functionality
+ */
 require("dotenv").config();
 const db = require("../utils/hspc_db").db;
 const constants = require("../utils/constants.js");
@@ -15,6 +13,9 @@ module.exports = {
     completeTeamRegistration,
 }
 
+/**
+ * Returns all pending requests for an advisor to be associated with a school
+ */
 function getAllSchoolRequests() {
     let pending = constants.ADVISOR_STATUS_PENDING
     return db.any(
@@ -27,6 +28,9 @@ function getAllSchoolRequests() {
         `, { pending });
 }
 
+/**
+ * Approves or denies a request for an advisor to be associated with a school
+ */
 function completeSchoolRequest( { approved, schoolid, advisorid }){
     if(approved){
         let statusApproved = constants.ADVISOR_STATUS_APPROVED
@@ -46,6 +50,9 @@ function completeSchoolRequest( { approved, schoolid, advisorid }){
     }
 }
 
+/**
+ * Creates a request for an advisor to be associated with a school
+ */
 function requestSchool( { schoolid, advisorid } ) {
     let pending = constants.ADVISOR_STATUS_PENDING
     return db.none( `
@@ -54,6 +61,9 @@ function requestSchool( { schoolid, advisorid } ) {
     `,{ schoolid, advisorid, pending });
 }
 
+/**
+ * Returns all waitlisted teams for a given competition
+ */
 function requestWaitlistedTeamsForEvent( { eventid } ) {
     let pending = constants.TEAM_STATUS_WAITLISTED
     return db.any(
@@ -66,6 +76,9 @@ function requestWaitlistedTeamsForEvent( { eventid } ) {
         `, { eventid, pending });
 }
 
+/**
+ * Approves or denies a request for a team to be registered
+ */
 function completeTeamRegistration( { approved, teamid }){
     if(approved){
         let statusApproved = constants.TEAM_STATUS_REGISTERED

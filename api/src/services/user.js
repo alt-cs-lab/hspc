@@ -1,8 +1,6 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
-
+/**
+ * Services for user functionality
+ */
 require("dotenv").config();
 
 const db = require("../utils/hspc_db").db;
@@ -27,9 +25,7 @@ module.exports = {
 };
 
 /**
- * Generates a hash for a password
- * @param {string} password The given password
- * @returns A new hash
+ * Returns a hash for a given password
  */
 function generateHash(password) {
   return new Promise((resolve, reject) => {
@@ -46,8 +42,7 @@ function generateHash(password) {
 }
 
 /**
- * Gets the current Date and Time
- * @returns A string consisting of the date and time
+ * Returns the current Date and Time
  */
 function getDateTime() {
   var currentDate = new Date();
@@ -68,12 +63,8 @@ function getDateTime() {
 
 /**
  * Registers a new user
- * @param {List?} list A list of all the items needed to make a new user
- * @returns Nothing
  */
 function register({ firstName, lastName, email, phone, requestLevel, schoolId, password }) {
-    // newly registered users are either volunteer or advisor accounts
-    // otherwise they must be upgraded by an admin
     // TODO TWP: Access Level should not implicitly equal request level.
     accessLevel = requestLevel;
     return generateHash(password).then((encryptedPassword) => 
@@ -97,7 +88,6 @@ function register({ firstName, lastName, email, phone, requestLevel, schoolId, p
     })
     .then(() => {
       if (requestLevel == constants.ADVISOR) {
-        // if they are registering as an advisor, we need to add an AdvisorsAffiliation record
         let pending = constants.ADVISOR_STATUS_PENDING
         return db.none(
           `
@@ -121,8 +111,6 @@ function casRegister(firstName, lastName, email, accessLevel) {
 
 /**
  * Returns the login information for the user with the given email
- * @param {String} email
- * @returns
  */
 function getLogin(email) {
   return db
@@ -149,8 +137,7 @@ function getLogin(email) {
 }
 
 /**
- * Gets all the users from the database
- * @returns All the users from the database
+ * Returns all users
  */
 function getAllUsers() {
   return db.any(`
@@ -161,8 +148,7 @@ function getAllUsers() {
 }
 
 /**
- * Gets all the volunteers from the database
- * @returns All the volunteers
+ * Returns all volunteers
  */
 function getAllVolunteers() {
   return db.any(`
@@ -173,8 +159,7 @@ function getAllVolunteers() {
 }
 
 /**
- * Gets all the roles from the Roles table
- * @returns All the roles
+ * Returns all roles
  */
 function getAllRoles() {
   return db.any(`
@@ -184,8 +169,7 @@ function getAllRoles() {
 }
 
 /**
- * Gets students who are not on a team
- * @returns All the students not on a team
+ * Returns all students not on a team
  */
 function getStudents(){
     return db.any(`
@@ -196,10 +180,7 @@ function getStudents(){
 }
 
 /**
- * Changes the school an advisor is attached to
- * @param {int} userId The id of the advisor
- * @param {int} schoolId The id of the school
- * @returns Nothing
+ * Changes an advisor's assigned school to the given school
  */
 function advisorUpdateSchool(userId, schoolId) {
   return db.none(
@@ -213,16 +194,7 @@ function advisorUpdateSchool(userId, schoolId) {
 }
 
 /**
- * Adds a student to the Users and HighSchoolStudents table
- * @param {string} firstName
- * @param {string} lastName
- * @param {string} email
- * @param {string} phone
- * @param {short} accessLevel
- * @param {short} requestLevel
- * @param {string} encryptedPassword
- * @param {int} schoolID
- * @returns Nothing
+ * Creates a student
  */
 function addstudent(
   firstName,
@@ -255,12 +227,8 @@ function addstudent(
       dateTime,
     }
   );
-
-//    return db.none(`INSERT INTO Users (FirstName, LastName, Email, Phone, AccessLevel, RequestLevel, EncryptedPassword) VALUES($(firstName), $(lastName), $(email), $(phone), $(accessLevel), $(requestLevel), $(encryptedPassword)); 
-//    insert into student values((select userid from users where email= $(email)),(select userid from users where email=$(advisoremail)));`, {firstName, lastName, email, phone, accessLevel, requestLevel, encryptedPassword, advisoremail});
 }
 
-//Function used to check in Volunteers based on userid
 function checkinvolunteer(userid) {
   /* TODO TWP: Not being used 2/5/2024
     return db.none(`UPDATE Users SET Active = 1 WHERE userId = $(userid)`, {userid})
@@ -283,6 +251,9 @@ function getactivevolunteers() {
     WHERE U.AccessLevel = 20 AND U.Active = 1`)*/
 }
 
+/**
+ * Updates a user based on their id and the given data
+ */
 function updateProfile( { updateData, userId } ) {
   var firstName = updateData.firstName;
   var lastName = updateData.lastName;
@@ -297,12 +268,3 @@ function updateProfile( { updateData, userId } ) {
     WHERE UserID = $(userId)
   `, { userId, firstName, lastName, phone, email });
 }
-
-/*
-UPDATE Users
-SET FirstName = 'Casey',
-  LastName = 'Ring',
-  Phone = '913-901-6711',
-  Email = 'caseyring@email.com'
-WHERE UserID = 23
-*/
