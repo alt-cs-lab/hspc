@@ -6,6 +6,7 @@
 import React, { Component } from "react";
 import SchoolService from "../../_common/services/school";
 import StudentService from "../../_common/services/high-school-student";
+import EditStudent from "../../registration/edit/high-school-students.jsx"
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import {
