@@ -1,7 +1,7 @@
 /*
  * Controllers for request functionality
- * Author: 
- * Modified: 
+ * Author:
+ * Modified:
  */
 const router = require("express").Router();
 const passport = require("passport");
@@ -15,7 +15,7 @@ const requestService = require("../services/request");
 const statusResponses = require("../utils/status-response.js");
 
 /*
- * Returns a JSON list of all advisors' school requests.
+ * Calls the API and returns a JSON list of all advisors' school requests.
  */
 router.get("/allSchool", (req, res) => {
   // TWP TODO: Do Role Checking
@@ -30,7 +30,7 @@ router.get("/allSchool", (req, res) => {
 });
 
 /*
- * Approves or denies a specific advisor's school request.
+ * Calls the API and approves or denies a specific advisor's school request.
  */
 router.post("/completeSchool", (req, res) => {
   // TWP TODO: Do Role Checking
@@ -38,7 +38,7 @@ router.post("/completeSchool", (req, res) => {
 });
 
 /*
- * Requests an additional school for a specific advisor
+ * Calls the API and requests an additional school for a specific advisor
  */
 router.post("/requestSchool", (req, res) => {
   // TWP TODO: Do Role Checking
@@ -46,7 +46,7 @@ router.post("/requestSchool", (req, res) => {
 });
 
 /*
- * Approves or denies a specific team's waitlisted condition.
+ * Calls the API and approves or denies a specific team's waitlisted condition.
  */
 router.post("/completeTeamRegistration", (req, res) => {
   // TWP TODO: Do Role Checking
@@ -54,7 +54,7 @@ router.post("/completeTeamRegistration", (req, res) => {
 });
 
 /*
- * Returns a JSON list of all waitlisted teams in an event
+ * Calls the API and returns a JSON list of all waitlisted teams in an event
  */
 router.get("/waitlistedTeamsForEvent", (req, res) => {
   // TWP TODO: Do Role Checking

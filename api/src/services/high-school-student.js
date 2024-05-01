@@ -1,5 +1,7 @@
 /**
  * Services for high school student functionality
+ * Author:
+ * Modified:
  */
 require("dotenv").config();
 const db = require("../utils/hspc_db").db;
@@ -7,14 +9,14 @@ const { renameKeys } = require("../utils/extensions");
 const constants = require("../utils/constants.js");
 
 module.exports = {
-    createStudent,
-    editStudent,
-    getEmail,
-    getAllStudents,
-    getAdvisorSchoolsTeams,
-    getStudentsInTeam,
-    getStudentsWithNoTeam
-}
+  createStudent,
+  editStudent,
+  getEmail,
+  getAllStudents,
+  getAdvisorSchoolsTeams,
+  getStudentsInTeam,
+  getStudentsWithNoTeam,
+};
 
 /**
  * Creates a given student
@@ -36,7 +38,7 @@ function createStudent({ firstName, lastName, schoolId, email, gradDate }) {
 }
 
 /**
- * Edits a given student's details
+ * Updates a given student's details
  */
 function editStudent({ studentId, firstName, lastName, schoolId, gradDate }) {
   return db.none(
@@ -45,8 +47,8 @@ function editStudent({ studentId, firstName, lastName, schoolId, gradDate }) {
         SET FirstName = $(firstName), LastName = $(lastName), SchoolID = $(schoolId), GradDate = $(gradDate)
         WHERE StudentID = $(studentId);
     `,
-        { studentId, firstName, lastName, schoolId, gradDate}
-    );
+    { studentId, firstName, lastName, schoolId, gradDate }
+  );
 }
 
 /**
