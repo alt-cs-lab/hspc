@@ -16,10 +16,11 @@ import { Form } from "react-bootstrap";
 import Select from "react-select";
 import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/standard.css";
+import ViewStudents from "../view/high-school-students.jsx";
 
 const constants = require("../../_utilities/constants.js");
 
-/*
+/**
  * A component for adding a student
  */
 class AddStudent extends Component {
@@ -161,15 +162,8 @@ class AddStudent extends Component {
             </Form.Group>
             <Form.Group className="mb-4">
               <Form.Label>Graduation Year</Form.Label>
-              <Form.Control
-                type="number"
-                required
-                placeholder="Ex: 2024"
-                onChange={(target) =>
-                  this.setState({ gradYear: target.target.value })
-                }
-                value={this.state.gradYear}
-              />
+              <Form.Control type="number" required placeholder="Ex: 2024"
+                onChange={(target => this.setState({ gradYear: target.target.value }))} value={ this.state.gradYear }/>
             </Form.Group>
           </div>
           <Button type="submit">Create Student</Button>

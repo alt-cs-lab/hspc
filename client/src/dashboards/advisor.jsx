@@ -42,7 +42,7 @@ function AdvisorDash (props)
               <NavDropdown.Item onClick={() => setCurrentView(<ViewStudents advisorUser={props.currentUser.id} setCurrentView={setCurrentView} />)}>
                 View Students
               </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => setCurrentView(<AddStudent advisorUser={props.currentUser.id} />)}>
+              <NavDropdown.Item onClick={() => setCurrentView(<AddStudent advisorUser={props.currentUser.id} setCurrentView={setCurrentView} />)}>
                 Create Student
               </NavDropdown.Item>
             </NavDropdown>

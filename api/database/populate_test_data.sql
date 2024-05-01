@@ -88,6 +88,7 @@ VALUES
     (21, '1275551015', 'Harry', 'Miller', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 4, 4, 'harry.miller@email.com', '2024-01-06', '2024-01-26'),
     (22, '9325551016', 'Irene', 'Wilson', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 8, 8, 'irene.wilson@email.com', '2024-01-07', '2024-01-25'),
     (23, '3285551017', 'Jack', 'Thomas', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 8, 8, 'jack.thomas@email.com', '2024-01-08', '2024-01-24'),
+    (28, '9132224767', 'Donkey', 'Kong', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 8, 8, 'dk@email.com', '2024-05-01', '2024-05-01'),
     (24, '4215551018', 'Kathy', 'Lee', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 16, 16, 'kathy.lee@email.com', '2024-01-09', '2024-01-23'),
     (25, '3215551019', 'Leo', 'Garcia', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 16, 16, 'leo.garcia@email.com', '2024-01-10', '2024-01-22'),
     (26, '4425551020', 'Josh', 'Weese', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 32, 32, 'josh.@email.com', '2024-01-11', '2024-01-29'),
@@ -102,7 +103,10 @@ VALUES
     (22, 181, 2),
     (22, 182, 1),
     (22, 183, 3),
-    (23, 182, 2);
+    (23, 182, 2),
+    (28, 228, 2),
+    (28, 282, 2),
+    (28, 174, 2);
 
 /*
 Insert Dummy Values into High School Students Table
@@ -123,7 +127,13 @@ VALUES
     (180, 'Greg', 'Newman', 182, 'greg.newman@school.com', '2025-06-15'),
     (190, 'Galliard', 'Strauss', 182, 'galliard.strauss@school.com', '2025-06-15'),
     (200, 'Taylor', 'Lorry', 182, 'taylor.lorry@school.com', '2025-06-15'),
-    (201, 'Greg', 'Grad', 182, 'greg.grad@school.com', '2023-05-30');
+    (201, 'Greg', 'Grad', 182, 'greg.grad@school.com', '2023-05-30'),
+    (202, 'Devan', 'Griffin', 228, 'devan.griffin@email.com', '2020-07-28'),
+    (203, 'Casey', 'Ring', 228, 'casey.ring@email.com', '2025-05-28'),
+    (204, 'Trent', 'Powell', 282, 'trent.powell@email.com', '2026-05-28'),
+    (205, 'Devin', 'Richards', 174, 'devin.richards@email.com', '2027-12-28');
+
+
 /*
 Insert Dummy Values into Volunteers Table
 */

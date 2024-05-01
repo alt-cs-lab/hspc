@@ -16,6 +16,7 @@ import { Form } from "react-bootstrap";
 import Select from "react-select";
 import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/standard.css";
+import ViewStudents from "../view/high-school-students.jsx";
 
 const constants = require("../../_utilities/constants");
 
@@ -159,9 +160,7 @@ class EditStudent extends Component {
   render() {
     return (
       <div className="RegisterBox">
-        <h2>
-          Edit Student - {this.state.firstName} {this.state.lastName}
-        </h2>
+        <h2>Edit Student - {this.state.firstName} {this.state.lastName}</h2>  
         <Form onSubmit={(event) => this.editStudent(event)}>
           <div class="add-margin">
             <Form.Group className="mb-3">
@@ -223,15 +222,8 @@ class EditStudent extends Component {
             </Form.Group>
             <Form.Group className="mb-4">
               <Form.Label>Graduation Year</Form.Label>
-              <Form.Control
-                type="number"
-                required
-                placeholder="Ex: 2024"
-                onChange={(target) =>
-                  this.setState({ gradYear: target.target.value })
-                }
-                defaultValue={this.state.gradYear}
-              />
+              <Form.Control type="number" required placeholder="Ex: 2024"
+                onChange={(target => this.setState({ gradYear: target.target.value }))} defaultValue={ this.state.gradYear }/>
             </Form.Group>
           </div>
           <Button type="submit">Edit Student</Button>

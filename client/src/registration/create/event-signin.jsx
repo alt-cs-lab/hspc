@@ -213,8 +213,6 @@ class EventSignIn extends Component {
               <b>Event</b>
             </p>
             <Select
-              id="dropdown"
-              style={styles.selectStyles}
               placeholder="Select an Event"
               options={this.state.eventList}
               onChange={(e) => this.showRegisteredTeams(e.label)}
@@ -223,9 +221,6 @@ class EventSignIn extends Component {
           {this.dataView}
           <div>
             <Button
-              variant="primary"
-              className="register-button"
-              style={styles.buttonStyles}
               onClick={() => this.handleSaveChanges()}
             >
               Begin Event

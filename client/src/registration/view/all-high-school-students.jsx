@@ -16,7 +16,6 @@ import {
 import Select from "react-select";
 import { Button, FormCheck } from "react-bootstrap";
 import "../../_common/assets/css/standard.css";
-import EditStudent from "../edit/high-school-students.jsx";
 
 const constants = require("../../_utilities/constants");
 
@@ -159,7 +158,7 @@ class ViewAllStudents extends Component {
    * Resets the table to show all the students
    */
   ResetTable = () => {
-    this.setState({ selectedSchool: null });
+    this.setState({ selectedSchool: null, schoolid: -1 });
     this.HandleGradCheck(-1, this.state.gradFilter);
   };
 
