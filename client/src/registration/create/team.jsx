@@ -62,6 +62,8 @@ class CreateTeam extends Component {
         /**
         * Gets all of the published events.
         */
+
+        // TWP TODO: Change to getRegisterableEvents
         EventService.getPublishedEvents()
         .then((response) => {
             if (response.ok){

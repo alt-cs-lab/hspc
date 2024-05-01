@@ -10,9 +10,9 @@ const request = supertest(app);
 
 const dbdir = pathJoin(__dirname, '/../../database');
 
-const queries = fs.readFileSync(`${dbdir}/hspc_queries-psql.sql`, 'utf8');
+const queries = fs.readFileSync(`${dbdir}/create_database.sql`, 'utf8');
 const schools = `${dbdir}/SchoolDirectoryCSV.csv`;
-const populate = fs.readFileSync(`${dbdir}/hspc_testpopulate.sql`, 'utf8');
+const populate = fs.readFileSync(`${dbdir}/populate_test_data.sql`, 'utf8');
 let adminToken = null;
 let advisorToken = null;
 

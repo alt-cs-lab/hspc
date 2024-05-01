@@ -4,10 +4,10 @@ Copyright (c) 2019 KSU-CS-Software-Engineering
 */
 import React, { Component, useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import TeamService from "../../_common/services/team";
-import EventService from "../../_common/services/event";
-import SchoolService from "../../_common/services/school";
-import StudentService from "../../_common/services/high-school-student";
+import TeamService from "../../_common/services/team.js";
+import EventService from "../../_common/services/event.js";
+import SchoolService from "../../_common/services/school.js";
+import StudentService from "../../_common/services/high-school-student.js";
 import DataTable from "react-data-table-component";
 import Select from "react-select";
 import { connect } from "react-redux";
@@ -46,6 +46,9 @@ class ViewTeams extends Component {
    * If an advisor is logged in, the list of teams registered with that advisor is returned.
    */
   componentDidMount = () => {
+    /*
+    * Get Published Events
+    */
     EventService.getPublishedEvents(
       this.props.auth.user.id,
       this.props.auth.user.accessLevel
@@ -72,10 +75,11 @@ class ViewTeams extends Component {
         let body = response.data;
         let schools = [];
         if (response.ok) {
+          console.log(response)
           for (let i = 0; i < body.length; i++) {
             schools.push({
-              label: body[i].name,
-              value: body[i].id,
+              label: body[i].schoolname,
+              value: body[i].schoolid,
             });
           }
           this.setState({ schoolList: schools });
@@ -93,43 +97,6 @@ class ViewTeams extends Component {
       })
       .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
-  /*
-   * Updates the list of teams based on selected event
-   */
-  UpdateTeams = (id, school) => {
-    let allTeams = this.state.teamTable;
-    let filteredTeams = [];
-    if (school) {
-      this.setState({ schoolId: id });
-      for (let i = 0; i < allTeams.length; i++) {
-        if (
-          allTeams[i].schoolid === id &&
-          allTeams[i].competitionid === this.state.competitionId
-        ) {
-          filteredTeams.push(allTeams[i]);
-        }
-      }
-    } else {
-      this.setState({ competitionId: id });
-      for (let i = 0; i < allTeams.length; i++) {
-        if (
-          allTeams[i].schoolid === this.state.schoolId &&
-          allTeams[i].competitionid === id
-        ) {
-          filteredTeams.push(allTeams[i]);
-        }
-      }
-    }
-    this.setState({ filteredTeamsTable: filteredTeams });
-  };
-  /*
-  UpdateTeams(nameofevent) {
-    TeamService.getAllTeamsInCompName(nameofevent).then((response) => {
-      this.setState({ teamTable: response.data, columns: this.getAllTeamColumns() });
-    });
-    return;
-  }
-  */
 
   // Specifies what information to include in the rendered columns.
   getAllTeamColumns() {
@@ -231,9 +198,8 @@ class ViewTeams extends Component {
             <span style={{ marginRight: "5px", fontSize: "16px" }}>
               Select School:
             </span>
-            <div id="sub-nav" className="schoolDropdowm">
+            <div id="sub-nav" className="eventDropDown">
               <Select
-                id="event-dropdown"
                 placeholder="Select School"
                 options={this.state.schoolList}
                 onChange={(target) => this.handleSchoolSelection(target)}

@@ -10,65 +10,12 @@ import ServiceUtils from "../../_utilities/serviceUtils";
  */
 class UserService {
 
-  constructor() {
-    this.getAllUsers = this.getAllUsers.bind(this);
-    this.getAllVolunteers = this.getAllVolunteers.bind(this);
-    this.logVolunteerAssignment = this.logVolunteerAssignment.bind(this);
-  }
-
   /**
    * Requests to get all users
    * @returns {json} All users
    */
   getAllUsers() {
     return ServiceUtils.getRequest("/api/user/view", {});
-  }
-
-  /**
-   * Requests to get all volunteers
-   * @returns {json} All volunteers
-   */
-  getAllVolunteers() {
-    return ServiceUtils.getRequest("api/user/volunteers", {});
-  }
-
-  /*
-   *API Endpoint that sets a volunteer as active in the database
-   */
-  /**
-   * Request to set a volunteer
-   * @param {int} userId 
-   * @returns 
-   */
-  checkInVolunteer(userId) {
-    return ServiceUtils.postRequest("api/user/checkinvolunteer", {
-      userId: userId,
-    });
-  }
-
-  /*
-   * API Endpoint that checks out a volunteer
-   */
-  checkOutVolunteer(userId) {
-    return ServiceUtils.postRequest("api/user/checkoutvolunteer", {
-      userId: userId,
-    });
-  }
-
-  /*
-   * API Endpoint that logs a volunteer assignment
-   *
-   * @author: Trey Moddelmog
-   * @param {string} text value of the competition/event ID
-   * @param {string} text value of the user ID
-   * @param {string} text value of the team ID
-   */
-  logVolunteerAssignment(compID, volID, teamID) {
-    return ServiceUtils.postRequest("api/user/assignment", {
-      compID: compID,
-      volID: volID,
-      teamID: teamID,
-    });
   }
 
   /*
@@ -97,37 +44,6 @@ class UserService {
       phone: phone,
       password: hashedPassword,
       accessLevel: accesslevel,
-    });
-  }
-
-  /*
-   * API Endpoint that returns the volunteer team for the current user.
-   *
-   * @author: Trent Kempker
-   */
-  getVolunteerAssignment(volunteerid) {
-    return ServiceUtils.postRequest("api/user/getvolunteerassignment", {
-      volunteerid: volunteerid,
-    });
-  }
-
-  /*
-   * API Endpoint that returns the volunteer assigned for the current team selected.
-   *
-   * @author: May Phyo
-   */
-  getTeamAssignment(teamid) {
-    return ServiceUtils.getRequest("api/user/getteamassignment", {
-      teamid: teamid,
-    });
-  }
-
-  /*
-   * API Endpoint that deletes the assignment based on volunteeid
-   */
-  removeAssignment(volunteerid) {
-    return ServiceUtils.deleteRequest("api/user/removeassignment", {
-      volunteerid: volunteerid,
     });
   }
 
