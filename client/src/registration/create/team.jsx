@@ -1,7 +1,7 @@
 /**
  * Create team page
- * Author:
- * Modified: 5/1/2024
+ * Author: Devin Richards
+ * Modified: 5/4/2024
  */
 import React, { Component } from "react";
 import StudentService from "../../_common/services/high-school-student.js";
@@ -10,11 +10,7 @@ import teamService from "../../_common/services/team.js";
 import EventService from "../../_common/services/event.js";
 import Button from "react-bootstrap/Button";
 import { connect } from "react-redux";
-import {
-  clearErrors,
-  updateErrorMsg,
-  updateSuccessMsg,
-} from "../../_store/slices/errorSlice.js";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
 import { Form } from "react-bootstrap";
 import Select from "react-select";
 
@@ -72,8 +68,7 @@ class CreateTeam extends Component {
     /**
      * Gets all of the published events.
      */
-
-    // TWP TODO: Change to getRegisterableEvents
+    // TODO: Change to getRegisterableEvents
     EventService.getPublishedEvents()
       .then((response) => {
         if (response.ok) {
@@ -126,7 +121,7 @@ class CreateTeam extends Component {
 
   /**
    * Provides a list of students based on what school is selected.
-   * @param {*} schoolId The ID of the selected school.
+   * @param {int} schoolId The ID of the selected school.
    */
   createStudentList(schoolId) {
     StudentService.getStudentsWithNoTeam(schoolId).then((response) => {

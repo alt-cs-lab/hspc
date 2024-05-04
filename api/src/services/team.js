@@ -1,6 +1,6 @@
 /**
  * Services for team functionality
- * Author:
+ * Author: Devin Richards
  * Modified: 5/1/2024
  */
 const db = require("../utils/hspc_db").db;
@@ -30,6 +30,7 @@ function getAllSkillLevels() {
 
 /**
  * Returns all schools for a given advisor
+ * @param {int} advisorId The advisor's ID
  */
 function getAdvisorSchoolsTeams(advisorId) {
   let approved = constants.ADVISOR_STATUS_APPROVED;
@@ -185,6 +186,7 @@ function teamsInCompetitionForAllSchools({
 
 /**
  * Returns the details of a specific team
+ * @param {int} teamid The team's ID
  */
 function getTeamDetails({ teamid }) {
   return db.oneOrNone(

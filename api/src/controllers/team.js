@@ -1,7 +1,7 @@
-/**
+/*
  * Controllers for team functionality
- * Author:
- * Modified: 5/1/2024
+ * Author: Devin Richards
+ * Modified: 5/4/2024
  */
 const router = require("express").Router();
 const teamService = require("../services/team");
@@ -70,7 +70,7 @@ router.get("/getTeamDetails", (req, res) => {
   useService(teamService.getTeamDetails, req, res);
 });
 
-/**
+/*
  * Calls the API to create a team
  */
 router.post(

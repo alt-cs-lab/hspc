@@ -1,8 +1,8 @@
 import ServiceUtils from "../../_utilities/serviceUtils";
 
-/*
-* Schoolservice class that allows for registration of new schools or viewing of all schools
-* Bridges gap between client and API
+/**
+* Schoolservice class that allows for registration of new schools or viewing of all schools.
+* Bridges gap between client and API.
 */
 class SchoolService {
     constructor() {
