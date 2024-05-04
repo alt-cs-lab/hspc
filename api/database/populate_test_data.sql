@@ -88,7 +88,7 @@ VALUES
     (21, '1275551015', 'Harry', 'Miller', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 4, 4, 'harry.miller@email.com', '2024-01-06', '2024-01-26'),
     (22, '9325551016', 'Irene', 'Wilson', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 8, 8, 'irene.wilson@email.com', '2024-01-07', '2024-01-25'),
     (23, '3285551017', 'Jack', 'Thomas', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 8, 8, 'jack.thomas@email.com', '2024-01-08', '2024-01-24'),
-    (28, '9132224767', 'Donkey', 'Kong', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 8, 8, 'dk@email.com', '2024-05-01', '2024-05-01'),
+    (28, '9132224767', 'Derrick', 'Klein', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 8, 8, 'dk@email.com', '2024-05-01', '2024-05-01'),
     (24, '4215551018', 'Kathy', 'Lee', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 16, 16, 'kathy.lee@email.com', '2024-01-09', '2024-01-23'),
     (25, '3215551019', 'Leo', 'Garcia', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 16, 16, 'leo.garcia@email.com', '2024-01-10', '2024-01-22'),
     (26, '4425551020', 'Josh', 'Weese', '$2a$10$PZAjHhOA0BU3pW9SLRKDoeVxSIN2IhpoPA/1BEuH4iw3kaGUJN1G.', 32, 32, 'josh.@email.com', '2024-01-11', '2024-01-29'),
