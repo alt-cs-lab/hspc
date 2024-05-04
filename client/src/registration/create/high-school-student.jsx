@@ -1,6 +1,5 @@
 /**
- * Create high school student page
- * Author:
+ * Author: Devan Griffin
  * Modified: 5/1/2024
  */
 import React, { Component } from "react";
@@ -88,15 +87,24 @@ class AddStudent extends Component {
       .then((response) => {
         if (response.status === 201) {
           this.props.dispatchSuccess("Student Created");
+          this.ChangeView();
         } else {
           this.props.dispatchError(response.data);
         }
       })
       .catch((resErr) =>
         console.log(
-          "Something went wrong connecting to the server. Please try again"
+          "Something went wrong connecting to the server. Please try again: " + resErr
         )
       );
+  }
+
+  ChangeView = () => {
+    this.props.setCurrentView(
+      <ViewStudents
+        advisorUser={this.advisor.id}
+        setCurrentView={this.props.setCurrentView}
+      />);
   }
 
   /*
@@ -162,7 +170,7 @@ class AddStudent extends Component {
             </Form.Group>
             <Form.Group className="mb-4">
               <Form.Label>Graduation Year</Form.Label>
-              <Form.Control type="number" required placeholder="Ex: 2024"
+              <Form.Control min="1000" max="9999" type="number" required placeholder="Ex: 2024"
                 onChange={(target => this.setState({ gradYear: target.target.value }))} value={ this.state.gradYear }/>
             </Form.Group>
           </div>

@@ -1,6 +1,5 @@
 /**
- * Edit high school students page
- * Author:
+ * Author: Devan Griffin
  * Modified: 5/1/2024
  */
 import React, { Component } from "react";
@@ -53,62 +52,35 @@ class EditStudent extends Component {
      * Gets the schools that the advisor is connected to from the api
      * Gets all schools if the user is an admin
      */
-    if (this.isAdmin) {
-      SchoolService.getAllSchools()
-        .then((response) => {
-          if (response.ok) {
-            let schoolbody = response.data;
-            let schools = [];
-            let IDSchool = [];
-            let id = this.state.schoolId;
-            for (let i = 0; i < schoolbody.length; i++) {
-              if (schoolbody[i].schoolid === id) {
-                IDSchool.push({
-                  label: schoolbody[i].schoolname,
-                  value: schoolbody[i].schoolid,
-                });
-              }
-              schools.push({
+    SchoolService.getAdvisorApprovedSchools(
+      this.advisor.id,
+      this.advisor.accessLevel
+    )
+      .then((response) => {
+        if (response.ok) {
+          let schoolbody = response.data;
+          let schools = [];
+          let IDSchool = [];
+          let id = this.state.schoolId;
+          for (let i = 0; i < schoolbody.length; i++) {
+            if (schoolbody[i].schoolid === id) {
+              IDSchool.push({
                 label: schoolbody[i].schoolname,
                 value: schoolbody[i].schoolid,
               });
             }
-            this.setState({ schoolList: schools, studentSchool: IDSchool });
-          } else console.log("An error has occurred, Please try again.");
-        })
-        .catch((resErr) =>
-          console.log("Something went wrong. Please try again")
-        );
-    } else {
-      SchoolService.getAdvisorApprovedSchools(
-        this.advisor.id,
-        this.advisor.accessLevel
-      )
-        .then((response) => {
-          if (response.ok) {
-            let schoolbody = response.data;
-            let schools = [];
-            let IDSchool = [];
-            let id = this.state.schoolId;
-            for (let i = 0; i < schoolbody.length; i++) {
-              if (schoolbody[i].schoolid === id) {
-                IDSchool.push({
-                  label: schoolbody[i].schoolname,
-                  value: schoolbody[i].schoolid,
-                });
-              }
-              schools.push({
-                label: schoolbody[i].schoolname,
-                value: schoolbody[i].schoolid,
-              });
-            }
-            this.setState({ schoolList: schools, studentSchool: IDSchool });
-          } else console.log("An error has occurred, Please try again.");
-        })
-        .catch((resErr) =>
-          console.log("Something went wrong. Please try again")
-        );
-    }
+            schools.push({
+              label: schoolbody[i].schoolname,
+              value: schoolbody[i].schoolid,
+            });
+          }
+          this.setState({ schoolList: schools, studentSchool: IDSchool });
+        } else console.log("An error has occurred, Please try again.");
+      })
+      .catch((resErr) =>
+        console.log("Something went wrong. Please try again")
+      );
+
     let date = constants.dateFormat(this.student.graddate);
     let dateArray = date.split("-");
     let dateMonth = parseInt(dateArray[1]);
@@ -143,6 +115,7 @@ class EditStudent extends Component {
         console.log(response);
         if (response.status === 201) {
           this.props.dispatchSuccess("Student Edited");
+          this.ChangeView();
         } else {
           this.props.dispatchError(response.data);
         }
@@ -154,6 +127,14 @@ class EditStudent extends Component {
       );
   };
 
+  ChangeView = () => {
+    this.props.setCurrentView(
+      <ViewStudents
+        advisorUser={this.advisor.id}
+        setCurrentView={this.props.setCurrentView}
+      />);
+  }
+
   /**
    * Renders the form to be filled out for editing a student
    */
@@ -161,6 +142,14 @@ class EditStudent extends Component {
     return (
       <div className="RegisterBox">
         <h2>Edit Student - {this.state.firstName} {this.state.lastName}</h2>  
+        <Button 
+          onClick={() => this.props.setCurrentView(
+            <ViewStudents
+              advisorUser={this.advisor.id}
+              setCurrentView={this.props.setCurrentView}
+            />)}>
+          View Students
+        </Button>
         <Form onSubmit={(event) => this.editStudent(event)}>
           <div class="add-margin">
             <Form.Group className="mb-3">
@@ -222,7 +211,7 @@ class EditStudent extends Component {
             </Form.Group>
             <Form.Group className="mb-4">
               <Form.Label>Graduation Year</Form.Label>
-              <Form.Control type="number" required placeholder="Ex: 2024"
+              <Form.Control min="1000" max="9999" type="number" required placeholder="Ex: 2024"
                 onChange={(target => this.setState({ gradYear: target.target.value }))} defaultValue={ this.state.gradYear }/>
             </Form.Group>
           </div>
