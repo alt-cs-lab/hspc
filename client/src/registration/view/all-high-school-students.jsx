@@ -6,7 +6,6 @@
 import React, { Component } from "react";
 import SchoolService from "../../_common/services/school";
 import StudentService from "../../_common/services/high-school-student";
-import EditStudent from "../../registration/edit/high-school-students.jsx"
 import DataTable from "react-data-table-component";
 import { connect } from "react-redux";
 import {
@@ -132,26 +131,7 @@ class ViewAllStudents extends Component {
         selector: (row) => constants.gradDateFormat(row.graddate),
         sortable: true,
         sortFunction: constants.dateSort,
-      },
-      {
-        name: "Edit Student",
-        cell: (row) => (
-          <Button
-            onClick={() =>
-              this.props.setCurrentView(
-                <EditStudent
-                  admin={true}
-                  student={row}
-                  setCurrentView={this.props.setCurrentView}
-                />
-              )
-            }
-          >
-            Edit
-          </Button>
-        ),
-        button: true,
-      },
+      }
     ];
   }
 

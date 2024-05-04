@@ -1,6 +1,5 @@
 /**
- * View high school students page
- * Author:
+ * Author: Devan Griffin
  * Modified: 5/1/2024
  */
 import React, { Component } from "react";
@@ -126,8 +125,6 @@ class ViewStudents extends Component {
             Edit
           </Button>
         ),
-        // ignoreRowClick: true,
-        // allowOverflow: true,
         button: true,
       },
     ];
@@ -186,7 +183,7 @@ class ViewStudents extends Component {
           className="mb-3"
           onClick={() =>
             this.props.setCurrentView(
-              <AddStudent advisorUser={this.advisor.id} />
+              <AddStudent advisorUser={this.advisor.id} setCurrentView={this.props.setCurrentView}/>
             )
           }
         >
