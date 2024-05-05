@@ -1,7 +1,24 @@
+/**
+ * Author: Devan Griffin
+ * Modified: 4/24/2024
+ */
+
 import ServiceUtils from "../../_utilities/serviceUtils";
 
+/**
+ * Class for sending requests to the API for students
+ */
 class StudentService {
 
+    /**
+     * Request to add a new student
+     * @param {string} firstName 
+     * @param {string} lastName 
+     * @param {int} schoolId 
+     * @param {string} email 
+     * @param {string} gradDate Graduation Date
+     * @returns {json} The request response
+     */
     addHighSchoolStudent(firstName, lastName, schoolId, email, gradDate) {
         return ServiceUtils.postRequest('api/high-school-student/createStudent', { 
             firstName: firstName, 
@@ -12,6 +29,15 @@ class StudentService {
         });
     }
 
+    /**
+     * Request to edit a student
+     * @param {int} studentId 
+     * @param {string} firstName 
+     * @param {string} lastName 
+     * @param {int} schoolId 
+     * @param {string} gradDate Graduation Date
+     * @returns {json} The request response
+     */
     editHighSchoolStudent(studentId, firstName, lastName, schoolId, gradDate) {
         return ServiceUtils.postRequest('api/high-school-student/editStudent', { 
             studentId: studentId,
@@ -22,40 +48,43 @@ class StudentService {
         });
     }
 
-    editStudentEmail(studentId, email, firstName, lastName, schoolId, gradDate) {
-        return ServiceUtils.postRequest('api/high-school-student/editStudentEmail', { 
-            studentId: studentId,
-            email: email,
-            firstName: firstName, 
-            lastName: lastName, 
-            schoolId: schoolId,
-            gradDate: gradDate
-        });
-    }
-
+    /**
+     * Request to get all students
+     * @returns {json} All students
+     */
     getAllStudents() {
         return ServiceUtils.getRequest('api/high-school-student/getAllStudents');
     }
 
+    /**
+     * Request to get all the students at a specific school who aren't in a team.
+     * @param {int} schoolId 
+     * @returns {json} The students without a team
+     */
     getStudentsWithNoTeam(schoolId) {
         return ServiceUtils.getRequest('api/high-school-student/getStudentsWithNoTeam', {
             schoolId: schoolId
         });
     }
 
-    /*
-    * API Endpoint retrieves all students from an advisor's schools
-    */
+    /**
+     * Request to get all the students for an advisor
+     * @param {int} advisorId
+     * @returns {json} The advisor's students
+     */
     getAdvisorsStudents(advisorId) {
         return ServiceUtils.getRequest('api/high-school-student/getFromAdvisorSchools', {
             advisorId: advisorId
         });
     };
 
-    /*
-    * API Endpoint that returns all users with Student based on team name
-    * TODO TWP: MOVE TO STUDENT SERVICE
-    */
+
+    //TODO TWP: MOVE TO STUDENT SERVICE
+    /**
+     * Request to get all students based off a team 
+     * @param {int} teamid 
+     * @returns {json} All the students in the team
+     */
     getStudentsInTeam(teamid) {
         return ServiceUtils.getRequest("api/high-school-student/teamStudents", { teamid: teamid });
     }

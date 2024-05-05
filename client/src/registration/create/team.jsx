@@ -1,421 +1,376 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
-import React, {Component} from "react";
-import {ToggleButtonGroup, ToggleButton} from "react-bootstrap";
-//import ReCAPTCHA from "react-recaptcha";
-import Button from 'react-bootstrap/Button';
-
-import Form from 'react-bootstrap/Form'
-import teamService from "../../_common/services/team";
-import UserService from "../../_common/services/user";
-import EventService from "../../_common/services/event";
-import SchoolService from "../../_common/services/school.js";
-import Select from "react-select";
-import {connect} from "react-redux";
-import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice";
-
-const styles = require('../../_utilities/styleConstants.js');
-
-/*
- * @author: Daniel Bell, Tyler Trammell
+/**
+ * Create team page
+ * Author: Devin Richards
+ * Modified: 5/4/2024
  */
-class RegisterTeam extends Component {
-    constructor(props) {
-        super(props);
-        this.props.dispatchResetErrors();
-        this.state = {
-            teamName: "",
-            schoolId: null,
-            competitionId: null,
-            questionLevelId: 1,
-            advisorId: null,
-            isVerified: false,
-            redirect: false,
-            eventList: [],
-            schoolMaxList: [],
-            eventMaxList: [],
-            schoolList: [],
-            advisorList: [],
-            teamList: [],
-            eventTeamsList: [],
-        };
-    }
+import React, { Component } from "react";
+import StudentService from "../../_common/services/high-school-student.js";
+import SchoolService from "../../_common/services/school.js";
+import teamService from "../../_common/services/team.js";
+import EventService from "../../_common/services/event.js";
+import Button from "react-bootstrap/Button";
+import { connect } from "react-redux";
+import { clearErrors, updateErrorMsg, updateSuccessMsg } from "../../_store/slices/errorSlice.js";
+import { Form } from "react-bootstrap";
+import Select from "react-select";
 
-    /*
-     * Returns a list of all events, schools, and advisors when the component is rendered.
-     */
-    componentDidMount = () => {
-        EventService.getAllEvents(
-            this.props.auth.user.id,
-            this.props.auth.user.accessLevel
-        )
-            .then((response) => {
-                if (response.statusCode === 200) {
-                    let body = response.body;
-                    let events = [];
-                    let competitions = [];
-                    let EventMax = [];
-                    competitions.push({
-                        label: 0,
-                        value: 0,
-                    });
-                    EventMax.push({
-                        label: 0,
-                        value: 0,
-                    });
-
-                    for (let i = 0; i < body.length; i++) {
-                        events.push({
-                            label: body[i].eventname,
-                            value: body[i].competitionid,
-                        });
-                        competitions.push({
-                            label: body[i].competitionid,
-                            value: body[i].teamsperschool,
-                        });
-                        EventMax.push({
-                            label: body[i].competitionid,
-                            value: body[i].teamsperevent,
-                        });
-                    }
-                    this.setState({eventList: events});
-                    this.setState({schoolMaxList: competitions});
-                    this.setState({eventMaxList: EventMax});
-                } else console.log("An error has occurred, Please try again.");
-            })
-            .catch((resErr) => console.log("Something went wrong. Please try again"));
-
-        SchoolService.getAllSchools()
-            .then((response) => {
-                if (response.statusCode === 200) {
-                    let schoolbody = JSON.parse(response.body);
-                    let schools = [];
-                    for (let i = 0; i < schoolbody.length; i++) {
-                        schools.push({
-                            label: schoolbody[i].schoolname,
-                            value: schoolbody[i].schoolid,
-                        });
-                    }
-                    this.setState({schoolList: schools});
-                } else console.log("An error has occurred, Please try again.");
-            })
-            .catch((resErr) => console.log("Something went wrong. Please try again"));
-
-        UserService.getAllAdvisors()
-            .then((response) => {
-                if (response.statusCode === 200) {
-                    let advisorbody = JSON.parse(response.body);
-                    let advisors = [];
-                    for (let i = 0; i < advisorbody.length; i++) {
-                        advisors.push({
-                            label: advisorbody[i].email,
-                            value: advisorbody[i].userid,
-                        });
-                    }
-                    this.setState({advisorList: advisors});
-                } else console.log("An error has occurred, Please try again.");
-            })
-            .catch((resErr) => console.log("Something went wrong. Please try again"));
+/**
+ * Used by an advisor to create and register a team for an event.
+ */
+class CreateTeam extends Component {
+  constructor(props) {
+    super(props);
+    this.props.dispatchResetErrors();
+    this.advisor = this.props.advisor;
+    this.state = {
+      teamName: "",
+      schoolId: null,
+      competitionId: null,
+      skillLevelId: null,
+      isVerified: false,
+      studentList: [],
+      member1: null,
+      member2: null,
+      member3: null,
+      member4: null,
+      skillLevels: [],
+      schoolList: [],
+      eventList: [],
     };
+  }
 
-    /*
-     * Handles the registration of teams and adds the team information to the SQL database.
+  componentDidMount = () => {
+    /**
+     * Gets all of the skill levels.
      */
-    handleRegisterTeam = () => {
-        if (this.state.isVerified) {
-            if (
-                this.state.teamName === "" ||
-                this.state.schoolId === "" ||
-                this.state.competitionId === "" ||
-                this.state.advisorId === ""
-            ) {
-                this.props.dispatchError(
-                    "Please check that all the fields are completed."
-                );
-                return;
+    teamService
+      .getAllSkillLevels()
+      .then((response) => {
+        if (response.ok) {
+          let skillData = response.data;
+          let skills = [];
+          for (let i = 0; i < skillData.length; i++) {
+            skills.push({
+              label: skillData[i].skilllevel,
+              value: skillData[i].skilllevelid,
+            });
+          }
+          this.setState({ skillLevels: skills });
+        } else
+          console.log(
+            "There was an error getting the skill levels. Please try again"
+          );
+      })
+      .catch((resErr) =>
+        console.log("Can't connect to the server. Please try again.")
+      );
+
+    /**
+     * Gets all of the published events.
+     */
+    // TODO: Change to getRegisterableEvents
+    EventService.getPublishedEvents()
+      .then((response) => {
+        if (response.ok) {
+          let eventData = response.data;
+          let events = [];
+          for (let i = 0; i < eventData.length; i++) {
+            if (eventData[i].status === "Registerable") {
+              events.push({
+                label: eventData[i].name,
+                value: eventData[i].id,
+              });
             }
+          }
+          this.setState({ eventList: events });
+        } else
+          console.log(
+            "There was an error getting the published events. Please try again"
+          );
+      })
+      .catch((resErr) =>
+        console.log("Can't connect to the server. Please try again.")
+      );
 
-            teamService
-                .getTeamSchoolEvent(this.state.schoolId, this.state.competitionId)
-                .then((response) => {
-                    if (response.statusCode === 201 || response.statusCode === 200) {
-                        let teamBody = response.body;
-                        let teams = [];
-                        for (let i = 0; i < response.body.length; i++) {
-                            teams.push({
-                                label: teamBody[i].teamid,
-                                value: teamBody[i].teamname,
-                            });
-                        }
-                        this.setState({teamList: teams});
-
-                        if (
-                            this.state.teamList.length <
-                            this.state.schoolMaxList[this.state.competitionId].value
-                        ) {
-                            teamService
-                                .getTeamsEventID(this.state.competitionId)
-                                .then((response) => {
-                                    if (
-                                        response.statusCode === 201 ||
-                                        response.statusCode === 200
-                                    ) {
-                                        let teamBody = response.body;
-                                        let teams = [];
-                                        for (let i = 0; i < response.body.length; i++) {
-                                            teams.push({
-                                                label: teamBody[i].teamid,
-                                                value: teamBody[i].teamname,
-                                            });
-                                        }
-                                        this.setState({eventTeamsList: teams});
-                                    }
-
-                                    console.log(this.state.eventMaxList);
-                                    console.log(this.state.eventTeamsList);
-                                    if (
-                                        this.state.eventTeamsList.length <
-                                        this.state.eventMaxList[this.state.competitionId].value
-                                    ) {
-                                        teamService
-                                            .registerTeam(
-                                                this.state.teamName,
-                                                this.state.schoolId,
-                                                this.state.competitionId,
-                                                this.state.questionLevelId,
-                                                this.state.advisorId
-                                            )
-                                            .then((response) => {
-                                                if (response.statusCode === 201) {
-                                                    this.props.dispatchSuccess(
-                                                        "Registration Successful."
-                                                    );
-                                                    this.setState({redirect: true});
-                                                    this.resetFields();
-                                                    window.location.reload();
-                                                }
-                                            })
-                                            .catch((error) => {
-                                                this.props.dispatchError(
-                                                    "There was an error creating the Team."
-                                                );
-                                            });
-                                    } else {
-                                        console.log("Max teams in event reached");
-                                        this.props.dispatchError(
-                                            "The maximum number of teams for this event has been reached."
-                                        );
-                                    }
-                                });
-                        } else {
-                            console.log("max teams in school reached");
-                            this.props.dispatchError(
-                                "The maximum number of teams for this school has already been reached"
-                            );
-                        }
-                    } else
-                        console.log(
-                            "An error has occurred with valid response, Please try again."
-                        );
-                })
-                .catch((resErr) => {
-                    console.log(resErr);
-                    console.log(
-                        "Something went wrong getting school's events. Please try again"
-                    );
-                });
-        } else {
-            this.props.dispatchError("Please verify you are a human.");
-        }
-    };
-
-    resetFields = () => {
-        console.log("Reset");
-        this.setState({teamName: ""});
-        this.setState({schoolId: 0});
-        this.setState({competitionId: 0});
-    };
-
-    /*
-     * Handle the changing of question level - used in Question Level Toggle.
-     * @Param Value: the value that is to be set for questionLevelID
+    /**
+     * Gets all of the advisor's approved schools.
      */
-    handleChange = (value, event) => {
-        this.setState({questionLevelId: value});
-    };
+    SchoolService.getAdvisorApprovedSchools(this.advisor.id)
+      .then((response) => {
+        if (response.ok) {
+          let schoolbody = response.data;
+          let schools = [];
+          for (let i = 0; i < schoolbody.length; i++) {
+            schools.push({
+              label: schoolbody[i].schoolname,
+              value: schoolbody[i].schoolid,
+            });
+          }
+          this.setState({ schoolList: schools });
+          console.log("Manage");
+          console.log(response.data);
+        } else
+          console.log(
+            "There was an error getting the advisor's apporved schools. Please try again."
+          );
+      })
+      .catch((resErr) =>
+        console.log("Can't connect to the server. Please try again.")
+      );
+  };
 
-    /*
-     * Handle the changing of a school - used in School dropdown.
-     * @Param schoolId: the value to be set for the schoolId
-     */
-    handleSchoolChange = (schoolId) => {
-        this.setState({schoolId: schoolId.value});
-    };
+  /**
+   * Provides a list of students based on what school is selected.
+   * @param {int} schoolId The ID of the selected school.
+   */
+  createStudentList(schoolId) {
+    StudentService.getStudentsWithNoTeam(schoolId).then((response) => {
+      let studentData = response.data;
+      let studentOptions = [];
+      for (let i = 0; i < studentData.length; i++) {
+        studentOptions.push({
+          label:
+            studentData[i].firstname +
+            " " +
+            studentData[i].lastname +
+            ", " +
+            studentData[i].email,
+          value: studentData[i].studentid,
+        });
+      }
+      this.setState({
+        studentList: studentOptions,
+        schoolId: schoolId,
+        member1: null,
+        member2: null,
+        member3: null,
+        member4: null,
+      });
+    });
+  }
 
-    /*
-     * Handle the changing of a competition - used in Event Date dropdown.
-     * @Param competitionId: the value to be set for the competitionId
-     */
-    handleCompetitionChange = (competitionId) => {
-        this.setState({competitionId: competitionId.value});
-    };
-
-    /*
-     * Handle the changing of an advisor - used in Advisor dropdown.
-     * @Param competitionId: the value to be set for the competitionId
-     */
-    handleAdvisorChange = (advisorId) => {
-        this.setState({advisorId: advisorId.value});
-    };
-
-    /*
-     * Indicates successful loading of the captcha for debugging purposes
-     */
-    // recaptchaLoaded = () => {
-    //     console.log("captcha successfully loaded.");
-    // };
-
-    /*
-     * Changes the verfied state to true following a verified captcha result.
-     */
-    // verifyCallback = (response) => {
-    //     if (response) this.setState({isVerified: true});
-    //     else this.setState({isVerified: false});
-    // };
-
-    /*
-     * Auto-Redirect to the Add Users Page. By default, this renders the registration box.
-     */
-    render() {
-        return (
-            <div name="status-div" className="RegisterBox">
-                <h2>New Team?</h2>
-                <p>
-                    <b>Please fill out the information below.</b>
-                </p>
-                <Form>
-                    <Form.Group>
-                        <Form.Label>Enter your Team Name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            required
-                            label=""
-                            style={{margin: "10px"}}
-                            inputProps={{style: {fontSize: 14}}}
-                            InputLabelProps={{style: {fontSize: 13}}}
-                            onChange={(event) =>
-                                this.setState({teamName: event.target.value})
-                            }
-                            size="small">
-                        </Form.Control>
-
-                    </Form.Group>
-                    {/*TODO: Update selects to be bootstrap*/}
-                    <div id="sub-nav">
-                        <p id="sub-nav-item">
-                            <b>School</b>
-                        </p>
-                        <Select
-                            id="dropdown"
-                            styles={styles.selectStyles}
-                            placeholder="Select a school"
-                            options={this.state.schoolList}
-                            onChange={this.handleSchoolChange}
-                        />
-                    </div>
-                    <div id="sub-nav">
-                        <p id="sub-nav-item">
-                            <b>Event</b>
-                        </p>
-                        <Select
-                            id="dropdown"
-                            required
-                            styles={styles.selectStyles}
-                            placeholder="Select an event"
-                            options={this.state.eventList}
-                            onChange={this.handleCompetitionChange}
-                        />
-                    </div>
-                    <div id="sub-nav">
-                        <p id="sub-nav-item">
-                            <b>Advisor</b>
-                        </p>
-                        <Select
-                            id="dropdown"
-                            required
-                            styles={styles.selectStyles}
-                            placeholder="Select an advisor"
-                            options={this.state.advisorList}
-                            onChange={this.handleAdvisorChange}
-                        />
-                    </div>
-                    <br/>
-                    <p>
-                        <br/>
-                        Please select an experience level.
-                    </p>
-                    <ToggleButtonGroup
-                        className="RoleSelect"
-                        required
-                        type="radio"
-                        name="options"
-                        defaultValue={1}
-                    >
-                        <ToggleButton value={1} onClick={() => this.handleChange(1)}>
-                            Beginner
-                        </ToggleButton>
-                        <ToggleButton value={2} onClick={() => this.handleChange(2)}>
-                            Advanced
-                        </ToggleButton>
-                    </ToggleButtonGroup>
-                    <br/>
-                    <br/>
-                    {/* <div align="center">
-                        <ReCAPTCHA
-                            class="Captcha"
-                            sitekey="6LdB8YoUAAAAAL5OtI4zXys_QDLidEuqpkwd3sKN"
-                            render="explicit"
-                            onloadCallback={this.recaptchaLoaded}
-                            verifyCallback={this.verifyCallback}
-                        />
-                    </div> */}
-                    <Button
-                        variant="primary"
-                        className="RegisterButton"
-                        style={{
-                            margin: 15,
-                            backgroundColor: "#003434",
-                            fontSize: 14,
-                            color: "white",
-                        }}
-                        type="button"
-                        onClick={(event) => this.handleRegisterTeam(event)}
-                    >
-                        Register Team
-                    </Button>
-                </Form>
-            </div>
-        );
+  /**
+   * Handles the registration of a team.
+   */
+  handleRegisterTeam() {
+    if (
+      this.state.teamName === "" ||
+      this.state.schoolId === null ||
+      this.state.competitionId === null ||
+      this.state.skillLevelId === null
+    ) {
+      this.props.dispatchError("Please check that all fields are complete.");
+      return;
     }
+
+    let mem1 = this.state.member1;
+    let mem2 = this.state.member2;
+    let mem3 = this.state.member3;
+    let mem4 = this.state.member4;
+
+    /*
+     * Creates an array of the selected students.
+     */
+    let selectedStudents = new Set([mem1, mem2, mem3, mem4]);
+    const uniqueValues = new Set();
+    const duplicates = [];
+
+    /*
+     * Removes members whose values are null.
+     */
+    selectedStudents.forEach((item) => {
+      if (item === null) {
+        selectedStudents.delete(item);
+      }
+    });
+
+    /*
+     * Checks if at least two students students are selected.
+     */
+    if (selectedStudents.length < 2) {
+      this.props.dispatchError("Select at least two students to form a team.");
+      return;
+    }
+
+    /*
+     * Checks if the user selected the same student more than once.
+     */
+    selectedStudents.forEach((item) => {
+      if (uniqueValues.has(item)) {
+        duplicates.push(item);
+      } else {
+        uniqueValues.add(item);
+      }
+    });
+
+    if (duplicates.length >= 1) {
+      this.props.dispatchError("A student can only be selected once.");
+      this.createStudentList(this.state.studentid);
+      return;
+    }
+
+    const finalMembers = Array.from(selectedStudents);
+
+    /*
+     * Calls on the registerTeam function to create the team.
+     */
+    teamService
+      .registerTeam(
+        this.state.teamName,
+        this.state.schoolId,
+        this.state.competitionId,
+        this.state.skillLevelId,
+        this.advisor.id,
+        finalMembers,
+        this.state.isVerified
+      )
+      .then((response) => {
+        if (response.ok) {
+          console.log(response.data);
+          this.props.dispatchSuccess("Registration was successful.");
+          this.resetFields();
+        }
+      })
+      .catch((error) => {
+        this.props.dispatchError("There was an error creating the team.");
+      });
+  }
+
+  /**
+   * Clears out the information in some fields so that the page can be used again.
+   */
+  resetFields = () => {
+    console.log("Reset");
+    this.setState({
+      teamName: "",
+      schoolId: null,
+      competitionId: null,
+      member1: null,
+      member2: null,
+      member3: null,
+      member4: null,
+    });
+  };
+
+  /**
+   * Draws the webpage.
+   */
+  render() {
+    const table =
+      this.state.studentList.length === 0 || this.state.schoolId === null ? (
+        <p>
+          <b>Select A School To Display Students</b>
+        </p>
+      ) : (
+        <Form.Group class="add-margin">
+          <b>Select at least two students to create a team.</b>
+          <div className="mb-3">
+            <Form.Label>Member #1</Form.Label>
+            <Select
+              placeholder="Select a student"
+              options={this.state.studentList}
+              onChange={(opt) => this.setState({ member1: opt.value })}
+            />
+          </div>
+          <div className="mb-3">
+            <Form.Label>Member #2</Form.Label>
+            <Select
+              placeholder="Select a student"
+              options={this.state.studentList}
+              onChange={(opt) => this.setState({ member2: opt.value })}
+            />
+          </div>
+          <div className="mb-3">
+            <Form.Label>Member #3</Form.Label>
+            <Select
+              placeholder="Select a student"
+              options={this.state.studentList}
+              onChange={(opt) => this.setState({ member3: opt.value })}
+            />
+          </div>
+          <div className="mb-3">
+            <Form.Label>Member #4</Form.Label>
+            <Select
+              placeholder="Select a student"
+              options={this.state.studentList}
+              onChange={(opt) => this.setState({ member4: opt.value })}
+            />
+          </div>
+        </Form.Group>
+      );
+    return (
+      <div>
+        <h2>Team Creation</h2>
+        <p>
+          <b>Please fill out the information below.</b>
+        </p>
+        <Form>
+          <div class="add-margin">
+            <Form.Group className="mb-3">
+              <Form.Label>School</Form.Label>
+              <Select
+                placeholder="Select a school"
+                options={this.state.schoolList}
+                onChange={(opt) => this.createStudentList(opt.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Event</Form.Label>
+              <Select
+                placeholder="Select an event"
+                options={this.state.eventList}
+                onChange={(opt) => this.setState({ competitionId: opt.value })}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Skill Level</Form.Label>
+              <Select
+                placeholder="Select a skill level"
+                options={this.state.skillLevels}
+                onChange={(opt) => this.setState({ skillLevelId: opt.value })}
+              />
+            </Form.Group>
+            {table}
+            <Form.Group className="mb-3">
+              <Form.Label>Team Name</Form.Label>
+              <Form.Control
+                required
+                placeholder="Ex: Wildcats"
+                onChange={(event) =>
+                  this.setState({ teamName: event.target.value })
+                }
+                value={this.state.teamName}
+              ></Form.Control>
+            </Form.Group>
+          </div>
+          <Button onClick={(event) => this.handleRegisterTeam()}>
+            Register Team
+          </Button>
+        </Form>
+      </div>
+    );
+  }
 }
 
+/**
+ * Redux initializes props.
+ */
 const mapStateToProps = (state) => {
-    return {
-        auth: state.auth,
-        errors: state.errors,
-    };
+  return {
+    auth: state.auth,
+    errors: state.errors,
+  };
 };
 
+/**
+ * Redux updates props.
+ */
 const mapDispatchToProps = (dispatch) => {
-    return {
-        dispatchResetErrors: () => dispatch(clearErrors()),
-        dispatchError: (message) =>
-            dispatch(updateErrorMsg(message)),
-        dispatchSuccess: (message) =>
-            dispatch(updateSuccessMsg(message)),
-    };
+  return {
+    dispatchResetErrors: () => dispatch(clearErrors()),
+    dispatchError: (message) => dispatch(updateErrorMsg(message)),
+    dispatchSuccess: (message) => dispatch(updateSuccessMsg(message)),
+  };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterTeam);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateTeam);

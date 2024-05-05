@@ -30,7 +30,7 @@ class RequestService {
   }
 
   /*
-  * Calls the API and returns a JSON list of all teams
+  * Calls the API and returns a JSON list of all waitlisted teams in an event
   */
   getWaitlistedTeamsForEvent( eventid ) {
     return ServiceUtils.getRequest("/api/request/waitlistedTeamsForEvent", { eventid: eventid });

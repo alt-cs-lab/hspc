@@ -1,22 +1,24 @@
-/*
-MIT License
-Copyright (c) 2019 KSU-CS-Software-Engineering
-*/
-
+/**
+ * Dashboard for Advisors
+ * Author:
+ * Modified: 5/1/2024
+ */
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, NavDropdown/*, NavLink*/ } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import StatusMessages from "../_common/components/status-messages.jsx";
 import DashboardHome from "../home/dashboard-home"
-import TeamsView from "../registration/advisor/teams-view";
+import AdvisorTeamsView from "../registration/view/advisor-teams";
 import ViewEvents from "../registration/view/events";
-import CreateTeam from "../registration/create/manage-team";
-//import Scoreboard from "../scoring/scoreboard.jsx";
+import CreateTeam from "../registration/create/team";
 import "../_common/assets/css/public-dashboard.css";
-import AddStudent from "../registration/create/add-high-school-student.jsx";
+import AddStudent from "../registration/create/high-school-student.jsx";
 import ViewStudents from "../registration/view/high-school-students.jsx";
 import { connect } from "react-redux";
 import { clearErrors } from "../_store/slices/errorSlice.js";
 
+/**
+ * Returns a react component that renders the Advisor dashboard
+ */
 function AdvisorDash (props)
 { 
   const [currentView, setCurrentView] = useState(<DashboardHome user={props.currentUser} />);
@@ -40,12 +42,12 @@ function AdvisorDash (props)
               <NavDropdown.Item onClick={() => setCurrentView(<ViewStudents advisorUser={props.currentUser.id} setCurrentView={setCurrentView} />)}>
                 View Students
               </NavDropdown.Item>
-              <NavDropdown.Item onClick={() => setCurrentView(<AddStudent advisorUser={props.currentUser.id} />)}>
+              <NavDropdown.Item onClick={() => setCurrentView(<AddStudent advisorUser={props.currentUser.id} setCurrentView={setCurrentView} />)}>
                 Create Student
               </NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title="Teams">
-              <NavDropdown.Item onClick={() => setCurrentView(<TeamsView advisor={props.currentUser} setCurrentView={setCurrentView}/>)}>
+              <NavDropdown.Item onClick={() => setCurrentView(<AdvisorTeamsView advisor={props.currentUser} setCurrentView={setCurrentView}/>)}>
                 View Teams
               </NavDropdown.Item>
               <NavDropdown.Item onClick={() => setCurrentView(<CreateTeam advisor={props.currentUser} />)}>
@@ -54,12 +56,9 @@ function AdvisorDash (props)
             </NavDropdown>
             <NavDropdown title="Events" align="end" flip>
               <NavDropdown.Item onClick={() => setCurrentView(<ViewEvents />)}>
-                View Events
+                View Published Events
               </NavDropdown.Item>
             </NavDropdown>
-            {/* <NavLink eventKey={6} onClick={() => setCurrentView(<Scoreboard />)}>
-              View Board
-            </NavLink> */}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -71,7 +70,9 @@ function AdvisorDash (props)
   );  
 }
 
-//Maps the states to props to be used in connect wrapper in export
+/**
+ * Redux initializes props.
+ */
 const mapStateToProps = (state) => {
   return { 
     currentUser: state.auth.user,
@@ -79,6 +80,9 @@ const mapStateToProps = (state) => {
   };
 };
 
+/**
+ * Redux updates props.
+ */
 const mapDispatchToProps = (dispatch) => {
   return {
     dispatchResetErrors: () => dispatch(clearErrors()),

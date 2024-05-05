@@ -1,43 +1,41 @@
+/**
+ * Services for event functionality
+ * Author:
+ * Modified: 5/1/2024
+ */
 const { renameKeys } = require("../utils/extensions");
-
 const db = require("../utils/hspc_db").db;
-const constants = require('../utils/constants')
+const constants = require("../utils/constants");
 
 module.exports = {
-    createEvent,
-    //getEventHistory,
-    getAllEvents,
-    getCompetitionTeamsInfo,
-    getHighlightEvent,
+  createEvent,
+  getPublished,
+  getUnpublished,
+  getEvent,
+  getCompetitionTeamsInfo,
+  getHighlightEvent,
 };
 
 /**
- * Function to create a new event in the Competition table 
- * Takes a request body with the following parameters:
- * name: the name of the event
- * location: the location of the event
- * date: the date of the event
- * time: the time of the event
- * teamsPerSchool: the number of teams per school
- * teamsPerEvent: the number of teams per event
- * description: the description of the event
- * @returns nothing
+ * Creates a given event
  */
 function createEvent({
-    name,
-    location,
-    date,
-    startTime,
-    endTime,
-    beginnerTeamsPerSchool,
-    advancedTeamsPerSchool,
-    teamsPerSchool,
-    beginnerTeamsPerEvent,
-    advancedTeamsPerEvent,
-    teamsPerEvent,
-    description}) {
-    return db.none(
-        `INSERT INTO Competitions(
+  name,
+  location,
+  date,
+  startTime,
+  endTime,
+  beginnerTeamsPerSchool,
+  advancedTeamsPerSchool,
+  teamsPerSchool,
+  beginnerTeamsPerEvent,
+  advancedTeamsPerEvent,
+  teamsPerEvent,
+  description,
+}) {
+  let eventStatus = constants.EVENT_STATUS_UNPUBLISHED;
+  return db.none(
+    `INSERT INTO Competitions(
             EventName,
             EventLocation,
             EventDate,
@@ -49,7 +47,8 @@ function createEvent({
             BeginnerTeamsPerEvent,
             AdvancedTeamsPerEvent,
             TeamsPerEvent,
-            EventDescription) 
+            EventDescription,
+            CompetitionStatusID) 
         VALUES(
             $(name),
             $(location),
@@ -62,30 +61,33 @@ function createEvent({
             $(beginnerTeamsPerEvent),
             $(advancedTeamsPerEvent),
             $(teamsPerEvent),
-            $(description))`,
+            $(description),
+            $(eventStatus))`,
     {
-        name,
-        location,
-        date,
-        startTime,
-        endTime,
-        beginnerTeamsPerSchool,
-        advancedTeamsPerSchool,
-        teamsPerSchool,
-        beginnerTeamsPerEvent,
-        advancedTeamsPerEvent,
-        teamsPerEvent,
-        description}
-    );
+      name,
+      location,
+      date,
+      startTime,
+      endTime,
+      beginnerTeamsPerSchool,
+      advancedTeamsPerSchool,
+      teamsPerSchool,
+      beginnerTeamsPerEvent,
+      advancedTeamsPerEvent,
+      teamsPerEvent,
+      description,
+      eventStatus,
+    }
+  );
 }
 
-/*
- * Function to get all the competitions in the Competition table
- * also returns the name Natalie Laughlin
+/**
+ * Returns all published events
  */
-function getAllEvents() {
-    return db.any(
-        `SELECT
+function getPublished() {
+  return db
+    .any(
+      `SELECT
             C.CompetitionID,
             C.EventName,
             C.EventLocation,
@@ -98,9 +100,15 @@ function getAllEvents() {
             C.TeamsPerSchool,
             C.BeginnerTeamsPerEvent,
             C.AdvancedTeamsPerEvent,
-            C.TeamsPerEvent
-        FROM Competitions AS C`
-    ).then((events) => renameKeys(events,[
+            C.TeamsPerEvent,
+            CS.Status
+        FROM Competitions AS C
+        LEFT JOIN CompetitionStatus AS CS
+            ON C.CompetitionStatusID = CS.StatusID
+        WHERE CS.Status <> 'Unpublished'`
+    )
+    .then((events) =>
+      renameKeys(events, [
         "id",
         "name",
         "location",
@@ -113,48 +121,148 @@ function getAllEvents() {
         "teamsPerSchool",
         "beginnerTeamsPerEvent",
         "advancedTeamsPerEvent",
-        "teamsPerEvent"
-    ]));
+        "teamsPerEvent",
+        "status",
+      ])
+    );
 }
 
-/*
- * Function to get "Highlight" Compeitition which means next upcoming or if there is none then the most recent.
+/**
+ * Returns all unpublished events
+ */
+function getUnpublished() {
+  return db
+    .any(
+      `SELECT
+            C.CompetitionID,
+            C.EventName,
+            C.EventLocation,
+            C.EventDate,
+            C.EventStartTime, 
+            C.EventEndTime, 
+            C.EventDescription,
+            C.BeginnerTeamsPerSchool,
+            C.AdvancedTeamsPerSchool,
+            C.TeamsPerSchool,
+            C.BeginnerTeamsPerEvent,
+            C.AdvancedTeamsPerEvent,
+            C.TeamsPerEvent,
+            CS.Status
+        FROM Competitions AS C
+        LEFT JOIN CompetitionStatus AS CS
+            ON C.CompetitionStatusID = CS.StatusID
+        WHERE CS.Status = 'Unpublished'`
+    )
+    .then((events) =>
+      renameKeys(events, [
+        "id",
+        "name",
+        "location",
+        "date",
+        "startTime",
+        "endTime",
+        "description",
+        "beginnerTeamsPerSchool",
+        "advancedTeamsPerSchool",
+        "teamsPerSchool",
+        "beginnerTeamsPerEvent",
+        "advancedTeamsPerEvent",
+        "teamsPerEvent",
+        "status",
+      ])
+    );
+}
+
+/**
+ * Returns an event based on its id
+ */
+function getEvent({ eventID }) {
+  return db
+    .oneOrNone(
+      `SELECT
+            C.CompetitionID,
+            C.EventName,
+            C.EventLocation,
+            C.EventDate,
+            C.EventStartTime, 
+            C.EventEndTime, 
+            C.EventDescription,
+            C.BeginnerTeamsPerSchool,
+            C.AdvancedTeamsPerSchool,
+            C.TeamsPerSchool,
+            C.BeginnerTeamsPerEvent,
+            C.AdvancedTeamsPerEvent,
+            C.TeamsPerEvent,
+            CS.Status
+        FROM Competitions AS C
+        LEFT JOIN CompetitionStatus AS CS
+            ON C.CompetitionStatusID = CS.StatusID
+        WHERE C.CompetitionID = $(eventID);`,
+      { eventID }
+    )
+    .then((eventInfo) => ({
+      competitionID: eventInfo.CompetitionID,
+      eventName: eventInfo.EventName,
+      eventLocation: eventInfo.EventLocation,
+      eventDate: eventInfo.EventDate,
+      eventStartTime: eventInfo.EventStartTime,
+      eventEndTime: eventInfo.EventEndTime,
+      eventDescription: eventInfo.EventDescription,
+      beginnerTeamsPerSchool: eventInfo.BeginnerTeamsPerSchool,
+      advancedTeamsPerSchool: eventInfo.AdvancedTeamsPerSchool,
+      teamsPerSchool: eventInfo.TeamsPerSchool,
+      beginnerTeamsPerEvent: eventInfo.BeginnerTeamsPerEvent,
+      advancedTeamsPerEvent: eventInfo.AdvancedTeamsPerEvent,
+      teamsPerEvent: eventInfo.TeamsPerEvent,
+      status: eventInfo.Status,
+    }));
+}
+
+/**
+ * Returns the next competition (If none, most recent competition)
  */
 function getHighlightEvent() {
-    const date = new Date();
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    // This arrangement can be altered based on how we want the date's format to appear.
-    let currentDate = constants.toDatabaseDate(year, month, day);
+  const date = new Date();
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+  let currentDate = constants.toDatabaseDate(year, month, day);
 
-    return db.any(
-        `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
+  return db
+    .any(
+      `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
         FROM Competitions AS C
-        WHERE C.EventDate > $(currentDate)`, {currentDate})
-    .then((data)=>{
-        if (data[0] != null) {
-            return db.any(
-                `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
+        WHERE C.EventDate > $(currentDate)`,
+      { currentDate }
+    )
+    .then((data) => {
+      if (data[0] != null) {
+        return db.any(
+          `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
                 FROM Competitions AS C
                 WHERE C.EventDate > $(currentDate)
                 ORDER BY C.EventDate ASC
-                LIMIT 1`, {currentDate})
-        }
-        else{
-            return db.any(
-                `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
+                LIMIT 1`,
+          { currentDate }
+        );
+      } else {
+        return db.any(
+          `SELECT C.EventLocation, C.EventDate, C.EventStartTime, C.EventEndTime, C.EventName, C.EventDescription
                 FROM Competitions AS C
                 ORDER BY C.EventDate DESC
-                LIMIT 1`)
-        }
-    })
+                LIMIT 1`
+        );
+      }
+    });
 }
 
-// returns the TeamsPerSchool and TeamsPerEvent for a given competition
+/**
+ * Returns team capacity information for a given competition
+ */
 function getCompetitionTeamsInfo(competitionID) {
-    return db.oneOrNone(
-        `SELECT 
+  return db
+    .oneOrNone(
+      `SELECT 
             BeginnerTeamsPerSchool,
             AdvancedTeamsPerSchool,
             TeamsPerSchool,
@@ -163,13 +271,14 @@ function getCompetitionTeamsInfo(competitionID) {
             TeamsPerEvent
         FROM Competitions
         WHERE CompetitionID = $(competitionID);`,
-        { competitionID }
-    ).then((teamsInfo) => ({
-        beginnerTeamsPerSchool: teamsInfo.beginnerteamsperschool,
-        advancedTeamsPerSchool: teamsInfo.advancedteamsperschool,
-        teamsPerSchool: teamsInfo.teamsperschool,
-        beginnerTeamsPerEvent: teamsInfo.beginnerteamsperevent,
-        advancedTeamsPerEvent: teamsInfo.advancedteamsperevent,
-        teamsPerEvent: teamsInfo.teamsperevent,
+      { competitionID }
+    )
+    .then((teamsInfo) => ({
+      beginnerTeamsPerSchool: teamsInfo.beginnerteamsperschool,
+      advancedTeamsPerSchool: teamsInfo.advancedteamsperschool,
+      teamsPerSchool: teamsInfo.teamsperschool,
+      beginnerTeamsPerEvent: teamsInfo.beginnerteamsperevent,
+      advancedTeamsPerEvent: teamsInfo.advancedteamsperevent,
+      teamsPerEvent: teamsInfo.teamsperevent,
     }));
 }

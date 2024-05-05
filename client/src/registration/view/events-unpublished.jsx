@@ -1,5 +1,5 @@
 /**
- * View published events page
+ * View unpublished events page
  * Author:
  * Modified: 5/1/2024
  */
@@ -19,7 +19,7 @@ const constants = require("../../_utilities/constants");
  * @Updated: Natalie Laughlin - Viewing the Event Name
  * @Refactored: Trent Powell- Use Data Tables
  */
-class ViewEvents extends Component {
+class ViewEventsUnpublished extends Component {
   constructor(props) {
     super(props);
     this.props.dispatchResetErrors();
@@ -33,10 +33,7 @@ class ViewEvents extends Component {
    * Returns a list of all events when the component is rendered.
    */
   componentDidMount = () => {
-    /*
-     * Get Published Events
-     */
-    EventService.getPublishedEvents(
+    EventService.getUnpublishedEvents(
       this.props.auth.user.id,
       this.props.auth.user.accessLevel
     )
@@ -71,8 +68,8 @@ class ViewEvents extends Component {
         sortable: true,
       },
       {
-        name: "Date",
-        selector: (row) => constants.eventDateFormat(row.date),
+        name: "Date (YYYY-MM-DD)",
+        selector: (row) => constants.dateFormat(row.date),
         sortable: true,
         sortFunction: constants.dateSort,
       },
@@ -83,10 +80,6 @@ class ViewEvents extends Component {
           " - " +
           constants.timeFormat(row.endTime),
       },
-      {
-        name: "Status",
-        selector: (row) => row.status,
-      },
     ];
   }
 
@@ -96,7 +89,7 @@ class ViewEvents extends Component {
   render() {
     return (
       <div id="student-data-table">
-        <h2>Published Events</h2>
+        <h2>Unpublished Events</h2>
         <DataTable
           data={this.state.eventTable}
           columns={this.state.columns}
@@ -148,4 +141,7 @@ const ExpandedComponent = ({ data }) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewEvents);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ViewEventsUnpublished);

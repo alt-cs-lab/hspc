@@ -17,29 +17,24 @@ import SchoolService from "../../_common/services/school.js";
 import "../../_common/assets/css/standard.css";
 import ViewStudents from "../view/high-school-students.jsx";
 
-const constants = require("../../_utilities/constants");
+const constants = require("../../_utilities/constants.js");
 
 /**
- * A component for editing a student
+ * A component for adding a student
  */
-class EditStudent extends Component {
+class AddStudent extends Component {
   constructor(props) {
     super(props);
     this.props.dispatchResetErrors();
     this.advisor = this.props.auth.user;
-    this.student = this.props.student;
-    this.isAdmin = this.props.admin;
     this.state = {
-      studentId: this.props.student.studentid,
-      firstName: this.props.student.firstname,
-      lastName: this.props.student.lastname,
-      email: this.props.student.email,
-      initialEmail: this.props.student.email,
-      gradMonth: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      gradMonth: constants.months[4].value,
       gradYear: "",
-      schoolId: this.props.student.schoolid,
+      schoolId: -1,
       schoolList: [],
-      studentSchool: [],
     };
   }
 
@@ -48,10 +43,6 @@ class EditStudent extends Component {
    * Returns a list of all schools when the component is rendered to be used in the dropdown.
    */
   componentDidMount = () => {
-    /**
-     * Gets the schools that the advisor is connected to from the api
-     * Gets all schools if the user is an admin
-     */
     SchoolService.getAdvisorApprovedSchools(
       this.advisor.id,
       this.advisor.accessLevel
@@ -60,61 +51,42 @@ class EditStudent extends Component {
         if (response.ok) {
           let schoolbody = response.data;
           let schools = [];
-          let IDSchool = [];
-          let id = this.state.schoolId;
           for (let i = 0; i < schoolbody.length; i++) {
-            if (schoolbody[i].schoolid === id) {
-              IDSchool.push({
-                label: schoolbody[i].schoolname,
-                value: schoolbody[i].schoolid,
-              });
-            }
             schools.push({
               label: schoolbody[i].schoolname,
               value: schoolbody[i].schoolid,
             });
           }
-          this.setState({ schoolList: schools, studentSchool: IDSchool });
+          this.setState({ schoolList: schools });
         } else console.log("An error has occurred, Please try again.");
       })
-      .catch((resErr) =>
-        console.log("Something went wrong. Please try again")
-      );
-
-    let date = constants.dateFormat(this.student.graddate);
-    let dateArray = date.split("-");
-    let dateMonth = parseInt(dateArray[1]);
-    this.setState({
-      gradYear: dateArray[0],
-      gradMonth: constants.months[dateMonth - 1],
-    });
+      .catch((resErr) => console.log("Something went wrong. Please try again"));
   };
 
   /**
-   * Sends a message to the api to update the student in the database
+   * Sends the new student to the database
    * @param {*} event
    */
-  editStudent = (event) => {
+  createStudent(event) {
     const newStudent = this.state;
 
     /* Sets the graduation date to the 28th day of the month */
     const gradDate = constants.toDatabaseDate(
       newStudent.gradYear,
-      newStudent.gradMonth.value,
+      newStudent.gradMonth,
       28
     );
 
-    StudentService.editHighSchoolStudent(
-      newStudent.studentId,
+    StudentService.addHighSchoolStudent(
       newStudent.firstName,
       newStudent.lastName,
       newStudent.schoolId,
+      newStudent.email,
       gradDate
     )
       .then((response) => {
-        console.log(response);
         if (response.status === 201) {
-          this.props.dispatchSuccess("Student Edited");
+          this.props.dispatchSuccess("Student Created");
           this.ChangeView();
         } else {
           this.props.dispatchError(response.data);
@@ -122,10 +94,10 @@ class EditStudent extends Component {
       })
       .catch((resErr) =>
         console.log(
-          "Something went wrong updating the student. Please try again"
+          "Something went wrong connecting to the server. Please try again: " + resErr
         )
       );
-  };
+  }
 
   ChangeView = () => {
     this.props.setCurrentView(
@@ -135,22 +107,14 @@ class EditStudent extends Component {
       />);
   }
 
-  /**
-   * Renders the form to be filled out for editing a student
+  /*
+   * Renders the form to be filled out for creating/registering a student
    */
   render() {
     return (
       <div className="RegisterBox">
-        <h2>Edit Student - {this.state.firstName} {this.state.lastName}</h2>  
-        <Button 
-          onClick={() => this.props.setCurrentView(
-            <ViewStudents
-              advisorUser={this.advisor.id}
-              setCurrentView={this.props.setCurrentView}
-            />)}>
-          View Students
-        </Button>
-        <Form onSubmit={(event) => this.editStudent(event)}>
+        <h2>Create Students For Your School</h2>
+        <Form onSubmit={(event) => this.createStudent(event)}>
           <div class="add-margin">
             <Form.Group className="mb-3">
               <Form.Label>First Name</Form.Label>
@@ -178,19 +142,12 @@ class EditStudent extends Component {
               <Form.Label>School</Form.Label>
               <Select
                 options={this.state.schoolList}
-                onChange={(target) =>
-                  this.setState({
-                    studentSchool: target,
-                    schoolId: target.value,
-                  })
-                }
-                value={this.state.studentSchool[0]}
+                onChange={(target) => this.setState({ schoolId: target.value })}
               />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
-                disabled
                 type="email"
                 required
                 placeholder="Ex: devangriffin@email.com"
@@ -205,17 +162,19 @@ class EditStudent extends Component {
               <Select
                 placeholder="Select a Month"
                 options={constants.months}
-                onChange={(target) => this.setState({ gradMonth: target })}
-                value={this.state.gradMonth}
+                onChange={(target) =>
+                  this.setState({ gradMonth: target.value })
+                }
+                defaultValue={constants.months[4]}
               />
             </Form.Group>
             <Form.Group className="mb-4">
               <Form.Label>Graduation Year</Form.Label>
               <Form.Control min="1000" max="9999" type="number" required placeholder="Ex: 2024"
-                onChange={(target => this.setState({ gradYear: target.target.value }))} defaultValue={ this.state.gradYear }/>
+                onChange={(target => this.setState({ gradYear: target.target.value }))} value={ this.state.gradYear }/>
             </Form.Group>
           </div>
-          <Button type="submit">Edit Student</Button>
+          <Button type="submit">Create Student</Button>
         </Form>
       </div>
     );
@@ -243,4 +202,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditStudent);
+export default connect(mapStateToProps, mapDispatchToProps)(AddStudent);

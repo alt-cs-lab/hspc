@@ -23,10 +23,20 @@ class EventService {
     }
 
     /*
-    * Calls the API and returns a JSON list of all registered events.
+    * Calls the API and returns a JSON list of all published events.
     */
-    getAllEvents(userID, accessLevel) {
-        return ServiceUtils.getRequest('/api/event/view', {
+    getPublishedEvents(userID, accessLevel) {
+        return ServiceUtils.getRequest('/api/event/getPublished', {
+            userID: userID,
+            accessLevel: accessLevel
+        });
+    }
+
+    /*
+    * Calls the API and returns a JSON list of all unpublished events.
+    */
+    getUnpublishedEvents(userID, accessLevel) {
+        return ServiceUtils.getRequest('/api/event/getUnpublished', {
             userID: userID,
             accessLevel: accessLevel
         });
