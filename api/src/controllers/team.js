@@ -193,13 +193,10 @@ router.post(
       .optional()
       .custom((studentIds, { req }) => {
         // Check that no student is in any other team in the competition.
-        return teamService
-          .isAnyStudentsInCompetition(req.body.competitionId, studentIds)
+        return teamService.isAnyStudentsInCompetition(req.body.competitionId, studentIds)
           .then((alreadyInATeam) => {
             if (alreadyInATeam) {
-              throw new Error(
-                "One or more students are already in a team for this competition."
-              );
+              throw new Error("One or more students are already in a team for this competition.");
             }
             return true;
           });

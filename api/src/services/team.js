@@ -132,10 +132,6 @@ function teamsInCompetitionBySchool(
   if (waitlisted) {
     statuses.push(constants.TEAM_STATUS_WAITLISTED);
   }
-  console.log(competitionId);
-  console.log(schoolId);
-  console.log(waitlisted);
-  console.log(statuses);
   return db
     .oneOrNone(
       `
@@ -228,9 +224,16 @@ function isAnyStudentsInCompetition(
 
   return db
     .oneOrNone(
-      `SELECT COUNT(*) FROM TeamMembers TM WHERE TeamID IN (SELECT TeamID FROM Teams WHERE CompetitionID = $(competitionId) AND T.TeamStatusID = ANY($(statuses))) 
-    AND StudentID = ANY($(studentIds))`,
-      [competitionId, studentIds, statuses]
+      `
+      SELECT COUNT(*) 
+      FROM TeamMembers TM 
+      WHERE TM.TeamID IN 
+      (
+        SELECT T.TeamID 
+        FROM Teams T
+        WHERE T.CompetitionID = $(competitionId) AND T.TeamStatusID = ANY($(statuses))
+      ) AND TM.StudentID = ANY($(studentIds))`,
+      {competitionId, studentIds, statuses}
     )
     .then((result) => parseInt(result.count) > 0);
 }

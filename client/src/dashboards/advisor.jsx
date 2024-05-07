@@ -74,10 +74,7 @@ function AdvisorDash (props)
  * Redux initializes props.
  */
 const mapStateToProps = (state) => {
-  return { 
-    currentUser: state.auth.user,
-    errors: state.errors
-  };
+  return { currentUser: state.auth.user };
 };
 
 /**

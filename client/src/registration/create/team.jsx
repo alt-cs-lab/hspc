@@ -107,8 +107,6 @@ class CreateTeam extends Component {
             });
           }
           this.setState({ schoolList: schools });
-          console.log("Manage");
-          console.log(response.data);
         } else
           console.log(
             "There was an error getting the advisor's apporved schools. Please try again."
@@ -187,7 +185,8 @@ class CreateTeam extends Component {
     /*
      * Checks if at least two students students are selected.
      */
-    if (selectedStudents.length < 2) {
+    console.log(selectedStudents.size);
+    if (selectedStudents.size < 2) {
       this.props.dispatchError("Select at least two students to form a team.");
       return;
     }
@@ -225,8 +224,7 @@ class CreateTeam extends Component {
         this.state.isVerified
       )
       .then((response) => {
-        if (response.ok) {
-          console.log(response.data);
+        if (response.status === 200) {
           this.props.dispatchSuccess("Registration was successful.");
           this.resetFields();
         }
